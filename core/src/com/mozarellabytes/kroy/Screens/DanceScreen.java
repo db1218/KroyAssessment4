@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Minigame.DanceMove;
 import com.mozarellabytes.kroy.Minigame.DanceManager;
+import com.mozarellabytes.kroy.Minigame.DanceResult;
 
 /**
  * The screen for the minigame that triggers when a firetruck meets an ET patrol
@@ -38,13 +39,15 @@ public class DanceScreen implements Screen {
     private final int ARROW_DISPLACEMENT = 128;
     private final int ARROW_SIZE = 96;
 
+    private DanceResult lastResult = null;
+
     public DanceScreen(Kroy game) {
         this.game = game;
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
 
-        this.danceMan = new DanceManager(60f);
+        this.danceMan = new DanceManager(120f);
 
         arrowUpTexture = new Texture(Gdx.files.internal("sprites/dance/arrowUp.png"), true);
         arrowUpTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
@@ -56,6 +59,8 @@ public class DanceScreen implements Screen {
         arrowRightTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
         targetBoxTexture = new Texture(Gdx.files.internal("sprites/dance/targetBox.png"), true);
         targetBoxTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+
+
 
         System.out.println("Got to the dance Screen");
     }
@@ -69,22 +74,23 @@ public class DanceScreen implements Screen {
     public void render(float delta)
     {
         danceMan.update(delta);
-//        System.out.println(danceMan.getBeatProxemity());
+
+        int danceTimer = 0;
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            danceMan.takeMove(DanceMove.UP);
+            lastResult = danceMan.takeMove(DanceMove.UP);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            danceMan.takeMove(DanceMove.DOWN);
+            lastResult = danceMan.takeMove(DanceMove.DOWN);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
-            danceMan.takeMove(DanceMove.LEFT);
+             lastResult = danceMan.takeMove(DanceMove.LEFT);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
-            danceMan.takeMove(DanceMove.RIGHT);
+             lastResult = danceMan.takeMove(DanceMove.RIGHT);
         }
 
         Gdx.gl.glClearColor(51/255f, 34/255f, 99/255f, 1);
@@ -95,32 +101,38 @@ public class DanceScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         Vector2 arrowsOrigin = new Vector2(camera.viewportWidth/2-ARROW_SIZE/2, camera.viewportHeight/3);
+        Vector2 textLocation = new Vector2(0, camera.viewportHeight/4);
         game.batch.begin();
         int i = 0;
         for (DanceMove d : danceMan.getMoveList()) {
             Color c =  game.batch.getColor();
             if (i == 0) {
                 //Set transparency for the bottom move
-                game.batch.setColor(c.r, c.b, c.g, 1f-danceMan.getPhase());
+                game.batch.setColor(c.r, c.b, c.g, 1f-phaseLerp(danceMan.getPhase()));
             }
             switch (d) {
                 case UP:
-            game.batch.draw(arrowUpTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - danceMan.getPhase() * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
+            game.batch.draw(arrowUpTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - phaseLerp(danceMan.getPhase()) * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
                 break;
                 case DOWN:
-            game.batch.draw(arrowDownTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - danceMan.getPhase() * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
+            game.batch.draw(arrowDownTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - phaseLerp(danceMan.getPhase()) * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
                 break;
                 case LEFT:
-            game.batch.draw(arrowLeftTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - danceMan.getPhase() * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
+            game.batch.draw(arrowLeftTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - phaseLerp(danceMan.getPhase()) * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
                 break;
                 case RIGHT:
-            game.batch.draw(arrowRightTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - danceMan.getPhase() * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
+            game.batch.draw(arrowRightTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - phaseLerp(danceMan.getPhase()) * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
                 break;
             }
             game.batch.setColor(c.r, c.b, c.g, 1f);
             i++;
         }
         game.batch.draw(targetBoxTexture, arrowsOrigin.x, arrowsOrigin.y, ARROW_SIZE, ARROW_SIZE);
+
+        if (lastResult != null) {
+            game.font60.draw(game.batch, lastResult.toString(), textLocation.x, textLocation.y,camera.viewportWidth, 1, false);
+        }
+
         game.batch.end();
     }
 
@@ -155,6 +167,6 @@ public class DanceScreen implements Screen {
     }
 
     public float phaseLerp(float phase) {
-        return (float) (.5f * Math.sin(Math.PI * (phase - .5f)) + .5f);
+        return (float) Math.pow(2, 10f * (phase-1));
     }
 }

@@ -76,17 +76,17 @@ public class DanceManager {
         {
             float proxemity = getBeatProxemity();
             float phase = getPhase();
-            if (proxemity > .9f) {
+            if (proxemity > .95f) {
                 System.out.println("Great");
                 doneThisBeat = true;
                 return DanceResult.GREAT;
             }
-            else if (proxemity > .8f) {
+            else if (proxemity > .9f) {
                 System.out.println("Good");
                 doneThisBeat = true;
                 return DanceResult.GOOD;
             }
-            else if (proxemity > .7) {
+            else if (proxemity > .8) {
                 System.out.println("Okay");
                 doneThisBeat = true;
                 return DanceResult.OKAY;
