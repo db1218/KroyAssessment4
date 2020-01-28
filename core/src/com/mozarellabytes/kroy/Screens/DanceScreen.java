@@ -101,7 +101,8 @@ public class DanceScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         Vector2 arrowsOrigin = new Vector2(camera.viewportWidth/2-ARROW_SIZE/2, camera.viewportHeight/3);
-        Vector2 textLocation = new Vector2(0, camera.viewportHeight/4);
+        Vector2 resultLocation = new Vector2(0, camera.viewportHeight/4);
+        Vector2 comboLocation = new Vector2(0, camera.viewportHeight/7);
         game.batch.begin();
         int i = 0;
         for (DanceMove d : danceMan.getMoveList()) {
@@ -130,8 +131,10 @@ public class DanceScreen implements Screen {
         game.batch.draw(targetBoxTexture, arrowsOrigin.x, arrowsOrigin.y, ARROW_SIZE, ARROW_SIZE);
 
         if (lastResult != null) {
-            game.font60.draw(game.batch, lastResult.toString(), textLocation.x, textLocation.y,camera.viewportWidth, 1, false);
+            game.font120.draw(game.batch, lastResult.toString(), resultLocation.x, resultLocation.y,camera.viewportWidth, 1, false);
         }
+
+        game.font60.draw(game.batch, danceMan.getCombo() + "x", comboLocation.x, comboLocation.y, camera.viewportWidth, 1, false);
 
         game.batch.end();
     }

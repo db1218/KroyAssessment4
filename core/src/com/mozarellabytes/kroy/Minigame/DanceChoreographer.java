@@ -32,4 +32,10 @@ public class DanceChoreographer {
         moveList.add(DanceMove.values()[random.nextInt(4)]);
         return moveList.remove(0);
     }
+
+    public void clearQueue() {
+        for (int i = 0; i < moveList.size(); i++) {
+            moveList.set(i, DanceMove.NONE);
+        }
+    }
 }

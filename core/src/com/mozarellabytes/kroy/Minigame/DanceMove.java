@@ -4,5 +4,7 @@ public enum DanceMove {
     UP,
     DOWN,
     LEFT,
-    RIGHT
+    RIGHT,
+    WAIT,
+    NONE
 }

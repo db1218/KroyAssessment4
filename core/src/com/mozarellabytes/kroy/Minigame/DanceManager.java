@@ -19,6 +19,8 @@ public class DanceManager {
     /** Whether an input has already been given this beat */
     private boolean doneThisBeat;
 
+    private int combo = 0;
+
     private DanceChoreographer choreographer;
 
 
@@ -68,7 +70,7 @@ public class DanceManager {
 
     public DanceResult takeMove(DanceMove move) {
         if (move != getNearestMove()) {
-            System.out.println("Wrong");
+            wrongMove();
             return DanceResult.WRONG;
         }
 
@@ -77,41 +79,41 @@ public class DanceManager {
             float proxemity = getBeatProxemity();
             float phase = getPhase();
             if (proxemity > .95f) {
-                System.out.println("Great");
                 doneThisBeat = true;
+                goodMove();
                 return DanceResult.GREAT;
             }
             else if (proxemity > .9f) {
-                System.out.println("Good");
                 doneThisBeat = true;
+                goodMove();
                 return DanceResult.GOOD;
             }
             else if (proxemity > .8) {
-                System.out.println("Okay");
                 doneThisBeat = true;
+                goodMove();
                 return DanceResult.OKAY;
             }
             else if (proxemity > .5 && phase > .5f) {
-                System.out.println("Early");
                 doneThisBeat = true;
+                killCombo();
                 return DanceResult.EARLY;
             }
             else if (proxemity > .5 && phase < .5f) {
-                System.out.println("Late");
                 doneThisBeat = true;
+                killCombo();
                 return DanceResult.LATE;
             }
             else {
-                System.out.println("Wrong");
                 doneThisBeat = true;
+                wrongMove();
                 return DanceResult.WRONG;
             }
         }
         else
         {
             // Player doubletook a move, punish them
-            System.out.println("Wrong");
             doneThisBeat = true;
+            wrongMove();
             return DanceResult.WRONG;
         }
     }
@@ -126,5 +128,22 @@ public class DanceManager {
         } else {
             return choreographer.getMoveList()[1];
         }
+    }
+
+    public void wrongMove() {
+        killCombo();
+        choreographer.clearQueue();
+    }
+
+    public void goodMove() {
+        combo++;
+    }
+
+    public int getCombo() {
+        return this.combo;
+    }
+
+    public void killCombo() {
+        combo = 0;
     }
 }
