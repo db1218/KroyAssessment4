@@ -55,6 +55,7 @@ public class Kroy extends Game {
 		font33Red = generator.generateFont(parameter);
 
 		this.setScreen(new SplashScreen(this));
+//		this.setScreen(new DanceScreen(this));	// Skip to dance screen
 	}
 
 	@Override
