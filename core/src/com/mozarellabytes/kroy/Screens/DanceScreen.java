@@ -3,6 +3,7 @@ package com.mozarellabytes.kroy.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -97,6 +98,11 @@ public class DanceScreen implements Screen {
         game.batch.begin();
         int i = 0;
         for (DanceMove d : danceMan.getMoveList()) {
+            Color c =  game.batch.getColor();
+            if (i == 0) {
+                //Set transparency for the bottom move
+                game.batch.setColor(c.r, c.b, c.g, 1f-danceMan.getPhase());
+            }
             switch (d) {
                 case UP:
             game.batch.draw(arrowUpTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - danceMan.getPhase() * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
@@ -111,10 +117,10 @@ public class DanceScreen implements Screen {
             game.batch.draw(arrowRightTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - danceMan.getPhase() * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
                 break;
             }
+            game.batch.setColor(c.r, c.b, c.g, 1f);
             i++;
         }
         game.batch.draw(targetBoxTexture, arrowsOrigin.x, arrowsOrigin.y, ARROW_SIZE, ARROW_SIZE);
-
         game.batch.end();
     }
 
@@ -148,7 +154,7 @@ public class DanceScreen implements Screen {
 
     }
 
-    public void drawArrow(DanceMove move) {
-
+    public float phaseLerp(float phase) {
+        return (float) (.5f * Math.sin(Math.PI * (phase - .5f)) + .5f);
     }
 }
