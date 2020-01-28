@@ -29,7 +29,7 @@ public class DanceChoreographer {
     }
 
     public DanceMove nextMove() {
-        moveList.add(DanceMove.values()[random.nextInt(4)]);
+        moveList.add(DanceMove.values()[random.nextInt(5)]);
         return moveList.remove(0);
     }
 

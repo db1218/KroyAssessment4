@@ -35,6 +35,7 @@ public class DanceScreen implements Screen {
     private final Texture arrowLeftTexture;
     private final Texture arrowRightTexture;
     private final Texture targetBoxTexture;
+    private final Texture waitTexture;
 
     private final int ARROW_DISPLACEMENT = 128;
     private final int ARROW_SIZE = 96;
@@ -59,6 +60,8 @@ public class DanceScreen implements Screen {
         arrowRightTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
         targetBoxTexture = new Texture(Gdx.files.internal("sprites/dance/targetBox.png"), true);
         targetBoxTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        waitTexture = new Texture(Gdx.files.internal("sprites/dance/wait.png"), true);
+        waitTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
 
 
@@ -124,6 +127,10 @@ public class DanceScreen implements Screen {
                 case RIGHT:
             game.batch.draw(arrowRightTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - phaseLerp(danceMan.getPhase()) * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
                 break;
+                case WAIT:
+            game.batch.draw(waitTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - phaseLerp(danceMan.getPhase()) * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
+                break;
+
             }
             game.batch.setColor(c.r, c.b, c.g, 1f);
             i++;
