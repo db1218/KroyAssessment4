@@ -18,10 +18,14 @@ public class DanceManager {
 
     /** Whether an input has already been given this beat */
     private boolean doneThisBeat;
+    /** Whether the player missed the last move */
+    private boolean missedLastTurn = false;
 
     private int combo = 0;
 
     private DanceChoreographer choreographer;
+
+    public DanceScorer scorer;
 
 
     public DanceManager(float tempo) {
@@ -34,6 +38,7 @@ public class DanceManager {
 
         // Setup dance queue
         this.choreographer = new DanceChoreographer();
+        this.scorer = new DanceScorer();
     }
 
     /** Called once a frame to update the dance manager*/
@@ -52,6 +57,11 @@ public class DanceManager {
         if (halfTime >= period)
         {
             halfTime = 0f;
+            if (!doneThisBeat && getNearestMove() != DanceMove.NONE && getNearestMove() != DanceMove.WAIT) {
+                // Player missed a turn
+                killCombo();
+                missedLastTurn = true;
+            }
             doneThisBeat = false;
         }
     }
@@ -69,6 +79,8 @@ public class DanceManager {
     }
 
     public DanceResult takeMove(DanceMove move) {
+        missedLastTurn = false;
+
         if (move != getNearestMove()) {
             wrongMove();
             return DanceResult.WRONG;
@@ -129,6 +141,10 @@ public class DanceManager {
             return choreographer.getMoveList()[1];
         }
     }
+
+    public boolean hasMissedLastBeat() {
+        return missedLastTurn;
+    };
 
     public void wrongMove() {
         killCombo();

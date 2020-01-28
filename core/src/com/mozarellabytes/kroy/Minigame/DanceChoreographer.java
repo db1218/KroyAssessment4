@@ -16,7 +16,7 @@ public class DanceChoreographer {
         moveList = new ArrayList<DanceMove>();
 
         for (int i = 0; i < MOVE_LIST_LENGTH; i++) {
-            moveList.add(DanceMove.values()[random.nextInt(4)]);
+            moveList.add(DanceMove.NONE);
         }
     }
 

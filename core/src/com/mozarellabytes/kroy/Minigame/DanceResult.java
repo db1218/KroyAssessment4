@@ -6,5 +6,6 @@ public enum DanceResult {
     OKAY,
     EARLY,
     LATE,
-    WRONG
+    WRONG,
+    MISSED
 }

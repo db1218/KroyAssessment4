@@ -12,6 +12,7 @@ import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Minigame.DanceMove;
 import com.mozarellabytes.kroy.Minigame.DanceManager;
 import com.mozarellabytes.kroy.Minigame.DanceResult;
+import com.mozarellabytes.kroy.Utilities.GUI;
 
 /**
  * The screen for the minigame that triggers when a firetruck meets an ET patrol
@@ -44,7 +45,6 @@ public class DanceScreen implements Screen {
 
     public DanceScreen(Kroy game) {
         this.game = game;
-
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
 
@@ -63,8 +63,6 @@ public class DanceScreen implements Screen {
         waitTexture = new Texture(Gdx.files.internal("sprites/dance/wait.png"), true);
         waitTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
-
-
         System.out.println("Got to the dance Screen");
     }
 
@@ -79,6 +77,10 @@ public class DanceScreen implements Screen {
         danceMan.update(delta);
 
         int danceTimer = 0;
+
+        if (danceMan.hasMissedLastBeat()) {
+            lastResult = DanceResult.MISSED;
+        }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
             lastResult = danceMan.takeMove(DanceMove.UP);
@@ -142,6 +144,7 @@ public class DanceScreen implements Screen {
         }
 
         game.font60.draw(game.batch, danceMan.getCombo() + "x", comboLocation.x, comboLocation.y, camera.viewportWidth, 1, false);
+        drawHealth(0, 0, danceMan.scorer.getPlayerHealth());
 
         game.batch.end();
     }
@@ -178,5 +181,11 @@ public class DanceScreen implements Screen {
 
     public float phaseLerp(float phase) {
         return (float) Math.pow(2, 10f * (phase-1));
+    }
+
+    public void drawHealth(int x, int y, int health) {
+//        game.shapeRenderer.rect(x + this.selectedW - positionSpacer - outerSpacing - barSpacer, this.selectedY + outerSpacing, whiteW, this.selectedH - outerSpacing*2 - spaceForText, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
+//        game.shapeRenderer.rect(x + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, barHeight, backgroundColour, backgroundColour, backgroundColour, backgroundColour);
+//        game.shapeRenderer.rect(this.selectedX + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, value/maxValue*barHeight, progressColour, progressColour, progressColour, progressColour);
     }
 }
