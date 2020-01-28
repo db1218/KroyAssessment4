@@ -32,6 +32,7 @@ public class DanceScreen implements Screen {
     private final Texture arrowDownTexture;
     private final Texture arrowLeftTexture;
     private final Texture arrowRightTexture;
+    private final Texture targetBoxTexture;
 
     private final int ARROW_DISPLACEMENT = 128;
     private final int ARROW_SIZE = 96;
@@ -52,6 +53,8 @@ public class DanceScreen implements Screen {
         arrowLeftTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
         arrowRightTexture = new Texture(Gdx.files.internal("sprites/dance/arrowRight.png"), true);
         arrowRightTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        targetBoxTexture = new Texture(Gdx.files.internal("sprites/dance/targetBox.png"), true);
+        targetBoxTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         System.out.println("Got to the dance Screen");
     }
@@ -67,8 +70,20 @@ public class DanceScreen implements Screen {
         danceMan.update(delta);
 //        System.out.println(danceMan.getBeatProxemity());
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+            danceMan.takeMove(DanceMove.UP);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
             danceMan.takeMove(DanceMove.DOWN);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+            danceMan.takeMove(DanceMove.LEFT);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
+            danceMan.takeMove(DanceMove.RIGHT);
         }
 
         Gdx.gl.glClearColor(51/255f, 34/255f, 99/255f, 1);
@@ -78,7 +93,7 @@ public class DanceScreen implements Screen {
 
         game.batch.setProjectionMatrix(camera.combined);
 
-        Vector2 arrowsOrigin = new Vector2(camera.viewportWidth/2-ARROW_SIZE/2, 0);
+        Vector2 arrowsOrigin = new Vector2(camera.viewportWidth/2-ARROW_SIZE/2, camera.viewportHeight/3);
         game.batch.begin();
         int i = 0;
         for (DanceMove d : danceMan.getMoveList()) {
@@ -98,6 +113,8 @@ public class DanceScreen implements Screen {
             }
             i++;
         }
+        game.batch.draw(targetBoxTexture, arrowsOrigin.x, arrowsOrigin.y, ARROW_SIZE, ARROW_SIZE);
+
         game.batch.end();
     }
 

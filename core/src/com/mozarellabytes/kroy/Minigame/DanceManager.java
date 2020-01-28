@@ -67,6 +67,11 @@ public class DanceManager {
     }
 
     public DanceResult takeMove(DanceMove move) {
+        if (move != getNearestMove()) {
+            System.out.println("Wrong");
+            return DanceResult.WRONG;
+        }
+
         if (!doneThisBeat)
         {
             float proxemity = getBeatProxemity();
@@ -86,12 +91,12 @@ public class DanceManager {
                 doneThisBeat = true;
                 return DanceResult.OKAY;
             }
-            else if (proxemity > .5 && phase < .5f) {
+            else if (proxemity > .5 && phase > .5f) {
                 System.out.println("Early");
                 doneThisBeat = true;
                 return DanceResult.EARLY;
             }
-            else if (proxemity > .5 && phase > .5f) {
+            else if (proxemity > .5 && phase < .5f) {
                 System.out.println("Late");
                 doneThisBeat = true;
                 return DanceResult.LATE;
@@ -113,5 +118,13 @@ public class DanceManager {
 
     public DanceMove[] getMoveList() {
         return choreographer.getMoveList();
+    }
+
+    public DanceMove getNearestMove() {
+        if (this.getPhase() < .5f) {
+            return choreographer.getMoveList()[0];
+        } else {
+            return choreographer.getMoveList()[1];
+        }
     }
 }
