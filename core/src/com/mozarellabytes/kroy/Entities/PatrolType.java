@@ -100,5 +100,18 @@ public enum PatrolType {
 
     public float getAP() { return this.AP; }
 
+    public Vector2 getPoint1(){
+        return point1;
+    }
+    public Vector2 getPoint2(){
+        return point2;
+    }
+    public Vector2 getPoint3(){
+        return point3;
+    }
+    public Vector2 getPoint4(){
+        return point4;
+    }
+
 }
 

@@ -39,6 +39,8 @@ public class FireStation {
      * @link FireTruck */
     private final ArrayList<FireTruck> trucks;
 
+    private final ArrayList<Patrols> patrols;
+
     /**
      * Constructs the Firestation with at a given position with locations
      * for the repair and refill tiles and the spawn tiles.
@@ -54,6 +56,8 @@ public class FireStation {
         this.bayTile2 = new Vector2(x+2, y);
         this.texture = new Texture(Gdx.files.internal("sprites/station/station.png"));
         this.trucks = new ArrayList<FireTruck>();
+        this.patrols = new ArrayList<Patrols>();
+
     }
 
     /**
@@ -68,6 +72,13 @@ public class FireStation {
             SoundFX.sfx_truck_spawn.play();
         }
         this.trucks.add(truck);
+    }
+
+    public void spawn(Patrols patrol) {
+        if (SoundFX.music_enabled) {
+            SoundFX.sfx_truck_spawn.play();
+        }
+        this.patrols.add(patrol);
     }
 
     /**
@@ -181,7 +192,15 @@ public class FireStation {
         return this.trucks;
     }
 
+    public ArrayList<Patrols> getPatrol() {
+        return this.patrols;
+    }
+
     public FireTruck getTruck(int i) {
         return this.trucks.get(i);
+    }
+
+    public Patrols getPatrol(int i) {
+        return this.patrols.get(i);
     }
 }

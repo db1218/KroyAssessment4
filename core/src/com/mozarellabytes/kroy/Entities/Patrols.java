@@ -81,13 +81,17 @@ public class Patrols extends Sprite {
 
     private Vector2 previousTile;
 
+    private Vector2 nextTile;
 
-/** Time since fortress has attacked the truck */
+
+    /** Time since fortress has attacked the truck */
 
     private long timeOfLastAttack;
 
 
-/** List of particles that the truck uses to attack
+    private Vector2 target;
+
+    /** List of particles that the truck uses to attack
      * a Fortress */
 
     private final ArrayList<WaterParticle> spray;
@@ -112,7 +116,8 @@ public class Patrols extends Sprite {
      */
 
     public Patrols(GameScreen gameScreen, Vector2 position, PatrolType type) {
-        super(new Texture(Gdx.files.internal("sprites/Patrol/down/frame0000.png")));
+        super(new Texture(Gdx.files.internal("sprites/firetruck/down.png")));
+
 
         this.gameScreen = gameScreen;
         this.type = type;
@@ -124,10 +129,13 @@ public class Patrols extends Sprite {
         this.inCollision = false;
         this.spray = new ArrayList<WaterParticle>();
         this.timeOfLastAttack = System.currentTimeMillis();
-        this.lookLeft = new Texture(Gdx.files.internal("sprites/Patrol/left/frame0000.png"));
-        this.lookRight = new Texture(Gdx.files.internal("sprites/Patrol/right/frame0000.png"));
-        this.lookUp = new Texture(Gdx.files.internal("sprites/Patrol/up/frame0000.png"));
-        this.lookDown = new Texture(Gdx.files.internal("sprites/Patrol/down/frame0000.png"));
+        this.nextTile=position;
+        this.previousTile=position;
+        this.target=type.getPoint2();
+        this.lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/left.png"));
+        this.lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right.png"));
+        this.lookUp = new Texture(Gdx.files.internal("sprites/firetruck/up.png"));
+        this.lookDown = new Texture(Gdx.files.internal("sprites/firetruck/down.png"));
     }
 
 
@@ -136,7 +144,7 @@ public class Patrols extends Sprite {
      * path
      */
 
-    public void move() {
+   /* public void move() {
         if (this.path.size > 0) {
             Vector2 nextTile = path.first();
             this.position = nextTile;
@@ -145,6 +153,45 @@ public class Patrols extends Sprite {
         } else {
             moving = false;
         }
+    }*/
+
+    public void cycle(){
+        if(this.position==type.getPoint2()){
+            target=type.getPoint3();
+        }
+        else if(this.position==type.getPoint3()){
+            target=type.getPoint4();
+        }
+        else if(this.position==type.getPoint4()){
+            target=type.getPoint1();
+        }
+        else if(this.position==type.getPoint1()){
+            target=type.getPoint2();
+        }
+    }
+
+    public void move(){
+            //position.x=this.position.x+1;
+            //position.y=this.position.y+1;
+
+            previousTile=position;
+            if(target.x>this.position.x){
+                position.x=this.position.x+1;
+                nextTile.x=position.x;
+            }
+            else if(target.y>this.position.y){
+                position.y=this.position.y+1;
+                nextTile.y=position.y;
+            }
+            else if(target.x<this.position.x){
+                position.x=this.position.x-1;
+                nextTile.x=position.x;
+            }
+            else if(target.y<this.position.y){
+                position.y=this.position.y-1;
+                nextTile.y=position.y;
+            }
+        cycle();
     }
 
 /**

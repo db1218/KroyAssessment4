@@ -57,8 +57,8 @@ public class Kroy extends Game {
 		parameter.size = 120;
 		font120 = generator.generateFont(parameter);
 
-		//this.setScreen(new SplashScreen(this));
-		this.setScreen(new DanceScreen(this));	// Skip to dance screen
+		this.setScreen(new SplashScreen(this));
+		//this.setScreen(new DanceScreen(this));	// Skip to dance screen
 	}
 
 	@Override
