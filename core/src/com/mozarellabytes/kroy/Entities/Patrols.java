@@ -1,3 +1,4 @@
+/*
 package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.Gdx;
@@ -13,81 +14,110 @@ import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.ArrayList;
 
+*/
 /**
  * FireTruck is an entity that the player controls. It navigates the map on the
  * roads defined in the Tiled Map by following a path that the user draws.
  *
  * Having 'A' held when within range of a  Fortress will deal damage to it.
- */
+ *//*
+
 public class Patrols extends Sprite {
 
-    /** Enables access to functions in GameScreen */
+    */
+/** Enables access to functions in GameScreen *//*
+
     private final GameScreen gameScreen;
 
-    /** Defines set of pre-defined attributes */
+    */
+/** Defines set of pre-defined attributes *//*
+
     public final PatrolType type;
 
-    /** Health points */
+    */
+/** Health points *//*
+
     private float HP;
 
-    /** Water Reserve */
+    */
+/** Water Reserve *//*
+
     private float reserve;
 
-    /** Position of FireTruck in tiles */
+    */
+/** Position of FireTruck in tiles *//*
+
     private Vector2 position;
 
-    /** Actual path the truck follows; the fewer item in
-     * the path the slower the truck will go */
+    */
+/** Actual path the truck follows; the fewer item in
+     * the path the slower the truck will go *//*
+
     public final Queue<Vector2> path;
 
-
-    /** If the truck is currently moving, determines whether the
+    */
+/** If the truck is currently moving, determines whether the
      * truck's position should be updated
      *
      * <code>true</code> once the player has drawn a
      * path and has let go of the mouse click
      * <code>false</code> once the truck has got to
-     * the end of the path */
+     * the end of the path *//*
+
     private boolean moving;
 
-    /** If the truck is attacking a Fortress
+    */
+/** If the truck is attacking a Fortress
      *
      * <code>true</code> 'A' key is pressed
-     * <code>false</code> 'A' key is not pressed */
+     * <code>false</code> 'A' key is not pressed *//*
+
     private boolean attacking;
 
-    /** Whether the truck has an unresolved collision
-     * with another truck */
+    */
+/** Whether the truck has an unresolved collision
+     * with another truck *//*
+
     private boolean inCollision;
 
-    /** Used to check if the truck's image should be
-     * changed to match the direction it is facing */
+    */
+/** Used to check if the truck's image should be
+     * changed to match the direction it is facing *//*
+
     private Vector2 previousTile;
 
-    /** Time since fortress has attacked the truck */
+    */
+/** Time since fortress has attacked the truck *//*
+
     private long timeOfLastAttack;
 
-    /** List of particles that the truck uses to attack
-     * a Fortress */
+    */
+/** List of particles that the truck uses to attack
+     * a Fortress *//*
+
     private final ArrayList<WaterParticle> spray;
 
-    /** Texture for each direction the
-     * truck is facing */
+    */
+/** Texture for each direction the
+     * truck is facing *//*
+
     private final Texture lookLeft;
     private final Texture lookRight;
     private final Texture lookUp;
     private final Texture lookDown;
 
-    /**
+    */
+/**
      * Constructs a new FireTruck at a position and of a certain type
      * which have been passed in
      *
      * @param gameScreen    used to access functions in GameScreen
      * @param position      initial location of the truck
      * @param type          used to have predefined attributes
-     */
+     *//*
+
     public Patrols(GameScreen gameScreen, Vector2 position, PatrolType type) {
-        super(new Texture(Gdx.files.internal("sprites/patrol/down/frame0000.png")));
+        super(new Texture(Gdx.files.internal("sprites/Patrol/down/frame0000.png")));
 
         this.gameScreen = gameScreen;
         this.type = type;
@@ -95,70 +125,72 @@ public class Patrols extends Sprite {
         this.reserve = type.getMaxReserve();
         this.position = position;
         this.path = new Queue<Vector2>();
-        this.trailPath = new Queue<Vector2>();
         this.moving = false;
         this.attacking = false;
         this.inCollision = false;
         this.spray = new ArrayList<WaterParticle>();
         this.timeOfLastAttack = System.currentTimeMillis();
-        this.lookLeft = new Texture(Gdx.files.internal("sprites/patrol/left/frame0000.png"));
-        this.lookRight = new Texture(Gdx.files.internal("sprites/patrol/right/frame0000.png"));
-        this.lookUp = new Texture(Gdx.files.internal("sprites/firetruck/up.png"));
-        this.lookDown = new Texture(Gdx.files.internal("sprites/firetruck/down.png"));
+        this.lookLeft = new Texture(Gdx.files.internal("sprites/Patrol/left/frame0000.png"));
+        this.lookRight = new Texture(Gdx.files.internal("sprites/Patrol/right/frame0000.png"));
+        this.lookUp = new Texture(Gdx.files.internal("sprites/Patrol/up/frame0000.png"));
+        this.lookDown = new Texture(Gdx.files.internal("sprites/Patrol/down/frame0000.png"));
     }
 
-    /**
+    */
+/**
      * Called every tick and updates the paths to simulate the truck moving along the
      * path
-     */
-    public void move() {
-        if (moving) {
-            if (this.path.size > 0) {
-                Vector2 nextTile = path.first();
-                this.position = nextTile;
+     *//*
 
-                if (!this.trailPath.isEmpty() && (int) this.position.x == this.trailPath.first().x && (int) this.position.y == this.trailPath.first().y) {
-                    this.trailPath.removeFirst();
-                }
-                if (!this.inCollision) {
-                    changeSprite(nextTile);
-                }
-                previousTile = nextTile;
-                path.removeFirst();
-            } else {
-                moving = false;
+    public void move() {
+        if (this.path.size > 0) {
+            Vector2 nextTile = path.first();
+            this.position = nextTile;
+
+            if (!this.inCollision) {
+                changeSprite(nextTile);
             }
-            if (this.path.isEmpty() && inCollision) {
-                inCollision = false;
-            }
+            previousTile = nextTile;
+            path.removeFirst();
+        } else {
+            moving = false;
+        }
+        if (this.path.isEmpty() && inCollision) {
+            inCollision = false;
         }
     }
 
-    /**
+    */
+/**
      * Increases Health Points of the truck
      *
      * @param HP    increased by this value
-     */
+     *//*
+
     public void repair(float HP) {
         this.HP += HP;
     }
 
-    /**
+    */
+/**
      * Increases the Reserve of the truck
      *
      * @param reserve increased by this value
-     */
+     *//*
+
     public void refill(float reserve) {
         this.reserve += reserve;
     }
 
-    /**
+    */
+/**
      * Called when the player drags mouse on GameScreen Coordinate is checked to see
      * whether it is a valid tile to draw to, then adds it to the paths
      *
      * @param coordinate    Position on the screen that the user's mouse is being
      *                      dragged over
-     */
+     *//*
+
     public void addTileToPath(Vector2 coordinate) {
         if (isValidDraw(coordinate)) {
             if (this.path.size > 0) {
@@ -173,7 +205,8 @@ public class Patrols extends Sprite {
         }
     }
 
-    /**
+    */
+/**
      * Used when drawing the path to check whether the next tile to be added to the path is
      * valid
      *
@@ -181,7 +214,8 @@ public class Patrols extends Sprite {
      * @return              <code>true</code> if the coordinate is a valid tile to be added to
      *                      the paths
      *                      <code>false</code> otherwise
-     */
+     *//*
+
     private boolean isValidDraw(Vector2 coordinate) {
         if (coordinate.y < 24) {
             if (gameScreen.isRoad((Math.round(coordinate.x)), (Math.round(coordinate.y)))) {
@@ -197,11 +231,13 @@ public class Patrols extends Sprite {
         return false;
     }
 
-    /**
+    */
+/**
      * Changes the direction of the truck depending on the previous tile and the next tile
      *
      * @param nextTile  first tile in the queue (next to be followed)
-     */
+     *//*
+
     private void changeSprite(Vector2 nextTile) {
         if (previousTile != null) {
             if (nextTile.x > previousTile.x) {
@@ -216,20 +252,24 @@ public class Patrols extends Sprite {
         }
     }
 
-    /**
+    */
+/**
      * Clears the two paths
-     */
+     *//*
+
     public void resetPath() {
         this.path.clear();
         this.trailPath.clear();
     }
 
-    /**
+    */
+/**
      * Deals damage to Fortress by generating a WaterParticle and adding
      * it to the spray
      *
      * @param fortress Fortress being attacked
-     */
+     *//*
+
     public void attack(Fortress fortress) {
         if (this.attacking && this.reserve > 0) {
             this.spray.add(new WaterParticle(this, fortress));
@@ -237,21 +277,25 @@ public class Patrols extends Sprite {
         }
     }
 
-    /**
+    */
+/**
      * Called every tick to check if a Fortress is within the range of
      *  the truck
      *
      * @param fortress  Fortress' position being checked
      * @return          <code>true</code> if Fortress is within range
      *                  <code>false </code> otherwise
-     */
+     *//*
+
     public boolean fortressInRange(Vector2 fortress) {
         return this.getVisualPosition().dst(fortress) <= this.type.getRange();
     }
 
-    /**
+    */
+/**
      * Updates the position of each WaterParticle
-     */
+     *//*
+
     public void updateSpray() {
         if (this.spray != null) {
             for (int i=0; i < this.spray.size(); i++) {
@@ -265,31 +309,37 @@ public class Patrols extends Sprite {
         }
     }
 
-    /**
+    */
+/**
      * Remove the WaterParticle from the spray when it hits the Fortress
      *
      * @param particle  The particle to be removed from spray
-     */
+     *//*
+
     private void removeParticle(WaterParticle particle) {
         this.spray.remove(particle);
     }
 
-    /**
+    */
+/**
      * Damages the Fortress depending on the truck's AP
      *
      * @param particle  the particle which damages the fortress
-     */
+     *//*
+
     private void damage(WaterParticle particle) {
         particle.getTarget().damage(Math.min(this.type.getAP(), particle.getTarget().getHP()));
     }
 
-    /**
+    */
+/**
      * Damage inflicted on truck by a fortress, called when a bomb hits a truck it plays
      * a sound and decreases the fire trucks HP by the amount of the fortresses AP
      *
      * @param HP    amount of HP being taken away dependant
      *              on the AP of the attacking Fortress
-     */
+     *//*
+
     public void fortressDamage(float HP) {
         if (SoundFX.music_enabled) {
             SoundFX.sfx_truck_damage.play();
@@ -297,11 +347,13 @@ public class Patrols extends Sprite {
         this.HP -= Math.min(HP, this.HP);
     }
 
-    /**
+    */
+/**
      *  Draws the visual, colourful path that the truck will follow
      *
      * @param mapBatch  Batch that the path is being drawn to (map dependant)
-     */
+     *//*
+
     public void drawPath(Batch mapBatch) {
         if (!this.trailPath.isEmpty()) {
             mapBatch.setColor(this.type.getTrailColour());
@@ -315,11 +367,13 @@ public class Patrols extends Sprite {
         }
     }
 
-    /**
+    */
+/**
      * Draws the mini health/reserve indicators relative to the truck
      *
      * @param shapeMapRenderer  Renderer that the stats are being drawn to (map  dependant)
-     */
+     *//*
+
     public void drawStats(ShapeRenderer shapeMapRenderer) {
         shapeMapRenderer.rect(this.getPosition().x + 0.2f, this.getPosition().y + 1.3f, 0.6f, 0.8f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
         shapeMapRenderer.rect(this.getPosition().x + 0.266f, this.getPosition().y + 1.4f, 0.2f, 0.6f, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
@@ -331,30 +385,36 @@ public class Patrols extends Sprite {
         }
     }
 
-    /**
+    */
+/**
      * Draws the FireTruck sprite
      *
      * @param mapBatch  Batch that the truck is being
      *                  drawn to (map dependant)
-     */
+     *//*
+
     public void drawSprite(Batch mapBatch) {
         mapBatch.draw(this, this.position.x, this.position.y, 1, 1);
     }
 
-    /**
+    */
+/**
      * Helper method that returns where the truck is visually to the player. This is used when
      * checking the range when attacking the Fortress and getting attacked by the Fortress
      *
      * @return a vector where the truck is visually
-     */
+     *//*
+
     public Vector2 getVisualPosition() {
         return new Vector2(this.position.x + 0.5f, this.position.y + 0.5f);
     }
 
-    /**
+    */
+/**
      * Sets time of last attack to unix timestamp provided
      * @param timestamp  timestamp set as time of last attack
-     */
+     *//*
+
     public void setTimeOfLastAttack(long timestamp) {
         this.timeOfLastAttack = timestamp;
     }
@@ -409,3 +469,4 @@ public class Patrols extends Sprite {
 }
 
 
+*/
