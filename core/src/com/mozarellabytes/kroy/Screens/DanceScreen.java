@@ -38,6 +38,11 @@ public class DanceScreen implements Screen {
     private final Texture targetBoxTexture;
     private final Texture waitTexture;
 
+    private final int FIREMAN_MAX_HEALTH = 10;
+    private int firemanHealth = FIREMAN_MAX_HEALTH;
+    private final int ET_MAX_HEALTH = 10;
+    private int etHealth = ET_MAX_HEALTH;
+
     private final int ARROW_DISPLACEMENT = 128;
     private final int ARROW_SIZE = 96;
 
@@ -98,6 +103,13 @@ public class DanceScreen implements Screen {
              lastResult = danceMan.takeMove(DanceMove.RIGHT);
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            int combo = danceMan.getCombo();
+            etHealth -= combo;
+            danceMan.killCombo();
+            System.out.println("ET Health: " + etHealth);
+        }
+
         Gdx.gl.glClearColor(51/255f, 34/255f, 99/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -130,7 +142,7 @@ public class DanceScreen implements Screen {
             game.batch.draw(arrowRightTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - phaseLerp(danceMan.getPhase()) * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
                 break;
                 case WAIT:
-            game.batch.draw(waitTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - phaseLerp(danceMan.getPhase()) * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
+//            game.batch.draw(waitTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - phaseLerp(danceMan.getPhase()) * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
                 break;
 
             }
