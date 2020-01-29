@@ -10,6 +10,8 @@ public class DanceChoreographer {
 
     private List<DanceMove> moveList;
 
+    private int clumpLength = 0;
+
     private Random random = new Random();
 
     public DanceChoreographer() {
@@ -29,8 +31,21 @@ public class DanceChoreographer {
     }
 
     public DanceMove nextMove() {
-        moveList.add(DanceMove.values()[random.nextInt(5)]);
-        return moveList.remove(0);
+        if (clumpLength == 0) {
+            if (random.nextInt(3) == 0) {
+                // Initiate clump
+                clumpLength = 3;
+                moveList.add(DanceMove.WAIT);
+                return moveList.remove(0);
+            } else {
+                moveList.add(DanceMove.values()[random.nextInt(5)]);
+                return moveList.remove(0);
+            }
+        } else {
+            clumpLength--;
+            moveList.add(DanceMove.WAIT);
+            return moveList.remove(0);
+        }
     }
 
     public void clearQueue() {

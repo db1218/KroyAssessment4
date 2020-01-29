@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Minigame.DanceMove;
 import com.mozarellabytes.kroy.Minigame.DanceManager;
@@ -31,6 +32,8 @@ public class DanceScreen implements Screen {
     /** Object for handling those funky beats */
     private final DanceManager danceMan;
 
+    private Screen previousScreen;
+
     private final Texture arrowUpTexture;
     private final Texture arrowDownTexture;
     private final Texture arrowLeftTexture;
@@ -48,10 +51,11 @@ public class DanceScreen implements Screen {
 
     private DanceResult lastResult = null;
 
-    public DanceScreen(Kroy game) {
+    public DanceScreen(Kroy game, Screen previousScreen) {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
+        this.previousScreen = previousScreen;
 
         this.danceMan = new DanceManager(120f);
 
@@ -80,6 +84,10 @@ public class DanceScreen implements Screen {
     public void render(float delta)
     {
         danceMan.update(delta);
+
+        if (firemanHealth <= 0 || etHealth <= 0) {
+            game.setScreen(previousScreen);
+        }
 
         int danceTimer = 0;
 
