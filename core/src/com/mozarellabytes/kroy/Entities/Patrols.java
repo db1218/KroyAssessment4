@@ -131,7 +131,7 @@ public class Patrols extends Sprite {
         this.timeOfLastAttack = System.currentTimeMillis();
         this.nextTile=position;
         this.previousTile=position;
-        this.target=type.getPoint2();
+        this.target=type.getPoint3();
         this.lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/left.png"));
         this.lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right.png"));
         this.lookUp = new Texture(Gdx.files.internal("sprites/firetruck/up.png"));
@@ -156,17 +156,23 @@ public class Patrols extends Sprite {
     }*/
 
     public void cycle(){
-        if(this.position==type.getPoint2()){
-            target=type.getPoint3();
+        System.out.println("here cycle");
+        System.out.println("here " + this.position + " " + type.getPoint3());
+        if(this.position.equals(type.getPoint2())){
+            System.out.println("here point2");
+            this.target=type.getPoint3();
         }
-        else if(this.position==type.getPoint3()){
-            target=type.getPoint4();
+        if(this.position.equals(type.getPoint3())){
+            System.out.println("here point3");
+            this.target=type.getPoint4();
         }
-        else if(this.position==type.getPoint4()){
-            target=type.getPoint1();
+        if(this.position.equals(type.getPoint4())){
+            System.out.println("here point4");
+            this.target=type.getPoint1();
         }
-        else if(this.position==type.getPoint1()){
-            target=type.getPoint2();
+        if(this.position.equals(type.getPoint1())){
+            System.out.println("here point1");
+            this.target=type.getPoint2();
         }
     }
 
@@ -174,24 +180,27 @@ public class Patrols extends Sprite {
             //position.x=this.position.x+1;
             //position.y=this.position.y+1;
 
-            previousTile=position;
-            if(target.x>this.position.x){
-                position.x=this.position.x+1;
-                nextTile.x=position.x;
-            }
-            else if(target.y>this.position.y){
-                position.y=this.position.y+1;
-                nextTile.y=position.y;
-            }
-            else if(target.x<this.position.x){
-                position.x=this.position.x-1;
-                nextTile.x=position.x;
-            }
-            else if(target.y<this.position.y){
-                position.y=this.position.y-1;
-                nextTile.y=position.y;
-            }
-        cycle();
+        previousTile=position;
+        if(target.x>this.position.x){
+            nextTile.x=this.position.x+1;
+            this.position.x=nextTile.x;
+        }
+        else if(target.y>this.position.y){
+            nextTile.y=this.position.y+1;
+            this.position.y=nextTile.y;
+        }
+        else if(target.x<this.position.x){
+            nextTile.x=this.position.x-1;
+            this.position.x=nextTile.x;
+        }
+        else if(target.y<this.position.y) {
+            nextTile.y=this.position.y-1;
+            this.position.y=nextTile.y;
+        }
+        else{
+            cycle();
+        }
+        changeSprite(nextTile);
     }
 
 /**
