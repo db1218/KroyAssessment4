@@ -357,6 +357,14 @@ public class Patrols extends Sprite {
     public boolean getMoving() {
         return this.moving;
     }
+
+    public boolean withinRange(Vector2 targetPos) {
+        System.out.print(targetPos);
+        System.out.println(this.position);
+
+        return targetPos.equals(this.position);
+    }
+
 }
 
 
