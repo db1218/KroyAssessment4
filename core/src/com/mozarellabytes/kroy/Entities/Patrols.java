@@ -9,10 +9,15 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
+
 import com.mozarellabytes.kroy.Screens.GameScreen;
+import com.mozarellabytes.kroy.Utilities.CircularLinkedList;
+import com.mozarellabytes.kroy.Utilities.Node;
+
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 /**
@@ -42,16 +47,21 @@ public class Patrols extends Sprite {
 
 /** Position of FireTruck in tiles */
 
-    private Vector2 position;
+    public Vector2 position;
 
 
 /** Actual path the truck follows; the fewer item in
      * the path the slower the truck will go */
 
-    public final Queue<Vector2> path;
+    public final CircularLinkedList path;
 
 
-/** If the truck is currently moving, determines whether the
+    public final Queue<Vector2> trailPath;
+
+
+    public Node current;
+
+    /** If the truck is currently moving, determines whether the
      * truck's position should be updated
      *
      * <code>true</code> once the player has drawn a
@@ -111,31 +121,32 @@ public class Patrols extends Sprite {
      * which have been passed in
      *
      * @param gameScreen    used to access functions in GameScreen
-     * @param position      initial location of the truck
      * @param type          used to have predefined attributes
      */
 
-    public Patrols(GameScreen gameScreen, Vector2 position, PatrolType type) {
+    public Patrols(GameScreen gameScreen, PatrolType type) {
         super(new Texture(Gdx.files.internal("sprites/firetruck/down.png")));
 
 
         this.gameScreen = gameScreen;
         this.type = type;
         this.HP = type.getMaxHP();
-        this.position = position;
-        this.path = new Queue<Vector2>();
-        this.moving = false;
+        this.position = new Vector2(type.getPoint1().x + 1,type.getPoint1().y);
+        this.path = new CircularLinkedList();
+        this.trailPath = new Queue<Vector2>();
+        this.moving = true;
         this.attacking = false;
         this.inCollision = false;
         this.spray = new ArrayList<WaterParticle>();
         this.timeOfLastAttack = System.currentTimeMillis();
         this.nextTile=position;
         this.previousTile=position;
-        this.target=type.getPoint3();
         this.lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/left.png"));
         this.lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right.png"));
         this.lookUp = new Texture(Gdx.files.internal("sprites/firetruck/up.png"));
         this.lookDown = new Texture(Gdx.files.internal("sprites/firetruck/down.png"));
+
+        definePath();
     }
 
 
@@ -144,63 +155,78 @@ public class Patrols extends Sprite {
      * path
      */
 
-   /* public void move() {
-        if (this.path.size > 0) {
-            Vector2 nextTile = path.first();
-            this.position = nextTile;
-            previousTile = nextTile;
-            path.removeFirst();
-        } else {
-            moving = false;
-        }
-    }*/
 
-    public void cycle(){
-        System.out.println("here cycle");
-        System.out.println("here " + this.position + " " + type.getPoint3());
-        if(this.position.equals(type.getPoint2())){
-            System.out.println("here point2");
-            this.target=type.getPoint3();
+    public void definePath(){
+        addTileToPath(this.position,type.getPoint1());
+
+        while(type.getTarget()!=type.getPoint1()){
+            if(this.type.getTarget().x>this.position.x){
+                nextTile.x=this.position.x+1;
+            }
+            else if(this.type.getTarget().y>this.position.y){
+                nextTile.y=this.position.y+1;
+            }
+            else if(this.type.getTarget().x<this.position.x){
+                nextTile.x=this.position.x-1;
+            }
+            else if(this.type.getTarget().y<this.position.y) {
+                nextTile.y=this.position.y-1;
+            }
+            else{
+                if(this.position.equals(type.getPoint2())){
+                    type.setTarget(type.getPoint3());
+                    System.out.println("got point2");
+                }
+                else if(this.position.equals(type.getPoint3())){
+                    type.setTarget(type.getPoint4());
+                    System.out.println("got point3");
+                }
+                else if(this.position.equals(type.getPoint4())){
+                    type.setTarget(type.getPoint1());
+                    System.out.println("got point4");
+
+                }
+                else{
+                    type.setTarget(type.getPoint2());
+                    System.out.println("got point1");
+
+                }
+            }
+            addTileToPath(this.position, previousTile);
         }
-        if(this.position.equals(type.getPoint3())){
-            System.out.println("here point3");
-            this.target=type.getPoint4();
-        }
-        if(this.position.equals(type.getPoint4())){
-            System.out.println("here point4");
-            this.target=type.getPoint1();
-        }
-        if(this.position.equals(type.getPoint1())){
-            System.out.println("here point1");
-            this.target=type.getPoint2();
-        }
+        current=path.getHead();
     }
 
-    public void move(){
-            //position.x=this.position.x+1;
-            //position.y=this.position.y+1;
+    public void addTileToPath(Vector2 coordinate, Vector2 previous) {
+            //Vector2 previous = this.path.last();
+            int interpolation = (int) (20/type. getSpeed());
+            for (int i=1; i<interpolation; i++) {
+                this.path.addNode(new Vector2((((previous.x - coordinate.x)*-1)/interpolation)*i + previous.x, (((previous.y - coordinate.y)*-1)/interpolation)*i + previous.y));
+            }
+        previousTile=new Vector2(((int) coordinate.x), ((int) coordinate.y));
+        this.path.addNode(previousTile);
+    }
 
-        previousTile=position;
-        if(target.x>this.position.x){
-            nextTile.x=this.position.x+1;
-            this.position.x=nextTile.x;
+    public void move() {
+        //path.traverseList();
+        if (moving) {
+            Node next=path.getNext(current);
+            Vector2 nextTile = path.getData(next);
+
+            this.position = nextTile;
+
+            changeSprite(nextTile);
+
+            /*if (!this.inCollision) {
+                changeSprite(nextTile);
+            }
+            else{
+                moving=false;
+            }*/
+            current=next;
+            previousTile = nextTile;
+
         }
-        else if(target.y>this.position.y){
-            nextTile.y=this.position.y+1;
-            this.position.y=nextTile.y;
-        }
-        else if(target.x<this.position.x){
-            nextTile.x=this.position.x-1;
-            this.position.x=nextTile.x;
-        }
-        else if(target.y<this.position.y) {
-            nextTile.y=this.position.y-1;
-            this.position.y=nextTile.y;
-        }
-        else{
-            cycle();
-        }
-        changeSprite(nextTile);
     }
 
 /**
@@ -255,9 +281,9 @@ public class Patrols extends Sprite {
      */
 
     public void drawStats(ShapeRenderer shapeMapRenderer) {
-        shapeMapRenderer.rect(this.getPosition().x - 0.26f, this.getPosition().y + 1.4f, 0.6f, 1.2f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
-        shapeMapRenderer.rect(this.getPosition().x - 0.13f, this.getPosition().y + 1.5f, 0.36f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-        shapeMapRenderer.rect(this.getPosition().x - 0.13f, this.getPosition().y + 1.5f, 0.36f, this.getHP() / this.type.getMaxHP() * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
+        shapeMapRenderer.rect(this.getPosition().x + 0.2f, this.getPosition().y + 1.3f, 0.4f, 0.8f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
+        shapeMapRenderer.rect(this.getPosition().x + 0.3f, this.getPosition().y + 1.4f, 0.2f, 0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+        shapeMapRenderer.rect(this.getPosition().x + 0.3f, this.getPosition().y + 1.4f, 0.2f, this.getHP() / this.type.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
     }
 
 
@@ -323,7 +349,7 @@ public class Patrols extends Sprite {
         return this.position;
     }
 
-    public Queue<Vector2> getPath() {
+    public CircularLinkedList getPath() {
         return this.path;
     }
 

@@ -50,6 +50,8 @@ public enum PatrolType {
 
     private final float range;
 
+    private Vector2 target;
+
 /** Attack points - the damage this truck can inflict */
 
     private final float AP;
@@ -85,7 +87,8 @@ public enum PatrolType {
         this.point1 = point1;
         this.point2 = point2;
         this.point3 = point3;
-        this.point4= point4;
+        this.point4 = point4;
+        this.target = point2;
     }
 
     public float getMaxReserve(){ return this.maxReserve; }
@@ -112,6 +115,9 @@ public enum PatrolType {
     public Vector2 getPoint4(){
         return point4;
     }
+
+    public Vector2 getTarget(){ return target; }
+    public void setTarget(Vector2 target){ this.target=target;}
 
 }
 
