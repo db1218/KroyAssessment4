@@ -159,7 +159,10 @@ public class Patrols extends Sprite {
     public void definePath(){
         addTileToPath(this.position,type.getPoint1());
 
-        while(type.getTarget()!=type.getPoint1()){
+        boolean fullCycle=false;
+        int counter=0;
+
+        while(!fullCycle){
             if(this.type.getTarget().x>this.position.x){
                 nextTile.x=this.position.x+1;
             }
@@ -189,11 +192,15 @@ public class Patrols extends Sprite {
                 else{
                     type.setTarget(type.getPoint2());
                     System.out.println("got point1");
-
+                    counter++;
+                    if(counter==2){
+                        fullCycle=true;
+                    }
                 }
             }
             addTileToPath(this.position, previousTile);
         }
+        //addTileToPath(this.target, this.position);
         current=path.getHead();
     }
 
@@ -359,10 +366,7 @@ public class Patrols extends Sprite {
     }
 
     public boolean withinRange(Vector2 targetPos) {
-        System.out.print(targetPos);
-        System.out.println(this.position);
-
-        return targetPos.equals(this.position);
+        return targetPos==this.position;
     }
 
 }

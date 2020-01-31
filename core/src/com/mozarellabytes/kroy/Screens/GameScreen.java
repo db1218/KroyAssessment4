@@ -261,8 +261,7 @@ public class GameScreen implements Screen {
                 }
             }
 
-            for (Patrols patrol : this.patrols) {
-                patrol.withinRange(truck.getVisualPosition());
+            for (Patrols patrol : station.getPatrol()) {
                 if (patrol.withinRange(truck.getVisualPosition())) {
                     game.setScreen(new GameOverScreen(game, false));
                 }

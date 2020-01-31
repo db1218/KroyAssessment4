@@ -24,7 +24,7 @@ public enum PatrolType {
 
 
     //Magenta(100, 2, "Magenta Patrol", 5, 0.08f, 150),
-    Green(250, 1, "Green Patrol", 7, 0.16f, 100, new Vector2(12, 18), new Vector2(15, 18), new Vector2(15, 15), new Vector2(12, 15)),
+    Green(250, 1, "Green Patrol", 7, 0.16f, 100, new Vector2(8, 19), new Vector2(15, 19), new Vector2(15, 15), new Vector2(8, 15)),
     Blue(100, 2, "Blue Patrol", 5, 0.08f, 150, new Vector2(30, 17), new Vector2(33, 17), new Vector2(33, 14), new Vector2(30, 14));
 
 
