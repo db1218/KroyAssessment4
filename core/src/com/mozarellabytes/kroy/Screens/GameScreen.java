@@ -71,6 +71,9 @@ public class GameScreen implements Screen {
     /** List of Fortresses currently active on the map */
     private final ArrayList<Fortress> fortresses;
 
+    private final ArrayList<Patrols> patrols;
+
+
     /** Where the FireEngines' spawn, refill and repair */
     private final FireStation station;
 
@@ -131,6 +134,8 @@ public class GameScreen implements Screen {
         fortresses.add(new Fortress(12, 18.5f, FortressType.Revs));
         fortresses.add(new Fortress(30.5f, 17.5f, FortressType.Walmgate));
         fortresses.add(new Fortress(16, 3.5f, FortressType.Clifford));
+
+        patrols = new ArrayList<Patrols>();
 
 
 
@@ -242,6 +247,12 @@ public class GameScreen implements Screen {
                     gameState.incrementTrucksInAttackRange();
                     truck.attack(fortress);
                     break;
+                }
+            }
+
+            for (Patrols patrol : station.getPatrol()) {
+                if (patrol.withinRange(truck.getVisualPosition())) {
+                    game.setScreen(new GameOverScreen(game, false));
                 }
             }
 
@@ -411,6 +422,13 @@ public class GameScreen implements Screen {
         station.spawn(new FireTruck(this, new Vector2(6,2), type));
         gameState.addFireTruck();
     }
+    
+    private void spawn(PatrolType type) {
+        SoundFX.sfx_truck_spawn.play();
+        station.spawn(new Patrols(this, type));
+        gameState.addFireTruck();
+    }
+
 
     /** Toggles between Play and Pause state when the Pause button is clicked */
     public void changeState() {
