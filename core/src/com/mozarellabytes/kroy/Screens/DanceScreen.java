@@ -10,9 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Kroy;
-import com.mozarellabytes.kroy.Minigame.DanceMove;
-import com.mozarellabytes.kroy.Minigame.DanceManager;
-import com.mozarellabytes.kroy.Minigame.DanceResult;
+import com.mozarellabytes.kroy.Minigame.*;
 import com.mozarellabytes.kroy.Utilities.GUI;
 
 /**
@@ -21,7 +19,7 @@ import com.mozarellabytes.kroy.Utilities.GUI;
 
 
 
-public class DanceScreen implements Screen {
+public class DanceScreen implements Screen, BeatListener {
 
     /** Instance of our game that allows us the change screens */
     private final Kroy game;
@@ -40,11 +38,18 @@ public class DanceScreen implements Screen {
     private final Texture arrowRightTexture;
     private final Texture targetBoxTexture;
     private final Texture waitTexture;
+    private final Texture firemanNoneTexture;
+    private final Texture firemanWaitTexture;
+    private final Texture firemanLeftTexture;
+    private final Texture firemanRightTexture;
+    private final Texture firemanUpTexture;
+    private final Texture firemanDownTexture;
+    private final Texture etNoneTexture;
+    private final Texture etLeftTexture;
+    private final Texture etRightTexture;
 
-    private final int FIREMAN_MAX_HEALTH = 10;
-    private int firemanHealth = FIREMAN_MAX_HEALTH;
-    private final int ET_MAX_HEALTH = 10;
-    private int etHealth = ET_MAX_HEALTH;
+    private Dancer firefighter;
+    private Dancer etDancer;
 
     private final int ARROW_DISPLACEMENT = 128;
     private final int ARROW_SIZE = 96;
@@ -58,6 +63,10 @@ public class DanceScreen implements Screen {
         this.previousScreen = previousScreen;
 
         this.danceMan = new DanceManager(120f);
+        danceMan.subscribeToBeat(this);
+
+        this.firefighter = new Dancer(10);
+        this.etDancer = new Dancer(10);
 
         arrowUpTexture = new Texture(Gdx.files.internal("sprites/dance/arrowUp.png"), true);
         arrowUpTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
@@ -72,6 +81,27 @@ public class DanceScreen implements Screen {
         waitTexture = new Texture(Gdx.files.internal("sprites/dance/wait.png"), true);
         waitTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
+        firemanNoneTexture = new Texture(Gdx.files.internal("sprites/dance/firefighter1.png"), true);
+        firemanNoneTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        firemanWaitTexture = new Texture(Gdx.files.internal("sprites/dance/firefighter2.png"), true);
+        firemanWaitTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        firemanLeftTexture = new Texture(Gdx.files.internal("sprites/dance/firefighter3.png"), true);
+        firemanLeftTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        firemanRightTexture = new Texture(Gdx.files.internal("sprites/dance/firefighter4.png"), true);
+        firemanRightTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        firemanUpTexture = new Texture(Gdx.files.internal("sprites/dance/firefighter5.png"), true);
+        firemanUpTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        firemanDownTexture = new Texture(Gdx.files.internal("sprites/dance/firefighter6.png"), true);
+        firemanDownTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+
+        etNoneTexture = new Texture(Gdx.files.internal("sprites/dance/et1.png"), true);
+        etNoneTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        etLeftTexture = new Texture(Gdx.files.internal("sprites/dance/et2.png"), true);
+        etLeftTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        etRightTexture = new Texture(Gdx.files.internal("sprites/dance/et3.png"), true);
+        etRightTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+
+
         System.out.println("Got to the dance Screen");
     }
 
@@ -85,37 +115,44 @@ public class DanceScreen implements Screen {
     {
         danceMan.update(delta);
 
-        if (firemanHealth <= 0 || etHealth <= 0) {
+        if (firefighter.getHealth() <= 0 || etDancer.getHealth() <= 0) {
             game.setScreen(previousScreen);
         }
 
-        int danceTimer = 0;
+        firefighter.addTimeInState(delta);
+        etDancer.addTimeInState(delta);
 
         if (danceMan.hasMissedLastBeat()) {
-            lastResult = DanceResult.MISSED;
+            if (firefighter.getTimeInState() > danceMan.getPhase()/4) {
+                lastResult = DanceResult.MISSED;
+            }
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
             lastResult = danceMan.takeMove(DanceMove.UP);
+            firefighter.setState(DanceMove.UP);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
             lastResult = danceMan.takeMove(DanceMove.DOWN);
+            firefighter.setState(DanceMove.DOWN);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
              lastResult = danceMan.takeMove(DanceMove.LEFT);
+            firefighter.setState(DanceMove.LEFT);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
              lastResult = danceMan.takeMove(DanceMove.RIGHT);
+            firefighter.setState(DanceMove.RIGHT);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             int combo = danceMan.getCombo();
-            etHealth -= combo;
+            etDancer.damage(combo);
             danceMan.killCombo();
-            System.out.println("ET Health: " + etHealth);
+            System.out.println("ET Health: " + etDancer.getHealth());
         }
 
         Gdx.gl.glClearColor(51/255f, 34/255f, 99/255f, 1);
@@ -128,7 +165,51 @@ public class DanceScreen implements Screen {
         Vector2 arrowsOrigin = new Vector2(camera.viewportWidth/2-ARROW_SIZE/2, camera.viewportHeight/3);
         Vector2 resultLocation = new Vector2(0, camera.viewportHeight/4);
         Vector2 comboLocation = new Vector2(0, camera.viewportHeight/7);
+        Vector2 firemanLocation = new Vector2(camera.viewportWidth/4-256, camera.viewportHeight/5);
+        Vector2 etLocation = new Vector2((3*camera.viewportWidth)/4-256, camera.viewportHeight/5);
         game.batch.begin();
+        // Draw firefighter
+        switch (firefighter.getState()) {
+            case NONE:
+                game.batch.draw(firemanNoneTexture, firemanLocation.x, firemanLocation.y, 512, 512);
+                break;
+            case WAIT:
+                game.batch.draw(firemanWaitTexture, firemanLocation.x, firemanLocation.y, 512, 512);
+                break;
+            case UP:
+                game.batch.draw(firemanUpTexture, firemanLocation.x, firemanLocation.y, 512, 512);
+                break;
+            case DOWN:
+                game.batch.draw(firemanDownTexture, firemanLocation.x, firemanLocation.y, 512, 512);
+                break;
+            case LEFT:
+                game.batch.draw(firemanLeftTexture, firemanLocation.x, firemanLocation.y, 512, 512);
+                break;
+            case RIGHT:
+                game.batch.draw(firemanRightTexture, firemanLocation.x, firemanLocation.y, 512, 512);
+                break;
+        }
+
+        // Draw et
+        switch (etDancer.getState()) {
+            case NONE:
+                game.batch.draw(etNoneTexture, etLocation.x, etLocation.y, 512, 512);
+                break;
+            case WAIT:
+                break;
+            case UP:
+                break;
+            case DOWN:
+                break;
+            case LEFT:
+                game.batch.draw(etLeftTexture, etLocation.x, etLocation.y, 512, 512);
+                break;
+            case RIGHT:
+                game.batch.draw(etRightTexture, etLocation.x, etLocation.y, 512, 512);
+                break;
+        }
+
+        // Render arrows
         int i = 0;
         for (DanceMove d : danceMan.getMoveList()) {
             Color c =  game.batch.getColor();
@@ -158,6 +239,7 @@ public class DanceScreen implements Screen {
             i++;
         }
         game.batch.draw(targetBoxTexture, arrowsOrigin.x, arrowsOrigin.y, ARROW_SIZE, ARROW_SIZE);
+
 
         if (lastResult != null) {
             game.font120.draw(game.batch, lastResult.toString(), resultLocation.x, resultLocation.y,camera.viewportWidth, 1, false);
@@ -207,5 +289,27 @@ public class DanceScreen implements Screen {
 //        game.shapeRenderer.rect(x + this.selectedW - positionSpacer - outerSpacing - barSpacer, this.selectedY + outerSpacing, whiteW, this.selectedH - outerSpacing*2 - spaceForText, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
 //        game.shapeRenderer.rect(x + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, barHeight, backgroundColour, backgroundColour, backgroundColour, backgroundColour);
 //        game.shapeRenderer.rect(this.selectedX + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, value/maxValue*barHeight, progressColour, progressColour, progressColour, progressColour);
+    }
+
+    @Override
+    public void onBeat() {
+        etDancer.updateJive();
+    }
+
+    @Override
+    public void offBeat() {
+        System.out.println("Offbeat");
+        if (firefighter.getTimeInState() > danceMan.getPhase()/2) {
+            firefighter.setState(DanceMove.WAIT);
+        }
+        etDancer.updateJive();
+    }
+
+    @Override
+    public void moveResult(DanceResult result) {
+        if (result == DanceResult.WRONG) {
+            firefighter.damage(1);
+            etDancer.setJiving(true);
+        };
     }
 }
