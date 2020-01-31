@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
+import com.mozarellabytes.kroy.Entities.Patrols;
+
 
 /**
  * FireStation is a class created when it is called from GameScreen.
@@ -39,7 +41,7 @@ public class FireStation {
      * @link FireTruck */
     private final ArrayList<FireTruck> trucks;
 
-    //private final ArrayList<Patrols> patrols;
+    private final ArrayList<Patrols> patrols;
 
     /**
      * Constructs the Firestation with at a given position with locations
@@ -56,7 +58,7 @@ public class FireStation {
         this.bayTile2 = new Vector2(x+2, y);
         this.texture = new Texture(Gdx.files.internal("sprites/station/station.png"));
         this.trucks = new ArrayList<FireTruck>();
-        //this.patrols = new ArrayList<Patrols>();
+        this.patrols = new ArrayList<Patrols>();
 
     }
 
@@ -74,12 +76,12 @@ public class FireStation {
         this.trucks.add(truck);
     }
 
-    /*public void spawn(Patrols patrol) {
+    public void spawn(Patrols patrol) {
         if (SoundFX.music_enabled) {
             SoundFX.sfx_truck_spawn.play();
         }
         this.patrols.add(patrol);
-    }*/
+    }
 
     /**
      * Calls the repair and refill methods. When a truck is within the station
@@ -192,9 +194,9 @@ public class FireStation {
         return this.trucks;
     }
 
-    /*public ArrayList<Patrols> getPatrol() {
+    public ArrayList<Patrols> getPatrol() {
         return this.patrols;
-    }*/
+    }
 
     public FireTruck getTruck(int i) {
         return this.trucks.get(i);

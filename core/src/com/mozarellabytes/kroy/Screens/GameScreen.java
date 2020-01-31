@@ -71,7 +71,7 @@ public class GameScreen implements Screen {
     /** List of Fortresses currently active on the map */
     private final ArrayList<Fortress> fortresses;
 
-    private final ArrayList<Patrols> patrols;
+    //private final ArrayList<Patrols> patrols;
 
 
     /** Where the FireEngines' spawn, refill and repair */
@@ -135,11 +135,8 @@ public class GameScreen implements Screen {
         fortresses.add(new Fortress(30.5f, 17.5f, FortressType.Walmgate));
         fortresses.add(new Fortress(16, 3.5f, FortressType.Clifford));
 
-        patrols = new ArrayList<Patrols>();
-
-
-
-
+        spawn(PatrolType.Blue);
+        spawn(PatrolType.Green);
 
         // sets the origin point to which all of the polygon's local vertices are relative to.
         for (FireTruck truck : station.getTrucks()) {
@@ -152,7 +149,6 @@ public class GameScreen implements Screen {
             SoundFX.sfx_soundtrack.setVolume(.5f);
             SoundFX.sfx_soundtrack.play();
         }
-
     }
 
     @Override
@@ -174,6 +170,10 @@ public class GameScreen implements Screen {
             truck.drawSprite(mapBatch);
         }
 
+        for (Patrols patrol : station.getPatrol()) {
+            patrol.drawSprite(mapBatch);
+        }
+
         station.draw(mapBatch);
 
         for (Fortress fortress : this.fortresses) {
@@ -188,6 +188,10 @@ public class GameScreen implements Screen {
 
         for (FireTruck truck : station.getTrucks()) {
             truck.drawStats(shapeMapRenderer);
+        }
+
+        for (Patrols patrol : station.getPatrol()) {
+            patrol.drawStats(shapeMapRenderer);
         }
 
         for (Fortress fortress : fortresses) {
@@ -264,6 +268,10 @@ public class GameScreen implements Screen {
                     this.selectedTruck = null;
                 }
             }
+        }
+
+        for (Patrols patrol:station.getPatrol()) {
+            patrol.move();
         }
 
         for (int i = 0; i < this.fortresses.size(); i++) {
