@@ -130,9 +130,6 @@ public class GameScreen implements Screen {
         spawn(FireTruckType.Ocean);
         spawn(FireTruckType.Speed);
 
-        spawn(PatrolType.Blue);
-        spawn(PatrolType.Green);
-
         fortresses = new ArrayList<Fortress>();
         fortresses.add(new Fortress(12, 18.5f, FortressType.Revs));
         fortresses.add(new Fortress(30.5f, 17.5f, FortressType.Walmgate));
@@ -177,10 +174,6 @@ public class GameScreen implements Screen {
             truck.drawSprite(mapBatch);
         }
 
-        for (Patrols patrol : station.getPatrol()) {
-            patrol.drawSprite(mapBatch);
-        }
-
         station.draw(mapBatch);
 
         for (Fortress fortress : this.fortresses) {
@@ -195,10 +188,6 @@ public class GameScreen implements Screen {
 
         for (FireTruck truck : station.getTrucks()) {
             truck.drawStats(shapeMapRenderer);
-        }
-
-        for (Patrols patrol : station.getPatrol()) {
-            patrol.drawStats(shapeMapRenderer);
         }
 
         for (Fortress fortress : fortresses) {
@@ -275,11 +264,6 @@ public class GameScreen implements Screen {
                     this.selectedTruck = null;
                 }
             }
-        }
-
-        for(int i=0; i<station.getPatrol().size();i++){
-            Patrols patrol= station.getPatrol(i);
-            patrol.move();
         }
 
         for (int i = 0; i < this.fortresses.size(); i++) {
@@ -438,7 +422,7 @@ public class GameScreen implements Screen {
         station.spawn(new FireTruck(this, new Vector2(6,2), type));
         gameState.addFireTruck();
     }
-
+    
     private void spawn(PatrolType type) {
         SoundFX.sfx_truck_spawn.play();
         station.spawn(new Patrols(this, type));

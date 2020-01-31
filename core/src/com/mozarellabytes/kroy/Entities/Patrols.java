@@ -1,5 +1,5 @@
-
 package com.mozarellabytes.kroy.Entities;
+
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -368,8 +368,4 @@ public class Patrols extends Sprite {
     public boolean withinRange(Vector2 targetPos) {
         return targetPos==this.position;
     }
-
 }
-
-
-

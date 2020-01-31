@@ -118,6 +118,4 @@ public enum PatrolType {
 
     public Vector2 getTarget(){ return target; }
     public void setTarget(Vector2 target){ this.target=target;}
-
 }
-
