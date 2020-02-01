@@ -90,9 +90,9 @@ public class GUI {
         this.game = game;
         this.gameScreen = gameScreen;
         this.selectedH = 275;
-        this.selectedW = 275;
-        this.selectedX = 10;
-        this.selectedY = Gdx.graphics.getHeight() - 10 - this.selectedH;
+        this.selectedW = 225;
+        this.selectedX = 5;
+        this.selectedY = Gdx.graphics.getHeight() - 5 - this.selectedH;
 
         homeButtonIdle = new Texture(Gdx.files.internal("ui/home_idle.png"), true);
         homeButtonIdle.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
