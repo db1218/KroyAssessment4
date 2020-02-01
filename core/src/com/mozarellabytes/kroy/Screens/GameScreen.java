@@ -14,6 +14,8 @@ import com.mozarellabytes.kroy.Entities.*;
 import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.*;
+import com.mozarellabytes.kroy.Screens.*;
+
 
 import java.util.ArrayList;
 
@@ -232,6 +234,7 @@ public class GameScreen implements Screen {
 
         station.restoreTrucks();
         station.checkForCollisions();
+
         gameState.setTrucksInAttackRange(0);
 
         for (int i = 0; i < station.getTrucks().size(); i++) {
@@ -255,8 +258,8 @@ public class GameScreen implements Screen {
             }
 
             for (Patrols patrol : station.getPatrol()) {
-                if (patrol.withinRange(truck.getVisualPosition())) {
-                    game.setScreen(new GameOverScreen(game, false));
+                if (patrol.getAttacking()) {
+                    toDanceScreen();
                 }
             }
 
@@ -419,6 +422,10 @@ public class GameScreen implements Screen {
     public void toHomeScreen() {
         game.setScreen(new MenuScreen(game));
         SoundFX.sfx_soundtrack.dispose();
+    }
+
+    public void toDanceScreen() {
+        game.setScreen(new DanceScreen(game, this));
     }
 
     /**

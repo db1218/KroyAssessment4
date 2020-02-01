@@ -331,6 +331,10 @@ public class Patrols extends Sprite {
         this.attacking = b;
     }
 
+    public boolean getAttacking(){
+        return this.attacking;
+    }
+
     public void setMoving(boolean t) {
         this.moving = t;
     }
