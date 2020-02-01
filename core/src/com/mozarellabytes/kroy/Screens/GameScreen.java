@@ -438,7 +438,7 @@ public class GameScreen implements Screen {
      */
     private void spawn(FireTruckType type) {
         SoundFX.sfx_truck_spawn.play();
-        station.spawn(new FireTruck(this, new Vector2(6,2), type));
+        station.spawn(new FireTruck(this, new Vector2(6,7), type));
         gameState.addFireTruck();
     }
     
