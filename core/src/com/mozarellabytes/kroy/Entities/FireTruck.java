@@ -186,7 +186,7 @@ public class FireTruck extends Sprite {
      *                      <code>false</code> otherwise
      */
     private boolean isValidDraw(Vector2 coordinate) {
-        if (coordinate.y < 24) {
+        if (coordinate.y < 29) {
             if (gameScreen.isRoad((Math.round(coordinate.x)), (Math.round(coordinate.y)))) {
                 if (this.path.isEmpty()) {
                     return this.getPosition().equals(coordinate);
