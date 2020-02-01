@@ -125,7 +125,7 @@ public class Patrols extends Sprite {
      */
 
     public Patrols(GameScreen gameScreen, PatrolType type) {
-        super(new Texture(Gdx.files.internal("sprites/firetruck/down.png")));
+        super(new Texture(Gdx.files.internal("sprites/Patrol/patrol.png")));
 
 
         this.gameScreen = gameScreen;
@@ -141,10 +141,10 @@ public class Patrols extends Sprite {
         this.timeOfLastAttack = System.currentTimeMillis();
         this.nextTile=position;
         this.previousTile=position;
-        this.lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/left.png"));
-        this.lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right.png"));
-        this.lookUp = new Texture(Gdx.files.internal("sprites/firetruck/up.png"));
-        this.lookDown = new Texture(Gdx.files.internal("sprites/firetruck/down.png"));
+        this.lookLeft = new Texture(Gdx.files.internal("sprites/Patrol/patrol.png"));
+        this.lookRight = new Texture(Gdx.files.internal("sprites/Patrol/patrol.png"));
+        this.lookUp = new Texture(Gdx.files.internal("sprites/Patrol/patrol.png"));
+        this.lookDown = new Texture(Gdx.files.internal("sprites/Patrol/patrol.png"));
 
         definePath();
     }

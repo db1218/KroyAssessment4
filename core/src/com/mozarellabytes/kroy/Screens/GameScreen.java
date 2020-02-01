@@ -172,9 +172,6 @@ public class GameScreen implements Screen {
             truck.drawSprite(mapBatch);
         }
 
-        for (Patrols patrol : station.getPatrol()) {
-            patrol.drawSprite(mapBatch);
-        }
 
         station.draw(mapBatch);
 
@@ -185,6 +182,12 @@ public class GameScreen implements Screen {
         mapBatch.end();
 
         mapRenderer.render(structureLayersIndices);
+
+        mapBatch.begin();
+        for (Patrols patrol : station.getPatrol()) {
+            patrol.drawSprite(mapBatch);
+        }
+        mapBatch.end();
 
         shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
