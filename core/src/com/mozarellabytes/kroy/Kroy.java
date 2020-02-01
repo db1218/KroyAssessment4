@@ -22,6 +22,8 @@ public class Kroy extends Game {
 
 	public BitmapFont font26;
 	public BitmapFont font19;
+	public BitmapFont font15;
+	public BitmapFont font11;
 	public BitmapFont font60;
 	public BitmapFont font50;
 	public BitmapFont font25;
@@ -45,6 +47,10 @@ public class Kroy extends Game {
 		font26 = generator.generateFont(parameter);
 		parameter.size = 19;
 		font19 = generator.generateFont(parameter);
+		parameter.size = 15;
+		font15 = generator.generateFont(parameter);
+		parameter.size = 11;
+		font11 = generator.generateFont(parameter);
 		parameter.size = 50;
 		font50 = generator.generateFont(parameter);
 		parameter.size = 25;
@@ -71,6 +77,8 @@ public class Kroy extends Game {
 		batch.dispose();
 		shapeRenderer.dispose();
 		font19.dispose();
+		font15.dispose();
+		font11.dispose();
 		font25.dispose();
 		font26.dispose();
 		font33.dispose();

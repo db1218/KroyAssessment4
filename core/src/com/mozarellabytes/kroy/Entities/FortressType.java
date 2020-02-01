@@ -20,7 +20,10 @@ public enum FortressType {
      */
     Revs ("Revolution", 2500, 7, 100, 10, 5, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress_revs.png"))),
     Walmgate ("Walmgate Bar", 1500, 8, 200, 15, 5, 5, new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate.png"))),
-    Clifford ("Clifford's Tower", 500, 4, 150, 20, 4, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford.png")));
+    Clifford ("Clifford's Tower", 500, 5, 150, 10, 4, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford.png"))),
+    CentralHall ("Central Hall", 500, 6, 200, 20, 4, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress.png"))),
+    Museum ("York Museum", 1500, 6, 180, 20, 4, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress.png"))),
+    Railway ("Railway Museum", 1000, 6, 250, 15, 4, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress.png")));
 
     /** The name for the fortress, visible once the fortress has been clicked on */
     private final String name;

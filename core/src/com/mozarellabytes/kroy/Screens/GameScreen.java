@@ -125,18 +125,22 @@ public class GameScreen implements Screen {
 
         structureLayersIndices = new int[]{mapLayers.getIndex("structures"),
                 mapLayers.getIndex("structures2"),
+                mapLayers.getIndex("structures3"),
                 mapLayers.getIndex("transparentStructures")};
 
-        station = new FireStation(3, 2);
+        station = new FireStation(3, 7);
 
         spawn(FireTruckType.Ocean);
         spawn(FireTruckType.Speed);
 
         fortresses = new ArrayList<Fortress>();
-        fortresses.add(new Fortress(12, 18.5f, FortressType.Revs));
-        fortresses.add(new Fortress(30.5f, 17.5f, FortressType.Walmgate));
-        fortresses.add(new Fortress(16, 3.5f, FortressType.Clifford));
-
+        fortresses.add(new Fortress(12, 23.5f, FortressType.Revs));
+        fortresses.add(new Fortress(30.5f, 22.5f, FortressType.Walmgate));
+        fortresses.add(new Fortress(16f, 3.5f, FortressType.Railway));
+        fortresses.add(new Fortress(32f, 1.5f, FortressType.Clifford));
+        fortresses.add(new Fortress(41.5f, 24f, FortressType.Museum));
+        fortresses.add(new Fortress(44f, 11f, FortressType.CentralHall));
+        
         spawn(PatrolType.Blue);
         spawn(PatrolType.Green);
 
@@ -437,7 +441,7 @@ public class GameScreen implements Screen {
      */
     private void spawn(FireTruckType type) {
         SoundFX.sfx_truck_spawn.play();
-        station.spawn(new FireTruck(this, new Vector2(6,2), type));
+        station.spawn(new FireTruck(this, new Vector2(6,7), type));
         gameState.addFireTruck();
     }
     
