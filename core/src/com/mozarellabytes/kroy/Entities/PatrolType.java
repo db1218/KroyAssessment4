@@ -23,10 +23,13 @@ public enum PatrolType {
      */
 
 
-    //Magenta(100, 2, "Magenta Patrol", 5, 0.08f, 150),
-    Green(250, 1, "Green Patrol", 7, 0.16f, 100, new Vector2(8, 19), new Vector2(15, 19), new Vector2(15, 15), new Vector2(8, 15)),
-    Blue(100, 2, "Blue Patrol", 5, 0.08f, 150, new Vector2(30, 17), new Vector2(33, 17), new Vector2(33, 14), new Vector2(30, 14));
+    Green(new Texture(Gdx.files.internal("sprites/Patrol/greenPatrol.png")), 250, 1, "Green Patrol", 7, 0.16f, 100, new Vector2(17, 2), new Vector2(47, 2), new Vector2(47, 20), new Vector2(17, 20)),
+    Blue(new Texture(Gdx.files.internal("sprites/Patrol/bluePatrol.png")), 100, 2, "Blue Patrol", 5, 0.08f, 150, new Vector2(2, 27), new Vector2(2, 19), new Vector2(18,19), new Vector2(18, 27)),
+    Peach(new Texture(Gdx.files.internal("sprites/Patrol/peachPatrol.png")), 250, 1, "Peach Patrol", 7, 0.16f, 100, new Vector2(4, 4), new Vector2(9, 16), new Vector2(31, 21), new Vector2(26, 9)),
+    Violet(new Texture(Gdx.files.internal("sprites/Patrol/violetPatrol.png")), 100, 2, "Violet Patrol", 5, 0.08f, 150, new Vector2(48, 18), new Vector2(38, 28), new Vector2(28, 18), new Vector2(38, 8)),
+    Yellow(new Texture(Gdx.files.internal("sprites/Patrol/yellowPatrol.png")), 100, 2, "Yellow Patrol", 5, 0.08f, 150, new Vector2(46, 13), new Vector2(46, 21), new Vector2(27, 21), new Vector2(27, 13));
 
+    private final Texture texture;
 
     /** The maximum amount of water this type of truck can have,
      * also the value of the truck's reserve when it is spawned */
@@ -77,7 +80,8 @@ public enum PatrolType {
      *
      */
 
-    PatrolType(int maxReserve, int speed, String name, float range, float AP, float maxHP, Vector2 point1, Vector2 point2, Vector2 point3, Vector2 point4) {
+    PatrolType(Texture texture, int maxReserve, int speed, String name, float range, float AP, float maxHP, Vector2 point1, Vector2 point2, Vector2 point3, Vector2 point4) {
+        this.texture=texture;
         this.maxReserve = maxReserve;
         this.maxHP = maxHP;
         this.speed = speed;
@@ -103,6 +107,9 @@ public enum PatrolType {
 
     public float getAP() { return this.AP; }
 
+    public  Texture getTexture(){
+        return this.texture;
+    }
     public Vector2 getPoint1(){
         return point1;
     }

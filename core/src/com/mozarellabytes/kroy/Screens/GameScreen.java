@@ -143,6 +143,10 @@ public class GameScreen implements Screen {
         
         spawn(PatrolType.Blue);
         spawn(PatrolType.Green);
+        spawn(PatrolType.Peach);
+        spawn(PatrolType.Violet);
+        spawn(PatrolType.Yellow);
+
 
         // sets the origin point to which all of the polygon's local vertices are relative to.
         for (FireTruck truck : station.getTrucks()) {

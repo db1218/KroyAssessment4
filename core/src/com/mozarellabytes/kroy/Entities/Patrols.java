@@ -110,10 +110,10 @@ public class Patrols extends Sprite {
 /** Texture for each direction the
      * truck is facing */
 
-    private final Texture lookLeft;
-    private final Texture lookRight;
-    private final Texture lookUp;
-    private final Texture lookDown;
+    private final Texture texture;
+    //private final Texture lookRight;
+    //private final Texture lookUp;
+    //private final Texture lookDown;
 
 
 /**
@@ -125,7 +125,7 @@ public class Patrols extends Sprite {
      */
 
     public Patrols(GameScreen gameScreen, PatrolType type) {
-        super(new Texture(Gdx.files.internal("sprites/Patrol/patrol.png")));
+        super(type.getTexture());
 
 
         this.gameScreen = gameScreen;
@@ -141,10 +141,10 @@ public class Patrols extends Sprite {
         this.timeOfLastAttack = System.currentTimeMillis();
         this.nextTile=position;
         this.previousTile=position;
-        this.lookLeft = new Texture(Gdx.files.internal("sprites/Patrol/patrol.png"));
-        this.lookRight = new Texture(Gdx.files.internal("sprites/Patrol/patrol.png"));
-        this.lookUp = new Texture(Gdx.files.internal("sprites/Patrol/patrol.png"));
-        this.lookDown = new Texture(Gdx.files.internal("sprites/Patrol/patrol.png"));
+        this.texture = type.getTexture();
+        //this.lookRight = new Texture(Gdx.files.internal("sprites/Patrol/patrol.png"));
+        //this.lookUp = new Texture(Gdx.files.internal("sprites/Patrol/patrol.png"));
+        //this.lookDown = new Texture(Gdx.files.internal("sprites/Patrol/patrol.png"));
 
         definePath();
     }
@@ -222,7 +222,7 @@ public class Patrols extends Sprite {
 
             this.position = nextTile;
 
-            changeSprite(nextTile);
+            //changeSprite(nextTile);
 
             /*if (!this.inCollision) {
                 changeSprite(nextTile);
@@ -242,7 +242,7 @@ public class Patrols extends Sprite {
      * @param nextTile  first tile in the queue (next to be followed)
      */
 
-    private void changeSprite(Vector2 nextTile) {
+    /*private void changeSprite(Vector2 nextTile) {
         if (previousTile != null) {
             if (nextTile.x > previousTile.x) {
                 setTexture(lookRight);
@@ -255,7 +255,7 @@ public class Patrols extends Sprite {
             }
         }
     }
-
+*/
 /**
      * Deals damage to Fortress by generating a WaterParticle and adding
      * it to the spray
