@@ -42,6 +42,7 @@ public class GameInputHandler implements InputProcessor {
                 Gdx.app.exit();
                 System.exit(1);
                 break;
+                /*
             case Input.Keys.A:
                 System.out.println(gameScreen.gameState.getTrucksInAttackRange());
                 if (SoundFX.music_enabled && gameScreen.gameState.getTrucksInAttackRange() > 0) {
@@ -51,6 +52,7 @@ public class GameInputHandler implements InputProcessor {
                     truck.setAttacking(true);
                 }
                 break;
+                 */
             case Input.Keys.C:
                 gameScreen.toControlScreen();
                 break;
@@ -68,6 +70,7 @@ public class GameInputHandler implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
+        /*
         if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
             if (keycode == Input.Keys.A) {
                 SoundFX.stopTruckAttack();
@@ -76,6 +79,7 @@ public class GameInputHandler implements InputProcessor {
                 }
             }
         }
+         */
         return true;
     }
 

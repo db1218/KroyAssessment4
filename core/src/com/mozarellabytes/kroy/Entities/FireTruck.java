@@ -56,11 +56,11 @@ public class FireTruck extends Sprite {
      * the end of the path */
     private boolean moving;
 
-    /** If the truck is attacking a Fortress
+    /* If the truck is attacking a Fortress
      *
      * <code>true</code> 'A' key is pressed
      * <code>false</code> 'A' key is not pressed */
-    private boolean attacking;
+    //private boolean attacking; Removed
 
     /** Whether the truck has an unresolved collision
      * with another truck */
@@ -125,7 +125,7 @@ public class FireTruck extends Sprite {
         this.path = new Queue<>();
         this.trailPath = new Queue<>();
         this.moving = false;
-        this.attacking = false;
+        //this.attacking = false;
         this.inCollision = false;
         this.spray = new ArrayList<WaterParticle>();
         this.timeOfLastAttack = System.currentTimeMillis();
@@ -440,7 +440,7 @@ public class FireTruck extends Sprite {
      * @param fortress Fortress being attacked
      */
     public void attack(Fortress fortress) {
-        if (this.attacking && this.reserve > 0) {
+        if (this.reserve > 0) {
             this.spray.add(new WaterParticle(this, fortress));
             this.reserve -= Math.min(this.reserve, this.type.getAP());
         }
@@ -568,9 +568,11 @@ public class FireTruck extends Sprite {
         this.timeOfLastAttack = timestamp;
     }
 
+    /*
     public void setAttacking(boolean b) {
         this.attacking = b;
     }
+     */
 
     public void setMoving(boolean t) {
         this.moving = t;

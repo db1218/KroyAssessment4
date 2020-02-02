@@ -307,13 +307,10 @@ public class GameScreen implements Screen {
 
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            if (gameState.getTrucksInAttackRange() > 0) {
-                SoundFX.playTruckAttack();
-            }
-            else {
-                SoundFX.stopTruckAttack();
-            }
+        if (gameState.getTrucksInAttackRange() > 0 && SoundFX.music_enabled){
+            SoundFX.playTruckAttack();
+        } else {
+            SoundFX.stopTruckAttack();
         }
 
         System.out.println(SoundFX.isPlaying);
