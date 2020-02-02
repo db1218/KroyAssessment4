@@ -86,6 +86,8 @@ public class GameScreen implements Screen {
      * the large stats in the top left corner */
     public Object selectedEntity;
 
+    private GlyphLayout layout;
+
     /** Play when the game is being played
      * Pause when the pause button is clicked */
     public enum PlayState {
