@@ -12,6 +12,9 @@ import com.mozarellabytes.kroy.Screens.GameScreen;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 
 /**
  * FireTruck is an entity that the player controls. It navigates the map on the
@@ -81,6 +84,28 @@ public class FireTruck extends Sprite {
     private final Texture lookUp;
     private final Texture lookDown;
 
+
+    /** Whether the mouse has been dragged off a road tile */
+    private boolean dragOffMap = false;
+    /** Whether the path finding algorithm has reached the end*/
+    boolean reachedEnd = false;
+    /** All possible routes from an end tile to a new tile are stored in this */
+    Queue<Vector2> positions;
+    /** Current tile */
+    Vector2 currentPos;
+    /**  Shows all possible movement directions for a firetruck*/
+    final int[] directionX = {-1, 1, 0, 0};
+    final int[] directionY = {0, 0, 1, -1};
+
+    /** True if a tile has been visited when constructing a path, false otherwise */
+    boolean[][] vistited;
+    /** Links parents to children in order o find the shortest path */
+    Vector2[] prev;
+    /** the shortest path between 2 points */
+    LinkedList<Vector2> reconstructedPath;
+
+
+
     /**
      * Constructs a new FireTruck at a position and of a certain type
      * which have been passed in
@@ -97,8 +122,8 @@ public class FireTruck extends Sprite {
         this.HP = type.getMaxHP();
         this.reserve = type.getMaxReserve();
         this.position = position;
-        this.path = new Queue<Vector2>();
-        this.trailPath = new Queue<Vector2>();
+        this.path = new Queue<>();
+        this.trailPath = new Queue<>();
         this.moving = false;
         this.attacking = false;
         this.inCollision = false;
@@ -164,15 +189,39 @@ public class FireTruck extends Sprite {
      */
     public void addTileToPath(Vector2 coordinate) {
         if (isValidDraw(coordinate)) {
-            if (this.path.size > 0) {
-                Vector2 previous = this.path.last();
-                int interpolation = (int) (20/type. getSpeed());
-                for (int i=1; i<interpolation; i++) {
-                    this.path.addLast(new Vector2((((previous.x - coordinate.x)*-1)/interpolation)*i + previous.x, (((previous.y - coordinate.y)*-1)/interpolation)*i + previous.y));
+            if (!dragOffMap) {
+                if (this.path.size > 0) {
+                    Vector2 previous = this.path.last();
+                    int interpolation = (int) (20 / type.getSpeed());
+                    for (int i = 1; i < interpolation; i++) {
+                        this.path.addLast(new Vector2((((previous.x - coordinate.x) * -1) / interpolation) * i + previous.x, (((previous.y - coordinate.y) * -1) / interpolation) * i + previous.y));
+                    }
+                }
+                this.trailPath.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
+                this.path.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
+            } else {
+                //dragged off map
+                if(this.path.size > 0) {
+                    dragOffMap = false;
+
+                    int interpolation = (int) (20 / type.getSpeed());
+                    Vector2 previous = this.path.last();
+                    Vector2[] newPath = findPath(coordinate, this.path.last());
+                    for (int i = 0; i < newPath.length; i++) {
+
+
+                        for(int j = 1; j < interpolation; j++) {
+                            this.path.addLast(new Vector2((((previous.x - newPath[i].x) * -1) / interpolation) * j + previous.x, (((previous.y - newPath[i].y) * -1) / interpolation) * j + previous.y));
+
+                        }
+
+                        this.trailPath.addLast(new Vector2(newPath[i]));
+                        this.path.addLast(new Vector2(newPath[i]));
+                        previous = this.path.last();
+
+                    }
                 }
             }
-            this.trailPath.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
-            this.path.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
         }
     }
 
@@ -186,18 +235,175 @@ public class FireTruck extends Sprite {
      *                      <code>false</code> otherwise
      */
     private boolean isValidDraw(Vector2 coordinate) {
-        if (coordinate.y < 29) {
+        if (coordinate.y < 28) {
             if (gameScreen.isRoad((Math.round(coordinate.x)), (Math.round(coordinate.y)))) {
                 if (this.path.isEmpty()) {
                     return this.getPosition().equals(coordinate);
                 } else {
                     if (!this.path.last().equals(coordinate)) {
-                        return (int) Math.abs(this.path.last().x - coordinate.x) + (int) Math.abs(this.path.last().y - coordinate.y) <= 1;
+                        if((int) Math.abs(this.path.last().x - coordinate.x) + (int) Math.abs(this.path.last().y - coordinate.y) >= 2) {
+                            dragOffMap = true;
+                            return (int) Math.abs(this.path.last().x - coordinate.x) + (int) Math.abs(this.path.last().y - coordinate.y) >= 2;
+                        } else {
+                            dragOffMap = false;
+                            return (int) Math.abs(this.path.last().x - coordinate.x) + (int) Math.abs(this.path.last().y - coordinate.y) <= 1;
+                        }
+
                     }
                 }
             }
         }
         return false;
+    }
+    /**
+     * Finds a path between two points
+     *
+     * @param endPos    Position on the screen that the user's mouse is on
+     * @param startPos    Position of last tile in the path queue
+     *
+     * @return An Vector2 array containing all points in the shortest path between the start and end point
+     */
+    private Vector2[] findPath(Vector2 endPos, Vector2 startPos) {
+        positions = new Queue<>();
+
+
+        Vector2 start = startPos;
+        Vector2 goal = endPos;
+
+        //System.out.print(start.x + "    afojfoja           start  " + start.y + "\n");
+        //System.out.print(goal.x + "    djsanisnd        end    " + goal.y +   "\n");
+
+        vistited = new boolean[48][29];
+        prev = new Vector2[1392];
+
+
+        for(int i=0; i<48; i++){
+            for(int j=0; j<29; j++){
+                vistited[i][j] = false;
+            }
+        }
+
+        positions.addLast(start);
+
+        vistited[(int) start.x][(int) start.y] = true;
+
+
+        while (!positions.isEmpty()) {
+
+
+            //for(Vector2 s : positions) {
+            //System.out.println(s.toString() +"this is all poses\n");
+            //}
+
+            currentPos = positions.removeLast();
+
+
+            //System.out.print("\n\n     " + currentPos.x +"   " + currentPos.y+"    "+positions.size +   " \n\n");
+
+            if(currentPos.x == goal.x && currentPos.y == goal.y) {
+                reachedEnd = true;
+                break;
+            }
+
+            exploreNeighbours(currentPos);
+
+
+        }
+
+        return shortestPath(goal);
+
+
+    }
+    /**
+     * Searches area around a tile and checks if it is a valid place to move
+     *
+     * @param currentPos    Position of current tile on the positions queue
+
+     */
+    private void exploreNeighbours(Vector2 currentPos) {
+
+
+        int n = 0;
+        for(int i = 0; i < 4; i++) {
+            Vector2 newPos = new Vector2();
+            newPos.x = currentPos.x + directionX[i];
+            newPos.y = currentPos.y + directionY[i];
+            System.out.print(newPos.x + "   newPos ihfqsjdi   dsadd       " + newPos.y + "   "+ n + "  "+ "\n");
+
+            n++;
+
+            if(newPos.x < 0 || newPos.y < 0) {
+                System.out.print("\n negative \n");
+                continue;
+            }
+            if(newPos.x > 47 || newPos.y > 28) {
+                continue;
+            }
+            boolean isRoad = gameScreen.isRoad(Math.round(newPos.x), Math.round(newPos.y));
+            if(!isRoad) {
+                continue;
+            }
+            if(vistited[(int)newPos.x][(int)newPos.y]) {
+                System.out.print("\n visited \n");
+                continue;
+            }
+
+
+            //System.out.print(currentPos.x + "                  kdaoufhihf                    " + currentPos.y + "\n");
+            //System.out.print("\n\n\n\n" + newPos.x + "   After contine       " + newPos.y + "\n");
+            positions.addFirst(newPos);
+            //System.out.print("\n\n\n\n" + newPos.toString() + "ggggggggggggggggggggggggggg \n");
+
+            //System.out.print("udhaidjas yolo \n" + positions.removeFirst().y + "\n");
+            vistited[(int)newPos.x] [(int)newPos.y] = true;
+
+            prev[convertVector2ToIntPositionInMap(newPos)] = currentPos;
+        }
+    }
+    /**
+     * Maps a parent position to it's child (An adjacent tile)
+     *
+     * @param pos    The current position being queued
+     *
+     * @return An int reprsenting the Vector2 as a point on the map
+     */
+    private int convertVector2ToIntPositionInMap(Vector2 pos) {
+        return ((int) (pos.x * 29 + pos.y));
+    }
+    /**
+     * Reverses an array
+     *
+     * @param a    The shortest path array, so it goes from start to finish rather then finish to start in order
+     *
+     * @return A reversed array
+     */
+    private void reverse(Vector2[] a)
+    {
+        Collections.reverse(Arrays.asList(a));
+    }
+    /**
+     * Returns the shortest path using the mapped coordinates
+     *
+     * @param endPos    The shortest path array, so it goes from start to finish rather then finish to start in order
+     *
+     * @return A array containing the Vector2 positions of the shortest path between two points
+     */
+    private Vector2[] shortestPath(Vector2 endPos) {
+        reconstructedPath = new LinkedList<>();
+        for(Vector2 at = endPos; at != null; at = prev[convertVector2ToIntPositionInMap(at)]) {
+            reconstructedPath.add(at);
+        }
+
+        Object[] objectAarray = reconstructedPath.toArray();
+        Vector2[] path = new Vector2[objectAarray.length];
+
+        for(int i=0;i<objectAarray.length;i++) {
+            path[i] = (Vector2) objectAarray[i];
+            //System.out.print("SHORTEST PATH \n" + path[i]+ "LOLOL \n");
+        }
+
+        reverse(path);
+        return  path;
     }
 
     /**
