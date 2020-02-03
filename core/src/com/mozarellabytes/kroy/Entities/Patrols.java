@@ -55,8 +55,8 @@ public class Patrols extends Sprite {
 
     public final CircularLinkedList path;
 
+    public final Queue<Vector2> stationPath;
 
-    public final Queue<Vector2> trailPath;
 
 
     public Node current;
@@ -133,7 +133,7 @@ public class Patrols extends Sprite {
         this.HP = type.getMaxHP();
         this.position = new Vector2(type.getPoint1().x + 1,type.getPoint1().y);
         this.path = new CircularLinkedList();
-        this.trailPath = new Queue<Vector2>();
+        this.stationPath = new Queue<Vector2>();
         this.moving = true;
         this.attacking = false;
         this.inCollision = false;
@@ -202,6 +202,35 @@ public class Patrols extends Sprite {
         }
         //addTileToPath(this.target, this.position);
         current=path.getHead();
+    }
+
+    public void pathToStation(){
+        while(FireStation.getVisualPosition().dst(getPosition()) >= 3){
+            Vector2 previousTile=this.position;
+            if(FireStation.getVisualPosition().x>position.x){
+                nextTile.x=this.position.x+1;
+            }
+            if(FireStation.getVisualPosition().y>position.y){
+                nextTile.y=this.position.y+1;
+            }
+            if(FireStation.getVisualPosition().x<position.x){
+                nextTile.x=this.position.x-1;
+            }
+            if(FireStation.getVisualPosition().y<position.y){
+                nextTile.y=this.position.y-1;
+            }
+            int interpolation = (int) (20/type. getSpeed());
+            for (int i=1; i<interpolation; i++) {
+                this.position=(new Vector2((((previousTile.x - nextTile.x)*-1)/interpolation)*i + previousTile.x, (((previousTile.y - nextTile.y)*-1)/interpolation)*i + previousTile.y));
+            }
+            this.position=(nextTile);
+        }
+
+
+/*        while(stationPath.size>0){
+                this.position=stationPath.first();
+                stationPath.removeFirst();
+            }*/
     }
 
     public void addTileToPath(Vector2 coordinate, Vector2 previous) {
@@ -358,6 +387,10 @@ public class Patrols extends Sprite {
 
     public Vector2 getPosition() {
         return this.position;
+    }
+
+    public void setPosition(Vector2 position){
+        this.position=position;
     }
 
     public CircularLinkedList getPath() {

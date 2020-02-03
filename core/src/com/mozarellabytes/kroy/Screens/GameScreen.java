@@ -55,6 +55,8 @@ public class GameScreen implements Screen {
     /** Stores whether the game is running or is paused */
     private PlayState state;
 
+    private boolean found;
+
     /**
      * Deals with all the user interface on the screen
      * that does not want to be inline with the map
@@ -285,7 +287,21 @@ public class GameScreen implements Screen {
         }
 
         for (Patrols patrol:station.getPatrol()) {
-            patrol.move();
+            if (hasStationBeenFound(game)) {
+
+                    System.out.println(patrol.getPosition());
+
+                    patrol.pathToStation();
+
+
+                //if(station.getHP()==0){
+                    setStationBeenFound(true);
+                //}
+                //station.setHP(0);
+            }
+            else{
+                patrol.move();
+            }
         }
 
         for (int i = 0; i < this.fortresses.size(); i++) {
@@ -479,6 +495,19 @@ public class GameScreen implements Screen {
 
     public PlayState getState() {
         return this.state;
+    }
+
+    public boolean hasStationBeenFound(Kroy game){
+        if(gameState.getFortressesDestroyed()==1){
+            return found=true;
+        }
+        else{
+            return found=false;
+        }
+    }
+
+    public void setStationBeenFound(boolean b){
+        found=b;
     }
 
 }

@@ -19,10 +19,13 @@ public class GameState {
     /** The number of trucks that have a fortress within their attack range */
     private int trucksInAttackRange;
 
+    private boolean stationDestroyed;
+
     /** Constructor for GameState */
     public GameState() {
         this.activeFireTrucks = 0;
-        this.fortressesDestroyed = 0;
+        this.fortressesDestroyed = 1;
+        this.stationDestroyed = false;
     }
 
     /** Adds one to activeFireTrucks, called when a firetruck is spawned */
@@ -42,6 +45,9 @@ public class GameState {
         this.fortressesDestroyed++;
     }
 
+    public  void setStationDestroyed(){
+        this.stationDestroyed=true;
+    }
     /** Determines whether the game has ended either when a certain
      * number of fortresses have been destroyed or when there are no
      * fire trucks left
@@ -54,6 +60,16 @@ public class GameState {
             endGame(false, game);
         }
     }
+
+    public boolean targetStation(Kroy game){
+        if ((fortressesDestroyed == 1) && (stationDestroyed == false)) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 
     /** Triggers the appropriate game over screen depending
      * on if the user has won or lost
@@ -79,6 +95,14 @@ public class GameState {
 
     public int getTrucksInAttackRange(){
         return trucksInAttackRange;
+    }
+
+    public int getFortressesDestroyed(){
+        return fortressesDestroyed;
+    }
+
+    public int getStationDestroyed(){
+        return getStationDestroyed();
     }
 
 

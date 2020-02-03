@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
+
+import com.mozarellabytes.kroy.Utilities.CircularLinkedList;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 import com.mozarellabytes.kroy.Entities.Patrols;
 
@@ -22,7 +24,7 @@ public class FireStation {
      * X and Y co-ordinates of the FireStation's position on the game screen
      * in tiles
      */
-    private final int x,y;
+    private static int x,y;
 
     /** The tile where new FireTrucks are spawned */
     private final Vector2 spawnTile;
@@ -36,6 +38,8 @@ public class FireStation {
 
     /** The sprite image for the station */
     private final Texture texture;
+
+    private int HP;
 
     /** List of active fire trucks
      * @link FireTruck */
@@ -59,7 +63,7 @@ public class FireStation {
         this.texture = new Texture(Gdx.files.internal("sprites/station/station.png"));
         this.trucks = new ArrayList<FireTruck>();
         this.patrols = new ArrayList<Patrols>();
-
+        this.HP=100;
     }
 
     /**
@@ -212,4 +216,16 @@ public class FireStation {
     /*public Patrols getPatrol(int i) {
         return this.patrols.get(i);
     }*/
+
+    public static Vector2 getVisualPosition() {
+        return new Vector2(x + 0.5f, y + 0.5f);
+    }
+
+    public void setHP(int HP){
+        this.HP=HP;
+    }
+
+    public int getHP(){
+        return HP;
+    }
 }
