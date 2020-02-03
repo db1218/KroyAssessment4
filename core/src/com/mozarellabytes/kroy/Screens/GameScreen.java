@@ -86,6 +86,7 @@ public class GameScreen implements Screen {
 
     private GlyphLayout layout;
     private DifficultyControl difficultyControl;
+    private ArrayList<DestroyedFortress> deadFortresses;
 
     /** Play when the game is being played
      * Pause when the pause button is clicked */
@@ -100,6 +101,7 @@ public class GameScreen implements Screen {
      */
     public GameScreen(Kroy game) {
         this.game = game;
+
         difficultyControl = new DifficultyControl();
 
         state = PlayState.PLAY;
@@ -149,6 +151,8 @@ public class GameScreen implements Screen {
         spawn(PatrolType.Violet);
         spawn(PatrolType.Yellow);
 
+        deadFortresses = new ArrayList<>(6);
+
 
         // sets the origin point to which all of the polygon's local vertices are relative to.
         for (FireTruck truck : station.getTrucks()) {
@@ -182,11 +186,14 @@ public class GameScreen implements Screen {
             truck.drawSprite(mapBatch);
         }
 
-
         station.draw(mapBatch);
 
         for (Fortress fortress : this.fortresses) {
             fortress.draw(mapBatch);
+        }
+
+        for (DestroyedFortress deadFortress : deadFortresses){
+            deadFortress.draw(mapBatch);
         }
 
         mapBatch.end();
@@ -237,7 +244,6 @@ public class GameScreen implements Screen {
 
 
         //Difficulty Stuff
-        difficultyControl.incrementCurrentTime(delta);
         layout = new GlyphLayout(game.font25, difficultyControl.getDifficultyOutput());
         float fontX = 10;
         float fontY = Gdx.graphics.getHeight() - layout.height/2;
@@ -312,6 +318,7 @@ public class GameScreen implements Screen {
             // check if fortress is destroyed
             if (fortress.getHP() <= 0) {
                 gameState.addFortress();
+                deadFortresses.add(fortress.createDestroyedFortress());
                 this.fortresses.remove(fortress);
                 if (SoundFX.music_enabled) {
                     SoundFX.sfx_fortress_destroyed.play();
@@ -332,6 +339,8 @@ public class GameScreen implements Screen {
         shapeMapRenderer.setColor(Color.WHITE);
 
         gui.renderSelectedEntity(selectedEntity);
+
+        difficultyControl.incrementCurrentTime(delta);
     }
 
     @Override

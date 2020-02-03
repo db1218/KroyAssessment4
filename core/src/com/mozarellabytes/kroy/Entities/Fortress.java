@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-import com.mozarellabytes.kroy.Utilities.DifficultyControl;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.ArrayList;
@@ -122,6 +121,10 @@ public class Fortress {
      */
     public void draw(Batch mapBatch) {
         mapBatch.draw(this.getFortressType().getTexture(this.getHP()), this.getArea().x, this.getArea().y, this.getArea().width, this.getArea().height);
+    }
+
+    public DestroyedFortress createDestroyedFortress(){
+        return new DestroyedFortress(this.getFortressType().getTexture(0), this.area);
     }
 
     public Vector2 getPosition() {
