@@ -1,36 +1,35 @@
 package com.mozarellabytes.kroy.Utilities;
 
-import com.mozarellabytes.kroy.Kroy;
+import java.text.DecimalFormat;
 
 public class DifficultyControl {
-    private Integer CurrentDifficulty;
-    private float DifficultyChangeInterval;
-    private float CurrentTime;
+    private Integer currentDifficulty;
+    private float difficultyChangeInterval;
+    private float currentTime;
 
 
     public DifficultyControl(){
-        CurrentDifficulty = 0;
-        DifficultyChangeInterval = 60f;
-        CurrentTime = 60;
+        currentDifficulty = 0;
+        difficultyChangeInterval = 60f;
+        currentTime = 60;
     }
 
-    public Integer getCurrentDifficulty() {
-        return CurrentDifficulty;
-    }
-    public float getCurrentTime(){
-        return CurrentTime;
-    }
-    public void setCurrentTime(float newTime){
-        CurrentTime = newTime;
+    public void incrementCurrentTime(float TimeDelta){
+        currentTime -= TimeDelta;
+        changeDifficulty();
     }
     public String getDifficultyOutput(){
-        return ("Difficulty:" + String.valueOf(CurrentDifficulty) + "\n" +
-                "Time To Increase:" + String.valueOf(CurrentTime));
+        DecimalFormat decimalFormat = new DecimalFormat("#.0");
+        return ("Difficulty:" + String.valueOf(currentDifficulty) + "\n" +
+                "Time To Increase:" + decimalFormat.format(currentTime));
     }
     public void changeDifficulty(){
-        if (CurrentTime == 0){
-            CurrentTime = DifficultyChangeInterval;
-            CurrentDifficulty++;
+        if (currentTime <= 0){
+            currentTime = difficultyChangeInterval;
+            currentDifficulty++;
         }
+    }
+    public float getDifficultyMultiplier(){
+        return (currentDifficulty + 10)/10;
     }
 }

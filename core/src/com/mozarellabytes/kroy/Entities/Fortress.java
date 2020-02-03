@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import com.mozarellabytes.kroy.Utilities.DifficultyControl;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.ArrayList;
@@ -61,9 +62,9 @@ public class Fortress {
      * @param randomTarget  whether the bomb hits every time or
      *                      there is a chance it misses
      */
-    public void attack(FireTruck target, boolean randomTarget) {
+    public void attack(FireTruck target, boolean randomTarget, float difficultyMultiplier) {
         if (target.getTimeOfLastAttack() + fortressType.getDelay() < System.currentTimeMillis()) {
-            this.bombs.add(new Bomb(this, target, randomTarget));
+            this.bombs.add(new Bomb(this, target, randomTarget, difficultyMultiplier));
             target.setTimeOfLastAttack(System.currentTimeMillis());
             if (SoundFX.music_enabled) {
                 SoundFX.sfx_fortress_attack.play();

@@ -44,7 +44,7 @@ public class Bomb extends Sprite {
      *                  <code>false</code> chance that
      *                  bomb doesnt head towards target
      */
-    public Bomb(Fortress fortress, FireTruck target, boolean isRandom) {
+    public Bomb(Fortress fortress, FireTruck target, boolean isRandom, float difficultyMultiplier) {
         this.target = target;
         this.truckPosition = new Vector2(getMiddleOfTile(target.getPosition()));
         this.startPosition = new Vector2(fortress.getPosition());
@@ -55,7 +55,7 @@ public class Bomb extends Sprite {
             this.targetPosition = getMiddleOfTile(this.truckPosition);
 
         }
-        this.damage = fortress.getFortressType().getAP();
+        this.damage = fortress.getFortressType().getAP() * difficultyMultiplier;
     }
 
     /**

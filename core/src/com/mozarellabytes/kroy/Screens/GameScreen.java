@@ -1,7 +1,6 @@
 package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -14,7 +13,6 @@ import com.mozarellabytes.kroy.Entities.*;
 import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.*;
-import com.mozarellabytes.kroy.Screens.*;
 
 
 import java.util.ArrayList;
@@ -87,6 +85,7 @@ public class GameScreen implements Screen {
     public Object selectedEntity;
 
     private GlyphLayout layout;
+    private DifficultyControl difficultyControl;
 
     /** Play when the game is being played
      * Pause when the pause button is clicked */
@@ -101,6 +100,7 @@ public class GameScreen implements Screen {
      */
     public GameScreen(Kroy game) {
         this.game = game;
+        difficultyControl = new DifficultyControl();
 
         state = PlayState.PLAY;
 
@@ -234,6 +234,17 @@ public class GameScreen implements Screen {
                 gui.renderPauseScreenText();
         }
         gui.renderButtons();
+
+
+        //Difficulty Stuff
+        difficultyControl.incrementCurrentTime(delta);
+        layout = new GlyphLayout(game.font25, difficultyControl.getDifficultyOutput());
+        float fontX = 10;
+        float fontY = Gdx.graphics.getHeight() - layout.height/2;
+        game.batch.begin();
+        game.font25.draw(game.batch, difficultyControl.getDifficultyOutput(), fontX, fontY);
+        game.batch.end();
+
     }
 
     /**
@@ -261,7 +272,7 @@ public class GameScreen implements Screen {
             // manages attacks between trucks and fortresses
             for (Fortress fortress : this.fortresses) {
                 if (fortress.withinRange(truck.getVisualPosition())) {
-                    fortress.attack(truck, true);
+                    fortress.attack(truck, true, difficultyControl.getDifficultyMultiplier());
                 }
                 if (truck.fortressInRange(fortress.getPosition())) {
                     gameState.incrementTrucksInAttackRange();
