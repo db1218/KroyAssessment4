@@ -47,7 +47,7 @@ public enum FortressType {
     private final int h;
 
     /** The sprite for the fortress */
-    private final Texture texture;
+    private final Texture textureFull;// textureHalf, textureDead
 
     /**
      * Constructs the FortressType
@@ -59,10 +59,10 @@ public enum FortressType {
      * @param AP The attack points for this type of fortress
      * @param w The width of the sprite for this type of fortress in tiles
      * @param h The height of the sprite for this type of fortress in tiles
-     * @param texture The sprite for this type of fortress
+     * @param textureFull The sprite for this type of fortress
      *
      */
-    FortressType(String name, int delay, float range, float maxHP, float AP, int w, int h, Texture texture) {
+    FortressType(String name, int delay, float range, float maxHP, float AP, int w, int h, Texture textureFull) {
         this.name = name;
         this.delay = delay;
         this.range = range;
@@ -70,7 +70,9 @@ public enum FortressType {
         this.AP = AP;
         this.w = w;
         this.h = h;
-        this.texture = texture;
+        this.textureFull = textureFull; // full hp
+        //this.textureHalf = textureHalf; // half hp
+        //this.textureDead = textureDead; // dead
     }
 
     public String getName() { return name; }
@@ -87,6 +89,15 @@ public enum FortressType {
 
     public int getH() { return h; }
 
-    public Texture getTexture() { return texture; }
+    public Texture getTexture(float currentHP) {
+        /*
+        if (currentHP > getMaxHP()/2){
+            return textureFull;
+        } else if (currentHP > 0){
+            return textureHalf;
+        } else {
+            return textureDead
+        } */
+        return textureFull; }
 
 }

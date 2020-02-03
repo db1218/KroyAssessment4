@@ -121,7 +121,7 @@ public class Fortress {
      * @param mapBatch  the renderer in line with the map
      */
     public void draw(Batch mapBatch) {
-        mapBatch.draw(this.getFortressType().getTexture(), this.getArea().x, this.getArea().y, this.getArea().width, this.getArea().height);
+        mapBatch.draw(this.getFortressType().getTexture(this.getHP()), this.getArea().x, this.getArea().y, this.getArea().width, this.getArea().height);
     }
 
     public Vector2 getPosition() {
