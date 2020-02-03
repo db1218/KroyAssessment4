@@ -175,6 +175,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        fpsCounter.log();
 
         camera.update();
 
@@ -335,7 +336,7 @@ public class GameScreen implements Screen {
             SoundFX.stopTruckAttack();
         }
 
-        System.out.println(SoundFX.isPlaying);
+        //System.out.println(SoundFX.isPlaying);
 
         shapeMapRenderer.end();
         shapeMapRenderer.setColor(Color.WHITE);

@@ -151,4 +151,8 @@ public class Fortress {
         return this.bombs;
     }
 
+    public float getRange(){
+        return this.fortressType.getRange();
+    }
+
 }

@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Fortress;
 import com.mozarellabytes.kroy.Kroy;
@@ -77,6 +79,8 @@ public class GUI {
     private final Texture soundOffClickedTexture;
     /** Texture of the soundButton that is rendered to the screen */
     private Texture currentSoundTexture;
+
+    private Circle rangeCircle;
 
     /** Camera to set the projection for the screen */
     private final OrthographicCamera pauseCamera;
@@ -182,6 +186,8 @@ public class GUI {
         renderSelectedEntityBar(truck.getHP(), truck.getType().getMaxHP(), Color.RED, Color.FIREBRICK, 1, 35);
         renderSelectedEntityBar(truck.getReserve(), truck.getType().getMaxReserve(), Color.CYAN, Color.BLUE, 2, 35);
         renderSelectedEntityText(truck);
+        renderSelectedEntityRange(truck.getPosition(), truck.getRange());
+
     }
 
     /**
@@ -194,6 +200,7 @@ public class GUI {
     private void renderSelectedFortress(Fortress fortress) {
         renderSelectedEntityBar(fortress.getHP(), fortress.getFortressType().getMaxHP(), Color.RED, Color.FIREBRICK, 1, 50);
         renderSelectedEntityText(fortress);
+        renderSelectedEntityRange(fortress.getPosition(), fortress.getRange());
     }
 
     /**
@@ -376,6 +383,16 @@ public class GUI {
         game.font50.draw(game.batch, pauseText1, pauseCamera.viewportWidth/2 - layout.width/2.7f, pauseCamera.viewportHeight/1.8f - layout.height/2);
         game.font26.draw(game.batch, pauseText2, pauseCamera.viewportWidth/2 - layout.width/2, pauseCamera.viewportHeight/2.3f - layout.height/2);
         game.batch.end();
+    }
+
+    public void renderSelectedEntityRange(Vector2 entityPosition, float radius){
+        game.shapeRenderer.end();
+        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        game.shapeRenderer.setColor(Color.RED);
+        game.shapeRenderer.circle(entityPosition.y, entityPosition.x, radius*20);
+        game.shapeRenderer.end();
+
+
     }
 
     public Rectangle getHomeButton() { return this.homeButton; }

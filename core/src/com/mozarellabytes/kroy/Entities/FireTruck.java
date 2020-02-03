@@ -106,6 +106,7 @@ public class FireTruck extends Sprite {
 
 
 
+
     /**
      * Constructs a new FireTruck at a position and of a certain type
      * which have been passed in
@@ -616,6 +617,10 @@ public class FireTruck extends Sprite {
 
     public boolean getMoving() {
         return this.moving;
+    }
+
+    public  float getRange(){
+        return this.type.getRange();
     }
 }
 
