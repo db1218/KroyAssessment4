@@ -87,6 +87,7 @@ public class GameScreen implements Screen {
     private GlyphLayout layout;
     private DifficultyControl difficultyControl;
     private ArrayList<DestroyedFortress> deadFortresses;
+    public FPSLogger fpsCounter;
 
     /** Play when the game is being played
      * Pause when the pause button is clicked */
@@ -101,6 +102,7 @@ public class GameScreen implements Screen {
      */
     public GameScreen(Kroy game) {
         this.game = game;
+        fpsCounter = new FPSLogger();
 
         difficultyControl = new DifficultyControl();
 
