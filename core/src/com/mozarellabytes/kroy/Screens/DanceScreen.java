@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Patrol;
@@ -124,8 +125,6 @@ public class DanceScreen implements Screen, BeatListener {
         if (firefighter.getHealth() <= 0 || etDancer.getHealth() <= 0) {
             this.firetruck.setHP(firefighter.getHealth());
             this.patrol.setHP(etDancer.getHealth());
-
-            patrol.
             game.setScreen(previousScreen);
         }
 
@@ -160,7 +159,7 @@ public class DanceScreen implements Screen, BeatListener {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             int combo = danceMan.getCombo();
-            etDancer.damage(combo);
+            etDancer.damage((int)scaleDamage(combo));
             danceMan.killCombo();
             System.out.println("Firetruck health: " + firefighter.getHealth() + " ET health: " + etDancer.getHealth());
         }
@@ -256,9 +255,12 @@ public class DanceScreen implements Screen, BeatListener {
         }
 
         game.font60.draw(game.batch, danceMan.getCombo() + "x", comboLocation.x, comboLocation.y, camera.viewportWidth, 1, false);
-//        drawHealth(0, 0, danceMan.scorer.getPlayerHealth());
-
         game.batch.end();
+        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        game.shapeRenderer.setProjectionMatrix(camera.combined);
+        drawHealthbar(camera.viewportWidth/4, camera.viewportHeight/5, firefighter.getHealth()/firetruck.type.getMaxHP());
+        drawHealthbar((camera.viewportWidth * 3)/4, camera.viewportHeight/5, etDancer.getHealth()/patrol.type.getMaxHP());
+        game.shapeRenderer.end();
     }
 
     @Override
@@ -295,13 +297,14 @@ public class DanceScreen implements Screen, BeatListener {
         return (float) Math.pow(2, 10f * (phase-1));
     }
 
-    public void drawHealth(int x, int y, int health) {
 //        game.shapeRenderer.rect(x + this.selectedW - positionSpacer - outerSpacing - barSpacer, this.selectedY + outerSpacing, whiteW, this.selectedH - outerSpacing*2 - spaceForText, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
 //        game.shapeRenderer.rect(x + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, barHeight, backgroundColour, backgroundColour, backgroundColour, backgroundColour);
 //        game.shapeRenderer.rect(this.selectedX + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, value/maxValue*barHeight, progressColour, progressColour, progressColour, progressColour);
+
+    public float scaleDamage(float combo) {
+        return (float) (50 * Math.log((float)combo+1));
     }
 
-    @Override
     public void onBeat() {
         etDancer.updateJive();
     }
@@ -318,9 +321,22 @@ public class DanceScreen implements Screen, BeatListener {
     @Override
     public void moveResult(DanceResult result) {
         if (result == DanceResult.WRONG) {
-            firefighter.damage(1);
+            firefighter.damage(20);
             etDancer.setJiving(true);
             System.out.println("Firetruck health: " + firefighter.getHealth() + " ET health: " + etDancer.getHealth());
         };
+    }
+
+    /** Draws a health bar
+     * @param x The of the healthbar's origin
+     * @param y The y of the healthbar's origin
+     * @param percentage How full the health bar is where 1f is full, 0f is empty
+     * */
+    private void drawHealthbar(float x, float y, float percentage) {
+        int width = 500;
+        int height = 50;
+        float offset = height * .2f;
+        game.shapeRenderer.rect(x-width/2, y, width, height, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
+        game.shapeRenderer.rect(x-width/2 + offset, y + offset, (width - 2*offset) * percentage, height - 2*offset, Color.RED, Color.RED, Color.RED, Color.RED);
     }
 }
