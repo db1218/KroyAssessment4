@@ -1,8 +1,10 @@
 package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
@@ -42,6 +44,8 @@ public class FireStation {
 
     private final ArrayList<Patrol> patrols;
 
+    private int HP;
+
     /**
      * Constructs the Firestation with at a given position with locations
      * for the repair and refill tiles and the spawn tiles.
@@ -58,7 +62,7 @@ public class FireStation {
         this.texture = new Texture(Gdx.files.internal("sprites/station/station.png"));
         this.trucks = new ArrayList<FireTruck>();
         this.patrols = new ArrayList<Patrol>();
-
+        this.HP=100;
     }
 
     /**
@@ -80,6 +84,12 @@ public class FireStation {
             SoundFX.sfx_truck_spawn.play();
         }
         this.patrols.add(patrol);
+    }
+
+    public void drawStats(ShapeRenderer shapeMapRenderer) {
+        shapeMapRenderer.rect(this.getPosition().x + 2.26f, this.getPosition().y + 2.9f, 0.6f, 1.2f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
+        shapeMapRenderer.rect(this.getPosition().x + 2.38f, this.getPosition().y + 3f, 0.36f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+        shapeMapRenderer.rect(this.getPosition().x + 2.38f, this.getPosition().y + 3f, 0.36f, this.getHP() / 100 * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
     }
 
     /**
@@ -128,6 +138,18 @@ public class FireStation {
         this.trucks.remove(truck);
     }
 
+    public void destroyPatrol(Patrol patrol) {
+        this.patrols.remove(patrol);
+    }
+
+
+    public void damage(float HP){
+        this.HP -= HP;
+    }
+
+    public float getHP() {
+        return this.HP;
+    }
     /**
      * Checks that no more than one truck occupies a tile at a time by checking trucks
      * are not moving towards each other and that a moving truck is not going to go onto
@@ -206,6 +228,10 @@ public class FireStation {
 
     public FireTruck getTruck(int i) {
         return this.trucks.get(i);
+    }
+
+    public Vector2 getPosition() {
+        return new Vector2(this.x,this.y);
     }
 
     /*public Patrols getPatrol(int i) {

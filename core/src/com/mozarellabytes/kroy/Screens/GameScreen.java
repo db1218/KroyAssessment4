@@ -152,6 +152,7 @@ public class GameScreen implements Screen {
         spawn(PatrolType.Peach);
         spawn(PatrolType.Violet);
         spawn(PatrolType.Yellow);
+        spawn(PatrolType.Station);
 
         deadFortresses = new ArrayList<>(6);
 
@@ -219,14 +220,19 @@ public class GameScreen implements Screen {
             patrol.drawStats(shapeMapRenderer);
         }
 
+        station.drawStats(shapeMapRenderer);
+
+
         for (Fortress fortress : fortresses) {
             fortress.drawStats(shapeMapRenderer);
             for (Bomb bomb : fortress.getBombs()) {
                 bomb.drawBomb(shapeMapRenderer);
             }
         }
+        //gui.renderSelectedEntityRange(selectedEntity, shapeMapRenderer);
 
         shapeMapRenderer.end();
+        gui.renderSelectedEntityRange(selectedEntity, shapeMapRenderer);
 
         gui.renderSelectedEntity(selectedEntity);
 
@@ -244,6 +250,7 @@ public class GameScreen implements Screen {
                 gui.renderPauseScreenText();
         }
         gui.renderButtons();
+
 
 
         //Difficulty Stuff
@@ -307,7 +314,21 @@ public class GameScreen implements Screen {
         }
 
         for (Patrol patrol:station.getPatrol()) {
-            patrol.move();
+            patrol.updateSpray();
+            if((patrol.getType()==PatrolType.Station)&&(patrol.getPosition().equals(PatrolType.Station.getPoint4()))){
+                System.out.println("here");
+                patrol.attack(station);
+                if(station.getHP()<=0){
+
+                }
+            }
+            else{
+                patrol.move();
+            }
+            if (patrol.getHP() <= 0) {
+                gameState.removePatrol();
+                station.destroyPatrol(patrol);
+            }
         }
 
         for (int i = 0; i < this.fortresses.size(); i++) {
@@ -474,7 +495,7 @@ public class GameScreen implements Screen {
     private void spawn(PatrolType type) {
         SoundFX.sfx_truck_spawn.play();
         station.spawn(new Patrol(this, type));
-        gameState.addFireTruck();
+        gameState.addPatrol();
     }
 
 
