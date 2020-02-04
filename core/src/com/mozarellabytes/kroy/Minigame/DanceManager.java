@@ -29,9 +29,6 @@ public class DanceManager {
 
     private DanceChoreographer choreographer;
 
-    public DanceScorer scorer;
-
-
     public DanceManager(float tempo) {
         // Setup tempo
         this.tempo = tempo;
@@ -42,7 +39,6 @@ public class DanceManager {
 
         // Setup dance queue
         this.choreographer = new DanceChoreographer();
-        this.scorer = new DanceScorer();
         this.beatListeners = new ArrayList<>();
     }
 

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
+import com.mozarellabytes.kroy.Entities.Patrol;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Minigame.*;
 import com.mozarellabytes.kroy.Utilities.GUI;
@@ -48,6 +49,8 @@ public class DanceScreen implements Screen, BeatListener {
     private final Texture etLeftTexture;
     private final Texture etRightTexture;
 
+    private FireTruck firetruck;
+    private Patrol patrol;
     private Dancer firefighter;
     private Dancer etDancer;
 
@@ -56,7 +59,7 @@ public class DanceScreen implements Screen, BeatListener {
 
     private DanceResult lastResult = null;
 
-    public DanceScreen(Kroy game, Screen previousScreen) {
+    public DanceScreen(Kroy game, Screen previousScreen, FireTruck firetruck, Patrol patrol) {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
@@ -65,8 +68,11 @@ public class DanceScreen implements Screen, BeatListener {
         this.danceMan = new DanceManager(120f);
         danceMan.subscribeToBeat(this);
 
-        this.firefighter = new Dancer(10);
-        this.etDancer = new Dancer(10);
+        System.out.println("Firetruck health: " + firetruck.getHP() + " ET health: " + patrol.getHP());
+        this.patrol = patrol;
+        this.firetruck = firetruck;
+        this.firefighter = new Dancer((int) firetruck.getHP());
+        this.etDancer = new Dancer((int) patrol.getHP());
 
         arrowUpTexture = new Texture(Gdx.files.internal("sprites/dance/arrowUp.png"), true);
         arrowUpTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
@@ -116,6 +122,10 @@ public class DanceScreen implements Screen, BeatListener {
         danceMan.update(delta);
 
         if (firefighter.getHealth() <= 0 || etDancer.getHealth() <= 0) {
+            this.firetruck.setHP(firefighter.getHealth());
+            this.patrol.setHP(etDancer.getHealth());
+
+            patrol.
             game.setScreen(previousScreen);
         }
 
@@ -152,7 +162,7 @@ public class DanceScreen implements Screen, BeatListener {
             int combo = danceMan.getCombo();
             etDancer.damage(combo);
             danceMan.killCombo();
-            System.out.println("ET Health: " + etDancer.getHealth());
+            System.out.println("Firetruck health: " + firefighter.getHealth() + " ET health: " + etDancer.getHealth());
         }
 
         Gdx.gl.glClearColor(51/255f, 34/255f, 99/255f, 1);
@@ -246,7 +256,7 @@ public class DanceScreen implements Screen, BeatListener {
         }
 
         game.font60.draw(game.batch, danceMan.getCombo() + "x", comboLocation.x, comboLocation.y, camera.viewportWidth, 1, false);
-        drawHealth(0, 0, danceMan.scorer.getPlayerHealth());
+//        drawHealth(0, 0, danceMan.scorer.getPlayerHealth());
 
         game.batch.end();
     }
@@ -310,6 +320,7 @@ public class DanceScreen implements Screen, BeatListener {
         if (result == DanceResult.WRONG) {
             firefighter.damage(1);
             etDancer.setJiving(true);
+            System.out.println("Firetruck health: " + firefighter.getHealth() + " ET health: " + etDancer.getHealth());
         };
     }
 }

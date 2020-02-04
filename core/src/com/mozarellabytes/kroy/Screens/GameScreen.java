@@ -292,7 +292,7 @@ public class GameScreen implements Screen {
 
             for (Patrol patrol : station.getPatrol()) {
                 if (patrol.getAttacking()) {
-                    toDanceScreen();
+                    doDanceOff(truck, patrol);
                 }
             }
 
@@ -457,8 +457,8 @@ public class GameScreen implements Screen {
         SoundFX.sfx_soundtrack.dispose();
     }
 
-    public void toDanceScreen() {
-        game.setScreen(new DanceScreen(game, this));
+    public void doDanceOff(FireTruck firetruck, Patrol et) {
+        game.setScreen(new DanceScreen(game, this, firetruck, et));
     }
 
     /**

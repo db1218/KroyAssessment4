@@ -587,6 +587,8 @@ public class FireTruck extends Sprite {
         return this.HP;
     }
 
+    public void setHP(int hp) { this.HP = hp; }
+
     public float getReserve() {
         return this.reserve;
     }

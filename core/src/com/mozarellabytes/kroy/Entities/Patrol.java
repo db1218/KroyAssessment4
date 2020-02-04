@@ -347,6 +347,7 @@ public class Patrol extends Sprite {
         return this.HP;
     }
 
+    public void setHP(int hp) { this.HP = hp; }
 
     public PatrolType getType() {
         return this.type;
