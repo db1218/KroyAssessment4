@@ -204,7 +204,7 @@ public class GameScreen implements Screen {
         mapRenderer.render(structureLayersIndices);
 
         mapBatch.begin();
-        for (Patrols patrol : station.getPatrol()) {
+        for (Patrol patrol : station.getPatrol()) {
             patrol.drawSprite(mapBatch);
         }
         mapBatch.end();
@@ -215,7 +215,7 @@ public class GameScreen implements Screen {
             truck.drawStats(shapeMapRenderer);
         }
 
-        for (Patrols patrol : station.getPatrol()) {
+        for (Patrol patrol : station.getPatrol()) {
             patrol.drawStats(shapeMapRenderer);
         }
 
@@ -290,7 +290,7 @@ public class GameScreen implements Screen {
                 }
             }
 
-            for (Patrols patrol : station.getPatrol()) {
+            for (Patrol patrol : station.getPatrol()) {
                 if (patrol.getAttacking()) {
                     toDanceScreen();
                 }
@@ -306,7 +306,7 @@ public class GameScreen implements Screen {
             }
         }
 
-        for (Patrols patrol:station.getPatrol()) {
+        for (Patrol patrol:station.getPatrol()) {
             patrol.move();
         }
 
@@ -473,7 +473,7 @@ public class GameScreen implements Screen {
     
     private void spawn(PatrolType type) {
         SoundFX.sfx_truck_spawn.play();
-        station.spawn(new Patrols(this, type));
+        station.spawn(new Patrol(this, type));
         gameState.addFireTruck();
     }
 

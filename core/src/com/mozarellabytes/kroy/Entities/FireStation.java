@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
-import com.mozarellabytes.kroy.Entities.Patrols;
 
 
 /**
@@ -41,7 +40,7 @@ public class FireStation {
      * @link FireTruck */
     private final ArrayList<FireTruck> trucks;
 
-    private final ArrayList<Patrols> patrols;
+    private final ArrayList<Patrol> patrols;
 
     /**
      * Constructs the Firestation with at a given position with locations
@@ -58,7 +57,7 @@ public class FireStation {
         this.bayTile2 = new Vector2(x+2, y);
         this.texture = new Texture(Gdx.files.internal("sprites/station/station.png"));
         this.trucks = new ArrayList<FireTruck>();
-        this.patrols = new ArrayList<Patrols>();
+        this.patrols = new ArrayList<Patrol>();
 
     }
 
@@ -76,7 +75,7 @@ public class FireStation {
         this.trucks.add(truck);
     }
 
-    public void spawn(Patrols patrol) {
+    public void spawn(Patrol patrol) {
         if (SoundFX.music_enabled) {
             SoundFX.sfx_truck_spawn.play();
         }
@@ -156,7 +155,7 @@ public class FireStation {
                     }
                 }
             }
-            for (Patrols patrol : patrols) {
+            for (Patrol patrol : patrols) {
                 Vector2 patroltile = new Vector2(Math.round(patrol.getPosition().x), Math.round(patrol.getPosition().y));
                 Vector2 truckstile = new Vector2((float)Math.floor(truck.getPosition().x),(float) Math.floor(truck.getPosition().y));
                 if (truckstile.equals(patroltile)) {
@@ -201,7 +200,7 @@ public class FireStation {
         return this.trucks;
     }
 
-    public ArrayList<Patrols> getPatrol() {
+    public ArrayList<Patrol> getPatrol() {
         return this.patrols;
     }
 
