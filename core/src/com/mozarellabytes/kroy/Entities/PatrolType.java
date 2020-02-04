@@ -27,7 +27,9 @@ public enum PatrolType {
     Blue(new Texture(Gdx.files.internal("sprites/Patrol/bluePatrol.png")), 100, 2, "Blue Patrol", 5, 0.08f, 150, new Vector2(2, 27), new Vector2(2, 19), new Vector2(18,19), new Vector2(18, 27)),
     Peach(new Texture(Gdx.files.internal("sprites/Patrol/peachPatrol.png")), 250, 1, "Peach Patrol", 7, 0.16f, 100, new Vector2(4, 4), new Vector2(9, 16), new Vector2(31, 21), new Vector2(26, 9)),
     Violet(new Texture(Gdx.files.internal("sprites/Patrol/violetPatrol.png")), 100, 2, "Violet Patrol", 5, 0.08f, 150, new Vector2(48, 18), new Vector2(38, 28), new Vector2(28, 18), new Vector2(38, 8)),
-    Yellow(new Texture(Gdx.files.internal("sprites/Patrol/yellowPatrol.png")), 100, 2, "Yellow Patrol", 5, 0.08f, 150, new Vector2(46, 13), new Vector2(46, 21), new Vector2(27, 21), new Vector2(27, 13));
+    Yellow(new Texture(Gdx.files.internal("sprites/Patrol/yellowPatrol.png")), 100, 2, "Yellow Patrol", 5, 0.08f, 150, new Vector2(46, 13), new Vector2(46, 21), new Vector2(27, 21), new Vector2(27, 13)),
+    Station(new Texture(Gdx.files.internal("sprites/Patrol/yellowPatrol.png")), 100, 1, "Station Patrol", 5, 0.08f, 150, new Vector2(44, 11), new Vector2(43, 11), new Vector2(5, 9), new Vector2(5, 8));
+
 
     private final Texture texture;
 

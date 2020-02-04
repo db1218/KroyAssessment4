@@ -11,12 +11,10 @@ import com.badlogic.gdx.math.Vector2;
  * from the FireTruck towards the Fortress using the
  * interpolation function specified
  */
-public class WaterParticle {
+public class BlasterParticle {
 
     /** Fortress that WaterParticle is firing at */
-    private final Fortress target;
-
-
+    private final FireStation target;
 
     /** Random colour of Rectangle */
     private final Color colour;
@@ -41,18 +39,18 @@ public class WaterParticle {
      * Constructs a WaterParticle with
      * the following parameters
      *
-     * @param truck     The FireTruck that the
+     * @param patrol     The FireTruck that the
      *                  WaterParticle came from
      * @param target    The Fortress that the
      *                  WaterParticle is heading
      *                  towards
      */
-    public WaterParticle(FireTruck truck, Fortress target) {
+    public BlasterParticle(Patrol patrol, FireStation target) {
         this.target = target;
-        Color[] colors = new Color[] {Color.CYAN, Color.NAVY, Color.BLUE, Color.PURPLE, Color.SKY, Color.TEAL};
+        Color[] colors = new Color[] {Color.GREEN, Color.OLIVE, Color.YELLOW, Color.CORAL, Color.LIME, Color.TEAL};
         this.colour = colors[(int)(Math.random() * 4)];
         this.size = (float)(Math.random()/5 + 0.1);
-        this.startPosition = new Vector2(truck.getPosition().x + 0.5f, truck.getPosition().y + 0.5f);
+        this.startPosition = new Vector2(patrol.getPosition().x + 0.5f, patrol.getPosition().y + 0.5f);
         this.currentPosition = startPosition;
         this.targetPosition = target.getPosition();
         createTargetPosition(target);
@@ -63,9 +61,9 @@ public class WaterParticle {
      *
      * @param fortress the fortress whose target position is being created
      */
-    private void createTargetPosition(Fortress fortress) {
-        float xCoord = (float)(Math.random()-0.5+fortress.getPosition().x);
-        float yCoord = (float)(Math.random()-0.5+fortress.getPosition().y);
+    private void createTargetPosition(FireStation station) {
+        float xCoord = (float)(Math.random()-0.5+station.getPosition().x+1);
+        float yCoord = (float)(Math.random()-0.5+station.getPosition().y);
         this.targetPosition = new Vector2(xCoord, yCoord);
     }
 
@@ -89,7 +87,7 @@ public class WaterParticle {
                 ((int) this.targetPosition.y == (int) this.currentPosition.y));
     }
 
-    public Fortress getTarget() { return this.target; }
+    public FireStation getTarget() { return this.target; }
 
     public float getSize() { return this.size; }
 

@@ -13,6 +13,9 @@ public class GameState {
     /** Number of fire trucks there are on screen */
     private int activeFireTrucks;
 
+    private int activePatrols;
+
+
     /** The number of fortresses the player has destroyed */
     private int fortressesDestroyed;
 
@@ -23,6 +26,7 @@ public class GameState {
     public GameState() {
         this.activeFireTrucks = 0;
         this.fortressesDestroyed = 0;
+        this.activePatrols = 0;
     }
 
     /** Adds one to activeFireTrucks, called when a firetruck is spawned */
@@ -30,10 +34,19 @@ public class GameState {
         this.activeFireTrucks++;
     }
 
+    public void addPatrol() {
+        this.activePatrols++;
+    }
+
+
     /** Removes one from activeFireTrucks, called when a firetruck
      * is destroyed */
     public void removeFireTruck() {
         this.activeFireTrucks--;
+    }
+
+    public void removePatrol() {
+        this.activePatrols--;
     }
 
     /** Adds one to fortressesDestroyed when a user has destroyed a

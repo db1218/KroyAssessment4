@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
-
+import com.mozarellabytes.kroy.Entities.FireStation;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import com.mozarellabytes.kroy.Utilities.CircularLinkedList;
 import com.mozarellabytes.kroy.Utilities.Node;
@@ -104,7 +104,7 @@ public class Patrol extends Sprite {
     /** List of particles that the truck uses to attack
      * a Fortress */
 
-    private final ArrayList<WaterParticle> spray;
+    private final ArrayList<BlasterParticle> spray;
 
 
 /** Texture for each direction the
@@ -137,7 +137,7 @@ public class Patrol extends Sprite {
         this.moving = true;
         this.attacking = false;
         this.inCollision = false;
-        this.spray = new ArrayList<WaterParticle>();
+        this.spray = new ArrayList<BlasterParticle>();
         this.timeOfLastAttack = System.currentTimeMillis();
         this.nextTile=position;
         this.previousTile=position;
@@ -260,15 +260,32 @@ public class Patrol extends Sprite {
      * Deals damage to Fortress by generating a WaterParticle and adding
      * it to the spray
      *
-     * @param fireTruck Firetruck being attacked
+     * @param station FireStation being attacked
      */
 
-    public void attack(FireTruck fireTruck) {
-        //
+    public void attack(FireStation station) {
+        this.spray.add(new BlasterParticle(this, station));
+    }
+
+    public void updateSpray() {
+        if (this.spray != null) {
+            for (int i=0; i < this.spray.size(); i++) {
+                BlasterParticle particle = this.spray.get(i);
+                particle.updatePosition();
+                if (particle.isHit()) {
+                    this.damage(particle);
+                    this.removeParticle(particle);
+                }
+            }
+        }
+    }
+
+    private ArrayList<BlasterParticle> getSpray() {
+        return this.spray;
     }
 
 
-/**
+    /**
      * Called every tick to check if a Fortress is within the range of
      *  the truck
      *
@@ -291,6 +308,9 @@ public class Patrol extends Sprite {
         shapeMapRenderer.rect(this.getPosition().x + 0.2f, this.getPosition().y + 1.3f, 0.4f, 0.8f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
         shapeMapRenderer.rect(this.getPosition().x + 0.3f, this.getPosition().y + 1.4f, 0.2f, 0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
         shapeMapRenderer.rect(this.getPosition().x + 0.3f, this.getPosition().y + 1.4f, 0.2f, this.getHP() / this.type.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
+        for (BlasterParticle particle : this.getSpray()) {
+            shapeMapRenderer.rect(particle.getPosition().x, particle.getPosition().y, particle.getSize(), particle.getSize(), particle.getColour(), particle.getColour(), particle.getColour(), particle.getColour());
+        }
     }
 
 
@@ -317,6 +337,19 @@ public class Patrol extends Sprite {
         return new Vector2(this.position.x + 0.5f, this.position.y + 0.5f);
     }
 
+
+    private void removeParticle(BlasterParticle particle) {
+        this.spray.remove(particle);
+    }
+
+    /**
+     * Damages the Fortress depending on the truck's AP
+     *
+     * @param particle  the particle which damages the fortress
+     */
+    private void damage(BlasterParticle particle) {
+        particle.getTarget().damage(Math.min(this.type.getAP(), particle.getTarget().getHP()));
+    }
 
 /**
      * Sets time of last attack to unix timestamp provided
