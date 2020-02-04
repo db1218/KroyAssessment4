@@ -32,15 +32,15 @@ public class DanceChoreographer {
 
     public DanceMove nextMove() {
         if (clumpLength == 0) {
-            if (random.nextInt(3) == 0) {
-                // Initiate clump
-                clumpLength = 3;
-                moveList.add(DanceMove.WAIT);
-                return moveList.remove(0);
-            } else {
+//            if (random.nextInt(3) == 0) {
+//                // Initiate clump
+//                clumpLength = 3;
+//                moveList.add(DanceMove.WAIT);
+//                return moveList.remove(0);
+//            } else {
                 moveList.add(DanceMove.values()[random.nextInt(5)]);
                 return moveList.remove(0);
-            }
+//            }
         } else {
             clumpLength--;
             moveList.add(DanceMove.WAIT);

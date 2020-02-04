@@ -27,7 +27,7 @@ import java.util.LinkedList;
  * Having 'A' held when within range of a  Fortress will deal damage to it.
  */
 
-public class Patrols extends Sprite {
+public class Patrol extends Sprite {
 
 
 /** Enables access to functions in GameScreen */
@@ -124,7 +124,7 @@ public class Patrols extends Sprite {
      * @param type          used to have predefined attributes
      */
 
-    public Patrols(GameScreen gameScreen, PatrolType type) {
+    public Patrol(GameScreen gameScreen, PatrolType type) {
         super(type.getTexture());
 
 
@@ -347,6 +347,7 @@ public class Patrols extends Sprite {
         return this.HP;
     }
 
+    public void setHP(int hp) { this.HP = hp; }
 
     public PatrolType getType() {
         return this.type;

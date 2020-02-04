@@ -1,5 +1,6 @@
 package com.mozarellabytes.kroy.Minigame;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DanceManager {
@@ -21,12 +22,12 @@ public class DanceManager {
     /** Whether the player missed the last move */
     private boolean missedLastTurn = false;
 
+    /** List of classes to notify about the beat */
+    private List<BeatListener> beatListeners;
+
     private int combo = 0;
 
     private DanceChoreographer choreographer;
-
-    public DanceScorer scorer;
-
 
     public DanceManager(float tempo) {
         // Setup tempo
@@ -38,7 +39,7 @@ public class DanceManager {
 
         // Setup dance queue
         this.choreographer = new DanceChoreographer();
-        this.scorer = new DanceScorer();
+        this.beatListeners = new ArrayList<>();
     }
 
     /** Called once a frame to update the dance manager*/
@@ -51,6 +52,7 @@ public class DanceManager {
             System.out.println("Beat: " + time);
             choreographer.nextMove();
             time = 0f;
+            notifyOnBeat();
         }
 
         // Trigger every off-beat
@@ -63,6 +65,7 @@ public class DanceManager {
                 missedLastTurn = true;
             }
             doneThisBeat = false;
+            notifyOffBeat();
         }
     }
 
@@ -83,6 +86,7 @@ public class DanceManager {
 
         if (move != getNearestMove()) {
             wrongMove();
+            notifyResult(DanceResult.WRONG);
             return DanceResult.WRONG;
         }
 
@@ -93,31 +97,37 @@ public class DanceManager {
             if (proxemity > .95f) {
                 doneThisBeat = true;
                 goodMove();
+                notifyResult(DanceResult.GREAT);
                 return DanceResult.GREAT;
             }
             else if (proxemity > .9f) {
                 doneThisBeat = true;
                 goodMove();
+                notifyResult(DanceResult.GOOD);
                 return DanceResult.GOOD;
             }
             else if (proxemity > .8) {
                 doneThisBeat = true;
                 goodMove();
+                notifyResult(DanceResult.OKAY);
                 return DanceResult.OKAY;
             }
             else if (proxemity > .5 && phase > .5f) {
                 doneThisBeat = true;
                 killCombo();
+                notifyResult(DanceResult.EARLY);
                 return DanceResult.EARLY;
             }
             else if (proxemity > .5 && phase < .5f) {
                 doneThisBeat = true;
                 killCombo();
+                notifyResult(DanceResult.LATE);
                 return DanceResult.LATE;
             }
             else {
                 doneThisBeat = true;
                 wrongMove();
+                notifyResult(DanceResult.WRONG);
                 return DanceResult.WRONG;
             }
         }
@@ -126,6 +136,7 @@ public class DanceManager {
             // Player doubletook a move, punish them
             doneThisBeat = true;
             wrongMove();
+            notifyResult(DanceResult.WRONG);
             return DanceResult.WRONG;
         }
     }
@@ -161,5 +172,27 @@ public class DanceManager {
 
     public void killCombo() {
         combo = 0;
+    }
+
+    public void subscribeToBeat(BeatListener listener) {
+        beatListeners.add(listener);
+    }
+
+    public void notifyOnBeat() {
+        for (BeatListener b : beatListeners) {
+            b.onBeat();
+        }
+    }
+
+    public void notifyOffBeat() {
+        for (BeatListener b : beatListeners) {
+            b.offBeat();
+        }
+    }
+
+    public void notifyResult(DanceResult result) {
+        for (BeatListener b : beatListeners) {
+            b.moveResult(result);
+        }
     }
 }
