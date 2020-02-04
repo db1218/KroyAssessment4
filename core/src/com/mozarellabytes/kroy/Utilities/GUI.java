@@ -80,8 +80,6 @@ public class GUI {
     /** Texture of the soundButton that is rendered to the screen */
     private Texture currentSoundTexture;
 
-    private Circle rangeCircle;
-
     /** Camera to set the projection for the screen */
     private final OrthographicCamera pauseCamera;
 
@@ -387,9 +385,9 @@ public class GUI {
 
     public void renderSelectedEntityRange(Vector2 entityPosition, float radius){
         game.shapeRenderer.end();
-        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         game.shapeRenderer.setColor(Color.RED);
-        game.shapeRenderer.circle(entityPosition.y, entityPosition.x, radius*20);
+        game.shapeRenderer.circle(entityPosition.x, entityPosition.y, radius*20);
         game.shapeRenderer.end();
 
 
