@@ -156,6 +156,13 @@ public class FireStation {
                     }
                 }
             }
+            for (Patrols patrol : patrols) {
+                Vector2 patroltile = new Vector2(Math.round(patrol.getPosition().x), Math.round(patrol.getPosition().y));
+                Vector2 truckstile = new Vector2((float)Math.floor(truck.getPosition().x),(float) Math.floor(truck.getPosition().y));
+                if (truckstile.equals(patroltile)) {
+                    patrol.setAttacking(true);
+                }
+            }
         }
     }
 

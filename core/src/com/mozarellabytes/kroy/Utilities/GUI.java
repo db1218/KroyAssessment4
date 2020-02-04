@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Fortress;
 import com.mozarellabytes.kroy.Kroy;
@@ -78,6 +80,8 @@ public class GUI {
     /** Texture of the soundButton that is rendered to the screen */
     private Texture currentSoundTexture;
 
+    private Circle rangeCircle;
+
     /** Camera to set the projection for the screen */
     private final OrthographicCamera pauseCamera;
 
@@ -90,9 +94,9 @@ public class GUI {
         this.game = game;
         this.gameScreen = gameScreen;
         this.selectedH = 275;
-        this.selectedW = 275;
-        this.selectedX = 10;
-        this.selectedY = Gdx.graphics.getHeight() - 10 - this.selectedH;
+        this.selectedW = 225;
+        this.selectedX = 5;
+        this.selectedY = Gdx.graphics.getHeight() - 5 - this.selectedH;
 
         homeButtonIdle = new Texture(Gdx.files.internal("ui/home_idle.png"), true);
         homeButtonIdle.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
@@ -179,9 +183,11 @@ public class GUI {
      *              that are being displayed
      */
     private void renderSelectedTruck(FireTruck truck) {
-        renderSelectedEntityBar(truck.getHP(), truck.getType().getMaxHP(), Color.RED, Color.FIREBRICK, 1);
-        renderSelectedEntityBar(truck.getReserve(), truck.getType().getMaxReserve(), Color.CYAN, Color.BLUE, 2);
+        renderSelectedEntityBar(truck.getHP(), truck.getType().getMaxHP(), Color.RED, Color.FIREBRICK, 1, 35);
+        renderSelectedEntityBar(truck.getReserve(), truck.getType().getMaxReserve(), Color.CYAN, Color.BLUE, 2, 35);
         renderSelectedEntityText(truck);
+        renderSelectedEntityRange(truck.getPosition(), truck.getRange());
+
     }
 
     /**
@@ -189,11 +195,12 @@ public class GUI {
      * health bar of a fortress in the stats area
      *
      * @param fortress  the Fortress that owns the stats
-     *                  thta are being displayed
+     *                  that are being displayed
      */
     private void renderSelectedFortress(Fortress fortress) {
-        renderSelectedEntityBar(fortress.getHP(), fortress.getFortressType().getMaxHP(), Color.RED, Color.FIREBRICK, 1);
+        renderSelectedEntityBar(fortress.getHP(), fortress.getFortressType().getMaxHP(), Color.RED, Color.FIREBRICK, 1, 50);
         renderSelectedEntityText(fortress);
+        renderSelectedEntityRange(fortress.getPosition(), fortress.getRange());
     }
 
     /**
@@ -230,7 +237,10 @@ public class GUI {
     private void renderSelectedEntityText(Fortress fortress) {
         int newLine = 20;
         game.batch.begin();
-        game.font26.draw(game.batch, fortress.getFortressType().getName(), this.selectedX + 10, this.selectedY + this.selectedH - 10);
+        if(fortress.getFortressType().getName().length() > 14){ //Scale down name of the fortress' size if it is large
+            game.font19.draw(game.batch, fortress.getFortressType().getName(), this.selectedX + 10, this.selectedY + this.selectedH - 10);
+        } else
+            game.font26.draw(game.batch, fortress.getFortressType().getName(), this.selectedX + 10, this.selectedY + this.selectedH - 10);
         game.font19.draw(game.batch, "HP: ", this.selectedX + 15, this.selectedY + this.selectedH - 50);
         game.font19.draw(game.batch, String.format("%.1f", fortress.getHP()) + " / " + String.format("%.1f", fortress.getFortressType().getMaxHP()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine);
         game.font19.draw(game.batch, "Range: ", this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*2);
@@ -254,9 +264,10 @@ public class GUI {
      * @param position          the 'bar number' to allow multiple
      *                          bars along side each other
      *                          (1 to infinity)
+     * @param width             the width of the bar (usually 50 or 25)
      */
-    private void renderSelectedEntityBar(float value, float maxValue, Color progressColour, Color backgroundColour, int position) {
-        int whiteW = 50;
+    private void renderSelectedEntityBar(float value, float maxValue, Color progressColour, Color backgroundColour, int position, int width) {
+        int whiteW = width;
         int outerSpacing = 10;
         int innerSpacing = 5;
         int spaceForText = 35;
@@ -268,7 +279,6 @@ public class GUI {
         game.shapeRenderer.rect(this.selectedX + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, barHeight, backgroundColour, backgroundColour, backgroundColour, backgroundColour);
         game.shapeRenderer.rect(this.selectedX + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, value/maxValue*barHeight, progressColour, progressColour, progressColour, progressColour);
     }
-
     /** Renders the buttons to the game screen */
     public void renderButtons() {
         game.batch.begin();
@@ -373,6 +383,16 @@ public class GUI {
         game.font50.draw(game.batch, pauseText1, pauseCamera.viewportWidth/2 - layout.width/2.7f, pauseCamera.viewportHeight/1.8f - layout.height/2);
         game.font26.draw(game.batch, pauseText2, pauseCamera.viewportWidth/2 - layout.width/2, pauseCamera.viewportHeight/2.3f - layout.height/2);
         game.batch.end();
+    }
+
+    public void renderSelectedEntityRange(Vector2 entityPosition, float radius){
+        game.shapeRenderer.end();
+        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        game.shapeRenderer.setColor(Color.RED);
+        game.shapeRenderer.circle(entityPosition.y, entityPosition.x, radius*20);
+        game.shapeRenderer.end();
+
+
     }
 
     public Rectangle getHomeButton() { return this.homeButton; }

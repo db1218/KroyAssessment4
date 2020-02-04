@@ -1,7 +1,6 @@
 package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -14,6 +13,7 @@ import com.mozarellabytes.kroy.Entities.*;
 import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.*;
+
 
 import java.util.ArrayList;
 
@@ -84,6 +84,11 @@ public class GameScreen implements Screen {
      * the large stats in the top left corner */
     public Object selectedEntity;
 
+    private GlyphLayout layout;
+    private DifficultyControl difficultyControl;
+    private ArrayList<DestroyedFortress> deadFortresses;
+    public FPSLogger fpsCounter;
+
     /** Play when the game is being played
      * Pause when the pause button is clicked */
     public enum PlayState {
@@ -97,6 +102,9 @@ public class GameScreen implements Screen {
      */
     public GameScreen(Kroy game) {
         this.game = game;
+        fpsCounter = new FPSLogger();
+
+        difficultyControl = new DifficultyControl();
 
         state = PlayState.PLAY;
 
@@ -123,20 +131,30 @@ public class GameScreen implements Screen {
 
         structureLayersIndices = new int[]{mapLayers.getIndex("structures"),
                 mapLayers.getIndex("structures2"),
+                mapLayers.getIndex("structures3"),
                 mapLayers.getIndex("transparentStructures")};
 
-        station = new FireStation(3, 2);
+        station = new FireStation(3, 7);
 
         spawn(FireTruckType.Ocean);
         spawn(FireTruckType.Speed);
 
         fortresses = new ArrayList<Fortress>();
-        fortresses.add(new Fortress(12, 18.5f, FortressType.Revs));
-        fortresses.add(new Fortress(30.5f, 17.5f, FortressType.Walmgate));
-        fortresses.add(new Fortress(16, 3.5f, FortressType.Clifford));
-
+        fortresses.add(new Fortress(12, 23.5f, FortressType.Revs));
+        fortresses.add(new Fortress(30.5f, 22.5f, FortressType.Walmgate));
+        fortresses.add(new Fortress(16f, 3.5f, FortressType.Railway));
+        fortresses.add(new Fortress(32f, 1.5f, FortressType.Clifford));
+        fortresses.add(new Fortress(41.5f, 24f, FortressType.Museum));
+        fortresses.add(new Fortress(44f, 11f, FortressType.CentralHall));
+        
         spawn(PatrolType.Blue);
         spawn(PatrolType.Green);
+        spawn(PatrolType.Peach);
+        spawn(PatrolType.Violet);
+        spawn(PatrolType.Yellow);
+
+        deadFortresses = new ArrayList<>(6);
+
 
         // sets the origin point to which all of the polygon's local vertices are relative to.
         for (FireTruck truck : station.getTrucks()) {
@@ -157,6 +175,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        fpsCounter.log();
 
         camera.update();
 
@@ -170,19 +189,25 @@ public class GameScreen implements Screen {
             truck.drawSprite(mapBatch);
         }
 
-        for (Patrols patrol : station.getPatrol()) {
-            patrol.drawSprite(mapBatch);
-        }
-
         station.draw(mapBatch);
 
         for (Fortress fortress : this.fortresses) {
             fortress.draw(mapBatch);
         }
 
+        for (DestroyedFortress deadFortress : deadFortresses){
+            deadFortress.draw(mapBatch);
+        }
+
         mapBatch.end();
 
         mapRenderer.render(structureLayersIndices);
+
+        mapBatch.begin();
+        for (Patrols patrol : station.getPatrol()) {
+            patrol.drawSprite(mapBatch);
+        }
+        mapBatch.end();
 
         shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
@@ -219,6 +244,16 @@ public class GameScreen implements Screen {
                 gui.renderPauseScreenText();
         }
         gui.renderButtons();
+
+
+        //Difficulty Stuff
+        layout = new GlyphLayout(game.font25, difficultyControl.getDifficultyOutput());
+        float fontX = 10;
+        float fontY = Gdx.graphics.getHeight() - layout.height/2;
+        game.batch.begin();
+        game.font25.draw(game.batch, difficultyControl.getDifficultyOutput(), fontX, fontY);
+        game.batch.end();
+
     }
 
     /**
@@ -232,6 +267,7 @@ public class GameScreen implements Screen {
 
         station.restoreTrucks();
         station.checkForCollisions();
+
         gameState.setTrucksInAttackRange(0);
 
         for (int i = 0; i < station.getTrucks().size(); i++) {
@@ -245,7 +281,7 @@ public class GameScreen implements Screen {
             // manages attacks between trucks and fortresses
             for (Fortress fortress : this.fortresses) {
                 if (fortress.withinRange(truck.getVisualPosition())) {
-                    fortress.attack(truck, true);
+                    fortress.attack(truck, true, difficultyControl.getDifficultyMultiplier());
                 }
                 if (truck.fortressInRange(fortress.getPosition())) {
                     gameState.incrementTrucksInAttackRange();
@@ -255,8 +291,8 @@ public class GameScreen implements Screen {
             }
 
             for (Patrols patrol : station.getPatrol()) {
-                if (patrol.withinRange(truck.getVisualPosition())) {
-                    game.setScreen(new GameOverScreen(game, false));
+                if (patrol.getAttacking()) {
+                    toDanceScreen();
                 }
             }
 
@@ -285,6 +321,7 @@ public class GameScreen implements Screen {
             // check if fortress is destroyed
             if (fortress.getHP() <= 0) {
                 gameState.addFortress();
+                deadFortresses.add(fortress.createDestroyedFortress());
                 this.fortresses.remove(fortress);
                 if (SoundFX.music_enabled) {
                     SoundFX.sfx_fortress_destroyed.play();
@@ -293,21 +330,20 @@ public class GameScreen implements Screen {
 
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            if (gameState.getTrucksInAttackRange() > 0) {
-                SoundFX.playTruckAttack();
-            }
-            else {
-                SoundFX.stopTruckAttack();
-            }
+        if (gameState.getTrucksInAttackRange() > 0 && SoundFX.music_enabled){
+            SoundFX.playTruckAttack();
+        } else {
+            SoundFX.stopTruckAttack();
         }
 
-        System.out.println(SoundFX.isPlaying);
+        //System.out.println(SoundFX.isPlaying);
 
         shapeMapRenderer.end();
         shapeMapRenderer.setColor(Color.WHITE);
 
         gui.renderSelectedEntity(selectedEntity);
+
+        difficultyControl.incrementCurrentTime(delta);
     }
 
     @Override
@@ -421,13 +457,17 @@ public class GameScreen implements Screen {
         SoundFX.sfx_soundtrack.dispose();
     }
 
+    public void toDanceScreen() {
+        game.setScreen(new DanceScreen(game, this));
+    }
+
     /**
      * Creates a new FireEngine, plays a sound and adds it gameState to track
      * @param type Type of truck to be spawned (Ocean, Speed)
      */
     private void spawn(FireTruckType type) {
         SoundFX.sfx_truck_spawn.play();
-        station.spawn(new FireTruck(this, new Vector2(6,2), type));
+        station.spawn(new FireTruck(this, new Vector2(6,7), type));
         gameState.addFireTruck();
     }
     

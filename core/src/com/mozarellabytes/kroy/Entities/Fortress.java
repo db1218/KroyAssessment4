@@ -61,9 +61,9 @@ public class Fortress {
      * @param randomTarget  whether the bomb hits every time or
      *                      there is a chance it misses
      */
-    public void attack(FireTruck target, boolean randomTarget) {
+    public void attack(FireTruck target, boolean randomTarget, float difficultyMultiplier) {
         if (target.getTimeOfLastAttack() + fortressType.getDelay() < System.currentTimeMillis()) {
-            this.bombs.add(new Bomb(this, target, randomTarget));
+            this.bombs.add(new Bomb(this, target, randomTarget, difficultyMultiplier));
             target.setTimeOfLastAttack(System.currentTimeMillis());
             if (SoundFX.music_enabled) {
                 SoundFX.sfx_fortress_attack.play();
@@ -120,7 +120,11 @@ public class Fortress {
      * @param mapBatch  the renderer in line with the map
      */
     public void draw(Batch mapBatch) {
-        mapBatch.draw(this.getFortressType().getTexture(), this.getArea().x, this.getArea().y, this.getArea().width, this.getArea().height);
+        mapBatch.draw(this.getFortressType().getTexture(this.getHP()), this.getArea().x, this.getArea().y, this.getArea().width, this.getArea().height);
+    }
+
+    public DestroyedFortress createDestroyedFortress(){
+        return new DestroyedFortress(this.getFortressType().getTexture(0), this.area);
     }
 
     public Vector2 getPosition() {
@@ -145,6 +149,10 @@ public class Fortress {
 
     public ArrayList<Bomb> getBombs() {
         return this.bombs;
+    }
+
+    public float getRange(){
+        return this.fortressType.getRange();
     }
 
 }

@@ -41,8 +41,10 @@ public class SoundFX {
 
     /** Stops the sound of FireTrucks attacking and resets isPlaying to false */
     public static void stopTruckAttack() {
-        sfx_truck_attack.stop();
-        isPlaying = false;
+        if (isPlaying) {
+            sfx_truck_attack.stop();
+            isPlaying = false;
+        }
     }
     /** Plays game music */
     public static void playGameMusic() {

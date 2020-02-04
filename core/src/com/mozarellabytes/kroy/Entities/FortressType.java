@@ -20,7 +20,10 @@ public enum FortressType {
      */
     Revs ("Revolution", 2500, 7, 100, 10, 5, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress_revs.png"))),
     Walmgate ("Walmgate Bar", 1500, 8, 200, 15, 5, 5, new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate.png"))),
-    Clifford ("Clifford's Tower", 500, 4, 150, 20, 4, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford.png")));
+    Clifford ("Clifford's Tower", 500, 5, 150, 10, 4, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford.png"))),
+    CentralHall ("Central Hall", 500, 6, 200, 20, 4, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress.png"))),
+    Museum ("York Museum", 1500, 6, 180, 20, 4, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress.png"))),
+    Railway ("Railway Museum", 1000, 6, 250, 15, 4, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress.png")));
 
     /** The name for the fortress, visible once the fortress has been clicked on */
     private final String name;
@@ -44,7 +47,7 @@ public enum FortressType {
     private final int h;
 
     /** The sprite for the fortress */
-    private final Texture texture;
+    private final Texture textureFull;// textureHalf, textureDead
 
     /**
      * Constructs the FortressType
@@ -56,10 +59,10 @@ public enum FortressType {
      * @param AP The attack points for this type of fortress
      * @param w The width of the sprite for this type of fortress in tiles
      * @param h The height of the sprite for this type of fortress in tiles
-     * @param texture The sprite for this type of fortress
+     * @param textureFull The sprite for this type of fortress
      *
      */
-    FortressType(String name, int delay, float range, float maxHP, float AP, int w, int h, Texture texture) {
+    FortressType(String name, int delay, float range, float maxHP, float AP, int w, int h, Texture textureFull) {
         this.name = name;
         this.delay = delay;
         this.range = range;
@@ -67,7 +70,9 @@ public enum FortressType {
         this.AP = AP;
         this.w = w;
         this.h = h;
-        this.texture = texture;
+        this.textureFull = textureFull; // full hp
+        //this.textureHalf = textureHalf; // half hp
+        //this.textureDead = textureDead; // dead
     }
 
     public String getName() { return name; }
@@ -84,6 +89,15 @@ public enum FortressType {
 
     public int getH() { return h; }
 
-    public Texture getTexture() { return texture; }
+    public Texture getTexture(float currentHP) {
+        /*
+        if (currentHP > getMaxHP()/2){
+            return textureFull;
+        } else if (currentHP > 0){
+            return textureHalf;
+        } else {
+            return textureDead
+        } */
+        return textureFull; }
 
 }

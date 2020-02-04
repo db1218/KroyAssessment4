@@ -99,10 +99,10 @@ public class ControlsScreen implements Screen {
         count = 0;
 
         exitButton = new Rectangle();
-        exitButton.x = 1185;
-        exitButton.y = (int) (camera.viewportHeight - 90);
-        exitButton.width = (int)(screenWidth / 1.08f);
-        exitButton.height = (int)(screenHeight / 1.126f);
+        exitButton.x = (int)camera.viewportWidth - 105;
+        exitButton.y = (int) (camera.viewportHeight - 95);
+        exitButton.width = 30;
+        exitButton.height = 30;
     }
 
     @Override
@@ -273,12 +273,12 @@ public class ControlsScreen implements Screen {
     /** Renders the exit button */
     private void renderExitButton(){
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        game.shapeRenderer.rect(screenWidth / 1.08f,  screenHeight / 1.126f, 30, 30, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-        game.shapeRenderer.rect(screenWidth / 1.078f,  screenHeight / 1.123f, 26, 26, Color.RED, Color.RED, Color.RED, Color.RED);
+        game.shapeRenderer.rect(camera.viewportWidth - 105,  camera.viewportHeight - 95, 30, 30, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+        game.shapeRenderer.rect(camera.viewportWidth - 105,  camera.viewportHeight - 95, 26, 26, Color.RED, Color.RED, Color.RED, Color.RED);
         game.shapeRenderer.end();
 
         game.batch.begin();
-        game.font33Red.draw(game.batch, "X", screenWidth / 1.074f, screenHeight / 1.09f);
+        game.font33Red.draw(game.batch, "X",camera.viewportWidth - 98 , camera.viewportHeight - 72);
         game.batch.end();
     }
 
