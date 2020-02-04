@@ -229,8 +229,10 @@ public class GameScreen implements Screen {
                 bomb.drawBomb(shapeMapRenderer);
             }
         }
+        //gui.renderSelectedEntityRange(selectedEntity, shapeMapRenderer);
 
         shapeMapRenderer.end();
+        gui.renderSelectedEntityRange(selectedEntity, shapeMapRenderer);
 
         gui.renderSelectedEntity(selectedEntity);
 

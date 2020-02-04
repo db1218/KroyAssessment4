@@ -80,8 +80,6 @@ public class GUI {
     /** Texture of the soundButton that is rendered to the screen */
     private Texture currentSoundTexture;
 
-    private Circle rangeCircle;
-
     /** Camera to set the projection for the screen */
     private final OrthographicCamera pauseCamera;
 
@@ -186,7 +184,6 @@ public class GUI {
         renderSelectedEntityBar(truck.getHP(), truck.getType().getMaxHP(), Color.RED, Color.FIREBRICK, 1, 35);
         renderSelectedEntityBar(truck.getReserve(), truck.getType().getMaxReserve(), Color.CYAN, Color.BLUE, 2, 35);
         renderSelectedEntityText(truck);
-        renderSelectedEntityRange(truck.getPosition(), truck.getRange());
 
     }
 
@@ -200,7 +197,6 @@ public class GUI {
     private void renderSelectedFortress(Fortress fortress) {
         renderSelectedEntityBar(fortress.getHP(), fortress.getFortressType().getMaxHP(), Color.RED, Color.FIREBRICK, 1, 50);
         renderSelectedEntityText(fortress);
-        renderSelectedEntityRange(fortress.getPosition(), fortress.getRange());
     }
 
     /**
@@ -385,12 +381,28 @@ public class GUI {
         game.batch.end();
     }
 
-    public void renderSelectedEntityRange(Vector2 entityPosition, float radius){
-        game.shapeRenderer.end();
-        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        game.shapeRenderer.setColor(Color.RED);
-        game.shapeRenderer.circle(entityPosition.y, entityPosition.x, radius*20);
-        game.shapeRenderer.end();
+    public void renderSelectedEntityRange(Object entity, ShapeRenderer shapeMapRenderer){
+        float x, y, range;
+        if (entity instanceof FireTruck){
+            FireTruck truck = (FireTruck) entity;
+            x = truck.getPosition().x;
+            y = truck.getPosition().y;
+            range = truck.getRange();
+        } else if (entity instanceof Fortress){
+            Fortress fortress = (Fortress) entity;
+            x = fortress.getPosition().x;
+            y = fortress.getPosition().y;
+            range = fortress.getRange();
+        } else {
+            x = -1;
+            y = -1;
+            range = 0;
+        }
+        Gdx.gl.glLineWidth(3);
+        shapeMapRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeMapRenderer.setColor(Color.RED);
+        shapeMapRenderer.circle(x, y, range);
+        shapeMapRenderer.end();
 
 
     }
