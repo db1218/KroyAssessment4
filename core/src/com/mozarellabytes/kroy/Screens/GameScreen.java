@@ -154,7 +154,6 @@ public class GameScreen implements Screen {
         patrols.add(new Patrol(this,PatrolType.Peach));
         patrols.add(new Patrol(this,PatrolType.Violet));
         patrols.add(new Patrol(this,PatrolType.Yellow));
-        patrols.add(new Patrol(this,PatrolType.Station));
 
         deadFortresses = new ArrayList<>(6);
 
@@ -274,6 +273,7 @@ public class GameScreen implements Screen {
      */
     private void update(float delta) {
         gameState.hasGameEnded(game);
+        gameState.firstFortressDestroyed(game);
         CameraShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
 
         station.restoreTrucks();
@@ -305,9 +305,13 @@ public class GameScreen implements Screen {
                 }
             }
 
+            if(gameState.hasStationDestoyed()){
+                System.out.println("here");
+                patrols.add(new Patrol(this,PatrolType.Station));
+            }
+
             for (Patrol patrol : this.patrols) {
                 if (patrol.position.equals(truck.getPosition())) {
-                    System.out.println("setAttacking "+patrol.getAttacking());
                     doDanceOff(truck, patrol);
                 }
             }
@@ -331,7 +335,6 @@ public class GameScreen implements Screen {
 
             patrol.updateSpray();
             if((patrol.getType()==PatrolType.Station)&&(patrol.getPosition().equals(PatrolType.Station.getPoint4()))){
-                System.out.println("here");
                 patrol.attack(station);
             }
             else{
