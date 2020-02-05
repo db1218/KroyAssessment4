@@ -338,8 +338,7 @@ public class GameScreen implements Screen {
                 patrol.move();
             }
             if (patrol.getHP() <= 0) {
-                gameState.removePatrol();
-                station.destroyPatrol(patrol);
+                patrols.remove(patrol);
             }
         }
 
