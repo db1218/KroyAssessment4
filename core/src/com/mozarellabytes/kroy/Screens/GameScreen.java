@@ -71,8 +71,7 @@ public class GameScreen implements Screen {
     /** List of Fortresses currently active on the map */
     private final ArrayList<Fortress> fortresses;
 
-    //private final ArrayList<Patrols> patrols;
-
+    private final ArrayList<Patrol> patrols;
 
     /** Where the FireEngines' spawn, refill and repair */
     private final FireStation station;
@@ -146,13 +145,14 @@ public class GameScreen implements Screen {
         fortresses.add(new Fortress(32f, 1.5f, FortressType.Clifford));
         fortresses.add(new Fortress(41.5f, 24f, FortressType.Museum));
         fortresses.add(new Fortress(44f, 11f, FortressType.CentralHall));
-        
-        spawn(PatrolType.Blue);
-        spawn(PatrolType.Green);
-        spawn(PatrolType.Peach);
-        spawn(PatrolType.Violet);
-        spawn(PatrolType.Yellow);
-        spawn(PatrolType.Station);
+
+        patrols = new ArrayList<Patrol>();
+        patrols.add(new Patrol(this,PatrolType.Blue));
+        patrols.add(new Patrol(this,PatrolType.Green));
+        patrols.add(new Patrol(this,PatrolType.Peach));
+        patrols.add(new Patrol(this,PatrolType.Violet));
+        patrols.add(new Patrol(this,PatrolType.Yellow));
+        patrols.add(new Patrol(this,PatrolType.Station));
 
         deadFortresses = new ArrayList<>(6);
 
@@ -190,7 +190,9 @@ public class GameScreen implements Screen {
             truck.drawSprite(mapBatch);
         }
 
-        station.draw(mapBatch);
+       if(!gameState.hasStationDestoyed()) {
+            station.draw(mapBatch);
+       }
 
         for (Fortress fortress : this.fortresses) {
             fortress.draw(mapBatch);
@@ -205,7 +207,7 @@ public class GameScreen implements Screen {
         mapRenderer.render(structureLayersIndices);
 
         mapBatch.begin();
-        for (Patrol patrol : station.getPatrol()) {
+        for (Patrol patrol : this.patrols) {
             patrol.drawSprite(mapBatch);
         }
         mapBatch.end();
@@ -216,7 +218,7 @@ public class GameScreen implements Screen {
             truck.drawStats(shapeMapRenderer);
         }
 
-        for (Patrol patrol : station.getPatrol()) {
+        for (Patrol patrol : this.patrols) {
             patrol.drawStats(shapeMapRenderer);
         }
 
@@ -275,6 +277,10 @@ public class GameScreen implements Screen {
         station.restoreTrucks();
         station.checkForCollisions();
 
+        /*for (Patrol patrol : this.patrols){
+            System.out.println("setAttacking "+patrol.getAttacking());
+        }*/
+
         gameState.setTrucksInAttackRange(0);
 
         for (int i = 0; i < station.getTrucks().size(); i++) {
@@ -297,8 +303,9 @@ public class GameScreen implements Screen {
                 }
             }
 
-            for (Patrol patrol : station.getPatrol()) {
-                if (patrol.getAttacking()) {
+            for (Patrol patrol : this.patrols) {
+                if (patrol.position.equals(truck.getPosition())) {
+                    System.out.println("setAttacking "+patrol.getAttacking());
                     doDanceOff(truck, patrol);
                 }
             }
@@ -313,14 +320,17 @@ public class GameScreen implements Screen {
             }
         }
 
-        for (Patrol patrol:station.getPatrol()) {
+        if (station.getHP() <= 0) {
+            gameState.setStationDestoyed();
+        }
+
+        for (int i=0;i<this.patrols.size();i++) {
+            Patrol patrol=this.patrols.get(i);
+
             patrol.updateSpray();
             if((patrol.getType()==PatrolType.Station)&&(patrol.getPosition().equals(PatrolType.Station.getPoint4()))){
                 System.out.println("here");
                 patrol.attack(station);
-                if(station.getHP()<=0){
-
-                }
             }
             else{
                 patrol.move();
@@ -491,13 +501,6 @@ public class GameScreen implements Screen {
         station.spawn(new FireTruck(this, new Vector2(6,7), type));
         gameState.addFireTruck();
     }
-    
-    private void spawn(PatrolType type) {
-        SoundFX.sfx_truck_spawn.play();
-        station.spawn(new Patrol(this, type));
-        gameState.addPatrol();
-    }
-
 
     /** Toggles between Play and Pause state when the Pause button is clicked */
     public void changeState() {

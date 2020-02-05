@@ -193,7 +193,7 @@ public class FireTruck extends Sprite {
             if (!dragOffMap) {
                 if (this.path.size > 0) {
                     Vector2 previous = this.path.last();
-                    int interpolation = (int) (20 / type.getSpeed());
+                    int interpolation = (int) (40 / type.getSpeed());
                     for (int i = 1; i < interpolation; i++) {
                         this.path.addLast(new Vector2((((previous.x - coordinate.x) * -1) / interpolation) * i + previous.x, (((previous.y - coordinate.y) * -1) / interpolation) * i + previous.y));
                     }
@@ -205,7 +205,7 @@ public class FireTruck extends Sprite {
                 if(this.path.size > 0) {
                     dragOffMap = false;
 
-                    int interpolation = (int) (20 / type.getSpeed());
+                    int interpolation = (int) (40 / type.getSpeed());
                     Vector2 previous = this.path.last();
                     Vector2[] newPath = findPath(coordinate, this.path.last());
                     for (int i = 0; i < newPath.length; i++) {
