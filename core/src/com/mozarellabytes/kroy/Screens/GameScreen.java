@@ -136,8 +136,10 @@ public class GameScreen implements Screen {
 
         station = new FireStation(3, 7);
 
-        spawn(FireTruckType.Ocean);
-        spawn(FireTruckType.Speed);
+        spawn(FireTruckType.Emerald);
+        spawn(FireTruckType.Amethyst);
+        spawn(FireTruckType.Sapphire);
+        spawn(FireTruckType.Ruby);
 
         fortresses = new ArrayList<Fortress>();
         fortresses.add(new Fortress(12, 23.5f, FortressType.Revs));
