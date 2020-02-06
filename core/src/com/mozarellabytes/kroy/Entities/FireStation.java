@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
@@ -25,6 +26,13 @@ public class FireStation {
      */
     private final int x,y;
 
+    private final int w;
+
+    /** The height of the sprite measured in tiles */
+    private final int h;
+
+    private final Rectangle area;
+
     /** The tile where new FireTrucks are spawned */
     private final Vector2 spawnTile;
 
@@ -36,7 +44,7 @@ public class FireStation {
     private final Vector2 bayTile2;
 
     /** The sprite image for the station */
-    private final Texture texture;
+    private final Texture texture, deadTexture;
 
     /** List of active fire trucks
      * @link FireTruck */
@@ -56,14 +64,21 @@ public class FireStation {
     public FireStation(int x, int y) {
         this.x = x;
         this.y = y;
+        this.w=5;
+        this.h=3;
         this.spawnTile = new Vector2(x+3, y);
         this.bayTile1 = new Vector2(x+1, y);
         this.bayTile2 = new Vector2(x+2, y);
         this.texture = new Texture(Gdx.files.internal("sprites/station/station.png"));
+        this.deadTexture = new Texture(Gdx.files.internal("sprites/station/station.png")); // change me pls
         this.trucks = new ArrayList<FireTruck>();
         this.patrols = new ArrayList<Patrol>();
         this.HP=100;
+        this.area = new Rectangle(this.x - (float) this.w/2, this.y - (float) this.h/2,
+                this.w, this.h);
     }
+
+
 
     /**
      * Creates a fire truck of type specified from FireTruckType. It signals to
@@ -105,6 +120,7 @@ public class FireStation {
             }
         }
     }
+
 
     /**
      * Increments the truck's HP until the truck's HP equals the truck's maximum
@@ -177,13 +193,13 @@ public class FireStation {
                     }
                 }
             }
-            for (Patrol patrol : patrols) {
+            /*for (Patrol patrol : this.patrols) {
                 Vector2 patroltile = new Vector2(Math.round(patrol.getPosition().x), Math.round(patrol.getPosition().y));
                 Vector2 truckstile = new Vector2((float)Math.floor(truck.getPosition().x),(float) Math.floor(truck.getPosition().y));
                 if (truckstile.equals(patroltile)) {
                     patrol.setAttacking(true);
                 }
-            }
+            }*/
         }
     }
 
@@ -216,6 +232,9 @@ public class FireStation {
      * @param mapBatch batch being used to render to the gameScreen */
     public void draw(Batch mapBatch) {
         mapBatch.draw(this.texture, this.x, this.y, 5, 3);
+    }
+    public DestroyedEntity getDestroyedStation(){
+        return new DestroyedEntity(this.deadTexture, this.x, this.y, 5, 3);
     }
 
     public ArrayList<FireTruck> getTrucks() {

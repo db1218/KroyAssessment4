@@ -302,7 +302,7 @@ public class DanceScreen implements Screen, BeatListener {
 //        game.shapeRenderer.rect(this.selectedX + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, value/maxValue*barHeight, progressColour, progressColour, progressColour, progressColour);
 
     public float scaleDamage(float combo) {
-        return (float) (50 * Math.log((float)combo+1));
+        return (float) (20 * (Math.pow(1.2, combo)-1f));
     }
 
     public void onBeat() {

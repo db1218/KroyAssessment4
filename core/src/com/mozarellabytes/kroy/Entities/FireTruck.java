@@ -77,13 +77,6 @@ public class FireTruck extends Sprite {
      * a Fortress */
     private final ArrayList<WaterParticle> spray;
 
-    /** Texture for each direction the
-     * truck is facing */
-    private final Texture lookLeft;
-    private final Texture lookRight;
-    private final Texture lookUp;
-    private final Texture lookDown;
-
 
     /** Whether the mouse has been dragged off a road tile */
     private boolean dragOffMap = false;
@@ -116,7 +109,7 @@ public class FireTruck extends Sprite {
      * @param type          used to have predefined attributes
      */
     public FireTruck(GameScreen gameScreen, Vector2 position, FireTruckType type) {
-        super(new Texture(Gdx.files.internal("sprites/firetruck/down.png")));
+        super(new Texture(Gdx.files.internal("sprites/firetruck/blue/down.png")));
 
         this.gameScreen = gameScreen;
         this.type = type;
@@ -130,10 +123,6 @@ public class FireTruck extends Sprite {
         this.inCollision = false;
         this.spray = new ArrayList<WaterParticle>();
         this.timeOfLastAttack = System.currentTimeMillis();
-        this.lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/left.png"));
-        this.lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right.png"));
-        this.lookUp = new Texture(Gdx.files.internal("sprites/firetruck/up.png"));
-        this.lookDown = new Texture(Gdx.files.internal("sprites/firetruck/down.png"));
     }
 
     /**
@@ -415,13 +404,13 @@ public class FireTruck extends Sprite {
     private void changeSprite(Vector2 nextTile) {
         if (previousTile != null) {
             if (nextTile.x > previousTile.x) {
-                setTexture(lookRight);
+                setTexture(this.type.getLookRight());
             } else if (nextTile.x < previousTile.x) {
-                setTexture(lookLeft);
+                setTexture(this.type.getLookLeft());
             } else if (nextTile.y > previousTile.y) {
-                setTexture(lookUp);
+                setTexture(this.type.getLookUp());
             } else if (nextTile.y < previousTile.y) {
-                setTexture(lookDown);
+                setTexture(this.type.getLookDown());
             }
         }
     }

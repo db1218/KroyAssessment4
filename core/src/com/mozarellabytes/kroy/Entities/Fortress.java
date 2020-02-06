@@ -123,8 +123,8 @@ public class Fortress {
         mapBatch.draw(this.getFortressType().getTexture(this.getHP()), this.getArea().x, this.getArea().y, this.getArea().width, this.getArea().height);
     }
 
-    public DestroyedFortress createDestroyedFortress(){
-        return new DestroyedFortress(this.getFortressType().getTexture(0), this.area);
+    public DestroyedEntity createDestroyedFortress(){
+        return new DestroyedEntity(this.getFortressType().getTexture(0), this.area);
     }
 
     public Vector2 getPosition() {

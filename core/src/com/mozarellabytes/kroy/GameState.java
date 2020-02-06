@@ -22,11 +22,14 @@ public class GameState {
     /** The number of trucks that have a fortress within their attack range */
     private int trucksInAttackRange;
 
+    private boolean stationDestoyed;
+
     /** Constructor for GameState */
     public GameState() {
         this.activeFireTrucks = 0;
         this.fortressesDestroyed = 0;
         this.activePatrols = 0;
+        this.stationDestoyed = false;
     }
 
     /** Adds one to activeFireTrucks, called when a firetruck is spawned */
@@ -34,10 +37,14 @@ public class GameState {
         this.activeFireTrucks++;
     }
 
-    public void addPatrol() {
-        this.activePatrols++;
+
+    public void setStationDestoyed() {
+        this.stationDestoyed = true;
     }
 
+    public boolean hasStationDestoyed() {
+        return this.stationDestoyed;
+    }
 
     /** Removes one from activeFireTrucks, called when a firetruck
      * is destroyed */
@@ -65,6 +72,14 @@ public class GameState {
             endGame(true, game);
         } else if (this.activeFireTrucks == 0) {
             endGame(false, game);
+        }
+    }
+
+    public boolean firstFortressDestroyed(Kroy game) {
+        if ((fortressesDestroyed == 1)&&(stationDestoyed==false)) {
+            return true;
+        } else{
+            return false;
         }
     }
 
