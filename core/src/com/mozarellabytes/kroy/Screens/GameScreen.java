@@ -85,7 +85,7 @@ public class GameScreen implements Screen {
 
     private GlyphLayout layout;
     private DifficultyControl difficultyControl;
-    private ArrayList<DestroyedFortress> deadFortresses;
+    private ArrayList<DestroyedEntity> deadFortresses;
     public FPSLogger fpsCounter;
 
     /** Play when the game is being played
@@ -199,7 +199,7 @@ public class GameScreen implements Screen {
             fortress.draw(mapBatch);
         }
 
-        for (DestroyedFortress deadFortress : deadFortresses){
+        for (DestroyedEntity deadFortress : deadFortresses){
             deadFortress.draw(mapBatch);
         }
 
