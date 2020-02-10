@@ -13,6 +13,7 @@ public class Dancer {
     /** How far through the jive the dancer is */
     private int jiveStep;
 
+
     public Dancer(int maxHealth) {
         this.health = maxHealth;
         this.state = DanceMove.NONE;
@@ -20,32 +21,64 @@ public class Dancer {
         this.jiving = false;
     }
 
+    /**
+     * Returns the current health of the dancer
+     * */
     public int getHealth() {
         return health;
     }
 
+    /**
+     * Deals a set amount of damage to the dancer
+     * @param amount the amount of damage to deal
+     * @return true if the dancer was killed, else false
+     */
     public boolean damage(int amount) {
         this.health -= amount;
         return this.health <= 0;
     }
 
+    /**
+     * Gets the current state of the dancer
+     * @return a Dancemove
+     */
     public DanceMove getState() {
         return this.state;
     }
 
+    /**
+     * Sets the current state of the dancer
+     * @param move the Dancemove the dancer should perform
+     */
     public void setState(DanceMove move) {
         this.state = move;
         this.timeInState = 0f;
     }
 
+    /**
+     * Update the dancer so that it knows how long it has been in the current position
+     * @param delta the amount of time elapsed since the last update in seconds
+     */
     public void addTimeInState(float delta) {
         this.timeInState += delta;
     }
 
+    /**
+     * Returns the amount of time that the dancer has been in its current state in seconds
+     * @return time in state
+     */
     public float getTimeInState() { return this.timeInState; }
 
+    /**
+     * A dancer is jiving when it is performing an automatic celebratory dance
+     * @return true if the dancer is jiving, else false
+     */
     public boolean isJiving() { return this.jiving; }
 
+    /**
+     * Sets the dancer to perform an automatic celebratory dance
+     * @param state true if the dancer is jiving, false if they are not
+     */
     public void setJiving(boolean state) {
         System.out.println("A jive has started");
         this.jiving = state;
@@ -65,6 +98,9 @@ public class Dancer {
         }
     }
 
+    /**
+     * Sends an update to the dancer so that if they are jiving they can change moves in time to the music
+     */
     public void updateJive() {
         if (this.isJiving()) {
             jiveStep++;
