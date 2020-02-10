@@ -259,7 +259,8 @@ public class GameScreen implements Screen {
         //Difficulty Stuff
         layout = new GlyphLayout(game.font25, difficultyControl.getDifficultyOutput());
         float fontX = 10;
-        float fontY = Gdx.graphics.getHeight() - layout.height/2;
+        //float fontY = Gdx.graphics.getHeight() - layout.height/2;
+        float fontY = layout.height + 10;
         game.batch.begin();
         game.font25.draw(game.batch, difficultyControl.getDifficultyOutput(), fontX, fontY);
         game.batch.end();
