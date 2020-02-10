@@ -83,6 +83,8 @@ public class GUI {
     /** Camera to set the projection for the screen */
     private final OrthographicCamera pauseCamera;
 
+    private GlyphLayout layout;
+
     /** Constructor for GUI
      *
      * @param game          The Kroy game
@@ -403,8 +405,25 @@ public class GUI {
         shapeMapRenderer.setColor(Color.RED);
         shapeMapRenderer.circle(x, y, range);
         shapeMapRenderer.end();
+    }
 
-
+    public void renderDifficultyCounter(DifficultyControl difficultyControl){
+        layout = new GlyphLayout(game.font25, difficultyControl.getDifficultyOutput());
+        renderDifficultyBackground(layout);
+        float fontX = 10;
+        //float fontY = Gdx.graphics.getHeight() - layout.height/2;
+        float fontY = layout.height + 10;
+        game.batch.begin();
+        game.font25.draw(game.batch, difficultyControl.getDifficultyOutput(), fontX, fontY);
+        game.batch.end();
+    }
+    private void renderDifficultyBackground(GlyphLayout layout){
+        Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        game.shapeRenderer.setColor(0, 0, 0, 0.5f);
+        game.shapeRenderer.rect(0, 0, 325, 55);
+        game.shapeRenderer.end();
     }
 
     public Rectangle getHomeButton() { return this.homeButton; }
