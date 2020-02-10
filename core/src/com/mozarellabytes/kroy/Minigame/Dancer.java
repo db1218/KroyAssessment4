@@ -34,6 +34,9 @@ public class Dancer {
      * @return true if the dancer was killed, else false
      */
     public boolean damage(int amount) {
+        if (amount < 0) {
+            amount = 0;
+        }
         this.health -= amount;
         return this.health <= 0;
     }
