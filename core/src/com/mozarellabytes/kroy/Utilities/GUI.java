@@ -385,8 +385,8 @@ public class GUI {
         float x, y, range;
         if (entity instanceof FireTruck){
             FireTruck truck = (FireTruck) entity;
-            x = truck.getPosition().x;
-            y = truck.getPosition().y;
+            x = truck.getPosition().x + 0.5f;
+            y = truck.getPosition().y + 0.5f;
             range = truck.getRange();
         } else if (entity instanceof Fortress){
             Fortress fortress = (Fortress) entity;
