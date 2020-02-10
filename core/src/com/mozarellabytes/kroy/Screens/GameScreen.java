@@ -85,7 +85,7 @@ public class GameScreen implements Screen {
 
     private GlyphLayout layout;
     private DifficultyControl difficultyControl;
-    private ArrayList<DestroyedFortress> deadFortresses;
+    private ArrayList<DestroyedEntity> deadEntities;
     public FPSLogger fpsCounter;
 
     /** Play when the game is being played
@@ -155,7 +155,7 @@ public class GameScreen implements Screen {
         patrols.add(new Patrol(this,PatrolType.Violet));
         patrols.add(new Patrol(this,PatrolType.Yellow));
 
-        deadFortresses = new ArrayList<>(6);
+        deadEntities = new ArrayList<>(6);
 
 
         // sets the origin point to which all of the polygon's local vertices are relative to.
@@ -199,7 +199,7 @@ public class GameScreen implements Screen {
             fortress.draw(mapBatch);
         }
 
-        for (DestroyedFortress deadFortress : deadFortresses){
+        for (DestroyedEntity deadFortress : deadEntities){
             deadFortress.draw(mapBatch);
         }
 
@@ -328,6 +328,7 @@ public class GameScreen implements Screen {
 
         if (station.getHP() <= 0) {
             gameState.setStationDestoyed();
+            deadEntities.add(station.getDestroyedStation());
         }
 
         for (int i=0;i<this.patrols.size();i++) {
@@ -356,7 +357,7 @@ public class GameScreen implements Screen {
             // check if fortress is destroyed
             if (fortress.getHP() <= 0) {
                 gameState.addFortress();
-                deadFortresses.add(fortress.createDestroyedFortress());
+                deadEntities.add(fortress.createDestroyedFortress());
                 this.fortresses.remove(fortress);
                 if (SoundFX.music_enabled) {
                     SoundFX.sfx_fortress_destroyed.play();

@@ -44,7 +44,7 @@ public class FireStation {
     private final Vector2 bayTile2;
 
     /** The sprite image for the station */
-    private final Texture texture;
+    private final Texture texture, deadTexture;
 
     /** List of active fire trucks
      * @link FireTruck */
@@ -70,6 +70,7 @@ public class FireStation {
         this.bayTile1 = new Vector2(x+1, y);
         this.bayTile2 = new Vector2(x+2, y);
         this.texture = new Texture(Gdx.files.internal("sprites/station/station.png"));
+        this.deadTexture = new Texture(Gdx.files.internal("sprites/station/station.png")); // change me pls
         this.trucks = new ArrayList<FireTruck>();
         this.patrols = new ArrayList<Patrol>();
         this.HP=100;
@@ -231,6 +232,9 @@ public class FireStation {
      * @param mapBatch batch being used to render to the gameScreen */
     public void draw(Batch mapBatch) {
         mapBatch.draw(this.texture, this.x, this.y, 5, 3);
+    }
+    public DestroyedEntity getDestroyedStation(){
+        return new DestroyedEntity(this.deadTexture, this.x, this.y, 5, 3);
     }
 
     public ArrayList<FireTruck> getTrucks() {

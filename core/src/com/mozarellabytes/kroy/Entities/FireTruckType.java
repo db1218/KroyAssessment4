@@ -17,10 +17,10 @@ public enum FireTruckType {
     /** The preset values for the different truck types includes the type's:
      * maximum reserve, speed, trailColour, name, attack range, attack points
      */
-    Ruby(100, 1.7f, Color.RED, "Ruby Truck", 5, 0.08f, 150),
-    Sapphire(250, 1, Color.CYAN, "Sapphire Truck", 7, 0.16f, 120),
-    Amethyst(280, 0.7f, Color.YELLOW, "Amethyst Truck", 7, 0.2f, 230),
-    Emerald(120, 2, Color.PURPLE, "Emerald Truck", 4, 0.3f, 100);
+    Ruby(100, 1.7f, Color.RED, "Ruby Truck", 5, 0.08f, 150, "blue"),
+    Sapphire(250, 1, Color.CYAN, "Sapphire Truck", 7, 0.16f, 120, "blue"),
+    Amethyst(280, 0.7f, Color.PURPLE, "Amethyst Truck", 7, 0.2f, 230, "purple"),
+    Emerald(120, 2, Color.GREEN, "Emerald Truck", 4, 0.3f, 100, "green");
 
     /** The maximum amount of water this type of truck can have,
      * also the value of the truck's reserve when it is spawned */
@@ -55,6 +55,12 @@ public enum FireTruckType {
      * path from */
     private final Texture trailImageEnd;
 
+    /** The sprites for each of the truck's directions*/
+    private final Texture lookLeft;
+    private final Texture lookRight;
+    private final Texture lookUp;
+    private final Texture lookDown;
+
     /**
      * Constructs the FireTruckType
      *  @param maxReserve The maximum reserve for this type of truck;
@@ -63,9 +69,10 @@ public enum FireTruckType {
      * @param name The name for this type of truck
      * @param range The attack range for this type of truck in tiles
      * @param AP the attack points for this type of truck
+     * @param spriteFileName the file name that contains the sprites for each of the truck's directions
      *
      */
-    FireTruckType(int maxReserve, float speed, Color trailColour, String name, float range, float AP, float maxHP) {
+    FireTruckType(int maxReserve, float speed, Color trailColour, String name, float range, float AP,  float maxHP, String spriteFileName) {
         this.maxReserve = maxReserve;
         this.maxHP = maxHP;
         this.speed = speed;
@@ -73,6 +80,11 @@ public enum FireTruckType {
         this.name = name;
         this.range = range;
         this.AP = AP;
+
+        this.lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/"+spriteFileName+"/left.png"));
+        this.lookRight = new Texture(Gdx.files.internal("sprites/firetruck/"+spriteFileName+"/right.png"));
+        this.lookUp = new Texture(Gdx.files.internal("sprites/firetruck/"+spriteFileName+"/up.png"));
+        this.lookDown = new Texture(Gdx.files.internal("sprites/firetruck/"+spriteFileName+"/down.png"));
 
         this.trailImage = new Texture(Gdx.files.internal("sprites/firetruck/trail.png"));
         this.trailImageEnd = new Texture(Gdx.files.internal("sprites/firetruck/trailEnd.png"));
@@ -95,5 +107,13 @@ public enum FireTruckType {
     public Texture getTrailImage(){ return this.trailImage; }
 
     public Texture getTrailImageEnd() { return this.trailImageEnd; }
+
+    public Texture getLookLeft() { return this.lookLeft; }
+
+    public Texture getLookRight() { return this.lookRight; }
+
+    public Texture getLookUp() { return this.lookUp; }
+
+    public Texture getLookDown() { return this.lookDown; }
 
 }
