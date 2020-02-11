@@ -42,7 +42,7 @@ public class GameInputHandler implements InputProcessor {
                 Gdx.app.exit();
                 System.exit(1);
                 break;
-                /*
+                /* Outdated code
             case Input.Keys.A:
                 System.out.println(gameScreen.gameState.getTrucksInAttackRange());
                 if (SoundFX.music_enabled && gameScreen.gameState.getTrucksInAttackRange() > 0) {
