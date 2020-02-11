@@ -373,13 +373,13 @@ public class GUI {
         GlyphLayout layout = new GlyphLayout();
         String pauseText1 =  "Game paused \n";
         String pauseText2 =  "Press 'P' or the Pause button \n To return to game";
-        layout.setText(game.font26, pauseText1);
-        layout.setText(game.font26, pauseText2);
+        layout.setText(game.font26b, pauseText1);
+        layout.setText(game.font26b, pauseText2);
 
         game.batch.setProjectionMatrix(pauseCamera.combined);
         game.batch.begin();
-        game.font50.draw(game.batch, pauseText1, pauseCamera.viewportWidth/2 - layout.width/2.7f, pauseCamera.viewportHeight/1.8f - layout.height/2);
-        game.font26.draw(game.batch, pauseText2, pauseCamera.viewportWidth/2 - layout.width/2, pauseCamera.viewportHeight/2.3f - layout.height/2);
+        game.font50b.draw(game.batch, pauseText1, pauseCamera.viewportWidth/2 - layout.width/2.7f, 100);
+        game.font26b.draw(game.batch, pauseText2, pauseCamera.viewportWidth/2 - layout.width/2, 50);
         game.batch.end();
     }
 

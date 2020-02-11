@@ -91,6 +91,7 @@ public class GameScreen implements Screen {
 
     //public FPSLogger fpsCounter;
 
+    public boolean wasPaused = false;
     /** Play when the game is being played
      * Pause when the pause button is clicked */
     public enum PlayState {
@@ -250,7 +251,6 @@ public class GameScreen implements Screen {
                 bomb.drawBomb(shapeMapRenderer);
             }
         }
-        //gui.renderSelectedEntityRange(selectedEntity, shapeMapRenderer);
 
         shapeMapRenderer.end();
         gui.renderSelectedEntityRange(selectedEntity, shapeMapRenderer);
@@ -262,13 +262,24 @@ public class GameScreen implements Screen {
                 this.update(delta);
                 break;
             case PAUSE:
+
                 // render dark background
+                SoundFX.stopTruckAttack();
+
                 Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
+
                 shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
-                shapeMapRenderer.setColor(0, 0, 0, 0.5f);
+
+                shapeMapRenderer.setColor(0, 0, 0, 0.1f);
                 shapeMapRenderer.rect(0, 0, this.camera.viewportWidth, this.camera.viewportHeight);
+
                 shapeMapRenderer.end();
+
                 gui.renderPauseScreenText();
+                wasPaused = true;
+
+                break;
+
         }
         gui.renderButtons();
 
@@ -291,14 +302,19 @@ public class GameScreen implements Screen {
         station.restoreTrucks();
         station.checkForCollisions();
 
-        /*for (Patrol patrol : this.patrols){
-            System.out.println("setAttacking "+patrol.getAttacking());
-        }*/
-
         gameState.setTrucksInAttackRange(0);
 
         for (int i = 0; i < station.getTrucks().size(); i++) {
             FireTruck truck = station.getTruck(i);
+
+             if(!truck.path.isEmpty() && wasPaused) {
+                 truck.setMoving(true);
+             }
+
+            if(i == station.getTrucks().size()-1) {
+                wasPaused = false;
+            }
+
 
             truck.move();
             truck.updateSpray();
