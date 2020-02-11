@@ -123,6 +123,11 @@ public class Fortress {
         mapBatch.draw(this.getFortressType().getTexture(this.getHP()), this.getArea().x, this.getArea().y, this.getArea().width, this.getArea().height);
     }
 
+    /**
+     * Creates a instance of DestroyedEntity with the destroyed Fortress's texture in the same location.
+     *
+     * @return DestroyedEntity with Area and destroyed texture from this fortress.
+     */
     public DestroyedEntity createDestroyedFortress(){
         return new DestroyedEntity(this.getFortressType().getTexture(0), this.area);
     }
