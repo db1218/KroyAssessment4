@@ -27,7 +27,7 @@ public class GameState {
     /** Constructor for GameState */
     public GameState() {
         this.activeFireTrucks = 0;
-        this.fortressesDestroyed = 1;
+        this.fortressesDestroyed = 0;
         this.activePatrols = 0;
         this.stationDestoyed = false;
     }
