@@ -27,7 +27,7 @@ public class GameState {
     /** Constructor for GameState */
     public GameState() {
         this.activeFireTrucks = 0;
-        this.fortressesDestroyed = 0;
+        this.fortressesDestroyed = 1;
         this.activePatrols = 0;
         this.stationDestoyed = false;
     }
@@ -75,7 +75,7 @@ public class GameState {
         }
     }
 
-    public boolean firstFortressDestroyed(Kroy game) {
+    public boolean firstFortressDestroyed() {
         if ((fortressesDestroyed == 1)&&(stationDestoyed==false)) {
             return true;
         } else{

@@ -154,6 +154,7 @@ public class GameScreen implements Screen {
         patrols.add(new Patrol(this,PatrolType.Peach));
         patrols.add(new Patrol(this,PatrolType.Violet));
         patrols.add(new Patrol(this,PatrolType.Yellow));
+        patrols.add(new Patrol(this,PatrolType.Station));
 
         deadEntities = new ArrayList<>(6);
 
@@ -209,7 +210,14 @@ public class GameScreen implements Screen {
 
         mapBatch.begin();
         for (Patrol patrol : this.patrols) {
-            patrol.drawSprite(mapBatch);
+            if(patrol.getType().equals(PatrolType.Station)){
+                if(gameState.firstFortressDestroyed()){
+                    patrol.drawSprite(mapBatch);
+                }
+            }
+            else{
+                patrol.drawSprite(mapBatch);
+            }
         }
         mapBatch.end();
 
@@ -220,7 +228,14 @@ public class GameScreen implements Screen {
         }
 
         for (Patrol patrol : this.patrols) {
-            patrol.drawStats(shapeMapRenderer);
+            if(patrol.getType().equals(PatrolType.Station)){
+                if(gameState.firstFortressDestroyed()){
+                    patrol.drawStats(shapeMapRenderer);
+                }
+            }
+            else{
+                patrol.drawStats(shapeMapRenderer);
+            }
         }
 
         station.drawStats(shapeMapRenderer);
@@ -257,16 +272,12 @@ public class GameScreen implements Screen {
 
 
         //Difficulty Stuff
-        /*
         layout = new GlyphLayout(game.font25, difficultyControl.getDifficultyOutput());
         float fontX = 10;
-        //float fontY = Gdx.graphics.getHeight() - layout.height/2;
-        float fontY = layout.height + 10;
+        float fontY = Gdx.graphics.getHeight() - layout.height/2;
         game.batch.begin();
         game.font25.draw(game.batch, difficultyControl.getDifficultyOutput(), fontX, fontY);
         game.batch.end();
-         */
-        gui.renderDifficultyCounter(difficultyControl);
 
     }
 
@@ -277,7 +288,7 @@ public class GameScreen implements Screen {
      */
     private void update(float delta) {
         gameState.hasGameEnded(game);
-        gameState.firstFortressDestroyed(game);
+        gameState.firstFortressDestroyed();
         CameraShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
 
         station.restoreTrucks();
@@ -309,11 +320,6 @@ public class GameScreen implements Screen {
                 }
             }
 
-            if(gameState.hasStationDestoyed()){
-                System.out.println("here");
-                patrols.add(new Patrol(this,PatrolType.Station));
-            }
-
             for (Patrol patrol : this.patrols) {
                 if (patrol.position.equals(truck.getPosition())) {
                     doDanceOff(truck, patrol);
@@ -333,20 +339,42 @@ public class GameScreen implements Screen {
         if (station.getHP() <= 0) {
             gameState.setStationDestoyed();
             deadEntities.add(station.getDestroyedStation());
+            patrols.remove(PatrolType.Station);
         }
 
         for (int i=0;i<this.patrols.size();i++) {
             Patrol patrol=this.patrols.get(i);
 
             patrol.updateSpray();
-            if((patrol.getType()==PatrolType.Station)&&(patrol.getPosition().equals(PatrolType.Station.getPoint4()))){
-                patrol.attack(station);
+
+            if(patrol.getType().equals(PatrolType.Station)){
+                if((gameState.firstFortressDestroyed())){
+                    if((patrol.getPosition().equals(PatrolType.Station.getPoint4()))){
+                        patrol.attack(station);
+                    }
+                    else{
+                        patrol.move();
+                    }
+                }
+                else{
+                    if(gameState.hasStationDestoyed()){
+                        patrols.remove(patrol);
+
+                        //patrol.move();
+                        /*if((patrol.getPosition().equals(PatrolType.Station.getPoint1()))){
+                            patrols.remove(patrol);
+                        }*/
+                    }
+                }
             }
             else{
                 patrol.move();
             }
             if (patrol.getHP() <= 0) {
                 patrols.remove(patrol);
+                if((patrol.getType().equals(PatrolType.Station))&&(!gameState.hasStationDestoyed())){
+                    patrols.add(new Patrol(this,PatrolType.Station));
+                }
             }
         }
 
