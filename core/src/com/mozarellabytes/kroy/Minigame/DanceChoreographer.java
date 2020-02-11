@@ -6,13 +6,15 @@ import java.util.Random;
 
 public class DanceChoreographer {
 
+    /** The number of moves to queue up */
     private static final int MOVE_LIST_LENGTH = 10;
 
+    /** Queue to store upcoming moves */
     private List<DanceMove> moveList;
 
-    private int clumpLength = 0;
-
+    /** Random agent for move selection */
     private Random random = new Random();
+
 
     public DanceChoreographer() {
         moveList = new ArrayList<DanceMove>();
@@ -22,6 +24,10 @@ public class DanceChoreographer {
         }
     }
 
+    /**
+     * Gets the queue of upcoming moves
+     * @return an array of DanceMoves
+     */
     public DanceMove[] getMoveList() {
         DanceMove[] moves = new DanceMove[MOVE_LIST_LENGTH];
         for (int i = 0; i < MOVE_LIST_LENGTH; i++) {
@@ -30,24 +36,18 @@ public class DanceChoreographer {
         return moves;
     }
 
+    /**
+     * Consumes and returns the danceMove at the head of the queue
+     * @return the next dance move
+     */
     public DanceMove nextMove() {
-        if (clumpLength == 0) {
-//            if (random.nextInt(3) == 0) {
-//                // Initiate clump
-//                clumpLength = 3;
-//                moveList.add(DanceMove.WAIT);
-//                return moveList.remove(0);
-//            } else {
-                moveList.add(DanceMove.values()[random.nextInt(5)]);
-                return moveList.remove(0);
-//            }
-        } else {
-            clumpLength--;
-            moveList.add(DanceMove.WAIT);
-            return moveList.remove(0);
-        }
+        moveList.add(DanceMove.values()[random.nextInt(5)]);
+        return moveList.remove(0);
     }
 
+    /**
+     * Clears the dance queue
+     */
     public void clearQueue() {
         for (int i = 0; i < moveList.size(); i++) {
             moveList.set(i, DanceMove.NONE);

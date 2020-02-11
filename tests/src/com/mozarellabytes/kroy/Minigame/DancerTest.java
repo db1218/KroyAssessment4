@@ -1,9 +1,10 @@
 package com.mozarellabytes.kroy.Minigame;
 
 import com.mozarellabytes.kroy.GdxTestRunner;
-import org.junit.jupiter.api.Test;
+
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 @RunWith(GdxTestRunner.class)
 public class DancerTest {
@@ -22,6 +23,7 @@ public class DancerTest {
         assertEquals(0, dancer.getHealth());
         dancer = new Dancer(-50);
         assertEquals(-50, dancer.getHealth());
+
     }
 
     @Test

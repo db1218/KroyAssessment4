@@ -1,8 +1,10 @@
 package com.mozarellabytes.kroy.Entities;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static com.mozarellabytes.kroy.Entities.FortressType.Revs;
+import static org.junit.Assert.*;
 
 class BombTest {
 
