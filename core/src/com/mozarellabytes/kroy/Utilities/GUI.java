@@ -383,6 +383,11 @@ public class GUI {
         game.batch.end();
     }
 
+    /** Renders a circle around the current selected entity,
+     * showing the maximum range of its attacks
+     * @param entity The currently selected entity as an object
+     * @param shapeMapRenderer The ShapeRenderer for the map
+     */
     public void renderSelectedEntityRange(Object entity, ShapeRenderer shapeMapRenderer){
         float x, y, range;
         if (entity instanceof FireTruck){
@@ -407,9 +412,14 @@ public class GUI {
         shapeMapRenderer.end();
     }
 
+    /** Renders the information from the difficulty counter,
+     * includes the current difficulty and time to difficulty change
+     * Displayed in the bottom left.
+     * @param difficultyControl The DifficultyController from the game
+     */
     public void renderDifficultyCounter(DifficultyControl difficultyControl){
         layout = new GlyphLayout(game.font25, difficultyControl.getDifficultyOutput());
-        renderDifficultyBackground(layout);
+        renderDifficultyBackground();
         float fontX = 10;
         //float fontY = Gdx.graphics.getHeight() - layout.height/2;
         float fontY = layout.height + 10;
@@ -417,7 +427,11 @@ public class GUI {
         game.font25.draw(game.batch, difficultyControl.getDifficultyOutput(), fontX, fontY);
         game.batch.end();
     }
-    private void renderDifficultyBackground(GlyphLayout layout){
+
+    /** Renders the dark background behind the difficulty counter
+     *
+     */
+    private void renderDifficultyBackground(){
         Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);

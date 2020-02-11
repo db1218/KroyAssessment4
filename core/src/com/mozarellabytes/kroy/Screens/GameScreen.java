@@ -83,10 +83,13 @@ public class GameScreen implements Screen {
      * the large stats in the top left corner */
     public Object selectedEntity;
 
-    private GlyphLayout layout;
+    /** A class keeping track of the current difficulty and the time to the next change */
     private DifficultyControl difficultyControl;
+
+    /** An arraylist of all the entities that have been destroyed */
     private ArrayList<DestroyedEntity> deadEntities;
-    public FPSLogger fpsCounter;
+
+    //public FPSLogger fpsCounter;
 
     /** Play when the game is being played
      * Pause when the pause button is clicked */
@@ -101,7 +104,7 @@ public class GameScreen implements Screen {
      */
     public GameScreen(Kroy game) {
         this.game = game;
-        fpsCounter = new FPSLogger();
+        //fpsCounter = new FPSLogger();
 
         difficultyControl = new DifficultyControl();
 
@@ -178,7 +181,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        fpsCounter.log();
+        //fpsCounter.log();
 
         camera.update();
 
@@ -271,13 +274,7 @@ public class GameScreen implements Screen {
 
 
 
-        //Difficulty Stuff
-        layout = new GlyphLayout(game.font25, difficultyControl.getDifficultyOutput());
-        float fontX = 10;
-        float fontY = Gdx.graphics.getHeight() - layout.height/2;
-        game.batch.begin();
-        game.font25.draw(game.batch, difficultyControl.getDifficultyOutput(), fontX, fontY);
-        game.batch.end();
+        gui.renderDifficultyCounter(difficultyControl);
 
     }
 
