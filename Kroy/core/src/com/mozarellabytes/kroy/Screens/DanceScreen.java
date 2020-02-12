@@ -270,8 +270,9 @@ public class DanceScreen implements Screen, BeatListener {
 
     @Override
     public void show() {
-        if (!hasShownTutorial) {
+        if (!hasShownTutorial && ((GameScreen)previousScreen).gameState.hasDanceTutorialShown()) {
             hasShownTutorial = true;
+            ((GameScreen)previousScreen).gameState.setDanceTutorialShown();
             game.setScreen(new ControlsScreen(game, this, "dance"));
         }
     }
@@ -304,10 +305,6 @@ public class DanceScreen implements Screen, BeatListener {
     public float phaseLerp(float phase) {
         return (float) Math.pow(2, 10f * (phase-1));
     }
-
-//        game.shapeRenderer.rect(x + this.selectedW - positionSpacer - outerSpacing - barSpacer, this.selectedY + outerSpacing, whiteW, this.selectedH - outerSpacing*2 - spaceForText, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
-//        game.shapeRenderer.rect(x + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, barHeight, backgroundColour, backgroundColour, backgroundColour, backgroundColour);
-//        game.shapeRenderer.rect(this.selectedX + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, value/maxValue*barHeight, progressColour, progressColour, progressColour, progressColour);
 
     public float scaleDamage(float combo) {
         return (float) (20 * (Math.pow(1.2, combo)-1f));
