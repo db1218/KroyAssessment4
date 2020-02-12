@@ -96,10 +96,12 @@ public class FireTruck extends Sprite {
     Vector2[] prev;
     /** the shortest path between 2 points */
     LinkedList<Vector2> reconstructedPath;
+    /**Checks if the mouse was dragged off the road multiple times in one instance**/
+    private int counter = 0;
+    /** Path fireturch actually uses*/
+    private Vector2[] newPath;
 
-
-
-
+    private Vector2 previous;
     /**
      * Constructs a new FireTruck at a position and of a certain type
      * which have been passed in
@@ -131,6 +133,7 @@ public class FireTruck extends Sprite {
      */
     public void move() {
         if (moving) {
+            counter = 0;
             if (this.path.size > 0) {
                 Vector2 nextTile = path.first();
                 this.position = nextTile;
@@ -182,7 +185,7 @@ public class FireTruck extends Sprite {
             if (!dragOffMap) {
                 if (this.path.size > 0) {
                     Vector2 previous = this.path.last();
-                    int interpolation = (int) (20 / type.getSpeed());
+                    int interpolation = (int) (40 / type.getSpeed());
                     for (int i = 1; i < interpolation; i++) {
                         this.path.addLast(new Vector2((((previous.x - coordinate.x) * -1) / interpolation) * i + previous.x, (((previous.y - coordinate.y) * -1) / interpolation) * i + previous.y));
                     }
@@ -191,14 +194,28 @@ public class FireTruck extends Sprite {
                 this.path.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
             } else {
                 //dragged off map
-                if(this.path.size > 0) {
+
                     dragOffMap = false;
 
-                    int interpolation = (int) (20 / type.getSpeed());
-                    Vector2 previous = this.path.last();
-                    Vector2[] newPath = findPath(coordinate, this.path.last());
-                    for (int i = 0; i < newPath.length; i++) {
+                    int interpolation = (int) (40 / type.getSpeed());
+                    previous = this.path.last();
 
+                    newPath = findPath(coordinate, this.path.last());
+
+                    if(counter >= 2) {
+                        try {
+                            resetPath();
+                            newPath = findPath(coordinate, this.getPosition());
+                            previous = this.getPosition();
+                        } catch(Exception e) {
+
+                        }
+
+                    } else {
+
+                    }
+
+                    for (int i = 0; i < newPath.length; i++) {
 
                         for(int j = 1; j < interpolation; j++) {
                             this.path.addLast(new Vector2((((previous.x - newPath[i].x) * -1) / interpolation) * j + previous.x, (((previous.y - newPath[i].y) * -1) / interpolation) * j + previous.y));
@@ -213,7 +230,7 @@ public class FireTruck extends Sprite {
                 }
             }
         }
-    }
+
 
     /**
      * Used when drawing the path to check whether the next tile to be added to the path is
@@ -233,6 +250,7 @@ public class FireTruck extends Sprite {
                     if (!this.path.last().equals(coordinate)) {
                         if((int) Math.abs(this.path.last().x - coordinate.x) + (int) Math.abs(this.path.last().y - coordinate.y) >= 2) {
                             dragOffMap = true;
+                            counter++;
                             return (int) Math.abs(this.path.last().x - coordinate.x) + (int) Math.abs(this.path.last().y - coordinate.y) >= 2;
                         } else {
                             dragOffMap = false;
@@ -260,8 +278,6 @@ public class FireTruck extends Sprite {
         Vector2 start = startPos;
         Vector2 goal = endPos;
 
-        //System.out.print(start.x + "    afojfoja           start  " + start.y + "\n");
-        //System.out.print(goal.x + "    djsanisnd        end    " + goal.y +   "\n");
 
         vistited = new boolean[48][29];
         prev = new Vector2[1392];
@@ -281,14 +297,7 @@ public class FireTruck extends Sprite {
         while (!positions.isEmpty()) {
 
 
-            //for(Vector2 s : positions) {
-            //System.out.println(s.toString() +"this is all poses\n");
-            //}
-
             currentPos = positions.removeLast();
-
-
-            //System.out.print("\n\n     " + currentPos.x +"   " + currentPos.y+"    "+positions.size +   " \n\n");
 
             if(currentPos.x == goal.x && currentPos.y == goal.y) {
                 reachedEnd = true;
@@ -300,7 +309,7 @@ public class FireTruck extends Sprite {
 
         }
 
-        return shortestPath(goal);
+        return shortestPath(goal, start);
 
 
     }
@@ -313,17 +322,15 @@ public class FireTruck extends Sprite {
     private void exploreNeighbours(Vector2 currentPos) {
 
 
-        int n = 0;
         for(int i = 0; i < 4; i++) {
             Vector2 newPos = new Vector2();
             newPos.x = currentPos.x + directionX[i];
             newPos.y = currentPos.y + directionY[i];
-            System.out.print(newPos.x + "   newPos ihfqsjdi   dsadd       " + newPos.y + "   "+ n + "  "+ "\n");
 
-            n++;
+
 
             if(newPos.x < 0 || newPos.y < 0) {
-                System.out.print("\n negative \n");
+
                 continue;
             }
             if(newPos.x > 47 || newPos.y > 28) {
@@ -334,17 +341,14 @@ public class FireTruck extends Sprite {
                 continue;
             }
             if(vistited[(int)newPos.x][(int)newPos.y]) {
-                System.out.print("\n visited \n");
+
                 continue;
             }
 
 
-            //System.out.print(currentPos.x + "                  kdaoufhihf                    " + currentPos.y + "\n");
-            //System.out.print("\n\n\n\n" + newPos.x + "   After contine       " + newPos.y + "\n");
-            positions.addFirst(newPos);
-            //System.out.print("\n\n\n\n" + newPos.toString() + "ggggggggggggggggggggggggggg \n");
 
-            //System.out.print("udhaidjas yolo \n" + positions.removeFirst().y + "\n");
+            positions.addFirst(newPos);
+
             vistited[(int)newPos.x] [(int)newPos.y] = true;
 
             prev[convertVector2ToIntPositionInMap(newPos)] = currentPos;
@@ -378,9 +382,14 @@ public class FireTruck extends Sprite {
      *
      * @return A array containing the Vector2 positions of the shortest path between two points
      */
-    private Vector2[] shortestPath(Vector2 endPos) {
+    private Vector2[] shortestPath(Vector2 endPos, Vector2 startPos) {
         reconstructedPath = new LinkedList<>();
         for(Vector2 at = endPos; at != null; at = prev[convertVector2ToIntPositionInMap(at)]) {
+
+            if(at == startPos) {
+                if(!this.trailPath.isEmpty())
+                continue;
+            }
             reconstructedPath.add(at);
         }
 
@@ -389,7 +398,6 @@ public class FireTruck extends Sprite {
 
         for(int i=0;i<objectAarray.length;i++) {
             path[i] = (Vector2) objectAarray[i];
-            //System.out.print("SHORTEST PATH \n" + path[i]+ "LOLOL \n");
         }
 
         reverse(path);

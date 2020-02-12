@@ -47,7 +47,7 @@ public enum FortressType {
     private final int h;
 
     /** The sprite for the fortress */
-    private final Texture textureFull;// textureHalf, textureDead
+    private final Texture textureFull, textureHalf, textureDead;
 
     /**
      * Constructs the FortressType
@@ -71,8 +71,8 @@ public enum FortressType {
         this.w = w;
         this.h = h;
         this.textureFull = textureFull; // full hp
-        //this.textureHalf = textureHalf; // half hp
-        //this.textureDead = textureDead; // dead
+        this.textureHalf =  new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")); // half hp
+        this.textureDead =  new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png")); // dead
     }
 
     public String getName() { return name; }
@@ -90,14 +90,14 @@ public enum FortressType {
     public int getH() { return h; }
 
     public Texture getTexture(float currentHP) {
-        /*
         if (currentHP > getMaxHP()/2){
             return textureFull;
         } else if (currentHP > 0){
             return textureHalf;
         } else {
-            return textureDead
-        } */
-        return textureFull; }
+            return textureDead;
+        }
+        //return textureFull;
+        }
 
 }
