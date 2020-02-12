@@ -18,12 +18,33 @@ public enum FortressType {
      * name, delay between firing bombs, attack range, maximum health points,
      * attack points, width, height and sprite.
      */
-    Revs ("Revolution", 2500, 7, 100, 10, 5, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress_revs.png"))),
-    Walmgate ("Walmgate Bar", 1500, 8, 200, 15, 5, 5, new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate.png"))),
-    Clifford ("Clifford's Tower", 500, 7, 150, 10, 4, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford.png"))),
-    CentralHall ("Central Hall", 500, 7, 200, 20, 4, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress.png"))),
-    Museum ("York Museum", 1500, 8, 180, 20, 4, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress.png"))),
-    Railway ("Railway Museum", 1000, 8, 250, 15, 4, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress.png")));
+    Revs ("Revolution", 2500, 7, 100, 10, 5, 3,
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_revs.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png"))),
+
+    Walmgate ("Walmgate Bar", 1500, 8, 200, 15, 5, 5,
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png"))),
+
+    Clifford ("Clifford's Tower", 500, 7, 150, 10, 4, 3,
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png"))),
+    CentralHall ("Central Hall", 500, 7, 200, 20, 4, 3,
+            new Texture(Gdx.files.internal("sprites/fortress/fortress.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png"))),
+
+    Museum ("York Museum", 1500, 8, 180, 20, 4, 3,
+            new Texture(Gdx.files.internal("sprites/fortress/fortress.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png"))),
+    Railway ("Railway Museum", 1000, 8, 250, 15, 4, 3,
+            new Texture(Gdx.files.internal("sprites/fortress/fortress.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png")));
 
     /** The name for the fortress, visible once the fortress has been clicked on */
     private final String name;
@@ -59,10 +80,11 @@ public enum FortressType {
      * @param AP The attack points for this type of fortress
      * @param w The width of the sprite for this type of fortress in tiles
      * @param h The height of the sprite for this type of fortress in tiles
-     * @param textureFull The sprite for this type of fortress
-     *
+     * @param textureFull The sprite for this type of fortress at full hp
+     * @param textureHalf The sprite for this type of fortress below half hp
+     * @param textureDead The sprite for this type of fortress when it is dead
      */
-    FortressType(String name, int delay, float range, float maxHP, float AP, int w, int h, Texture textureFull) {
+    FortressType(String name, int delay, float range, float maxHP, float AP, int w, int h, Texture textureFull, Texture textureHalf, Texture textureDead) {
         this.name = name;
         this.delay = delay;
         this.range = range;
