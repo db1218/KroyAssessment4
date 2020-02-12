@@ -130,44 +130,49 @@ public class ControlsScreen implements Screen {
 
         game.batch.begin();
 
-        game.font50.draw(game.batch, "Control screen", screenWidth / 2.8f, screenHeight / 1.1678f);
-        game.font25.draw(game.batch, "Flood the fortresses before the fortresses destroy your fire trucks to win", (screenWidth / 2) - (36 * 15),screenHeight / 1.29f);
-        game.font33.draw(game.batch, "Moving the Fire Trucks", screenWidth / 8.33f, screenHeight * 0.6875f);
-        game.font25.draw(game.batch, "Click on a truck and drag it", screenWidth / 7.692f,screenHeight * 0.6125f);
-        game.font25.draw(game.batch, "This gives the truck a path:", screenWidth / 7.692f,screenHeight * 0.56875f);
-        game.font25.draw(game.batch, "Unclick and the truck will", screenWidth / 7.692f,screenHeight * 0.3815f);
-        game.font25.draw(game.batch, "follow the path", screenWidth / 7.692f,screenHeight * 0.34375f);
+        if (screen.equals("game") || screen.equals("menu")) {
+            game.font50.draw(game.batch, "Control screen", screenWidth / 2.8f, screenHeight / 1.1678f);
+            game.font25.draw(game.batch, "Flood the fortresses before the fortresses destroy your fire trucks to win", (screenWidth / 2) - (36 * 15),screenHeight / 1.29f);
+            game.font33.draw(game.batch, "Moving the Fire Trucks", screenWidth / 8.33f, screenHeight * 0.6875f);
+            game.font25.draw(game.batch, "Click on a truck and drag it", screenWidth / 7.692f,screenHeight * 0.6125f);
+            game.font25.draw(game.batch, "This gives the truck a path:", screenWidth / 7.692f,screenHeight * 0.56875f);
+            game.font25.draw(game.batch, "Unclick and the truck will", screenWidth / 7.692f,screenHeight * 0.3815f);
+            game.font25.draw(game.batch, "follow the path", screenWidth / 7.692f,screenHeight * 0.34375f);
 
-        game.batch.setColor(Color.CYAN);
-        float startPos = screenWidth / 7.11f;
-        float height = screenHeight / 2.2857f;
-        game.batch.draw(trailImage, startPos,screenHeight / 2.2857f);
-        game.batch.draw(trailImage, startPos + trailImage.getWidth() + 2, height);
-        game.batch.draw(trailImage, startPos + trailImage.getWidth() * 2 + 4, height);
-        game.batch.draw(trailImage, startPos + trailImage.getWidth() * 3 + 6, height);
-        game.batch.draw(trailImage, startPos + trailImage.getWidth() * 4 + 8, height);
-        game.batch.draw(trailImage, startPos + trailImage.getWidth() * 5 + 10, height);
-        game.batch.draw(trailImage, startPos + trailImage.getWidth() * 6 + 12, height);
-        game.batch.draw(trailEndImage, startPos + trailImage.getWidth() * 6 + 12, height);
+            game.batch.setColor(Color.CYAN);
+            float startPos = screenWidth / 7.11f;
+            float height = screenHeight / 2.2857f;
+            game.batch.draw(trailImage, startPos,screenHeight / 2.2857f);
+            game.batch.draw(trailImage, startPos + trailImage.getWidth() + 2, height);
+            game.batch.draw(trailImage, startPos + trailImage.getWidth() * 2 + 4, height);
+            game.batch.draw(trailImage, startPos + trailImage.getWidth() * 3 + 6, height);
+            game.batch.draw(trailImage, startPos + trailImage.getWidth() * 4 + 8, height);
+            game.batch.draw(trailImage, startPos + trailImage.getWidth() * 5 + 10, height);
+            game.batch.draw(trailImage, startPos + trailImage.getWidth() * 6 + 12, height);
+            game.batch.draw(trailEndImage, startPos + trailImage.getWidth() * 6 + 12, height);
 
-        game.font25.draw(game.batch, "Or click and drag from the", screenWidth / 7.76f,screenHeight / 3.81f);
-        game.font25.draw(game.batch, "end of the trucks path", screenWidth / 7.76f,screenHeight / 4.57f);
+            game.font25.draw(game.batch, "Or click and drag from the", screenWidth / 7.76f,screenHeight / 3.81f);
+            game.font25.draw(game.batch, "end of the trucks path", screenWidth / 7.76f,screenHeight / 4.57f);
 
-        game.batch.draw(trailImage, screenWidth / 3.37f, screenHeight / 8.89f);
-        game.batch.draw(trailEndImage, screenWidth / 3.37f, screenHeight / 8.89f);
+            game.batch.draw(trailImage, screenWidth / 3.37f, screenHeight / 8.89f);
+            game.batch.draw(trailEndImage, screenWidth / 3.37f, screenHeight / 8.89f);
 
-        game.batch.setColor(Color.RED);
-        game.batch.draw(trailImage, screenWidth / 4.74f, screenHeight / 8.89f);
-        game.batch.draw(trailEndImage, screenWidth / 4.74f, screenHeight / 8.89f);
+            game.batch.setColor(Color.RED);
+            game.batch.draw(trailImage, screenWidth / 4.74f, screenHeight / 8.89f);
+            game.batch.draw(trailEndImage, screenWidth / 4.74f, screenHeight / 8.89f);
 
-        game.font33.draw(game.batch, "Attacking the fortresses", screenWidth / 1.88f, screenHeight * 0.6875f);
-        game.font25.draw(game.batch, "When a firetruck is within range ", screenWidth / 1.87f,screenHeight * 0.6125f);
-        game.font25.draw(game.batch, "of a fortress press A to attack", screenWidth / 1.87f,screenHeight * 0.56875f);
+            game.font33.draw(game.batch, "Attacking the fortresses", screenWidth / 1.88f, screenHeight * 0.6875f);
+            game.font25.draw(game.batch, "When a firetruck is within range ", screenWidth / 1.87f,screenHeight * 0.6125f);
+            game.font25.draw(game.batch, "of a fortress press A to attack", screenWidth / 1.87f,screenHeight * 0.56875f);
 
-        game.batch.setColor(Color.WHITE);
-        game.batch.draw(truckRight, screenWidth / 7.44f, screenHeight / 2.33f);
-        game.batch.draw(fortress,screenWidth / 1.62f, screenHeight / 6.15f);
-        game.batch.draw(truckLeft,screenWidth / 1.23f, screenHeight / 4.21f);
+            game.batch.setColor(Color.WHITE);
+            game.batch.draw(truckRight, screenWidth / 7.44f, screenHeight / 2.33f);
+            game.batch.draw(fortress,screenWidth / 1.62f, screenHeight / 6.15f);
+            game.batch.draw(truckLeft,screenWidth / 1.23f, screenHeight / 4.21f);
+        } else if (screen.equals("dance")) {
+            game.font50.draw(game.batch, "Control screen", screenWidth / 2.8f, screenHeight / 1.1678f);
+            game.font25.draw(game.batch, "Huhuhuhuhuhuhuhuhuhuh", (screenWidth / 2) - (36 * 15),screenHeight / 1.29f);
+        }
 
         game.batch.end();
 

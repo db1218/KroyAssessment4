@@ -270,7 +270,7 @@ public class DanceScreen implements Screen, BeatListener {
 
     @Override
     public void show() {
-        if (!hasShownTutorial && ((GameScreen)previousScreen).gameState.hasDanceTutorialShown()) {
+        if (!hasShownTutorial && !((GameScreen)previousScreen).gameState.hasDanceTutorialShown()) {
             hasShownTutorial = true;
             ((GameScreen)previousScreen).gameState.setDanceTutorialShown();
             game.setScreen(new ControlsScreen(game, this, "dance"));
