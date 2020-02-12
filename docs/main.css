@@ -1,0 +1,61 @@
+html {
+    scroll-behavior: smooth;
+}
+
+.bg {
+    background-image: url("assets/menuscreen_blank.png");
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-top: 28em;
+    padding-bottom: 15em;
+}
+
+.buttons {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.jumbo-background1 {
+    background-color: #F4DAFE;
+}
+
+.card-title {
+    margin-bottom: 0;
+}
+
+section {
+    margin-bottom: 0;
+}
+
+.card {
+    margin-bottom: 1em;
+}
+
+.link {
+    margin-bottom: 0.75em;
+}
+
+.top {
+    position: fixed; /* Fixed/sticky position */
+    bottom: 20px; /* Place the button at the bottom of the page */
+    right: 30px; /* Place the button 30px from the right */
+    z-index: 99; /* Make sure it does not overlap */
+}
+
+.home {
+    position: fixed; /* Fixed/sticky position */
+    top: 20px; /* Place the button at the bottom of the page */
+    left: 30px; /* Place the button 30px from the right */
+    z-index: 100; /* Make sure it does not overlap */
+}
+
+embed {
+     height: 750px;
+     width: 100%;
+}
+
+.desc {
+    margin-bottom: 0;
+}
