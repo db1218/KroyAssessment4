@@ -83,6 +83,8 @@ public class ControlsScreen implements Screen {
             backgroundImage = new Texture(Gdx.files.internal("menuscreen_blank_2.png"), true);
         } else if (screen.equals("game")) {
             backgroundImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
+        } else if (screen.equals("dance")) {
+            backgroundImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
         }
 
         backgroundImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
@@ -217,6 +219,8 @@ public class ControlsScreen implements Screen {
             this.game.setScreen(parent);
         } else if (this.screen.equals("menu")){
             Gdx.input.setInputProcessor(new MenuInputHandler((MenuScreen)parent));
+            this.game.setScreen(parent);
+        } else if (this.screen.equals("dance")) {
             this.game.setScreen(parent);
         }
     }

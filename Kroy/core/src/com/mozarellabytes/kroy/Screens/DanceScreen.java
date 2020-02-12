@@ -14,6 +14,7 @@ import com.mozarellabytes.kroy.Entities.Patrol;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Minigame.*;
 import com.mozarellabytes.kroy.Utilities.GUI;
+import com.mozarellabytes.kroy.Utilities.GameInputHandler;
 
 /**
  * The screen for the minigame that triggers when a firetruck meets an ET patrol
@@ -33,6 +34,7 @@ public class DanceScreen implements Screen, BeatListener {
     private final DanceManager danceMan;
 
     private Screen previousScreen;
+    private boolean hasShownTutorial = false;
 
     private final Texture arrowUpTexture;
     private final Texture arrowDownTexture;
@@ -125,6 +127,9 @@ public class DanceScreen implements Screen, BeatListener {
         if (firefighter.getHealth() <= 0 || etDancer.getHealth() <= 0) {
             this.firetruck.setHP(firefighter.getHealth());
             this.patrol.setHP(etDancer.getHealth());
+            GUI gui = new GUI(game, (GameScreen) previousScreen);
+            Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) previousScreen, gui));
+            gui.idleInfoButton();
             game.setScreen(previousScreen);
         }
 
@@ -265,7 +270,10 @@ public class DanceScreen implements Screen, BeatListener {
 
     @Override
     public void show() {
-
+        if (!hasShownTutorial) {
+            hasShownTutorial = true;
+            game.setScreen(new ControlsScreen(game, this, "dance"));
+        }
     }
 
     @Override
