@@ -83,6 +83,8 @@ public class GUI {
     /** Camera to set the projection for the screen */
     private final OrthographicCamera pauseCamera;
 
+    private GlyphLayout layout;
+
     /** Constructor for GUI
      *
      * @param game          The Kroy game
@@ -371,22 +373,27 @@ public class GUI {
         GlyphLayout layout = new GlyphLayout();
         String pauseText1 =  "Game paused \n";
         String pauseText2 =  "Press 'P' or the Pause button \n To return to game";
-        layout.setText(game.font26, pauseText1);
-        layout.setText(game.font26, pauseText2);
+        layout.setText(game.font26b, pauseText1);
+        layout.setText(game.font26b, pauseText2);
 
         game.batch.setProjectionMatrix(pauseCamera.combined);
         game.batch.begin();
-        game.font50.draw(game.batch, pauseText1, pauseCamera.viewportWidth/2 - layout.width/2.7f, pauseCamera.viewportHeight/1.8f - layout.height/2);
-        game.font26.draw(game.batch, pauseText2, pauseCamera.viewportWidth/2 - layout.width/2, pauseCamera.viewportHeight/2.3f - layout.height/2);
+        game.font50b.draw(game.batch, pauseText1, pauseCamera.viewportWidth/2 - layout.width/2.7f, 100);
+        game.font26b.draw(game.batch, pauseText2, pauseCamera.viewportWidth/2 - layout.width/2, 50);
         game.batch.end();
     }
 
+    /** Renders a circle around the current selected entity,
+     * showing the maximum range of its attacks
+     * @param entity The currently selected entity as an object
+     * @param shapeMapRenderer The ShapeRenderer for the map
+     */
     public void renderSelectedEntityRange(Object entity, ShapeRenderer shapeMapRenderer){
         float x, y, range;
         if (entity instanceof FireTruck){
             FireTruck truck = (FireTruck) entity;
-            x = truck.getPosition().x;
-            y = truck.getPosition().y;
+            x = truck.getPosition().x + 0.5f;
+            y = truck.getPosition().y + 0.5f;
             range = truck.getRange();
         } else if (entity instanceof Fortress){
             Fortress fortress = (Fortress) entity;
@@ -403,8 +410,34 @@ public class GUI {
         shapeMapRenderer.setColor(Color.RED);
         shapeMapRenderer.circle(x, y, range);
         shapeMapRenderer.end();
+    }
 
+    /** Renders the information from the difficulty counter,
+     * includes the current difficulty and time to difficulty change
+     * Displayed in the bottom left.
+     * @param difficultyControl The DifficultyController from the game
+     */
+    public void renderDifficultyCounter(DifficultyControl difficultyControl){
+        layout = new GlyphLayout(game.font25, difficultyControl.getDifficultyOutput());
+        renderDifficultyBackground();
+        float fontX = 10;
+        //float fontY = Gdx.graphics.getHeight() - layout.height/2;
+        float fontY = layout.height + 10;
+        game.batch.begin();
+        game.font25.draw(game.batch, difficultyControl.getDifficultyOutput(), fontX, fontY);
+        game.batch.end();
+    }
 
+    /** Renders the dark background behind the difficulty counter
+     *
+     */
+    private void renderDifficultyBackground(){
+        Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        game.shapeRenderer.setColor(0, 0, 0, 0.5f);
+        game.shapeRenderer.rect(0, 0, 325, 55);
+        game.shapeRenderer.end();
     }
 
     public Rectangle getHomeButton() { return this.homeButton; }

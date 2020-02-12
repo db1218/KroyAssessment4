@@ -75,7 +75,7 @@ public class GameState {
         }
     }
 
-    public boolean firstFortressDestroyed(Kroy game) {
+    public boolean firstFortressDestroyed() {
         if ((fortressesDestroyed == 1)&&(stationDestoyed==false)) {
             return true;
         } else{
