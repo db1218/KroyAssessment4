@@ -32,6 +32,8 @@ public class DanceScreen implements Screen, BeatListener {
     /** Object for handling those funky beats */
     private final DanceManager danceMan;
 
+    private boolean hasShownTutorial = false;
+
     private Screen previousScreen;
 
     private final Texture arrowUpTexture;
@@ -111,6 +113,16 @@ public class DanceScreen implements Screen, BeatListener {
 
         System.out.println("Got to the dance Screen");
     }
+
+    @Override
+    public void show() {
+        if (!hasShownTutorial) {
+            hasShownTutorial = true;
+            game.setScreen(new ControlsScreen(game, this, "dance"));
+        }
+
+    }
+
 
     /**
      * Manages all of the updates/checks during the game
@@ -261,11 +273,6 @@ public class DanceScreen implements Screen, BeatListener {
         drawHealthbar(camera.viewportWidth/4, camera.viewportHeight/5, firefighter.getHealth()/firetruck.type.getMaxHP());
         drawHealthbar((camera.viewportWidth * 3)/4, camera.viewportHeight/5, etDancer.getHealth()/patrol.type.getMaxHP());
         game.shapeRenderer.end();
-    }
-
-    @Override
-    public void show() {
-
     }
 
     @Override

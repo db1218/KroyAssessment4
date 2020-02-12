@@ -70,7 +70,7 @@ public class Kroy extends Game {
 		parameter.size = 50;
 		font50b = generator.generateFont(parameter);
 
-		this.setScreen(new GameScreen(this));
+		this.setScreen(new SplashScreen(this));
 		//this.setScreen(new DanceScreen(this));	// Skip to dance screen
 	}
 

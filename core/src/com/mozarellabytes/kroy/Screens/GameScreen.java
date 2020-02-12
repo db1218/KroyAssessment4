@@ -538,6 +538,11 @@ public class GameScreen implements Screen {
         SoundFX.sfx_soundtrack.dispose();
     }
 
+    /**
+     * Starts a dance-off between the given firetruck and the given ET
+     * @param firetruck
+     * @param et
+     */
     public void doDanceOff(FireTruck firetruck, Patrol et) {
         game.setScreen(new DanceScreen(game, this, firetruck, et));
     }
