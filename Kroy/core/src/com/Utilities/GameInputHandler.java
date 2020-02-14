@@ -61,6 +61,7 @@ public class GameInputHandler implements InputProcessor {
                 gui.changeSound();
                 gui.idleSoundButton();
                 break;
+            case Input.Keys.SPACE:
             case Input.Keys.P:
                 gui.clickedPauseButton();
                 gameScreen.changeState();
