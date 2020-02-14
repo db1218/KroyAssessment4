@@ -36,6 +36,12 @@ public class ControlsScreen implements Screen {
     /** Sprite of a fortress */
     private final Texture fortress;
 
+    /** Sprite of the arrow falling */
+    private final Texture arrow;
+
+    /** Sprite of the box */
+    private final Texture arrowBox;
+
     /** Camera to set the projection for the screen */
     public final OrthographicCamera camera;
 
@@ -61,6 +67,10 @@ public class ControlsScreen implements Screen {
     /** Screen that called the control screen - the screen
      * to return to after the control screen has been exited */
     private final Screen parent;
+
+    private float time = 0;
+    private final float timeCap = .5f;
+    private boolean inSecondPhase = false;
 
 
     /** Constructor for the Control screen
@@ -97,6 +107,10 @@ public class ControlsScreen implements Screen {
 
         fortress = new Texture(Gdx.files.internal("sprites/fortress/fortress.png"), true);
 
+        arrow = new Texture(Gdx.files.internal("sprites/dance/arrowRight.png"), true);
+        arrowBox = new Texture(Gdx.files.internal("sprites/dance/targetBox.png"), true);
+
+
         HP = 200;
         count = 0;
 
@@ -128,7 +142,15 @@ public class ControlsScreen implements Screen {
         drawBackgroundImage();
         drawFilledBackgroundBox();
 
+        if (time < timeCap) {
+            time += delta;
+        } else {
+            time = 0;
+            inSecondPhase = !inSecondPhase;
+        }
+
         game.batch.begin();
+
 
         if (screen.equals("game") || screen.equals("menu")) {
             game.font50.draw(game.batch, "Control screen", screenWidth / 2.8f, screenHeight / 1.1678f);
@@ -161,9 +183,9 @@ public class ControlsScreen implements Screen {
             game.batch.draw(trailImage, screenWidth / 4.74f, screenHeight / 8.89f);
             game.batch.draw(trailEndImage, screenWidth / 4.74f, screenHeight / 8.89f);
 
-            game.font33.draw(game.batch, "Attacking the fortresses", screenWidth / 1.88f, screenHeight * 0.6875f);
-            game.font25.draw(game.batch, "When a firetruck is within range ", screenWidth / 1.87f,screenHeight * 0.6125f);
-            game.font25.draw(game.batch, "of a fortress press A to attack", screenWidth / 1.87f,screenHeight * 0.56875f);
+            game.font33.draw(game.batch, "Tactical Pause", screenWidth / 1.88f, screenHeight * 0.6875f);
+            game.font25.draw(game.batch, "Press [SPACE] to pause and give your trucks orders.", screenWidth / 1.87f,screenHeight * 0.6125f);
+            game.font25.draw(game.batch, "Press [Q] to cancel the selected trucks' path.", screenWidth / 1.87f,screenHeight * 0.56875f);
 
             game.batch.setColor(Color.WHITE);
             game.batch.draw(truckRight, screenWidth / 7.44f, screenHeight / 2.33f);
@@ -171,13 +193,23 @@ public class ControlsScreen implements Screen {
             game.batch.draw(truckLeft,screenWidth / 1.23f, screenHeight / 4.21f);
         } else if (screen.equals("dance")) {
             game.font50.draw(game.batch, "Control screen", screenWidth / 2.8f, screenHeight / 1.1678f);
-            game.font25.draw(game.batch, "Huhuhuhuhuhuhuhuhuhuh", (screenWidth / 2) - (36 * 15),screenHeight / 1.29f);
+            game.font25.draw(game.batch, "An ET has challenged you to a dance-off!", (screenWidth / 2) - (36 * 15),screenHeight / 1.29f);
+            game.font25.draw(game.batch, "Hit the arrow key as it gets to the center of the box to make the right move.", screenWidth / 7.692f, screenHeight * 0.68f);
+            game.font25.draw(game.batch, "Correct moves build up your combo, but missed ones will break it!", screenWidth / 7.692f,screenHeight * 0.64f);
+            game.font25.draw(game.batch, "USE your combo do damage the ET by pressing [SPACE]", screenWidth / 7.692f,screenHeight * 0.60f);
+            game.font25.draw(game.batch, "The crazier the combo the bigger the damage!", screenWidth / 7.692f,screenHeight * 0.56f);
+            game.font25.draw(game.batch, "But if you make the wrong move, feel the burn as the ET gets a turn.", screenWidth / 7.692f,screenHeight * 0.52f);
+            game.batch.draw(arrow, (screenWidth / 4f) * 3f, (screenHeight / 5f) * 3f + ((inSecondPhase ? 1 : 0) - DanceScreen.phaseLerp((time/timeCap)%1f)) * screenWidth/32, screenWidth/32, screenWidth/32);
+            game.batch.draw(arrowBox, (screenWidth / 4f) * 3f, (screenHeight / 5f) * 3f, screenWidth/32, screenWidth/32);
         }
 
         game.batch.end();
 
-        damageFortressHP();
-        drawFortressHealthBar();
+        if (screen.equals("game") || screen.equals("menu")) {
+            damageFortressHP();
+            drawFortressHealthBar();
+        } else if (screen.equals("dance")) {
+        }
 
         renderExitButton();
 

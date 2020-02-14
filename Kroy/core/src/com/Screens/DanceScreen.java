@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Patrol;
@@ -169,6 +170,10 @@ public class DanceScreen implements Screen, BeatListener {
             System.out.println("Firetruck health: " + firefighter.getHealth() + " ET health: " + etDancer.getHealth());
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            Gdx.app.exit();
+        }
+
         Gdx.gl.glClearColor(51/255f, 34/255f, 99/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -181,6 +186,7 @@ public class DanceScreen implements Screen, BeatListener {
         Vector2 comboLocation = new Vector2(0, camera.viewportHeight/7);
         Vector2 firemanLocation = new Vector2(camera.viewportWidth/4-256, camera.viewportHeight/5);
         Vector2 etLocation = new Vector2((3*camera.viewportWidth)/4-256, camera.viewportHeight/5);
+        Vector2 comboHintLocation = new Vector2(camera.viewportWidth/4, (3*camera.viewportHeight)/5);
         game.batch.begin();
         // Draw firefighter
         switch (firefighter.getState()) {
@@ -254,6 +260,9 @@ public class DanceScreen implements Screen, BeatListener {
         }
         game.batch.draw(targetBoxTexture, arrowsOrigin.x, arrowsOrigin.y, ARROW_SIZE, ARROW_SIZE);
 
+        if (danceMan.getCombo() > 2) {
+            game.font50.draw(game.batch, "Press [SPACE] to use combo!", comboHintLocation.x, (comboHintLocation.y + danceMan.getBeatProxemity()* camera.viewportHeight/32), camera.viewportWidth, 1, false);
+        }
 
         if (lastResult != null) {
             game.font120.draw(game.batch, lastResult.toString(), resultLocation.x, resultLocation.y,camera.viewportWidth, 1, false);
@@ -302,11 +311,11 @@ public class DanceScreen implements Screen, BeatListener {
 
     }
 
-    public float phaseLerp(float phase) {
+    public static float phaseLerp(float phase) {
         return (float) Math.pow(2, 10f * (phase-1));
     }
 
-    public float scaleDamage(float combo) {
+    public static float scaleDamage(float combo) {
         return (float) (20 * (Math.pow(1.2, combo)-1f));
     }
 
