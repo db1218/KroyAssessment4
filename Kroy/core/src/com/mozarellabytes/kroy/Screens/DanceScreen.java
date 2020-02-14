@@ -14,6 +14,7 @@ import com.mozarellabytes.kroy.Entities.Patrol;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Minigame.*;
 import com.mozarellabytes.kroy.Utilities.GUI;
+import com.mozarellabytes.kroy.Utilities.GameInputHandler;
 
 /**
  * The screen for the minigame that triggers when a firetruck meets an ET patrol
@@ -32,9 +33,8 @@ public class DanceScreen implements Screen, BeatListener {
     /** Object for handling those funky beats */
     private final DanceManager danceMan;
 
-    private boolean hasShownTutorial = false;
-
     private Screen previousScreen;
+    private boolean hasShownTutorial = false;
 
     private final Texture arrowUpTexture;
     private final Texture arrowDownTexture;
@@ -114,16 +114,6 @@ public class DanceScreen implements Screen, BeatListener {
         System.out.println("Got to the dance Screen");
     }
 
-    @Override
-    public void show() {
-        if (!hasShownTutorial) {
-            hasShownTutorial = true;
-            game.setScreen(new ControlsScreen(game, this, "dance"));
-        }
-
-    }
-
-
     /**
      * Manages all of the updates/checks during the game
      *
@@ -137,6 +127,9 @@ public class DanceScreen implements Screen, BeatListener {
         if (firefighter.getHealth() <= 0 || etDancer.getHealth() <= 0) {
             this.firetruck.setHP(firefighter.getHealth());
             this.patrol.setHP(etDancer.getHealth());
+            GUI gui = new GUI(game, (GameScreen) previousScreen);
+            Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) previousScreen, gui));
+            gui.idleInfoButton();
             game.setScreen(previousScreen);
         }
 
@@ -276,6 +269,15 @@ public class DanceScreen implements Screen, BeatListener {
     }
 
     @Override
+    public void show() {
+        if (!hasShownTutorial && !((GameScreen)previousScreen).gameState.hasDanceTutorialShown()) {
+            hasShownTutorial = true;
+            ((GameScreen)previousScreen).gameState.setDanceTutorialShown();
+            game.setScreen(new ControlsScreen(game, this, "dance"));
+        }
+    }
+
+    @Override
     public void resize(int width, int height) {
 
     }
@@ -303,10 +305,6 @@ public class DanceScreen implements Screen, BeatListener {
     public float phaseLerp(float phase) {
         return (float) Math.pow(2, 10f * (phase-1));
     }
-
-//        game.shapeRenderer.rect(x + this.selectedW - positionSpacer - outerSpacing - barSpacer, this.selectedY + outerSpacing, whiteW, this.selectedH - outerSpacing*2 - spaceForText, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
-//        game.shapeRenderer.rect(x + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, barHeight, backgroundColour, backgroundColour, backgroundColour, backgroundColour);
-//        game.shapeRenderer.rect(this.selectedX + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, value/maxValue*barHeight, progressColour, progressColour, progressColour, progressColour);
 
     public float scaleDamage(float combo) {
         return (float) (20 * (Math.pow(1.2, combo)-1f));

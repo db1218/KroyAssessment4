@@ -15,6 +15,7 @@ public class GameState {
 
     private int activePatrols;
 
+    private boolean hasShownDanceTutorial;
 
     /** The number of fortresses the player has destroyed */
     private int fortressesDestroyed;
@@ -30,6 +31,7 @@ public class GameState {
         this.fortressesDestroyed = 0;
         this.activePatrols = 0;
         this.stationDestoyed = false;
+        this.hasShownDanceTutorial = false;
     }
 
     /** Adds one to activeFireTrucks, called when a firetruck is spawned */
@@ -108,6 +110,10 @@ public class GameState {
     public int getTrucksInAttackRange(){
         return trucksInAttackRange;
     }
+
+    public void setDanceTutorialShown() { this.hasShownDanceTutorial = true; }
+
+    public boolean hasDanceTutorialShown() { return this.hasShownDanceTutorial; }
 
 
 }
