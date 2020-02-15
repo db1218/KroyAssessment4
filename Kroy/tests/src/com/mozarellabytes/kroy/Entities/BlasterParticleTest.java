@@ -1,18 +1,21 @@
 package com.mozarellabytes.kroy.Entities;
 
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-
+import com.mozarellabytes.kroy.GdxTestRunner;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 
 
+@RunWith(GdxTestRunner.class)
 class BlasterParticleTest {
     @Mock
     GameScreen gameScreenMock;
@@ -23,7 +26,7 @@ class BlasterParticleTest {
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void isHitTest() {
         Patrol aPatrol = new Patrol(gameScreenMock, testpatroltype);
         FireStation aTarget = new FireStation(1,5);
