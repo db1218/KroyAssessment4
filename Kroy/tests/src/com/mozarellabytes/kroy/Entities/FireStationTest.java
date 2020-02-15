@@ -11,8 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import static com.mozarellabytes.kroy.Entities.FireTruckType.Ocean;
-import static com.mozarellabytes.kroy.Entities.FireTruckType.Speed;
+import com.mozarellabytes.kroy.Entities.FireTruckType.*;
 import static org.junit.Assert.*;
 
 @RunWith(GdxTestRunner.class)
@@ -27,7 +26,7 @@ public class FireStationTest {
     @Test
     public void repairPassTest() {
         FireStation station = new FireStation(10, 10);
-        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), Speed));
+        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.Ruby));
         station.getTruck(0).fortressDamage(50);
         float HPBeforeRepair = station.getTruck(0).getHP();
         station.restoreTrucks();
@@ -38,7 +37,7 @@ public class FireStationTest {
     @Test
     public void repairIncorrectPositionTest() {
         FireStation station = new FireStation(10, 10);
-        station.spawn(new FireTruck(gameScreenMock, new Vector2(20, 10), Speed));
+        station.spawn(new FireTruck(gameScreenMock, new Vector2(20, 10), FireTruckType.Ruby));
         station.getTruck(0).fortressDamage(50);
         float HPBeforeRepair = station.getTruck(0).getHP();
         station.restoreTrucks();
@@ -49,7 +48,7 @@ public class FireStationTest {
     @Test
     public void repairAlreadyFullyRepairedTest() {
         FireStation station = new FireStation(10, 10);
-        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), Speed));
+        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.Ruby));
         float HPBeforeRepair = station.getTruck(0).getHP();
         station.restoreTrucks();
         float HPAfterRepair = station.getTruck(0).getHP();
@@ -60,8 +59,7 @@ public class FireStationTest {
     public void refillPassTest() {
         FireStation station = new FireStation(10, 10);
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
-        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), Speed));
-        station.getTruck(0).setAttacking(true);
+        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.Ruby));
         station.getTruck(0).attack(fortress);
         float HPBeforeRefill = station.getTruck(0).getReserve();
         station.restoreTrucks();
@@ -73,8 +71,7 @@ public class FireStationTest {
     public void refillIncorrectPositionTest() {
         FireStation station = new FireStation(10, 10);
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
-        station.spawn(new FireTruck(gameScreenMock, new Vector2(20, 10), Speed));
-        station.getTruck(0).setAttacking(true);
+        station.spawn(new FireTruck(gameScreenMock, new Vector2(20, 10), FireTruckType.Ruby));
         station.getTruck(0).attack(fortress);
         float HPBeforeRefill = station.getTruck(0).getReserve();
         station.restoreTrucks();
@@ -85,7 +82,7 @@ public class FireStationTest {
     @Test
     public void refillAlreadyFullTest() {
         FireStation station = new FireStation(10, 10);
-        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), Speed));
+        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.Ruby));
         float HPBeforeRefill = station.getTruck(0).getReserve();
         station.restoreTrucks();
         float HPAfterRefill = station.getTruck(0).getReserve();
@@ -98,8 +95,8 @@ public class FireStationTest {
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,12);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,13);
 
-        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(11, 11), Speed);
-        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(11, 13), Ocean);
+        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(11, 11), FireTruckType.Ruby);
+        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(11, 13), FireTruckType.Sapphire);
 
         FireStation station = new FireStation(0,0);
         station.spawn(fireTruck1);
@@ -124,8 +121,8 @@ public class FireStationTest {
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,13);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,14);
 
-        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(11, 11), Speed);
-        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(11, 14), Ocean);
+        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(11, 11), FireTruckType.Ruby);
+        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(11, 14), FireTruckType.Sapphire);
 
         FireStation station = new FireStation(0,0);
         station.spawn(fireTruck1);
