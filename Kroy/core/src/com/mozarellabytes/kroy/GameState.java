@@ -70,7 +70,7 @@ public class GameState {
      * @param game LibGDX game
      */
     public void hasGameEnded(Kroy game) {
-        if (fortressesDestroyed == 3) {
+        if (fortressesDestroyed == 7) {
             endGame(true, game);
         } else if (this.activeFireTrucks == 0) {
             endGame(false, game);
