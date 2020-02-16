@@ -1,0 +1,189 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GameOverScreen</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy.Screens</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GameOverScreen (com.mozarellabytes.kroy.Screens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameOverScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy.Screens;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.badlogic.gdx.Gdx;
+<i>4</i>&nbsp;import com.badlogic.gdx.Screen;
+<i>5</i>&nbsp;import com.badlogic.gdx.graphics.GL20;
+<i>6</i>&nbsp;import com.badlogic.gdx.graphics.OrthographicCamera;
+<i>7</i>&nbsp;import com.badlogic.gdx.graphics.Texture;
+<i>8</i>&nbsp;import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+<i>9</i>&nbsp;import com.mozarellabytes.kroy.Kroy;
+<i>10</i>&nbsp;import com.mozarellabytes.kroy.Utilities.GameOverInputHandler;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;/** This screen is shown after the game has ended.
+<i>13</i>&nbsp; * It tells the player if they have won or lost.
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;public class GameOverScreen implements Screen {
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /** The game - to be able to use the fonts from game */
+<i>19</i>&nbsp;    private final Kroy game;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    /** The texture that makes up the background screen */
+<i>22</i>&nbsp;    private final Texture backgroundLogo;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    /** Camera to set the projection for the screen */
+<i>25</i>&nbsp;    private final OrthographicCamera camera;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    /** The format that the text will be displayed in */
+<i>28</i>&nbsp;    private final GlyphLayout layout;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    /** The text that will be displayed to the screen */
+<i>31</i>&nbsp;    private String text;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /** Constructor for the game screen
+<i>34</i>&nbsp;     * @param game  LibGdx game
+<i>35</i>&nbsp;     * @param won &lt;code&gt; true &lt;/code&gt; if the game was won
+<i>36</i>&nbsp;     *            &lt;code&gt; false &lt;/code&gt; if th game was lost
+<i>37</i>&nbsp;     */
+<b class="nc"><i>38</i>&nbsp;    public GameOverScreen(Kroy game, boolean won) {</b>
+<b class="nc"><i>39</i>&nbsp;        this.game = game;</b>
+<b class="nc"><i>40</i>&nbsp;        camera = new OrthographicCamera();</b>
+<b class="nc"><i>41</i>&nbsp;        camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);</b>
+<i>42</i>&nbsp;
+<b class="nc"><i>43</i>&nbsp;        backgroundLogo = new Texture(Gdx.files.internal(&quot;images/backgroundLogo.png&quot;), true);</b>
+<b class="nc"><i>44</i>&nbsp;        backgroundLogo.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<i>45</i>&nbsp;
+<b class="nc"><i>46</i>&nbsp;        Gdx.input.setInputProcessor(new GameOverInputHandler(game));</b>
+<i>47</i>&nbsp;
+<b class="nc"><i>48</i>&nbsp;        layout = new GlyphLayout();</b>
+<b class="nc"><i>49</i>&nbsp;        if (won) {</b>
+<b class="nc"><i>50</i>&nbsp;            this.text = &quot;We did it! Good job little guy.&quot;;</b>
+<i>51</i>&nbsp;        } else {
+<b class="nc"><i>52</i>&nbsp;            this.text = &quot;Mission Failed. We&#39;ll get &#39;em next time.&quot;;</b>
+<i>53</i>&nbsp;        }
+<b class="nc"><i>54</i>&nbsp;        this.text = this.text + &quot;\n&quot; + &quot;   Click to return to the main menu...&quot;;</b>
+<b class="nc"><i>55</i>&nbsp;        layout.setText(game.font26, this.text);</b>
+<i>56</i>&nbsp;    }
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    @Override
+<i>59</i>&nbsp;    public void show() {
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    /** Renders the game over screen
+<i>64</i>&nbsp;     *
+<i>65</i>&nbsp;     *  @param delta The time in seconds since the last render. */
+<i>66</i>&nbsp;    @Override
+<i>67</i>&nbsp;    public void render(float delta) {
+<b class="nc"><i>68</i>&nbsp;        Gdx.gl.glClearColor(51/255f, 34/255f, 99/255f, 1f);</b>
+<b class="nc"><i>69</i>&nbsp;        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</b>
+<i>70</i>&nbsp;
+<b class="nc"><i>71</i>&nbsp;        camera.update();</b>
+<b class="nc"><i>72</i>&nbsp;        game.batch.setProjectionMatrix(camera.combined);</b>
+<i>73</i>&nbsp;
+<b class="nc"><i>74</i>&nbsp;        game.batch.begin();</b>
+<b class="nc"><i>75</i>&nbsp;        game.font26.draw(game.batch, this.text, camera.viewportWidth/2 - layout.width/2, camera.viewportHeight/2 - layout.height/2);</b>
+<b class="nc"><i>76</i>&nbsp;        game.batch.end();</b>
+<i>77</i>&nbsp;    }
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;    @Override
+<i>80</i>&nbsp;    public void resize(int width, int height) {
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    }
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    @Override
+<i>85</i>&nbsp;    public void pause() {
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;    }
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    @Override
+<i>90</i>&nbsp;    public void resume() {
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;    }
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;    @Override
+<i>95</i>&nbsp;    public void hide() {
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    }
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    /** Called when this screen should release all resources. */
+<i>100</i>&nbsp;    @Override
+<i>101</i>&nbsp;    public void dispose() {
+<b class="nc"><i>102</i>&nbsp;        backgroundLogo.dispose();</b>
+<i>103</i>&nbsp;    }
+<i>104</i>&nbsp;
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-02-16 18:13</div>
+</div>
+</body>
+</html>

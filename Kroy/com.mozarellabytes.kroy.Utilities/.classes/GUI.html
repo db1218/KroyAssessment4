@@ -1,0 +1,534 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GUI</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy.Utilities</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GUI (com.mozarellabytes.kroy.Utilities)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GUI</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 26)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 176)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy.Utilities;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.badlogic.gdx.Gdx;
+<i>4</i>&nbsp;import com.badlogic.gdx.graphics.Color;
+<i>5</i>&nbsp;import com.badlogic.gdx.graphics.GL20;
+<i>6</i>&nbsp;import com.badlogic.gdx.graphics.OrthographicCamera;
+<i>7</i>&nbsp;import com.badlogic.gdx.graphics.Texture;
+<i>8</i>&nbsp;import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+<i>9</i>&nbsp;import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+<i>10</i>&nbsp;import com.badlogic.gdx.math.Circle;
+<i>11</i>&nbsp;import com.badlogic.gdx.math.Rectangle;
+<i>12</i>&nbsp;import com.badlogic.gdx.math.Vector2;
+<i>13</i>&nbsp;import com.mozarellabytes.kroy.Entities.FireTruck;
+<i>14</i>&nbsp;import com.mozarellabytes.kroy.Entities.Fortress;
+<i>15</i>&nbsp;import com.mozarellabytes.kroy.Kroy;
+<i>16</i>&nbsp;import com.mozarellabytes.kroy.Screens.GameScreen;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;//import javax.jnlp.FileContents;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;/**
+<i>21</i>&nbsp; * This Class is responsible for displaying the majority of the GUI that the
+<i>22</i>&nbsp; * user can see and interact with that are apart from the main function of
+<i>23</i>&nbsp; * the game i.e. drawing the FireTruck&#39;s path. The GUI renders the buttons
+<i>24</i>&nbsp; * visible in the top right corner whilst playing the game, along with
+<i>25</i>&nbsp; * rendering the stats area in the top left corner when an entity is selected
+<i>26</i>&nbsp; * by clicking on it on the map
+<i>27</i>&nbsp; */
+<i>28</i>&nbsp;public class GUI {
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    /** LibGdx game */
+<i>31</i>&nbsp;    private final Kroy game;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /** Coordinates and dimensions of the stats box */
+<i>34</i>&nbsp;    private final int selectedX, selectedY, selectedH, selectedW;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    /** The screen where the buttons are rendered */
+<i>37</i>&nbsp;    private final GameScreen gameScreen;
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    /** Rectangle containing the homeButton&#39;s coordinates, height and width */
+<i>40</i>&nbsp;    private final Rectangle homeButton;
+<i>41</i>&nbsp;    /** Texture of the homeButton when it is not being clicked on */
+<i>42</i>&nbsp;    private final Texture homeButtonIdle;
+<i>43</i>&nbsp;    /** Texture of the homeButton when it&#39;s being clicked */
+<i>44</i>&nbsp;    private final Texture homeButtonClicked;
+<i>45</i>&nbsp;    /** Texture of the homeButton that is rendered to the screen */
+<i>46</i>&nbsp;    private Texture currentHomeTexture;
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    /** Rectangle containing the pauseButton&#39;s coordinates, height and width */
+<i>49</i>&nbsp;    private final Rectangle pauseButton;
+<i>50</i>&nbsp;    /** Texture of the pausebutton when it is not being clicked on */
+<i>51</i>&nbsp;    private final Texture pauseButtonIdle;
+<i>52</i>&nbsp;    /** Texture of the pauseButton when it&#39;s being clicked */
+<i>53</i>&nbsp;    private final Texture pauseButtonClicked;
+<i>54</i>&nbsp;    /** Texture of the pauseButton that is rendered to the screen */
+<i>55</i>&nbsp;    private Texture currentPauseTexture;
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    /** Rectangle containing the infoButton&#39;s coordinates, height and width */
+<i>58</i>&nbsp;    private final Rectangle infoButton;
+<i>59</i>&nbsp;    /** Texture of the infoButton when it is not being clicked on */
+<i>60</i>&nbsp;    private final Texture infoButtonIdle;
+<i>61</i>&nbsp;    /** Texture of the infoButton when it&#39;s being clicked */
+<i>62</i>&nbsp;    private final Texture infoButtonClicked;
+<i>63</i>&nbsp;    /** Texture of the infoButton that is rendered to the screen */
+<i>64</i>&nbsp;    private Texture currentInfoTexture;
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    /** Rectangle containing the soundButton&#39;s coordinates, height and width */
+<i>67</i>&nbsp;    private final Rectangle soundButton;
+<i>68</i>&nbsp;    /** Texture of the soundButton when music is off to turn the music on
+<i>69</i>&nbsp;     * when it is not being clicked */
+<i>70</i>&nbsp;    private final Texture soundOnIdleTexture;
+<i>71</i>&nbsp;    /** Texture of the soundButton when music is on to turn the music off
+<i>72</i>&nbsp;     * when it is not being clicked */
+<i>73</i>&nbsp;    private final Texture soundOffIdleTexture;
+<i>74</i>&nbsp;    /** Texture of the soundButton when music is off and the soundButton is
+<i>75</i>&nbsp;     * being clicked to turn the sound on*/
+<i>76</i>&nbsp;    private final Texture soundOnClickedTexture;
+<i>77</i>&nbsp;    /** Texture of the soundButton when music is on and the soundButton is
+<i>78</i>&nbsp;     * being clicked to turn the sound off */
+<i>79</i>&nbsp;    private final Texture soundOffClickedTexture;
+<i>80</i>&nbsp;    /** Texture of the soundButton that is rendered to the screen */
+<i>81</i>&nbsp;    private Texture currentSoundTexture;
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;    /** Camera to set the projection for the screen */
+<i>84</i>&nbsp;    private final OrthographicCamera pauseCamera;
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;    private GlyphLayout layout;
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    /** Constructor for GUI
+<i>89</i>&nbsp;     *
+<i>90</i>&nbsp;     * @param game          The Kroy game
+<i>91</i>&nbsp;     * @param gameScreen    Screen where these methods will be rendered
+<i>92</i>&nbsp;     */
+<b class="nc"><i>93</i>&nbsp;    public GUI(Kroy game, GameScreen gameScreen) {</b>
+<b class="nc"><i>94</i>&nbsp;        this.game = game;</b>
+<b class="nc"><i>95</i>&nbsp;        this.gameScreen = gameScreen;</b>
+<b class="nc"><i>96</i>&nbsp;        this.selectedH = 275;</b>
+<b class="nc"><i>97</i>&nbsp;        this.selectedW = 225;</b>
+<b class="nc"><i>98</i>&nbsp;        this.selectedX = 5;</b>
+<b class="nc"><i>99</i>&nbsp;        this.selectedY = Gdx.graphics.getHeight() - 5 - this.selectedH;</b>
+<i>100</i>&nbsp;
+<b class="nc"><i>101</i>&nbsp;        homeButtonIdle = new Texture(Gdx.files.internal(&quot;ui/home_idle.png&quot;), true);</b>
+<b class="nc"><i>102</i>&nbsp;        homeButtonIdle.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<b class="nc"><i>103</i>&nbsp;        homeButtonClicked = new Texture(Gdx.files.internal(&quot;ui/home_clicked.png&quot;), true);</b>
+<b class="nc"><i>104</i>&nbsp;        homeButtonClicked.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<i>105</i>&nbsp;
+<b class="nc"><i>106</i>&nbsp;        pauseButtonIdle = new Texture(Gdx.files.internal(&quot;ui/pause_idle.png&quot;), true);</b>
+<b class="nc"><i>107</i>&nbsp;        pauseButtonIdle.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<b class="nc"><i>108</i>&nbsp;        pauseButtonClicked = new Texture(Gdx.files.internal(&quot;ui/pause_clicked.png&quot;), true);</b>
+<b class="nc"><i>109</i>&nbsp;        pauseButtonClicked.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<i>110</i>&nbsp;
+<b class="nc"><i>111</i>&nbsp;        infoButtonIdle = new Texture(Gdx.files.internal(&quot;ui/info_idle.png&quot;), true);</b>
+<b class="nc"><i>112</i>&nbsp;        infoButtonIdle.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<b class="nc"><i>113</i>&nbsp;        infoButtonClicked = new Texture(Gdx.files.internal(&quot;ui/info_clicked.png&quot;), true);</b>
+<b class="nc"><i>114</i>&nbsp;        infoButtonClicked.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<i>115</i>&nbsp;
+<b class="nc"><i>116</i>&nbsp;        soundOnIdleTexture = new Texture(Gdx.files.internal(&quot;ui/sound_on_idle.png&quot;), true);</b>
+<b class="nc"><i>117</i>&nbsp;        soundOnIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<b class="nc"><i>118</i>&nbsp;        soundOffIdleTexture = new Texture(Gdx.files.internal(&quot;ui/sound_off_idle.png&quot;), true);</b>
+<b class="nc"><i>119</i>&nbsp;        soundOffIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<b class="nc"><i>120</i>&nbsp;        soundOnClickedTexture = new Texture(Gdx.files.internal(&quot;ui/sound_on_clicked.png&quot;), true);</b>
+<b class="nc"><i>121</i>&nbsp;        soundOnClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<b class="nc"><i>122</i>&nbsp;        soundOffClickedTexture = new Texture(Gdx.files.internal(&quot;ui/sound_off_clicked.png&quot;), true);</b>
+<b class="nc"><i>123</i>&nbsp;        soundOffClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<i>124</i>&nbsp;
+<b class="nc"><i>125</i>&nbsp;        currentHomeTexture = homeButtonIdle;</b>
+<b class="nc"><i>126</i>&nbsp;        currentPauseTexture = pauseButtonIdle;</b>
+<b class="nc"><i>127</i>&nbsp;        currentInfoTexture = infoButtonIdle;</b>
+<i>128</i>&nbsp;
+<b class="nc"><i>129</i>&nbsp;        if (SoundFX.music_enabled) {</b>
+<b class="nc"><i>130</i>&nbsp;            currentSoundTexture = soundOffIdleTexture;</b>
+<i>131</i>&nbsp;        } else {
+<b class="nc"><i>132</i>&nbsp;            currentSoundTexture = soundOnIdleTexture;</b>
+<i>133</i>&nbsp;        }
+<i>134</i>&nbsp;
+<b class="nc"><i>135</i>&nbsp;        homeButton = new Rectangle(Gdx.graphics.getWidth() - 33, Gdx.graphics.getHeight() - 33, 30, 30);</b>
+<b class="nc"><i>136</i>&nbsp;        soundButton = new Rectangle(Gdx.graphics.getWidth() - 70, Gdx.graphics.getHeight() - 33, 30, 30);</b>
+<b class="nc"><i>137</i>&nbsp;        pauseButton = new Rectangle(Gdx.graphics.getWidth() - 107, Gdx.graphics.getHeight() - 33, 30, 30);</b>
+<b class="nc"><i>138</i>&nbsp;        infoButton = new Rectangle(Gdx.graphics.getWidth() - 144, Gdx.graphics.getHeight() - 33, 30, 30);</b>
+<i>139</i>&nbsp;
+<b class="nc"><i>140</i>&nbsp;        pauseCamera = new OrthographicCamera();</b>
+<b class="nc"><i>141</i>&nbsp;        pauseCamera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);</b>
+<i>142</i>&nbsp;    }
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;    /**
+<i>145</i>&nbsp;     * Renders the health and (when applicable) reserve bars
+<i>146</i>&nbsp;     * along with the custom attributes that the entity
+<i>147</i>&nbsp;     * possesses
+<i>148</i>&nbsp;     *
+<i>149</i>&nbsp;     * @param entity    The entity that has been clicked on
+<i>150</i>&nbsp;     */
+<i>151</i>&nbsp;    public void renderSelectedEntity(Object entity) {
+<b class="nc"><i>152</i>&nbsp;        if (entity != null) {</b>
+<b class="nc"><i>153</i>&nbsp;            Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);</b>
+<b class="nc"><i>154</i>&nbsp;            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);</b>
+<b class="nc"><i>155</i>&nbsp;            game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);</b>
+<b class="nc"><i>156</i>&nbsp;            renderSelectedEntityBackground();</b>
+<b class="nc"><i>157</i>&nbsp;            game.shapeRenderer.end();</b>
+<b class="nc"><i>158</i>&nbsp;            game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);</b>
+<b class="nc"><i>159</i>&nbsp;            if (entity instanceof FireTruck) {</b>
+<b class="nc"><i>160</i>&nbsp;                FireTruck truck = (FireTruck) entity;</b>
+<b class="nc"><i>161</i>&nbsp;                renderSelectedTruck(truck);</b>
+<b class="nc"><i>162</i>&nbsp;            } else if (entity instanceof Fortress) {</b>
+<b class="nc"><i>163</i>&nbsp;                Fortress fortress = (Fortress) entity;</b>
+<b class="nc"><i>164</i>&nbsp;                renderSelectedFortress(fortress);</b>
+<i>165</i>&nbsp;            }
+<b class="nc"><i>166</i>&nbsp;            game.shapeRenderer.end();</b>
+<i>167</i>&nbsp;        }
+<i>168</i>&nbsp;    }
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;    /**
+<i>171</i>&nbsp;     * Renders the dark background behind the stats area
+<i>172</i>&nbsp;     */
+<i>173</i>&nbsp;    private void renderSelectedEntityBackground() {
+<b class="nc"><i>174</i>&nbsp;        game.shapeRenderer.setColor(0, 0, 0, 0.5f);</b>
+<b class="nc"><i>175</i>&nbsp;        game.shapeRenderer.rect(selectedX, selectedY, selectedW, selectedH);</b>
+<i>176</i>&nbsp;    }
+<i>177</i>&nbsp;
+<i>178</i>&nbsp;    /**
+<i>179</i>&nbsp;     * Calls the methods which render the attributes and
+<i>180</i>&nbsp;     * health/reserve bars of a truck in the stats area
+<i>181</i>&nbsp;     *
+<i>182</i>&nbsp;     * @param truck the FireTruck that owns the stats
+<i>183</i>&nbsp;     *              that are being displayed
+<i>184</i>&nbsp;     */
+<i>185</i>&nbsp;    private void renderSelectedTruck(FireTruck truck) {
+<b class="nc"><i>186</i>&nbsp;        renderSelectedEntityBar(truck.getHP(), truck.getType().getMaxHP(), Color.RED, Color.FIREBRICK, 1, 35);</b>
+<b class="nc"><i>187</i>&nbsp;        renderSelectedEntityBar(truck.getReserve(), truck.getType().getMaxReserve(), Color.CYAN, Color.BLUE, 2, 35);</b>
+<b class="nc"><i>188</i>&nbsp;        renderSelectedEntityText(truck);</b>
+<i>189</i>&nbsp;
+<i>190</i>&nbsp;    }
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;    /**
+<i>193</i>&nbsp;     * Calls the methods which render the attributes and
+<i>194</i>&nbsp;     * health bar of a fortress in the stats area
+<i>195</i>&nbsp;     *
+<i>196</i>&nbsp;     * @param fortress  the Fortress that owns the stats
+<i>197</i>&nbsp;     *                  that are being displayed
+<i>198</i>&nbsp;     */
+<i>199</i>&nbsp;    private void renderSelectedFortress(Fortress fortress) {
+<b class="nc"><i>200</i>&nbsp;        renderSelectedEntityBar(fortress.getHP(), fortress.getFortressType().getMaxHP(), Color.RED, Color.FIREBRICK, 1, 50);</b>
+<b class="nc"><i>201</i>&nbsp;        renderSelectedEntityText(fortress);</b>
+<i>202</i>&nbsp;    }
+<i>203</i>&nbsp;
+<i>204</i>&nbsp;    /**
+<i>205</i>&nbsp;     * Renders the attributes in a vertical layout
+<i>206</i>&nbsp;     * of the FireTruck
+<i>207</i>&nbsp;     *
+<i>208</i>&nbsp;     * @param truck the FireTruck that owns the stats
+<i>209</i>&nbsp;     *              that are being displayed
+<i>210</i>&nbsp;     */
+<i>211</i>&nbsp;    private void renderSelectedEntityText(FireTruck truck) {
+<b class="nc"><i>212</i>&nbsp;        int newLine = 20;</b>
+<b class="nc"><i>213</i>&nbsp;        game.batch.begin();</b>
+<b class="nc"><i>214</i>&nbsp;        game.font26.draw(game.batch, truck.getType().getName(), this.selectedX + 10, this.selectedY + this.selectedH - 10);</b>
+<b class="nc"><i>215</i>&nbsp;        game.font19.draw(game.batch, &quot;HP: &quot;, this.selectedX + 15, this.selectedY + this.selectedH - 50);</b>
+<b class="nc"><i>216</i>&nbsp;        game.font19.draw(game.batch, String.format(&quot;%.1f&quot;, truck.getHP()) + &quot; / &quot; + String.format(&quot;%.1f&quot;, truck.getType().getMaxHP()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine);</b>
+<b class="nc"><i>217</i>&nbsp;        game.font19.draw(game.batch, &quot;Reserve: &quot;, this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*2);</b>
+<b class="nc"><i>218</i>&nbsp;        game.font19.draw(game.batch, String.format(&quot;%.1f&quot;, truck.getReserve()) + &quot; / &quot; + String.format(&quot;%.1f&quot;, truck.getType().getMaxReserve()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine*3);</b>
+<b class="nc"><i>219</i>&nbsp;        game.font19.draw(game.batch, &quot;Speed: &quot;, this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*4);</b>
+<b class="nc"><i>220</i>&nbsp;        game.font19.draw(game.batch, String.format(&quot;%.1f&quot;, truck.getType().getSpeed()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine*5);</b>
+<b class="nc"><i>221</i>&nbsp;        game.font19.draw(game.batch, &quot;Range: &quot;, this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*6);</b>
+<b class="nc"><i>222</i>&nbsp;        game.font19.draw(game.batch, String.format(&quot;%.1f&quot;, truck.getType().getRange()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine*7);</b>
+<b class="nc"><i>223</i>&nbsp;        game.font19.draw(game.batch, &quot;AP: &quot;, this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*8);</b>
+<b class="nc"><i>224</i>&nbsp;        game.font19.draw(game.batch, String.format(&quot;%.2f&quot;, truck.getType().getAP()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine*9);</b>
+<b class="nc"><i>225</i>&nbsp;        game.batch.end();</b>
+<i>226</i>&nbsp;    }
+<i>227</i>&nbsp;
+<i>228</i>&nbsp;    /**
+<i>229</i>&nbsp;     * Renders the attributes in a vertical layout
+<i>230</i>&nbsp;     * of the Fortress
+<i>231</i>&nbsp;     *
+<i>232</i>&nbsp;     * @param fortress  the Fortress that owns the stats
+<i>233</i>&nbsp;     *                  that are being displayed
+<i>234</i>&nbsp;     */
+<i>235</i>&nbsp;    private void renderSelectedEntityText(Fortress fortress) {
+<b class="nc"><i>236</i>&nbsp;        int newLine = 20;</b>
+<b class="nc"><i>237</i>&nbsp;        game.batch.begin();</b>
+<b class="nc"><i>238</i>&nbsp;        if(fortress.getFortressType().getName().length() &gt; 14){ //Scale down name of the fortress&#39; size if it is large</b>
+<b class="nc"><i>239</i>&nbsp;            game.font19.draw(game.batch, fortress.getFortressType().getName(), this.selectedX + 10, this.selectedY + this.selectedH - 10);</b>
+<i>240</i>&nbsp;        } else
+<b class="nc"><i>241</i>&nbsp;            game.font26.draw(game.batch, fortress.getFortressType().getName(), this.selectedX + 10, this.selectedY + this.selectedH - 10);</b>
+<b class="nc"><i>242</i>&nbsp;        game.font19.draw(game.batch, &quot;HP: &quot;, this.selectedX + 15, this.selectedY + this.selectedH - 50);</b>
+<b class="nc"><i>243</i>&nbsp;        game.font19.draw(game.batch, String.format(&quot;%.1f&quot;, fortress.getHP()) + &quot; / &quot; + String.format(&quot;%.1f&quot;, fortress.getFortressType().getMaxHP()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine);</b>
+<b class="nc"><i>244</i>&nbsp;        game.font19.draw(game.batch, &quot;Range: &quot;, this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*2);</b>
+<b class="nc"><i>245</i>&nbsp;        game.font19.draw(game.batch, String.format(&quot;%.1f&quot;, fortress.getFortressType().getRange()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine*3);</b>
+<b class="nc"><i>246</i>&nbsp;        game.font19.draw(game.batch, &quot;AP: &quot;, this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*4);</b>
+<b class="nc"><i>247</i>&nbsp;        game.font19.draw(game.batch, String.format(&quot;%.2f&quot;, fortress.getFortressType().getAP()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine*5);</b>
+<b class="nc"><i>248</i>&nbsp;        game.batch.end();</b>
+<i>249</i>&nbsp;    }
+<i>250</i>&nbsp;
+<i>251</i>&nbsp;    /**
+<i>252</i>&nbsp;     * Renders the stat bars which are currently used to
+<i>253</i>&nbsp;     * show the health/reserve of trucks and health of
+<i>254</i>&nbsp;     * fortresses. The integers inside the method that
+<i>255</i>&nbsp;     * have values set to them are customisable to get
+<i>256</i>&nbsp;     * the desired layout/formatting of the bars
+<i>257</i>&nbsp;     *
+<i>258</i>&nbsp;     * @param value             the value towards the goal
+<i>259</i>&nbsp;     * @param maxValue          the goal
+<i>260</i>&nbsp;     * @param progressColour    the colour of the value bar
+<i>261</i>&nbsp;     * @param backgroundColour  the colour behind the value bar
+<i>262</i>&nbsp;     * @param position          the &#39;bar number&#39; to allow multiple
+<i>263</i>&nbsp;     *                          bars along side each other
+<i>264</i>&nbsp;     *                          (1 to infinity)
+<i>265</i>&nbsp;     * @param width             the width of the bar (usually 50 or 25)
+<i>266</i>&nbsp;     */
+<i>267</i>&nbsp;    private void renderSelectedEntityBar(float value, float maxValue, Color progressColour, Color backgroundColour, int position, int width) {
+<b class="nc"><i>268</i>&nbsp;        int whiteW = width;</b>
+<b class="nc"><i>269</i>&nbsp;        int outerSpacing = 10;</b>
+<b class="nc"><i>270</i>&nbsp;        int innerSpacing = 5;</b>
+<b class="nc"><i>271</i>&nbsp;        int spaceForText = 35;</b>
+<b class="nc"><i>272</i>&nbsp;        int barHeight = this.selectedH - outerSpacing*2 - innerSpacing*2 - spaceForText;</b>
+<b class="nc"><i>273</i>&nbsp;        int positionSpacer = position * whiteW;</b>
+<b class="nc"><i>274</i>&nbsp;        int barSpacer = 0;</b>
+<b class="nc"><i>275</i>&nbsp;        if (position &gt; 1) barSpacer = 5;</b>
+<b class="nc"><i>276</i>&nbsp;        game.shapeRenderer.rect(this.selectedX + this.selectedW - positionSpacer - outerSpacing - barSpacer, this.selectedY + outerSpacing, whiteW, this.selectedH - outerSpacing*2 - spaceForText, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);</b>
+<b class="nc"><i>277</i>&nbsp;        game.shapeRenderer.rect(this.selectedX + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, barHeight, backgroundColour, backgroundColour, backgroundColour, backgroundColour);</b>
+<b class="nc"><i>278</i>&nbsp;        game.shapeRenderer.rect(this.selectedX + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, value/maxValue*barHeight, progressColour, progressColour, progressColour, progressColour);</b>
+<i>279</i>&nbsp;    }
+<i>280</i>&nbsp;    /** Renders the buttons to the game screen */
+<i>281</i>&nbsp;    public void renderButtons() {
+<b class="nc"><i>282</i>&nbsp;        game.batch.begin();</b>
+<b class="nc"><i>283</i>&nbsp;        game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);</b>
+<b class="nc"><i>284</i>&nbsp;        game.batch.draw(currentHomeTexture, homeButton.x, homeButton.y, homeButton.width, homeButton.height);</b>
+<b class="nc"><i>285</i>&nbsp;        game.batch.draw(currentPauseTexture, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);</b>
+<b class="nc"><i>286</i>&nbsp;        game.batch.draw(currentInfoTexture, infoButton.x, infoButton.y, infoButton.width, infoButton.height);</b>
+<b class="nc"><i>287</i>&nbsp;        game.batch.end();</b>
+<i>288</i>&nbsp;    }
+<i>289</i>&nbsp;
+<i>290</i>&nbsp;    /** Sets the homeButton texture to homeButtonClicked while the homeButton
+<i>291</i>&nbsp;     * is being clicked on */
+<i>292</i>&nbsp;    public void clickedHomeButton() {
+<b class="nc"><i>293</i>&nbsp;        if (SoundFX.music_enabled){</b>
+<b class="nc"><i>294</i>&nbsp;            SoundFX.sfx_button_clicked.play();</b>
+<i>295</i>&nbsp;        }
+<b class="nc"><i>296</i>&nbsp;        currentHomeTexture = homeButtonClicked;</b>
+<i>297</i>&nbsp;    }
+<i>298</i>&nbsp;
+<i>299</i>&nbsp;    /** Sets the infoButton texture to &quot;Idle&quot; if the previous was &quot;Clicked&quot;,
+<i>300</i>&nbsp;     * else it sets it to &quot;Clicked&quot; */
+<i>301</i>&nbsp;    public void clickedInfoButton() {
+<b class="nc"><i>302</i>&nbsp;        if (currentInfoTexture == infoButtonIdle) {</b>
+<b class="nc"><i>303</i>&nbsp;            currentInfoTexture = infoButtonClicked;</b>
+<i>304</i>&nbsp;        } else {
+<b class="nc"><i>305</i>&nbsp;            currentInfoTexture = infoButtonIdle;</b>
+<i>306</i>&nbsp;        }
+<i>307</i>&nbsp;    }
+<i>308</i>&nbsp;
+<i>309</i>&nbsp;    /** Sets the soundButton texture to either soundOffClickedTexture or
+<i>310</i>&nbsp;     * soundOnClickedTexture while the soundButton is being clicked on */
+<i>311</i>&nbsp;    public void clickedSoundButton() {
+<b class="nc"><i>312</i>&nbsp;        if (SoundFX.music_enabled){</b>
+<b class="nc"><i>313</i>&nbsp;            currentSoundTexture = soundOffClickedTexture;</b>
+<i>314</i>&nbsp;        } else {
+<b class="nc"><i>315</i>&nbsp;            currentSoundTexture = soundOnClickedTexture;</b>
+<i>316</i>&nbsp;        }
+<i>317</i>&nbsp;    }
+<i>318</i>&nbsp;
+<i>319</i>&nbsp;    /** Sets the pauseButton texture that is rendered to the screen and pauses
+<i>320</i>&nbsp;     * and unpauses the game */
+<i>321</i>&nbsp;    public void clickedPauseButton() {
+<i>322</i>&nbsp;
+<b class="nc"><i>323</i>&nbsp;        if (gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {</b>
+<b class="nc"><i>324</i>&nbsp;            currentPauseTexture = pauseButtonClicked;</b>
+<b class="nc"><i>325</i>&nbsp;            if (SoundFX.music_enabled) {</b>
+<b class="nc"><i>326</i>&nbsp;                SoundFX.sfx_pause.play();</b>
+<i>327</i>&nbsp;            }
+<i>328</i>&nbsp;        } else {
+<b class="nc"><i>329</i>&nbsp;            currentPauseTexture = pauseButtonIdle;</b>
+<b class="nc"><i>330</i>&nbsp;            if (SoundFX.music_enabled) {</b>
+<b class="nc"><i>331</i>&nbsp;                SoundFX.sfx_unpause.play();</b>
+<i>332</i>&nbsp;            }
+<i>333</i>&nbsp;        }
+<i>334</i>&nbsp;    }
+<i>335</i>&nbsp;
+<i>336</i>&nbsp;    /** Sets the homeButton texture that is rendered to the screen */
+<i>337</i>&nbsp;    public void idleHomeButton() {
+<b class="nc"><i>338</i>&nbsp;        currentHomeTexture = homeButtonIdle;</b>
+<i>339</i>&nbsp;    }
+<i>340</i>&nbsp;
+<i>341</i>&nbsp;    /** Sets the pauseButton texture that is rendered to the screen */
+<i>342</i>&nbsp;    public void idlePauseButton() {
+<b class="nc"><i>343</i>&nbsp;        currentPauseTexture = pauseButtonIdle;</b>
+<i>344</i>&nbsp;    }
+<i>345</i>&nbsp;
+<i>346</i>&nbsp;    public void idleInfoButton() {
+<b class="nc"><i>347</i>&nbsp;        currentInfoTexture = infoButtonIdle;</b>
+<i>348</i>&nbsp;    }
+<i>349</i>&nbsp;
+<i>350</i>&nbsp;    /** Sets the soundButton texture that is rendered to the screen */
+<i>351</i>&nbsp;    public void idleSoundButton() {
+<b class="nc"><i>352</i>&nbsp;        if (SoundFX.music_enabled){</b>
+<b class="nc"><i>353</i>&nbsp;            currentSoundTexture = soundOffIdleTexture;</b>
+<i>354</i>&nbsp;        } else {
+<b class="nc"><i>355</i>&nbsp;            currentSoundTexture = soundOnIdleTexture;</b>
+<i>356</i>&nbsp;        }
+<i>357</i>&nbsp;    }
+<i>358</i>&nbsp;
+<i>359</i>&nbsp;    /** Toggles the sound, called if &#39;S&#39; key or the sound button
+<i>360</i>&nbsp;     * is pressed */
+<i>361</i>&nbsp;    public void changeSound() {
+<b class="nc"><i>362</i>&nbsp;        if (SoundFX.music_enabled){</b>
+<b class="nc"><i>363</i>&nbsp;            currentSoundTexture = soundOnIdleTexture;</b>
+<b class="nc"><i>364</i>&nbsp;            SoundFX.stopMusic();</b>
+<i>365</i>&nbsp;        } else {
+<b class="nc"><i>366</i>&nbsp;            currentSoundTexture = soundOffIdleTexture;</b>
+<b class="nc"><i>367</i>&nbsp;            SoundFX.playGameMusic();</b>
+<i>368</i>&nbsp;        }
+<i>369</i>&nbsp;    }
+<i>370</i>&nbsp;
+<i>371</i>&nbsp;    /** Renders the text to the screen when the game is paused */
+<i>372</i>&nbsp;    public void renderPauseScreenText() {
+<b class="nc"><i>373</i>&nbsp;        GlyphLayout layout = new GlyphLayout();</b>
+<b class="nc"><i>374</i>&nbsp;        String pauseText1 =  &quot;Game paused \n&quot;;</b>
+<b class="nc"><i>375</i>&nbsp;        String pauseText2 =  &quot;Press &#39;P&#39; or the Pause button \n To return to game&quot;;</b>
+<b class="nc"><i>376</i>&nbsp;        layout.setText(game.font26b, pauseText1);</b>
+<b class="nc"><i>377</i>&nbsp;        layout.setText(game.font26b, pauseText2);</b>
+<i>378</i>&nbsp;
+<b class="nc"><i>379</i>&nbsp;        game.batch.setProjectionMatrix(pauseCamera.combined);</b>
+<b class="nc"><i>380</i>&nbsp;        game.batch.begin();</b>
+<b class="nc"><i>381</i>&nbsp;        game.font50b.draw(game.batch, pauseText1, pauseCamera.viewportWidth/2 - layout.width/2.7f, 100);</b>
+<b class="nc"><i>382</i>&nbsp;        game.font26b.draw(game.batch, pauseText2, pauseCamera.viewportWidth/2 - layout.width/2, 50);</b>
+<b class="nc"><i>383</i>&nbsp;        game.batch.end();</b>
+<i>384</i>&nbsp;    }
+<i>385</i>&nbsp;
+<i>386</i>&nbsp;    /** Renders a circle around the current selected entity,
+<i>387</i>&nbsp;     * showing the maximum range of its attacks
+<i>388</i>&nbsp;     * @param entity The currently selected entity as an object
+<i>389</i>&nbsp;     * @param shapeMapRenderer The ShapeRenderer for the map
+<i>390</i>&nbsp;     */
+<i>391</i>&nbsp;    public void renderSelectedEntityRange(Object entity, ShapeRenderer shapeMapRenderer){
+<i>392</i>&nbsp;        float x, y, range;
+<b class="nc"><i>393</i>&nbsp;        if (entity instanceof FireTruck){</b>
+<b class="nc"><i>394</i>&nbsp;            FireTruck truck = (FireTruck) entity;</b>
+<b class="nc"><i>395</i>&nbsp;            x = truck.getPosition().x + 0.5f;</b>
+<b class="nc"><i>396</i>&nbsp;            y = truck.getPosition().y + 0.5f;</b>
+<b class="nc"><i>397</i>&nbsp;            range = truck.getRange();</b>
+<b class="nc"><i>398</i>&nbsp;        } else if (entity instanceof Fortress){</b>
+<b class="nc"><i>399</i>&nbsp;            Fortress fortress = (Fortress) entity;</b>
+<b class="nc"><i>400</i>&nbsp;            x = fortress.getPosition().x;</b>
+<b class="nc"><i>401</i>&nbsp;            y = fortress.getPosition().y;</b>
+<b class="nc"><i>402</i>&nbsp;            range = fortress.getRange();</b>
+<b class="nc"><i>403</i>&nbsp;        } else {</b>
+<b class="nc"><i>404</i>&nbsp;            x = -1;</b>
+<b class="nc"><i>405</i>&nbsp;            y = -1;</b>
+<b class="nc"><i>406</i>&nbsp;            range = 0;</b>
+<i>407</i>&nbsp;        }
+<b class="nc"><i>408</i>&nbsp;        Gdx.gl.glLineWidth(3);</b>
+<b class="nc"><i>409</i>&nbsp;        shapeMapRenderer.begin(ShapeRenderer.ShapeType.Line);</b>
+<b class="nc"><i>410</i>&nbsp;        shapeMapRenderer.setColor(Color.RED);</b>
+<b class="nc"><i>411</i>&nbsp;        shapeMapRenderer.circle(x, y, range);</b>
+<b class="nc"><i>412</i>&nbsp;        shapeMapRenderer.end();</b>
+<i>413</i>&nbsp;    }
+<i>414</i>&nbsp;
+<i>415</i>&nbsp;    /** Renders the information from the difficulty counter,
+<i>416</i>&nbsp;     * includes the current difficulty and time to difficulty change
+<i>417</i>&nbsp;     * Displayed in the bottom left.
+<i>418</i>&nbsp;     * @param difficultyControl The DifficultyController from the game
+<i>419</i>&nbsp;     */
+<i>420</i>&nbsp;    public void renderDifficultyCounter(DifficultyControl difficultyControl){
+<b class="nc"><i>421</i>&nbsp;        layout = new GlyphLayout(game.font25, difficultyControl.getDifficultyOutput());</b>
+<b class="nc"><i>422</i>&nbsp;        renderDifficultyBackground();</b>
+<b class="nc"><i>423</i>&nbsp;        float fontX = 10;</b>
+<i>424</i>&nbsp;        //float fontY = Gdx.graphics.getHeight() - layout.height/2;
+<b class="nc"><i>425</i>&nbsp;        float fontY = layout.height + 10;</b>
+<b class="nc"><i>426</i>&nbsp;        game.batch.begin();</b>
+<b class="nc"><i>427</i>&nbsp;        game.font25.draw(game.batch, difficultyControl.getDifficultyOutput(), fontX, fontY);</b>
+<b class="nc"><i>428</i>&nbsp;        game.batch.end();</b>
+<i>429</i>&nbsp;    }
+<i>430</i>&nbsp;
+<i>431</i>&nbsp;    /** Renders the dark background behind the difficulty counter
+<i>432</i>&nbsp;     *
+<i>433</i>&nbsp;     */
+<i>434</i>&nbsp;    private void renderDifficultyBackground(){
+<b class="nc"><i>435</i>&nbsp;        Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);</b>
+<b class="nc"><i>436</i>&nbsp;        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);</b>
+<b class="nc"><i>437</i>&nbsp;        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);</b>
+<b class="nc"><i>438</i>&nbsp;        game.shapeRenderer.setColor(0, 0, 0, 0.5f);</b>
+<b class="nc"><i>439</i>&nbsp;        game.shapeRenderer.rect(0, 0, 325, 55);</b>
+<b class="nc"><i>440</i>&nbsp;        game.shapeRenderer.end();</b>
+<i>441</i>&nbsp;    }
+<i>442</i>&nbsp;
+<b class="nc"><i>443</i>&nbsp;    public Rectangle getHomeButton() { return this.homeButton; }</b>
+<i>444</i>&nbsp;
+<b class="nc"><i>445</i>&nbsp;    public Rectangle getSoundButton() { return this.soundButton; }</b>
+<i>446</i>&nbsp;
+<b class="nc"><i>447</i>&nbsp;    public Rectangle getPauseButton() { return this.pauseButton; }</b>
+<i>448</i>&nbsp;
+<b class="nc"><i>449</i>&nbsp;    public Rectangle getInfoButton() { return this.infoButton; }</b>
+<i>450</i>&nbsp;
+<i>451</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-02-16 18:13</div>
+</div>
+</body>
+</html>

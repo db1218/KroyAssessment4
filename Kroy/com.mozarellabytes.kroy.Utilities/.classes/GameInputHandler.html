@@ -1,0 +1,378 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GameInputHandler</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy.Utilities</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GameInputHandler (com.mozarellabytes.kroy.Utilities)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameInputHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 92)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy.Utilities;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.badlogic.gdx.Gdx;
+<i>4</i>&nbsp;import com.badlogic.gdx.Input;
+<i>5</i>&nbsp;import com.badlogic.gdx.InputProcessor;
+<i>6</i>&nbsp;import com.badlogic.gdx.math.Vector2;
+<i>7</i>&nbsp;import com.badlogic.gdx.math.Vector3;
+<i>8</i>&nbsp;import com.mozarellabytes.kroy.Entities.FireTruck;
+<i>9</i>&nbsp;import com.mozarellabytes.kroy.Entities.Fortress;
+<i>10</i>&nbsp;import com.mozarellabytes.kroy.Screens.GameScreen;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;public class GameInputHandler implements InputProcessor {
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    /** The game screen that this input handler controls */
+<i>15</i>&nbsp;    private final GameScreen gameScreen;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    /** The graphical user interface - contains the buttons */
+<i>18</i>&nbsp;    private final GUI gui;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    /** Constructs the GameInputHandler
+<i>21</i>&nbsp;     *
+<i>22</i>&nbsp;     * @param gameScreen The game screen that this input handler controls
+<i>23</i>&nbsp;     * @param gui The graphical user interface - contains the buttons
+<i>24</i>&nbsp;     */
+<b class="nc"><i>25</i>&nbsp;    public GameInputHandler(GameScreen gameScreen, GUI gui) {</b>
+<b class="nc"><i>26</i>&nbsp;        this.gameScreen = gameScreen;</b>
+<b class="nc"><i>27</i>&nbsp;        this.gui = gui;</b>
+<i>28</i>&nbsp;    }
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    /** Called when a key was pressed
+<i>31</i>&nbsp;     *
+<i>32</i>&nbsp;     * This handles toggling sound, the control screen, the pause
+<i>33</i>&nbsp;     * screen and makes the fire trucks attack a fortress that is
+<i>34</i>&nbsp;     * within it&#39;s range
+<i>35</i>&nbsp;     *
+<i>36</i>&nbsp;     * @param keycode one of the constants in {@link Input.Keys}
+<i>37</i>&nbsp;     * @return whether the input was processed */
+<i>38</i>&nbsp;    @Override
+<i>39</i>&nbsp;    public boolean keyDown(int keycode) {
+<b class="nc"><i>40</i>&nbsp;        switch (keycode) {</b>
+<i>41</i>&nbsp;            case Input.Keys.ESCAPE:
+<b class="nc"><i>42</i>&nbsp;                Gdx.app.exit();</b>
+<b class="nc"><i>43</i>&nbsp;                System.exit(1);</b>
+<b class="nc"><i>44</i>&nbsp;                break;</b>
+<i>45</i>&nbsp;                /* Outdated code
+<i>46</i>&nbsp;            case Input.Keys.A:
+<i>47</i>&nbsp;                System.out.println(gameScreen.gameState.getTrucksInAttackRange());
+<i>48</i>&nbsp;                if (SoundFX.music_enabled &amp;&amp; gameScreen.gameState.getTrucksInAttackRange() &gt; 0) {
+<i>49</i>&nbsp;                    SoundFX.playTruckAttack();
+<i>50</i>&nbsp;                }
+<i>51</i>&nbsp;                for (FireTruck truck: gameScreen.getStation().getTrucks()){
+<i>52</i>&nbsp;                    truck.setAttacking(true);
+<i>53</i>&nbsp;                }
+<i>54</i>&nbsp;                break;
+<i>55</i>&nbsp;                 */
+<i>56</i>&nbsp;            case Input.Keys.C:
+<b class="nc"><i>57</i>&nbsp;                gameScreen.toControlScreen();</b>
+<b class="nc"><i>58</i>&nbsp;                break;</b>
+<i>59</i>&nbsp;            case Input.Keys.S:
+<b class="nc"><i>60</i>&nbsp;                gui.clickedSoundButton();</b>
+<b class="nc"><i>61</i>&nbsp;                gui.changeSound();</b>
+<b class="nc"><i>62</i>&nbsp;                gui.idleSoundButton();</b>
+<b class="nc"><i>63</i>&nbsp;                break;</b>
+<i>64</i>&nbsp;            case Input.Keys.SPACE:
+<i>65</i>&nbsp;            case Input.Keys.P:
+<b class="nc"><i>66</i>&nbsp;                gui.clickedPauseButton();</b>
+<b class="nc"><i>67</i>&nbsp;                gameScreen.changeState();</b>
+<b class="nc"><i>68</i>&nbsp;                break;</b>
+<i>69</i>&nbsp;            case Input.Keys.Q:
+<b class="nc"><i>70</i>&nbsp;                if(gameScreen.selectedTruck != null) {</b>
+<b class="nc"><i>71</i>&nbsp;                    if (!gameScreen.selectedTruck.getMoving()) {</b>
+<b class="nc"><i>72</i>&nbsp;                        gameScreen.selectedTruck.resetPath();</b>
+<i>73</i>&nbsp;                    }
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;                }
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;        }
+<b class="nc"><i>79</i>&nbsp;        return true;</b>
+<i>80</i>&nbsp;    }
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    @Override
+<i>83</i>&nbsp;    public boolean keyUp(int keycode) {
+<i>84</i>&nbsp;        /*
+<i>85</i>&nbsp;        if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
+<i>86</i>&nbsp;            if (keycode == Input.Keys.A) {
+<i>87</i>&nbsp;                SoundFX.stopTruckAttack();
+<i>88</i>&nbsp;                for (FireTruck truck : gameScreen.getStation().getTrucks()) {
+<i>89</i>&nbsp;                    truck.setAttacking(false);
+<i>90</i>&nbsp;                }
+<i>91</i>&nbsp;            }
+<i>92</i>&nbsp;        }
+<i>93</i>&nbsp;         */
+<b class="nc"><i>94</i>&nbsp;        return true;</b>
+<i>95</i>&nbsp;    }
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    @Override
+<i>98</i>&nbsp;    public boolean keyTyped(char character) {
+<b class="nc"><i>99</i>&nbsp;        return false;</b>
+<i>100</i>&nbsp;    }
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;    /** Checks whether the user clicks on a firetruck, fortress, button or the end
+<i>103</i>&nbsp;     * of a firetrucks path
+<i>104</i>&nbsp;     * @param screenX The x coordinate, origin is in the upper left corner
+<i>105</i>&nbsp;     * @param screenY The y coordinate, origin is in the upper left corner
+<i>106</i>&nbsp;     * @param pointer the pointer for the event.
+<i>107</i>&nbsp;     * @param button the button
+<i>108</i>&nbsp;     * @return whether the input was processed */
+<i>109</i>&nbsp;    @Override
+<i>110</i>&nbsp;    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+<b class="nc"><i>111</i>&nbsp;        Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);</b>
+<i>112</i>&nbsp;
+<b class="nc"><i>113</i>&nbsp;            if (gameScreen.isRoad((int) clickCoordinates.x, (int) clickCoordinates.y)) {</b>
+<i>114</i>&nbsp;
+<b class="nc"><i>115</i>&nbsp;                if (gameScreen.checkClick(clickCoordinates)) {</b>
+<b class="nc"><i>116</i>&nbsp;                    gameScreen.selectedTruck.resetPath();</b>
+<b class="nc"><i>117</i>&nbsp;                    gameScreen.selectedTruck.addTileToPath(clickCoordinates);</b>
+<b class="nc"><i>118</i>&nbsp;                    System.out.print(&quot;\n&quot; + clickCoordinates + &quot;\n&quot; + gameScreen.selectedTruck.getMoving());</b>
+<i>119</i>&nbsp;
+<b class="nc"><i>120</i>&nbsp;                } else if (!gameScreen.checkTrailClick(clickCoordinates) &amp;&amp; !checkFortressClick(clickCoordinates)) {</b>
+<b class="nc"><i>121</i>&nbsp;                    gameScreen.selectedTruck = null;</b>
+<b class="nc"><i>122</i>&nbsp;                    gameScreen.selectedEntity = null;</b>
+<i>123</i>&nbsp;                }
+<i>124</i>&nbsp;            } else {
+<b class="nc"><i>125</i>&nbsp;                checkFortressClick(clickCoordinates);</b>
+<i>126</i>&nbsp;            }
+<i>127</i>&nbsp;
+<b class="nc"><i>128</i>&nbsp;        checkButtonClick(new Vector2(screenX, Gdx.graphics.getHeight() - screenY));</b>
+<b class="nc"><i>129</i>&nbsp;        return true;</b>
+<i>130</i>&nbsp;    }
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;    /** The user draws a path for the fire truck, if the path is valid the coordinate
+<i>133</i>&nbsp;     * positions are added to the trucks path
+<i>134</i>&nbsp;     * @param pointer the pointer for the event.
+<i>135</i>&nbsp;     * @return whether the input was processed */
+<i>136</i>&nbsp;    @Override
+<i>137</i>&nbsp;    public boolean touchDragged(int screenX, int screenY, int pointer) {
+<i>138</i>&nbsp;
+<b class="nc"><i>139</i>&nbsp;            if (gameScreen.selectedTruck != null) {</b>
+<b class="nc"><i>140</i>&nbsp;                Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);</b>
+<b class="nc"><i>141</i>&nbsp;                gameScreen.selectedTruck.addTileToPath(clickCoordinates);</b>
+<i>142</i>&nbsp;            }
+<i>143</i>&nbsp;
+<b class="nc"><i>144</i>&nbsp;        return true;</b>
+<i>145</i>&nbsp;    }
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    /** Check if a user clicks up on a button or if the user draws multiple
+<i>148</i>&nbsp;     * trucks to end on the same tile
+<i>149</i>&nbsp;     *
+<i>150</i>&nbsp;     * @param pointer the pointer for the event.
+<i>151</i>&nbsp;     * @param button the button
+<i>152</i>&nbsp;     * @return whether the input was processed */
+<i>153</i>&nbsp;    @Override
+<i>154</i>&nbsp;    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+<i>155</i>&nbsp;
+<b class="nc"><i>156</i>&nbsp;            if (gameScreen.selectedTruck != null) {</b>
+<b class="nc"><i>157</i>&nbsp;                if (!gameScreen.selectedTruck.trailPath.isEmpty()) {</b>
+<b class="nc"><i>158</i>&nbsp;                    if (doTrucksHaveSameLastTile()){</b>
+<b class="nc"><i>159</i>&nbsp;                        giveTrucksDifferentLastTiles(gameScreen.selectedTruck);</b>
+<i>160</i>&nbsp;                    }
+<i>161</i>&nbsp;                }
+<b class="nc"><i>162</i>&nbsp;                if(this.gameScreen.getState().equals((GameScreen.PlayState.PAUSE))) {</b>
+<b class="nc"><i>163</i>&nbsp;                    gameScreen.selectedTruck.setMoving(false);</b>
+<i>164</i>&nbsp;                } else {
+<b class="nc"><i>165</i>&nbsp;                    gameScreen.selectedTruck.setMoving(true);</b>
+<i>166</i>&nbsp;                }
+<i>167</i>&nbsp;
+<i>168</i>&nbsp;            }
+<i>169</i>&nbsp;
+<b class="nc"><i>170</i>&nbsp;        checkButtonUnclick(screenX, screenY);</b>
+<b class="nc"><i>171</i>&nbsp;        return true;</b>
+<i>172</i>&nbsp;    }
+<i>173</i>&nbsp;
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;    @Override
+<i>176</i>&nbsp;    public boolean mouseMoved(int screenX, int screenY) {
+<b class="nc"><i>177</i>&nbsp;        return false;</b>
+<i>178</i>&nbsp;    }
+<i>179</i>&nbsp;
+<i>180</i>&nbsp;    @Override
+<i>181</i>&nbsp;    public boolean scrolled(int amount) {
+<b class="nc"><i>182</i>&nbsp;        return false;</b>
+<i>183</i>&nbsp;    }
+<i>184</i>&nbsp;
+<i>185</i>&nbsp;    /** Checks if the user has drawn more than one truck to the same end tile.
+<i>186</i>&nbsp;     *
+<i>187</i>&nbsp;     * @return &lt;code&gt; true &lt;/code&gt; If more than one truck has the same end tile
+<i>188</i>&nbsp;     *      * &lt;code&gt; false &lt;/code&gt; Otherwise
+<i>189</i>&nbsp;     */
+<i>190</i>&nbsp;    private boolean doTrucksHaveSameLastTile() {
+<b class="nc"><i>191</i>&nbsp;        for (FireTruck truck : gameScreen.getStation().getTrucks()) {</b>
+<b class="nc"><i>192</i>&nbsp;            if (!truck.equals(gameScreen.selectedTruck)) {</b>
+<b class="nc"><i>193</i>&nbsp;                if (!truck.getPath().isEmpty() &amp;&amp; !truck.getTrailPath().isEmpty()){</b>
+<b class="nc"><i>194</i>&nbsp;                    if (truck.trailPath.last().equals(gameScreen.selectedTruck.trailPath.last())){</b>
+<b class="nc"><i>195</i>&nbsp;                        return true;</b>
+<i>196</i>&nbsp;                    }
+<b class="nc"><i>197</i>&nbsp;                } else if (truck.getPosition().equals(gameScreen.selectedTruck.trailPath.last())) {</b>
+<b class="nc"><i>198</i>&nbsp;                    return true;</b>
+<i>199</i>&nbsp;                }
+<i>200</i>&nbsp;            }
+<b class="nc"><i>201</i>&nbsp;        }</b>
+<b class="nc"><i>202</i>&nbsp;        return false;</b>
+<i>203</i>&nbsp;    }
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;    /** The method for giving trucks that have the same end tiles adjacent end tiles
+<i>206</i>&nbsp;     * so that they do not end up on the same tile
+<i>207</i>&nbsp;     * @param selectedTruck the truck that has to be moved so the two trucks end up
+<i>208</i>&nbsp;     *                      on different tiles
+<i>209</i>&nbsp;     */
+<i>210</i>&nbsp;    private void giveTrucksDifferentLastTiles(FireTruck selectedTruck){
+<b class="nc"><i>211</i>&nbsp;        selectedTruck.trailPath.removeLast();</b>
+<b class="nc"><i>212</i>&nbsp;        while (!selectedTruck.trailPath.isEmpty() &amp;&amp; !selectedTruck.trailPath.last().equals(selectedTruck.path.last())) {</b>
+<b class="nc"><i>213</i>&nbsp;            selectedTruck.path.removeLast();</b>
+<i>214</i>&nbsp;        }
+<i>215</i>&nbsp;    }
+<i>216</i>&nbsp;
+<i>217</i>&nbsp;    /** Maps the position of where the user clicked on the screen to the tile that they clicked on
+<i>218</i>&nbsp;     *
+<i>219</i>&nbsp;     * @param screenX The x coordinate, origin is in the upper left corner
+<i>220</i>&nbsp;     * @param screenY The y coordinate, origin is in the upper left corner
+<i>221</i>&nbsp;     * @return a Vector2 containing the tile that the user clicked on
+<i>222</i>&nbsp;     */
+<i>223</i>&nbsp;    private Vector2 generateClickCoordinates(int screenX, int screenY){
+<b class="nc"><i>224</i>&nbsp;        Vector2 clickCoordinates = new Vector2(screenX, screenY);</b>
+<b class="nc"><i>225</i>&nbsp;        Vector3 position = gameScreen.getCamera().unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));</b>
+<b class="nc"><i>226</i>&nbsp;        return new Vector2((int) position.x, (int) position.y);</b>
+<i>227</i>&nbsp;    }
+<i>228</i>&nbsp;
+<i>229</i>&nbsp;
+<i>230</i>&nbsp;    /** Checks if the user clicked on the home, pause or sound button
+<i>231</i>&nbsp;     * and changes the sprite accordingly
+<i>232</i>&nbsp;     * @param position2d The tile that was clicked
+<i>233</i>&nbsp;     */
+<i>234</i>&nbsp;    private void checkButtonClick(Vector2 position2d){
+<b class="nc"><i>235</i>&nbsp;        if (gui.getHomeButton().contains(position2d)) {</b>
+<b class="nc"><i>236</i>&nbsp;            gui.clickedHomeButton();</b>
+<b class="nc"><i>237</i>&nbsp;        } else if (gui.getPauseButton().contains(position2d)){</b>
+<b class="nc"><i>238</i>&nbsp;            gui.clickedPauseButton();</b>
+<b class="nc"><i>239</i>&nbsp;        } else if (gui.getSoundButton().contains(position2d)) {</b>
+<b class="nc"><i>240</i>&nbsp;            gui.clickedSoundButton();</b>
+<b class="nc"><i>241</i>&nbsp;        } else if (gui.getInfoButton().contains(position2d)) {</b>
+<b class="nc"><i>242</i>&nbsp;            gui.clickedInfoButton();</b>
+<i>243</i>&nbsp;        }
+<i>244</i>&nbsp;    }
+<i>245</i>&nbsp;
+<i>246</i>&nbsp;    /** Checks if user clicked on a fortress, if it did this fortress
+<i>247</i>&nbsp;     * becomes the selected entity meaning its stats will be rendered
+<i>248</i>&nbsp;     * in the top right hand corner
+<i>249</i>&nbsp;     * @param position2d the tile that was clicked
+<i>250</i>&nbsp;     * @return &lt;code&gt; true &lt;/code&gt; If a fortress has been clicked on
+<i>251</i>&nbsp;     *         &lt;code&gt; false &lt;/code&gt; Otherwise
+<i>252</i>&nbsp;     */
+<i>253</i>&nbsp;    private boolean checkFortressClick(Vector2 position2d) {
+<b class="nc"><i>254</i>&nbsp;        for (Fortress fortress : gameScreen.getFortresses()) {</b>
+<b class="nc"><i>255</i>&nbsp;            if (fortress.getArea().contains(position2d)) {</b>
+<b class="nc"><i>256</i>&nbsp;                gameScreen.selectedEntity = fortress;</b>
+<b class="nc"><i>257</i>&nbsp;                return true;</b>
+<i>258</i>&nbsp;            }
+<b class="nc"><i>259</i>&nbsp;        }</b>
+<b class="nc"><i>260</i>&nbsp;        gameScreen.selectedTruck = null;</b>
+<b class="nc"><i>261</i>&nbsp;        gameScreen.selectedEntity = null;</b>
+<b class="nc"><i>262</i>&nbsp;        return false;</b>
+<i>263</i>&nbsp;    }
+<i>264</i>&nbsp;
+<i>265</i>&nbsp;    /** Checks if the user has lifted the mouse over a button and triggers the
+<i>266</i>&nbsp;     * appropriate action
+<i>267</i>&nbsp;     * @param screenX The x coordinate, origin is in the upper left corner
+<i>268</i>&nbsp;     * @param screenY The y coordinate, origin is in the upper left corner
+<i>269</i>&nbsp;     */
+<i>270</i>&nbsp;    private void checkButtonUnclick(int screenX, int screenY){
+<b class="nc"><i>271</i>&nbsp;        Vector2 screenCoords = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);</b>
+<i>272</i>&nbsp;
+<b class="nc"><i>273</i>&nbsp;        if (gui.getHomeButton().contains(screenCoords)) {</b>
+<b class="nc"><i>274</i>&nbsp;            gameScreen.toHomeScreen();</b>
+<i>275</i>&nbsp;        } else {
+<b class="nc"><i>276</i>&nbsp;            gui.idleHomeButton();</b>
+<i>277</i>&nbsp;        }
+<i>278</i>&nbsp;
+<b class="nc"><i>279</i>&nbsp;        if (gui.getSoundButton().contains(screenCoords)){</b>
+<b class="nc"><i>280</i>&nbsp;            gui.changeSound();</b>
+<i>281</i>&nbsp;        } else {
+<b class="nc"><i>282</i>&nbsp;            gui.idleSoundButton();</b>
+<i>283</i>&nbsp;        }
+<i>284</i>&nbsp;
+<b class="nc"><i>285</i>&nbsp;        if (gui.getPauseButton().contains(screenCoords)){</b>
+<b class="nc"><i>286</i>&nbsp;            gameScreen.changeState();</b>
+<i>287</i>&nbsp;        } else {
+<b class="nc"><i>288</i>&nbsp;            gui.idlePauseButton();</b>
+<i>289</i>&nbsp;        }
+<i>290</i>&nbsp;
+<b class="nc"><i>291</i>&nbsp;        if (gui.getInfoButton().contains(screenCoords)){</b>
+<b class="nc"><i>292</i>&nbsp;            gameScreen.toControlScreen();</b>
+<i>293</i>&nbsp;        }
+<i>294</i>&nbsp;    }
+<i>295</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-02-16 18:13</div>
+</div>
+</body>
+</html>

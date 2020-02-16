@@ -1,0 +1,144 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DifficultyControl</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy.Utilities</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DifficultyControl (com.mozarellabytes.kroy.Utilities)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DifficultyControl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 13)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy.Utilities;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.text.DecimalFormat;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;public class DifficultyControl {
+<i>6</i>&nbsp;    /** The value of the current difficulty level */
+<i>7</i>&nbsp;    private Integer currentDifficulty;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;    /** The amount of time, in seconds, for the difficulty to increment by one */
+<i>10</i>&nbsp;    private float difficultyChangeInterval;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    /** The amount of time that has passed since the last increment of difficulty */
+<i>13</i>&nbsp;    private float currentTime;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    /** The constructor for DifficultyControl
+<i>17</i>&nbsp;     */
+<b class="nc"><i>18</i>&nbsp;    public DifficultyControl(){</b>
+<b class="nc"><i>19</i>&nbsp;        currentDifficulty = 0;</b>
+<b class="nc"><i>20</i>&nbsp;        difficultyChangeInterval = 60f;</b>
+<b class="nc"><i>21</i>&nbsp;        currentTime = 60;</b>
+<i>22</i>&nbsp;    }
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    /** Updates the amount of time to a change in difficulty
+<i>26</i>&nbsp;     *
+<i>27</i>&nbsp;     * @param TimeDelta The amount of time since the last time update
+<i>28</i>&nbsp;     */
+<i>29</i>&nbsp;    public void incrementCurrentTime(float TimeDelta){
+<b class="nc"><i>30</i>&nbsp;        currentTime -= TimeDelta;</b>
+<b class="nc"><i>31</i>&nbsp;        changeDifficulty();</b>
+<i>32</i>&nbsp;    }
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    /** Gives the difficulty information as String that can be displayed by the GUI
+<i>35</i>&nbsp;     *
+<i>36</i>&nbsp;     * @return A String containing the current difficulty and time to the next difficulty increment
+<i>37</i>&nbsp;     */
+<i>38</i>&nbsp;    public String getDifficultyOutput(){
+<b class="nc"><i>39</i>&nbsp;        DecimalFormat decimalFormat = new DecimalFormat(&quot;#.0&quot;);</b>
+<b class="nc"><i>40</i>&nbsp;        return (&quot;Difficulty:&quot; + String.valueOf(currentDifficulty) + &quot;\n&quot; +</b>
+<b class="nc"><i>41</i>&nbsp;                &quot;Time To Increase:&quot; + decimalFormat.format(currentTime));</b>
+<i>42</i>&nbsp;    }
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    /** Checks if enough time has passed for the difficulty to increment
+<i>45</i>&nbsp;     * Increases difficulty by 1 if needed
+<i>46</i>&nbsp;     */
+<i>47</i>&nbsp;    private void changeDifficulty(){
+<b class="nc"><i>48</i>&nbsp;        if (currentTime &lt;= 0){</b>
+<b class="nc"><i>49</i>&nbsp;            currentTime = difficultyChangeInterval;</b>
+<b class="nc"><i>50</i>&nbsp;            currentDifficulty++;</b>
+<i>51</i>&nbsp;        }
+<i>52</i>&nbsp;    }
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    /** Returns the current difficulty level as a multiplier to be used
+<i>55</i>&nbsp;     *
+<i>56</i>&nbsp;     * @return A float equal to one tenth of the current difficulty level
+<i>57</i>&nbsp;     */
+<i>58</i>&nbsp;    public float getDifficultyMultiplier(){
+<b class="nc"><i>59</i>&nbsp;        return (currentDifficulty + 10)/10;</b>
+<i>60</i>&nbsp;    }
+<i>61</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-02-16 18:13</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,342 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: FireStation</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy.Entities</a> ]
+</div>
+
+<h1>Coverage Summary for Class: FireStation (com.mozarellabytes.kroy.Entities)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FireStation</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    47.4%
+  </span>
+  <span class="absValue">
+    (9/ 19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    74.4%
+  </span>
+  <span class="absValue">
+    (61/ 82)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy.Entities;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.badlogic.gdx.Gdx;
+<i>4</i>&nbsp;import com.badlogic.gdx.graphics.Color;
+<i>5</i>&nbsp;import com.badlogic.gdx.graphics.Texture;
+<i>6</i>&nbsp;import com.badlogic.gdx.graphics.g2d.Batch;
+<i>7</i>&nbsp;import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+<i>8</i>&nbsp;import com.badlogic.gdx.math.Rectangle;
+<i>9</i>&nbsp;import com.badlogic.gdx.math.Vector2;
+<i>10</i>&nbsp;import java.util.ArrayList;
+<i>11</i>&nbsp;import com.mozarellabytes.kroy.Utilities.SoundFX;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;/**
+<i>15</i>&nbsp; * FireStation is a class created when it is called from GameScreen.
+<i>16</i>&nbsp; * This class contains the location and sprite of the FireStation.
+<i>17</i>&nbsp; * The FireStation spawns, repairs and refills the firetrucks and
+<i>18</i>&nbsp; * ensures that trucks do not collide
+<i>19</i>&nbsp; */
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;public class FireStation {
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    /**
+<i>24</i>&nbsp;     * X and Y co-ordinates of the FireStation&#39;s position on the game screen
+<i>25</i>&nbsp;     * in tiles
+<i>26</i>&nbsp;     */
+<i>27</i>&nbsp;    private final int x,y;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    private final int w;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /** The height of the sprite measured in tiles */
+<i>32</i>&nbsp;    private final int h;
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    private final Rectangle area;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    /** The tile where new FireTrucks are spawned */
+<i>37</i>&nbsp;    private final Vector2 spawnTile;
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    /** A tile inside the station where a truck can be repaired and refilled */
+<i>40</i>&nbsp;    private final Vector2 bayTile1;
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    /** A second tile inside the station where a truck can be repaired and
+<i>43</i>&nbsp;     * refilled */
+<i>44</i>&nbsp;    private final Vector2 bayTile2;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    /** The sprite image for the station */
+<i>47</i>&nbsp;    private final Texture texture, deadTexture;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    /** List of active fire trucks
+<i>50</i>&nbsp;     * @link FireTruck */
+<i>51</i>&nbsp;    private final ArrayList&lt;FireTruck&gt; trucks;
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    private final ArrayList&lt;Patrol&gt; patrols;
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    private int HP;
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    /**
+<i>58</i>&nbsp;     * Constructs the Firestation with at a given position with locations
+<i>59</i>&nbsp;     * for the repair and refill tiles and the spawn tiles.
+<i>60</i>&nbsp;     *
+<i>61</i>&nbsp;     * @param x  x coordinate of Station in tiles (lower left point)
+<i>62</i>&nbsp;     * @param y  y coordinate of Station in tiles (lower left point)
+<i>63</i>&nbsp;     */
+<b class="fc"><i>64</i>&nbsp;    public FireStation(int x, int y) {</b>
+<b class="fc"><i>65</i>&nbsp;        this.x = x;</b>
+<b class="fc"><i>66</i>&nbsp;        this.y = y;</b>
+<b class="fc"><i>67</i>&nbsp;        this.w=5;</b>
+<b class="fc"><i>68</i>&nbsp;        this.h=3;</b>
+<b class="fc"><i>69</i>&nbsp;        this.spawnTile = new Vector2(x+3, y);</b>
+<b class="fc"><i>70</i>&nbsp;        this.bayTile1 = new Vector2(x+1, y);</b>
+<b class="fc"><i>71</i>&nbsp;        this.bayTile2 = new Vector2(x+2, y);</b>
+<b class="fc"><i>72</i>&nbsp;        this.texture = new Texture(Gdx.files.internal(&quot;sprites/station/station.png&quot;));</b>
+<b class="fc"><i>73</i>&nbsp;        this.deadTexture = new Texture(Gdx.files.internal(&quot;sprites/station/station.png&quot;)); // change me pls</b>
+<b class="fc"><i>74</i>&nbsp;        this.trucks = new ArrayList&lt;FireTruck&gt;();</b>
+<b class="fc"><i>75</i>&nbsp;        this.patrols = new ArrayList&lt;Patrol&gt;();</b>
+<b class="fc"><i>76</i>&nbsp;        this.HP=100;</b>
+<b class="fc"><i>77</i>&nbsp;        this.area = new Rectangle(this.x - (float) this.w/2, this.y - (float) this.h/2,</b>
+<i>78</i>&nbsp;                this.w, this.h);
+<b class="fc"><i>79</i>&nbsp;    }</b>
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;    /**
+<i>84</i>&nbsp;     * Creates a fire truck of type specified from FireTruckType. It signals to
+<i>85</i>&nbsp;     * the game state that a truck has been created and add the truck to the
+<i>86</i>&nbsp;     * arraylist this.truck so the game screen can iterate through all active trucks
+<i>87</i>&nbsp;     * @param truck truck to add to the arrayList of active trucks
+<i>88</i>&nbsp;     *
+<i>89</i>&nbsp;     */
+<i>90</i>&nbsp;    public void spawn(FireTruck truck) {
+<b class="fc"><i>91</i>&nbsp;        if (SoundFX.music_enabled) {</b>
+<b class="fc"><i>92</i>&nbsp;            SoundFX.sfx_truck_spawn.play();</b>
+<i>93</i>&nbsp;        }
+<b class="fc"><i>94</i>&nbsp;        this.trucks.add(truck);</b>
+<b class="fc"><i>95</i>&nbsp;    }</b>
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    public void spawn(Patrol patrol) {
+<b class="nc"><i>98</i>&nbsp;        if (SoundFX.music_enabled) {</b>
+<b class="nc"><i>99</i>&nbsp;            SoundFX.sfx_truck_spawn.play();</b>
+<i>100</i>&nbsp;        }
+<b class="nc"><i>101</i>&nbsp;        this.patrols.add(patrol);</b>
+<b class="nc"><i>102</i>&nbsp;    }</b>
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    public void drawStats(ShapeRenderer shapeMapRenderer) {
+<b class="nc"><i>105</i>&nbsp;        shapeMapRenderer.rect(this.getPosition().x + 2.26f, this.getPosition().y + 2.9f, 0.6f, 1.2f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);</b>
+<b class="nc"><i>106</i>&nbsp;        shapeMapRenderer.rect(this.getPosition().x + 2.38f, this.getPosition().y + 3f, 0.36f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);</b>
+<b class="nc"><i>107</i>&nbsp;        shapeMapRenderer.rect(this.getPosition().x + 2.38f, this.getPosition().y + 3f, 0.36f, this.getHP() / 100 * 1f, Color.RED, Color.RED, Color.RED, Color.RED);</b>
+<b class="nc"><i>108</i>&nbsp;    }</b>
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;    /**
+<i>111</i>&nbsp;     * Calls the repair and refill methods. When a truck is within the station
+<i>112</i>&nbsp;     * (the trucks position is the same as one of the station&#39;s bay tiles) the
+<i>113</i>&nbsp;     * truck will repair and refill at the same time.
+<i>114</i>&nbsp;     */
+<i>115</i>&nbsp;    public void restoreTrucks() {
+<b class="fc"><i>116</i>&nbsp;        for (FireTruck truck : this.trucks) {</b>
+<b class="fc"><i>117</i>&nbsp;            if (truck.getPosition().equals(this.bayTile1) || truck.getPosition().equals(this.bayTile2)) {</b>
+<b class="fc"><i>118</i>&nbsp;                repair(truck);</b>
+<b class="fc"><i>119</i>&nbsp;                refill(truck);</b>
+<i>120</i>&nbsp;            }
+<b class="fc"><i>121</i>&nbsp;        }</b>
+<b class="fc"><i>122</i>&nbsp;    }</b>
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;    /**
+<i>126</i>&nbsp;     * Increments the truck&#39;s HP until the truck&#39;s HP equals the truck&#39;s maximum
+<i>127</i>&nbsp;     * HP
+<i>128</i>&nbsp;     * @param truck truck that is being refilled
+<i>129</i>&nbsp;     */
+<i>130</i>&nbsp;    private void refill(FireTruck truck) {
+<b class="fc"><i>131</i>&nbsp;        if (truck.getReserve() &lt; truck.type.getMaxReserve()) {</b>
+<b class="fc"><i>132</i>&nbsp;            truck.refill(Math.min(0.6f, truck.getType().getMaxReserve() - truck.getReserve()));</b>
+<i>133</i>&nbsp;        }
+<b class="fc"><i>134</i>&nbsp;    }</b>
+<i>135</i>&nbsp;
+<i>136</i>&nbsp;    /**
+<i>137</i>&nbsp;     * Increments the truck&#39;s reserve until the truck&#39;s reserve equals the
+<i>138</i>&nbsp;     * truck&#39;s maximum reserve
+<i>139</i>&nbsp;     * @param truck truck that is being repaired
+<i>140</i>&nbsp;     */
+<i>141</i>&nbsp;    private void repair(FireTruck truck) {
+<b class="fc"><i>142</i>&nbsp;        if (truck.getHP() &lt; truck.type.getMaxHP()) {</b>
+<b class="fc"><i>143</i>&nbsp;            truck.repair(Math.min(0.4f, truck.getType().getMaxHP() - truck.getHP()));</b>
+<i>144</i>&nbsp;        }
+<b class="fc"><i>145</i>&nbsp;    }</b>
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    /**
+<i>148</i>&nbsp;     * Called when a truck&#39;s HP reaches 0, it removes the truck from the
+<i>149</i>&nbsp;     * array list of active trucks and the game screen.
+<i>150</i>&nbsp;     *
+<i>151</i>&nbsp;     * @param truck truck that is being removed from the arrayList of active trucks
+<i>152</i>&nbsp;     */
+<i>153</i>&nbsp;    public void destroyTruck(FireTruck truck) {
+<b class="nc"><i>154</i>&nbsp;        this.trucks.remove(truck);</b>
+<b class="nc"><i>155</i>&nbsp;    }</b>
+<i>156</i>&nbsp;
+<i>157</i>&nbsp;    public void destroyPatrol(Patrol patrol) {
+<b class="nc"><i>158</i>&nbsp;        this.patrols.remove(patrol);</b>
+<b class="nc"><i>159</i>&nbsp;    }</b>
+<i>160</i>&nbsp;
+<i>161</i>&nbsp;
+<i>162</i>&nbsp;    public void damage(float HP){
+<b class="nc"><i>163</i>&nbsp;        this.HP -= HP;</b>
+<b class="nc"><i>164</i>&nbsp;    }</b>
+<i>165</i>&nbsp;
+<i>166</i>&nbsp;    public float getHP() {
+<b class="nc"><i>167</i>&nbsp;        return this.HP;</b>
+<i>168</i>&nbsp;    }
+<i>169</i>&nbsp;    /**
+<i>170</i>&nbsp;     * Checks that no more than one truck occupies a tile at a time by checking trucks
+<i>171</i>&nbsp;     * are not moving towards each other and that a moving truck is not going to go onto
+<i>172</i>&nbsp;     * the same tile as a stationary truck. If two trucks are going to collide reset
+<i>173</i>&nbsp;     * trucks is called.
+<i>174</i>&nbsp;     */
+<i>175</i>&nbsp;    public void checkForCollisions() {
+<b class="fc"><i>176</i>&nbsp;        for (FireTruck truck : trucks) {</b>
+<b class="fc"><i>177</i>&nbsp;            for (FireTruck truck2 : trucks) {</b>
+<b class="fc"><i>178</i>&nbsp;                if (!(truck.equals(truck2))) {</b>
+<b class="fc"><i>179</i>&nbsp;                    if (!truck.trailPath.isEmpty() &amp;&amp; !truck.getPosition().equals(spawnTile)) {</b>
+<b class="fc"><i>180</i>&nbsp;                        Vector2 truck2tile = new Vector2(Math.round(truck2.getPosition().x), Math.round(truck2.getPosition().y));</b>
+<b class="fc"><i>181</i>&nbsp;                        Vector2 truckstile = new Vector2((float)Math.floor(truck2.getPosition().x),(float) Math.floor(truck2.getPosition().y));</b>
+<b class="fc"><i>182</i>&nbsp;                        if (!truck2.trailPath.isEmpty() &amp;&amp; truck.trailPath.first().equals(truck2.trailPath.first())) {</b>
+<b class="fc"><i>183</i>&nbsp;                            truck.setCollision();</b>
+<b class="fc"><i>184</i>&nbsp;                            truck2.setCollision();</b>
+<b class="fc"><i>185</i>&nbsp;                            resetTruck(truck, truck2);</b>
+<b class="fc"><i>186</i>&nbsp;                        } else if (truck.trailPath.first().equals(truck2tile)) {</b>
+<b class="fc"><i>187</i>&nbsp;                            resetTruck(truck, truck2);</b>
+<b class="fc"><i>188</i>&nbsp;                            truck.trailPath.clear();</b>
+<b class="fc"><i>189</i>&nbsp;                            truck2.trailPath.clear();</b>
+<b class="fc"><i>190</i>&nbsp;                        } else if (truck.trailPath.first().equals(truckstile)) {</b>
+<b class="nc"><i>191</i>&nbsp;                            resetTruck(truck, truck2);</b>
+<i>192</i>&nbsp;                        }
+<i>193</i>&nbsp;                    }
+<i>194</i>&nbsp;                }
+<b class="fc"><i>195</i>&nbsp;            }</b>
+<i>196</i>&nbsp;            /*for (Patrol patrol : this.patrols) {
+<i>197</i>&nbsp;                Vector2 patroltile = new Vector2(Math.round(patrol.getPosition().x), Math.round(patrol.getPosition().y));
+<i>198</i>&nbsp;                Vector2 truckstile = new Vector2((float)Math.floor(truck.getPosition().x),(float) Math.floor(truck.getPosition().y));
+<i>199</i>&nbsp;                if (truckstile.equals(patroltile)) {
+<i>200</i>&nbsp;                    patrol.setAttacking(true);
+<i>201</i>&nbsp;                }
+<i>202</i>&nbsp;            }*/
+<b class="fc"><i>203</i>&nbsp;        }</b>
+<b class="fc"><i>204</i>&nbsp;    }</b>
+<i>205</i>&nbsp;
+<i>206</i>&nbsp;    /** Resets two trucks - is called when both trucks are moving towards each other
+<i>207</i>&nbsp;     * It removes their paths so they halt on the tile of the collision. It then adds
+<i>208</i>&nbsp;     * the nearest tile to their path, the trucks move to this tile so that after the
+<i>209</i>&nbsp;     * collision the trucks are positioned at the centre of adjacent tiles.
+<i>210</i>&nbsp;     *
+<i>211</i>&nbsp;     * @param truck one truck involved in the collision
+<i>212</i>&nbsp;     * @param truck2 the second truck involved in the collision
+<i>213</i>&nbsp;     */
+<i>214</i>&nbsp;    private void resetTruck(FireTruck truck, FireTruck truck2) {
+<b class="fc"><i>215</i>&nbsp;        if (SoundFX.music_enabled) {</b>
+<b class="fc"><i>216</i>&nbsp;            SoundFX.sfx_horn.play();</b>
+<i>217</i>&nbsp;        }
+<i>218</i>&nbsp;
+<b class="fc"><i>219</i>&nbsp;        Vector2 hold = truck.trailPath.first();</b>
+<i>220</i>&nbsp;
+<b class="fc"><i>221</i>&nbsp;        truck.resetPath();</b>
+<b class="fc"><i>222</i>&nbsp;        truck.addTileToPath(truck.getPosition());</b>
+<b class="fc"><i>223</i>&nbsp;        truck.addTileToPath(new Vector2 ((float)Math.floor(truck.getX()),(float)Math.floor(truck.getY())));</b>
+<i>224</i>&nbsp;
+<b class="fc"><i>225</i>&nbsp;        truck2.resetPath();</b>
+<b class="fc"><i>226</i>&nbsp;        truck2.addTileToPath(truck2.getPosition());</b>
+<b class="fc"><i>227</i>&nbsp;        truck2.addTileToPath(hold);</b>
+<b class="fc"><i>228</i>&nbsp;    }</b>
+<i>229</i>&nbsp;
+<i>230</i>&nbsp;
+<i>231</i>&nbsp;    /** Draws the firetruck to the gameScreen
+<i>232</i>&nbsp;     * @param mapBatch batch being used to render to the gameScreen */
+<i>233</i>&nbsp;    public void draw(Batch mapBatch) {
+<b class="nc"><i>234</i>&nbsp;        mapBatch.draw(this.texture, this.x, this.y, 5, 3);</b>
+<b class="nc"><i>235</i>&nbsp;    }</b>
+<i>236</i>&nbsp;    public DestroyedEntity getDestroyedStation(){
+<b class="nc"><i>237</i>&nbsp;        return new DestroyedEntity(this.deadTexture, this.x, this.y, 5, 3);</b>
+<i>238</i>&nbsp;    }
+<i>239</i>&nbsp;
+<i>240</i>&nbsp;    public ArrayList&lt;FireTruck&gt; getTrucks() {
+<b class="nc"><i>241</i>&nbsp;        return this.trucks;</b>
+<i>242</i>&nbsp;    }
+<i>243</i>&nbsp;
+<i>244</i>&nbsp;    public ArrayList&lt;Patrol&gt; getPatrol() {
+<b class="nc"><i>245</i>&nbsp;        return this.patrols;</b>
+<i>246</i>&nbsp;    }
+<i>247</i>&nbsp;
+<i>248</i>&nbsp;    public FireTruck getTruck(int i) {
+<b class="fc"><i>249</i>&nbsp;        return this.trucks.get(i);</b>
+<i>250</i>&nbsp;    }
+<i>251</i>&nbsp;
+<i>252</i>&nbsp;    public Vector2 getPosition() {
+<b class="fc"><i>253</i>&nbsp;        return new Vector2(this.x,this.y);</b>
+<i>254</i>&nbsp;    }
+<i>255</i>&nbsp;
+<i>256</i>&nbsp;    /*public Patrols getPatrol(int i) {
+<i>257</i>&nbsp;        return this.patrols.get(i);
+<i>258</i>&nbsp;    }*/
+<i>259</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-02-16 18:13</div>
+</div>
+</body>
+</html>
