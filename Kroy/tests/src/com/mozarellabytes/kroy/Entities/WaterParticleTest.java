@@ -17,13 +17,13 @@ public class WaterParticleTest {
     @Mock
     GameScreen gameScreenMock;
 
-    @Mock
-    Fortress testFortress;
+
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Test
     public void isHit() {
+        Fortress testFortress = new Fortress(5,5, FortressType.CentralHall);
         Vector2 X = new Vector2(1,1);
         FireTruck testTruck = new FireTruck(gameScreenMock, X, FireTruckType.Ruby);
         WaterParticle testParticle = new WaterParticle(testTruck, testFortress);
