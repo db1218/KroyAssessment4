@@ -111,7 +111,7 @@ public class FireTruck extends Sprite {
      * @param type          used to have predefined attributes
      */
     public FireTruck(GameScreen gameScreen, Vector2 position, FireTruckType type) {
-        super(new Texture(Gdx.files.internal("sprites/firetruck/blue/down.png")));
+        super(type.getLookDown());
 
         this.gameScreen = gameScreen;
         this.type = type;
