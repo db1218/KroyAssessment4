@@ -11,7 +11,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import static com.mozarellabytes.kroy.Entities.FireTruckType.*;
+import static com.mozarellabytes.kroy.Entities.FireTruckType.Ocean;
+import static com.mozarellabytes.kroy.Entities.FireTruckType.Speed;
 import static org.junit.Assert.*;
 
 
@@ -26,12 +27,12 @@ public class FireTruckTest {
 
     @Test
     public void differentSpeedTest() {
-        assertNotEquals(Sapphire.getSpeed(), Ruby.getSpeed());
+        assertNotEquals(Ocean.getSpeed(), Speed.getSpeed());
     }
 
     @Test
     public void speedTruckShouldMove3TilesIn25FramesTest() {
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10,10), Ruby);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10,10), Speed);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,10);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,11);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,11);
@@ -48,7 +49,7 @@ public class FireTruckTest {
 
     @Test
     public void oceanTruckShouldNotMove3TilesIn25FramesTest() {
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10,10), Sapphire);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10,10), Ocean);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,10);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,11);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,11);
@@ -65,7 +66,7 @@ public class FireTruckTest {
 
     @Test
     public void oceanTruckShouldMove3TilesIn50FramesTest() {
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10,10), Sapphire);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10,10), Ocean);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,10);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,11);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,11);
@@ -82,22 +83,24 @@ public class FireTruckTest {
 
     @Test
     public void differentMaxVolumeTest() {
-        assertNotEquals(Sapphire.getMaxReserve(), Ruby.getMaxReserve());
+        assertNotEquals(Ocean.getMaxReserve(), Speed.getMaxReserve());
     }
 
     @Test
     public void differentAPTest() {
-        assertNotEquals(Sapphire.getAP(), Ruby.getAP());
+        assertNotEquals(Ocean.getAP(), Speed.getAP());
     }
 
     @Test
     public void checkTrucksFillToDifferentLevels() {
-        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(9,10), Ruby);
-        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(10,10), Sapphire);
+        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(9,10), Speed);
+        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(10,10), Ocean);
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
         FireStation fireStation = new FireStation(8, 10);
         fireStation.spawn(fireTruck1);
         fireStation.spawn(fireTruck2);
+        fireTruck1.setAttacking(true);
+        fireTruck2.setAttacking(true);
         for (int i=0; i<2000; i++) {
             fireTruck1.attack(fortress);
             fireTruck1.updateSpray();
@@ -112,8 +115,8 @@ public class FireTruckTest {
         }
 
         boolean checkEmptyReservesAreSame = fireTruck1ReserveEmpty == fireTruck2ReserveEmpty;
-        boolean checkSpeedTruckIsFull = fireTruck1.getReserve() == Ruby.getMaxReserve();
-        boolean checkOceanTruckIsNotFull = fireTruck2.getReserve() !=  Sapphire.getMaxReserve();
+        boolean checkSpeedTruckIsFull = fireTruck1.getReserve() == Speed.getMaxReserve();
+        boolean checkOceanTruckIsNotFull = fireTruck2.getReserve() !=  Ocean.getMaxReserve();
 
         assertTrue(checkEmptyReservesAreSame && checkSpeedTruckIsFull && checkOceanTruckIsNotFull);
 
@@ -121,18 +124,18 @@ public class FireTruckTest {
 
     @Test
     public void differentMaxHPTest() {
-        assertNotEquals(Ruby.getMaxHP(), Sapphire.getMaxHP());
+        assertNotEquals(Ocean.getMaxHP(), Speed.getMaxHP());
     }
 
     @Test
     public void checkTrucksRepairToDifferentLevels() {
-        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(9,10), Ruby);
-        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(10,10), Sapphire);
+        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(9,10), Speed);
+        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(10,10), Ocean);
         FireStation fireStation = new FireStation(8, 10);
         fireStation.spawn(fireTruck1);
         fireStation.spawn(fireTruck2);
-        fireTruck1.repair(Ruby.getMaxHP()*-1);
-        fireTruck2.repair(Sapphire.getMaxHP()*-1);
+        fireTruck1.repair(Speed.getMaxHP()*-1);
+        fireTruck2.repair(Ocean.getMaxHP()*-1);
         float fireTruck1Health0 = fireTruck1.getHP();
         float fireTruck2Health0 = fireTruck2.getHP();
 
@@ -141,8 +144,8 @@ public class FireTruckTest {
         }
 
         boolean checkHealth0IsSame = fireTruck1Health0 == fireTruck2Health0;
-        boolean checkOceanTruckIsFullyRepaired = fireTruck2.getHP() == Sapphire.getMaxHP();
-        boolean checkSpeedTruckIsNotFullyRepaired = fireTruck1.getHP() !=  Ruby.getMaxHP();
+        boolean checkOceanTruckIsFullyRepaired = fireTruck2.getHP() == Ocean.getMaxHP();
+        boolean checkSpeedTruckIsNotFullyRepaired = fireTruck1.getHP() !=  Speed.getMaxHP();
 
         assertTrue(checkHealth0IsSame && checkOceanTruckIsFullyRepaired && checkSpeedTruckIsNotFullyRepaired);
 
@@ -150,13 +153,13 @@ public class FireTruckTest {
 
     @Test
     public void differentRangeTest() {
-        assertNotEquals(Sapphire.getRange(), Ruby.getRange());
+        assertNotEquals(Ocean.getRange(), Speed.getRange());
     }
 
     @Test
     public void checkDifferentRangeTest() {
-        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(10, 15), Ruby);
-        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(10, 15), Sapphire);
+        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(10, 15), Speed);
+        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(10, 15), Ocean);
         Fortress fortress = new Fortress(10, 10, FortressType.Clifford);
         fireTruck1.fortressInRange(fortress.getPosition());
         assertNotEquals(fireTruck1.fortressInRange(fortress.getPosition()), fireTruck2.fortressInRange(fortress.getPosition()));
@@ -164,8 +167,9 @@ public class FireTruckTest {
 
     @Test
     public void truckShouldDecreaseHealthOfFortress() {
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Ruby);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
+        fireTruck.setAttacking(true);
         float healthBefore = fortress.getHP();
         fireTruck.attack(fortress);
         for (int i=0; i<200; i++) {
@@ -177,8 +181,9 @@ public class FireTruckTest {
 
     @Test
     public void truckShouldDecreaseReserveWhenAttackingFortress() {
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Ruby);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
+        fireTruck.setAttacking(true);
         float reserveBefore = fireTruck.getReserve();
         fireTruck.attack(fortress);
         for (int i=0; i<100; i++) {
@@ -191,54 +196,58 @@ public class FireTruckTest {
     @Test
     public void damageFortressWithSpeedByDamageTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Ruby);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
+        fireTruck.setAttacking(true);
         fireTruck.attack(fortress);
         for (int i=0; i<200; i++) {
             fireTruck.updateSpray();
         }
         float fortressHealthAfter = fortress.getHP();
-        assertEquals(FortressType.Walmgate.getMaxHP() - Ruby.getAP(), fortressHealthAfter, 0.0);
+        assertEquals(FortressType.Walmgate.getMaxHP() - Speed.getAP(), fortressHealthAfter, 0.0);
     }
 
     @Test
     public void damageFortressWithSpeedByReserveTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Ruby);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
+        fireTruck.setAttacking(true);
         fireTruck.attack(fortress);
         for (int i=0; i<100; i++) {
             fireTruck.updateSpray();
         }
         float fireTruckReserveAfter = fireTruck.getReserve();
-        assertEquals(Ruby.getMaxReserve() - Ruby.getAP(), fireTruckReserveAfter, 0.0);
+        assertEquals(Speed.getMaxReserve() - Speed.getAP(), fireTruckReserveAfter, 0.0);
     }
 
     @Test
     public void damageFortressWithOceanByDamageTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Sapphire);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Ocean);
+        fireTruck.setAttacking(true);
         fireTruck.attack(fortress);
         for (int i=0; i<200; i++) {
             fireTruck.updateSpray();
         }
         float fortressHealthAfter = fortress.getHP();
-        assertEquals(FortressType.Walmgate.getMaxHP() - Sapphire.getAP(), fortressHealthAfter, 0.0);
+        assertEquals(FortressType.Walmgate.getMaxHP() - Ocean.getAP(), fortressHealthAfter, 0.0);
     }
 
     @Test
     public void damageFortressWithOceanByReserveTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Sapphire);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Ocean);
+        fireTruck.setAttacking(true);
         fireTruck.attack(fortress);
         for (int i=0; i<100; i++) {
             fireTruck.updateSpray();
         }
         float fireTruckReserveAfter = fireTruck.getReserve();
-        assertEquals(Sapphire.getMaxReserve() - Sapphire.getAP(), fireTruckReserveAfter, 0.0);
+        assertEquals(Ocean.getMaxReserve() - Ocean.getAP(), fireTruckReserveAfter, 0.0);
     }
 
     @Test
     public void moveTest() {
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10,10), Ruby);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10,10), Speed);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,10);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,11);
         fireTruck.setMoving(true);
