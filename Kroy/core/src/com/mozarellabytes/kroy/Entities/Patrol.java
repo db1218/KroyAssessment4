@@ -406,4 +406,12 @@ public class Patrol extends Sprite {
     public boolean withinRange(Vector2 targetPos) {
         return targetPos==this.position;
     }
+
+    public void setTargetX(float x) {this.type.getTarget().x = x;}
+    public void setTargetY(float y) {this.type.getTarget().y = y;}
+    public void setPositionX(float x) {this.position.x = x;}
+    public void setPositionY(float y) {this.position.y = y;}
+    public float getPositionX() {return nextTile.x;}
+    public float getPositionY() {return nextTile.y;}
+
 }

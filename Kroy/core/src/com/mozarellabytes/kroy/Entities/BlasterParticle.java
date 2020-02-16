@@ -59,7 +59,7 @@ public class BlasterParticle {
     /**
      * Creates the random coordinate within the fortress
      *
-     * @param fortress the fortress whose target position is being created
+     * @paramfortress the fortress whose target position is being created
      */
     private void createTargetPosition(FireStation station) {
         float xCoord = (float)(Math.random()-0.5+station.getPosition().x+1);
@@ -94,6 +94,11 @@ public class BlasterParticle {
     public Color getColour() { return this.colour; }
 
     public Vector2 getPosition() { return this.currentPosition; }
+
+    public void setPositionX(float x) {this.currentPosition.x = x;}
+    public void setPositionY(float y) {this.currentPosition.y = y;}
+    public void setTargetPositionX(float x) {this.targetPosition.x = x;}
+    public void setTargetPositionY(float y) {this.targetPosition.y = y;}
 
 }
 
