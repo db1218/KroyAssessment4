@@ -40,7 +40,7 @@ public class Kroy extends Game {
 
 	@Override
 	public void create () {
-		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+		//Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
