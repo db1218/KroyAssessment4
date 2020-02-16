@@ -64,7 +64,7 @@ public class FireTruckTest {
 
     @Test
     public void oceanTruckShouldMove3TilesIn50FramesTest() {
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10,10), Ruby);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10,10), Sapphire);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,10);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,11);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,11);
@@ -97,7 +97,6 @@ public class FireTruckTest {
         FireStation fireStation = new FireStation(8, 10);
         fireStation.spawn(fireTruck1);
         fireStation.spawn(fireTruck2);
-
         for (int i=0; i<2000; i++) {
             fireTruck1.attack(fortress);
             fireTruck1.updateSpray();
@@ -121,7 +120,7 @@ public class FireTruckTest {
 
     @Test
     public void differentMaxHPTest() {
-        assertNotEquals(Sapphire.getMaxHP(), Ruby.getMaxHP());
+        assertNotEquals(Ruby.getMaxHP(), Sapphire.getMaxHP());
     }
 
     @Test
@@ -166,7 +165,6 @@ public class FireTruckTest {
     public void truckShouldDecreaseHealthOfFortress() {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Ruby);
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
-
         float healthBefore = fortress.getHP();
         fireTruck.attack(fortress);
         for (int i=0; i<200; i++) {
@@ -180,7 +178,6 @@ public class FireTruckTest {
     public void truckShouldDecreaseReserveWhenAttackingFortress() {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Ruby);
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
-
         float reserveBefore = fireTruck.getReserve();
         fireTruck.attack(fortress);
         for (int i=0; i<100; i++) {
@@ -206,7 +203,6 @@ public class FireTruckTest {
     public void damageFortressWithSpeedByReserveTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Ruby);
-
         fireTruck.attack(fortress);
         for (int i=0; i<100; i++) {
             fireTruck.updateSpray();
@@ -219,7 +215,6 @@ public class FireTruckTest {
     public void damageFortressWithOceanByDamageTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Sapphire);
-
         fireTruck.attack(fortress);
         for (int i=0; i<200; i++) {
             fireTruck.updateSpray();
@@ -232,7 +227,6 @@ public class FireTruckTest {
     public void damageFortressWithOceanByReserveTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Sapphire);
-
         fireTruck.attack(fortress);
         for (int i=0; i<100; i++) {
             fireTruck.updateSpray();

@@ -89,7 +89,7 @@ public class GameScreen implements Screen {
     /** An arraylist of all the entities that have been destroyed */
     private ArrayList<DestroyedEntity> deadEntities;
 
-    //public FPSLogger fpsCounter;
+    public FPSLogger fpsCounter;
 
     public boolean wasPaused = false;
     /** Play when the game is being played
@@ -105,7 +105,7 @@ public class GameScreen implements Screen {
      */
     public GameScreen(Kroy game) {
         this.game = game;
-        //fpsCounter = new FPSLogger();
+        fpsCounter = new FPSLogger();
 
         difficultyControl = new DifficultyControl();
 
@@ -147,9 +147,9 @@ public class GameScreen implements Screen {
         fortresses = new ArrayList<Fortress>();
         fortresses.add(new Fortress(12, 23.5f, FortressType.Revs));
         fortresses.add(new Fortress(30.5f, 22.5f, FortressType.Walmgate));
-        fortresses.add(new Fortress(16f, 3.5f, FortressType.Railway));
+        fortresses.add(new Fortress(16.5f, 3.5f, FortressType.Railway));
         fortresses.add(new Fortress(32f, 1.5f, FortressType.Clifford));
-        fortresses.add(new Fortress(41.5f, 24f, FortressType.Museum));
+        fortresses.add(new Fortress(41.95f, 23.5f, FortressType.Museum));
         fortresses.add(new Fortress(44f, 11f, FortressType.CentralHall));
 
         patrols = new ArrayList<Patrol>();
@@ -160,7 +160,7 @@ public class GameScreen implements Screen {
         patrols.add(new Patrol(this,PatrolType.Yellow));
         patrols.add(new Patrol(this,PatrolType.Station));
 
-        deadEntities = new ArrayList<>(6);
+        deadEntities = new ArrayList<>(7                           );
 
 
         // sets the origin point to which all of the polygon's local vertices are relative to.
@@ -182,7 +182,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        //fpsCounter.log();
+        fpsCounter.log();
 
         camera.update();
 
@@ -242,7 +242,9 @@ public class GameScreen implements Screen {
             }
         }
 
-        station.drawStats(shapeMapRenderer);
+        if(station.getHP()>0){
+            station.drawStats(shapeMapRenderer);
+        }
 
 
         for (Fortress fortress : fortresses) {
@@ -319,7 +321,7 @@ public class GameScreen implements Screen {
             truck.move();
             truck.updateSpray();
 
-            truck.move();
+            //truck.move();
 
             // manages attacks between trucks and fortresses
             for (Fortress fortress : this.fortresses) {
@@ -351,8 +353,10 @@ public class GameScreen implements Screen {
         }
 
         if (station.getHP() <= 0) {
-            gameState.setStationDestoyed();
-            deadEntities.add(station.getDestroyedStation());
+            if(!(gameState.hasStationDestoyed())){
+                gameState.setStationDestoyed();
+                deadEntities.add(station.getDestroyedStation());
+            }
             patrols.remove(PatrolType.Station);
         }
 

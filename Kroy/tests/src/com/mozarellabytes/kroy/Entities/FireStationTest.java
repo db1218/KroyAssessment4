@@ -13,6 +13,7 @@ import org.mockito.junit.MockitoRule;
 import com.mozarellabytes.kroy.Entities.FireTruckType.*;
 
 
+import com.mozarellabytes.kroy.Entities.FireTruckType.*;
 import static org.junit.Assert.*;
 
 @RunWith(GdxTestRunner.class)
@@ -61,7 +62,6 @@ public class FireStationTest {
         FireStation station = new FireStation(10, 10);
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
         station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.Ruby));
-
         station.getTruck(0).attack(fortress);
         float HPBeforeRefill = station.getTruck(0).getReserve();
         station.restoreTrucks();
@@ -74,7 +74,6 @@ public class FireStationTest {
         FireStation station = new FireStation(10, 10);
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
         station.spawn(new FireTruck(gameScreenMock, new Vector2(20, 10), FireTruckType.Ruby));
-
         station.getTruck(0).attack(fortress);
         float HPBeforeRefill = station.getTruck(0).getReserve();
         station.restoreTrucks();

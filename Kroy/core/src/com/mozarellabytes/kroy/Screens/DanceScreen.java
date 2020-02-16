@@ -74,7 +74,7 @@ public class DanceScreen implements Screen, BeatListener {
         danceMan.subscribeToBeat(this);
         SoundFX.playDanceoffMusic();
 
-        System.out.println("Firetruck health: " + firetruck.getHP() + " ET health: " + patrol.getHP());
+        //System.out.println("Firetruck health: " + firetruck.getHP() + " ET health: " + patrol.getHP());
         this.patrol = patrol;
         this.firetruck = firetruck;
         this.firefighter = new Dancer((int) firetruck.getHP());
@@ -114,7 +114,7 @@ public class DanceScreen implements Screen, BeatListener {
         etRightTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
 
-        System.out.println("Got to the dance Screen");
+        //System.out.println("Got to the dance Screen");
     }
 
     /**
@@ -171,7 +171,7 @@ public class DanceScreen implements Screen, BeatListener {
             int combo = danceMan.getCombo();
             etDancer.damage((int)scaleDamage(combo));
             danceMan.killCombo();
-            System.out.println("Firetruck health: " + firefighter.getHealth() + " ET health: " + etDancer.getHealth());
+            //System.out.println("Firetruck health: " + firefighter.getHealth() + " ET health: " + etDancer.getHealth());
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
@@ -329,7 +329,7 @@ public class DanceScreen implements Screen, BeatListener {
 
     @Override
     public void offBeat() {
-        System.out.println("Offbeat");
+        //System.out.println("Offbeat");
         if (firefighter.getTimeInState() > danceMan.getPhase()/2) {
             firefighter.setState(DanceMove.WAIT);
         }
@@ -341,7 +341,7 @@ public class DanceScreen implements Screen, BeatListener {
         if (result == DanceResult.WRONG) {
             firefighter.damage(20);
             etDancer.setJiving(true);
-            System.out.println("Firetruck health: " + firefighter.getHealth() + " ET health: " + etDancer.getHealth());
+            //System.out.println("Firetruck health: " + firefighter.getHealth() + " ET health: " + etDancer.getHealth());
         };
     }
 

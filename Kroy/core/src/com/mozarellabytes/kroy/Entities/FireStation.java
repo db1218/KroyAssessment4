@@ -70,7 +70,7 @@ public class FireStation {
         this.bayTile1 = new Vector2(x+1, y);
         this.bayTile2 = new Vector2(x+2, y);
         this.texture = new Texture(Gdx.files.internal("sprites/station/station.png"));
-        this.deadTexture = new Texture(Gdx.files.internal("sprites/station/station.png")); // change me pls
+        this.deadTexture = new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_dead.png")); // change me pls
         this.trucks = new ArrayList<FireTruck>();
         this.patrols = new ArrayList<Patrol>();
         this.HP=100;
@@ -114,10 +114,12 @@ public class FireStation {
      */
     public void restoreTrucks() {
         for (FireTruck truck : this.trucks) {
-            if (truck.getPosition().equals(this.bayTile1) || truck.getPosition().equals(this.bayTile2)) {
-                repair(truck);
-                refill(truck);
-            }
+            if (this.HP > 0) {
+                if (truck.getPosition().equals(this.bayTile1) || truck.getPosition().equals(this.bayTile2)) {
+                    repair(truck);
+                    refill(truck);
+                }
+             }
         }
     }
 

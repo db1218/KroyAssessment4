@@ -56,12 +56,6 @@ public class FireTruck extends Sprite {
      * the end of the path */
     private boolean moving;
 
-    /* If the truck is attacking a Fortress
-     *
-     * <code>true</code> 'A' key is pressed
-     * <code>false</code> 'A' key is not pressed */
-    //private boolean attacking; Removed
-
     /** Whether the truck has an unresolved collision
      * with another truck */
     private boolean inCollision;
@@ -111,7 +105,7 @@ public class FireTruck extends Sprite {
      * @param type          used to have predefined attributes
      */
     public FireTruck(GameScreen gameScreen, Vector2 position, FireTruckType type) {
-        super(new Texture(Gdx.files.internal("sprites/firetruck/blue/down.png")));
+        super(type.getLookDown());
 
         this.gameScreen = gameScreen;
         this.type = type;
@@ -121,7 +115,6 @@ public class FireTruck extends Sprite {
         this.path = new Queue<>();
         this.trailPath = new Queue<>();
         this.moving = false;
-        //this.attacking = false;
         this.inCollision = false;
         this.spray = new ArrayList<WaterParticle>();
         this.timeOfLastAttack = System.currentTimeMillis();

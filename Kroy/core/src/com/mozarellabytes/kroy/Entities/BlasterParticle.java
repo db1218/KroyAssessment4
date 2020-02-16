@@ -30,18 +30,18 @@ public class BlasterParticle {
     /** The current position of the water particle */
     private Vector2 currentPosition;
 
-    /** The end position of the water particle (the fortress the truck
+    /** The end position of the water particle the station the patrol
      * is attacking)
      */
     private Vector2 targetPosition;
 
     /**
-     * Constructs a WaterParticle with
+     * Constructs a BlasterParticle with
      * the following parameters
      *
-     * @param patrol     The FireTruck that the
+     * @param patrol     The patrol that the
      *                  WaterParticle came from
-     * @param target    The Fortress that the
+     * @param target    The Firestation that the
      *                  WaterParticle is heading
      *                  towards
      */
@@ -57,9 +57,9 @@ public class BlasterParticle {
     }
 
     /**
-     * Creates the random coordinate within the fortress
+     * Creates the random coordinate within the station
      *
-     * @paramfortress the fortress whose target position is being created
+     * @param station the station whose target position is being created
      */
     private void createTargetPosition(FireStation station) {
         float xCoord = (float)(Math.random()-0.5+station.getPosition().x+1);
@@ -68,7 +68,7 @@ public class BlasterParticle {
     }
 
     /**
-     * Updates the position of the WaterParticle
+     * Updates the position of the blasterparticle
      * using the Interpolation function
      */
     public void updatePosition() {
@@ -76,10 +76,10 @@ public class BlasterParticle {
     }
 
     /**
-     * Checks if the WaterParticle has
-     * reached the the Fortress
+     * Checks if the blasterparticle has
+     * reached the the station
      *
-     * @return  <code>true</code> if WaterParticle hit Fortress
+     * @return  <code>true</code> if blasterparticle hit Fortress
      *          <code>false</code> otherwise
      */
     public boolean isHit() {
