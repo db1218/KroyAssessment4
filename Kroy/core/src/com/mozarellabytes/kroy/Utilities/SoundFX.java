@@ -29,6 +29,8 @@ public class SoundFX {
     public static final Sound sfx_unpause = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/unpause.wav"));
     public static final Sound sfx_horn = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/horn.mp3"));
     public static final Sound sfx_button_clicked = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/button_clicked.wav"));
+    public static final Sound sfx_danceoff = Gdx.audio.newSound(Gdx.files.internal("sounds/dance_off.mp3"));
+
 
     /** Plays attacking sound for FireTrucks only if it isn't already playing */
     public static void playTruckAttack() {
@@ -58,10 +60,16 @@ public class SoundFX {
         music_enabled = true;
     }
 
+    /** Plays danceoff music */
+    public static void playDanceoffMusic() {
+        sfx_danceoff.loop(4f);
+    }
+
     /** Stops both menu music and game music */
     public static void stopMusic() {
         sfx_soundtrack.stop();
         sfx_menu.stop();
+        sfx_danceoff.stop();
         music_enabled = false;
     }
 
