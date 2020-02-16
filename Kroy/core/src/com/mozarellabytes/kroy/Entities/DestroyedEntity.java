@@ -44,6 +44,6 @@ public class DestroyedEntity {
      * @param mapBatch the renderer in line with the map
      */
     public void draw(Batch mapBatch){
-        mapBatch.draw(this.deadTexture, this.area.x, this.area.y, this.area.width, this.area.width);
+        mapBatch.draw(this.deadTexture, this.area.x, this.area.y, this.area.width, this.area.height);
     }
 }

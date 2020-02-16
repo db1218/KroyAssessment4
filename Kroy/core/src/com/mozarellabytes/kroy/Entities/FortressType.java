@@ -23,25 +23,27 @@ public enum FortressType {
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png"))),
 
-    Walmgate ("Walmgate Bar", 1500, 8, 200, 15, 5, 5,
+    Walmgate ("Walmgate Bar", 2750, 7.5f, 200, 15, 5, 5,
             new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png"))),
 
-    Clifford ("Clifford's Tower", 500, 7, 150, 10, 4, 3,
+    Clifford ("Clifford's Tower", 1500, 6.5f, 150, 10, 4, 3,
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png"))),
-    CentralHall ("Central Hall", 500, 7, 200, 20, 4, 3,
+
+    CentralHall ("Central Hall", 1000, 7, 200, 10, 4, 3,
             new Texture(Gdx.files.internal("sprites/fortress/fortress.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png"))),
 
-    Museum ("York Museum", 1500, 8, 180, 20, 4, 3,
+    Museum ("York Museum", 1500, 8, 180, 15, 4, 3,
             new Texture(Gdx.files.internal("sprites/fortress/fortress.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png"))),
-    Railway ("Railway Museum", 1000, 8, 250, 15, 4, 3,
+
+    Railway ("Railway Museum", 2000, 6.5f, 250, 15, 4, 3,
             new Texture(Gdx.files.internal("sprites/fortress/fortress.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png")));

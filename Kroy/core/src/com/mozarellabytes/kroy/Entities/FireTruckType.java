@@ -18,9 +18,9 @@ public enum FireTruckType {
      * maximum reserve, speed, trailColour, name, attack range, attack points
      */
     Ruby(100, 1.7f, Color.RED, "Ruby Truck", 5, 0.08f, 150, "red"),
-    Sapphire(250, 1, Color.CYAN, "Sapphire Truck", 7, 0.16f, 120, "blue"),
-    Amethyst(280, 0.7f, Color.PURPLE, "Amethyst Truck", 7, 0.2f, 230, "purple"),
-    Emerald(120, 2, Color.GREEN, "Emerald Truck", 4, 0.3f, 100, "green");
+    Sapphire(250, 1, Color.CYAN, "Sapphire Truck", 6, 0.16f, 120, "blue"),
+    Amethyst(280, 0.7f, Color.PURPLE, "Amethyst Truck", 6.5f, 0.2f, 230, "purple"),
+    Emerald(120, 2, Color.GREEN, "Emerald Truck", 4.5f, 0.3f, 100, "green");
 
     /** The maximum amount of water this type of truck can have,
      * also the value of the truck's reserve when it is spawned */
