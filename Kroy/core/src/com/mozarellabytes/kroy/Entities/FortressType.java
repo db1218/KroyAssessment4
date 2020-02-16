@@ -20,7 +20,7 @@ public enum FortressType {
      */
     Revs ("Revolution", 2500, 7, 100, 10, 5, 3,
             new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_full.png")),
-            new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_half")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_dead.png"))),
 
     Walmgate ("Walmgate Bar", 1500, 8, 200, 15, 5, 5,
