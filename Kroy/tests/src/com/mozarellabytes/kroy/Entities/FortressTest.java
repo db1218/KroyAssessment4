@@ -1,4 +1,4 @@
-/*
+
 package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.math.Vector2;
@@ -42,7 +42,7 @@ public class FortressTest {
     @Test
     public void attackTruckFromWalmgateFortressDamageTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.Speed);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.Ruby);
         fireTruck.setTimeOfLastAttack(System.currentTimeMillis() - 5000);
         fortress.attack(fireTruck, false);
         fortress.updateBombs();
@@ -52,7 +52,7 @@ public class FortressTest {
     @Test
     public void attackTruckFromCliffordFortressDamageTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Clifford);
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.Speed);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.Ruby);
         fireTruck.setTimeOfLastAttack(System.currentTimeMillis() - 5000);
         fortress.attack(fireTruck, false);
         fortress.updateBombs();
@@ -62,7 +62,7 @@ public class FortressTest {
     @Test
     public void attackTruckFromRevolutionFortressDamageTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Revs);
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.Speed);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.);
         fireTruck.setTimeOfLastAttack(System.currentTimeMillis() - 5000);
         fortress.attack(fireTruck, false);
         fortress.updateBombs();
@@ -141,4 +141,4 @@ public class FortressTest {
         assertFalse(withinRange);
     }
 
-}*/
+}
