@@ -32,6 +32,7 @@ public enum FortressType {
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford_full.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford_dead.png"))),
+
     CentralHall ("Central Hall", 500, 7, 200, 20, 4, 3,
             new Texture(Gdx.files.internal("sprites/fortress/UoY_central_hall_full.png")),
             new Texture(Gdx.files.internal("sprites/fortress/UoY_central_hall_half.png")),
@@ -42,7 +43,7 @@ public enum FortressType {
             new Texture(Gdx.files.internal("sprites/fortress/fortress_yorkshire_museum_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_yorkshire_museum_dead.png"))),
     
-    Railway ("Railway Museum", 1000, 8, 250, 15, 4, 3,
+    Railway ("Railway Museum", 1000, 8, 250, 15, 5, 4,
             new Texture(Gdx.files.internal("sprites/fortress/york_railway_museum_full.png")),
             new Texture(Gdx.files.internal("sprites/fortress/york_railway_museum_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/york_railway_museum_dead.png")));

@@ -147,9 +147,9 @@ public class GameScreen implements Screen {
         fortresses = new ArrayList<Fortress>();
         fortresses.add(new Fortress(12, 23.5f, FortressType.Revs));
         fortresses.add(new Fortress(30.5f, 22.5f, FortressType.Walmgate));
-        fortresses.add(new Fortress(16f, 3.5f, FortressType.Railway));
+        fortresses.add(new Fortress(16.5f, 3.5f, FortressType.Railway));
         fortresses.add(new Fortress(32f, 1.5f, FortressType.Clifford));
-        fortresses.add(new Fortress(41.5f, 24f, FortressType.Museum));
+        fortresses.add(new Fortress(41.95f, 23.5f, FortressType.Museum));
         fortresses.add(new Fortress(44f, 11f, FortressType.CentralHall));
 
         patrols = new ArrayList<Patrol>();
@@ -160,7 +160,7 @@ public class GameScreen implements Screen {
         patrols.add(new Patrol(this,PatrolType.Yellow));
         patrols.add(new Patrol(this,PatrolType.Station));
 
-        deadEntities = new ArrayList<>(6);
+        deadEntities = new ArrayList<>(7                           );
 
 
         // sets the origin point to which all of the polygon's local vertices are relative to.
