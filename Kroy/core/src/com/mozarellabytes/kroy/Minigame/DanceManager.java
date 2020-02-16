@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.Minigame;
 
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector2;
+import com.mozarellabytes.kroy.Utilities.CameraShake;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +35,14 @@ public class DanceManager {
     /** Technical class for deciding upcoming moves */
     private DanceChoreographer choreographer;
 
+
+
     public DanceManager(float tempo) {
+
         // Setup tempo
         this.tempo = tempo;
         this.period = 60/tempo;
-//        System.out.println("Period: " + this.period);
+        // System.out.println("Period: " + this.period);
         this.time = 0;
         this.halfTime = -period/2;
 
@@ -46,6 +53,8 @@ public class DanceManager {
 
     /** Called once a frame to update the dance manager*/
     public void update(float delta) {
+
+
         time += delta;
         halfTime += delta;
 
@@ -94,6 +103,7 @@ public class DanceManager {
      * @return the DanceResult for the move, eg 'MISSED' or 'GREAT'
      */
     public DanceResult takeMove(DanceMove move) {
+
         missedLastTurn = false;
 
         // The wrong move is input

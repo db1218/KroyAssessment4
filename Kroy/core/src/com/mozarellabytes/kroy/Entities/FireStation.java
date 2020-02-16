@@ -73,7 +73,7 @@ public class FireStation {
         this.deadTexture = new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_dead.png")); // change me pls
         this.trucks = new ArrayList<FireTruck>();
         this.patrols = new ArrayList<Patrol>();
-        this.HP=100;
+        this.HP=100.0f;
         this.area = new Rectangle(this.x - (float) this.w/2, this.y - (float) this.h/2,
                 this.w, this.h);
     }
