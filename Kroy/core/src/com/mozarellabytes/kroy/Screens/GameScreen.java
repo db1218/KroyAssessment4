@@ -336,6 +336,7 @@ public class GameScreen implements Screen {
             for (Patrol patrol : this.patrols) {
                 if (patrol.position.equals(truck.getPosition())) {
                     doDanceOff(truck, patrol);
+
                 }
             }
 
@@ -544,6 +545,7 @@ public class GameScreen implements Screen {
      * @param et
      */
     public void doDanceOff(FireTruck firetruck, Patrol et) {
+        SoundFX.stopMusic();
         game.setScreen(new DanceScreen(game, this, firetruck, et));
     }
 

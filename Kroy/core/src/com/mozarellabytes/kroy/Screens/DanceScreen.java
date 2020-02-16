@@ -16,6 +16,7 @@ import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Minigame.*;
 import com.mozarellabytes.kroy.Utilities.GUI;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
+import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 /**
  * The screen for the minigame that triggers when a firetruck meets an ET patrol
@@ -71,6 +72,7 @@ public class DanceScreen implements Screen, BeatListener {
 
         this.danceMan = new DanceManager(120f);
         danceMan.subscribeToBeat(this);
+        SoundFX.playDanceoffMusic();
 
         System.out.println("Firetruck health: " + firetruck.getHP() + " ET health: " + patrol.getHP());
         this.patrol = patrol;
@@ -131,6 +133,8 @@ public class DanceScreen implements Screen, BeatListener {
             GUI gui = new GUI(game, (GameScreen) previousScreen);
             Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) previousScreen, gui));
             gui.idleInfoButton();
+            SoundFX.stopMusic();
+            SoundFX.playGameMusic();
             game.setScreen(previousScreen);
         }
 
