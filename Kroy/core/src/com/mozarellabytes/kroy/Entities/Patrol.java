@@ -292,7 +292,7 @@ public class Patrol extends Sprite {
      * @param particle  the particle which damages the station
      */
     private void damage(BlasterParticle particle) {
-        particle.getTarget().damage(0.01f);
+        particle.getTarget().damage(0.15f);
     }
 
     public float getHP() {

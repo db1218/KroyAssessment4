@@ -52,7 +52,7 @@ public class FireStation {
 
     private final ArrayList<Patrol> patrols;
 
-    private int HP;
+    private float HP;
 
     /**
      * Constructs the Firestation with at a given position with locations
