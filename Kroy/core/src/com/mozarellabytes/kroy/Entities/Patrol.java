@@ -21,10 +21,10 @@ import java.util.LinkedList;
 
 
 /**
- * FireTruck is an entity that the player controls. It navigates the map on the
- * roads defined in the Tiled Map by following a path that the user draws.
+ * Patrol is an entity that the player controls. It navigates the map
+ * going through points defined in the the patrolType
  *
- * Having 'A' held when within range of a  Fortress will deal damage to it.
+ *
  */
 
 public class Patrol extends Sprite {
@@ -45,7 +45,7 @@ public class Patrol extends Sprite {
     private float HP;
 
 
-/** Position of FireTruck in tiles */
+/** Position of patrol in tiles */
 
     public Vector2 position;
 
@@ -107,17 +107,15 @@ public class Patrol extends Sprite {
     private final ArrayList<BlasterParticle> spray;
 
 
-/** Texture for each direction the
-     * truck is facing */
+/** Texture for each
+     * patrol*/
 
     private final Texture texture;
-    //private final Texture lookRight;
-    //private final Texture lookUp;
-    //private final Texture lookDown;
+
 
 
 /**
-     * Constructs a new FireTruck at a position and of a certain type
+     * Constructs a new Patrol at a position and of a certain type
      * which have been passed in
      *
      * @param gameScreen    used to access functions in GameScreen
@@ -126,7 +124,6 @@ public class Patrol extends Sprite {
 
     public Patrol(GameScreen gameScreen, PatrolType type) {
         super(type.getTexture());
-
 
         this.gameScreen = gameScreen;
         this.type = type;
@@ -142,16 +139,13 @@ public class Patrol extends Sprite {
         this.nextTile=position;
         this.previousTile=position;
         this.texture = type.getTexture();
-        //this.lookRight = new Texture(Gdx.files.internal("sprites/Patrol/patrol.png"));
-        //this.lookUp = new Texture(Gdx.files.internal("sprites/Patrol/patrol.png"));
-        //this.lookDown = new Texture(Gdx.files.internal("sprites/Patrol/patrol.png"));
 
         definePath();
     }
 
 
     /**
-     * Called every tick and updates the paths to simulate the truck moving along the
+     * Called every tick and updates the paths to simulate the patrol moving along the
      * path
      */
 
@@ -178,20 +172,15 @@ public class Patrol extends Sprite {
             else{
                 if(this.position.equals(type.getPoint2())){
                     type.setTarget(type.getPoint3());
-                    System.out.println("got point2");
                 }
                 else if(this.position.equals(type.getPoint3())){
                     type.setTarget(type.getPoint4());
-                    System.out.println("got point3");
                 }
                 else if(this.position.equals(type.getPoint4())){
                     type.setTarget(type.getPoint1());
-                    System.out.println("got point4");
-
                 }
                 else{
                     type.setTarget(type.getPoint2());
-                    System.out.println("got point1");
                     counter++;
                     if(counter==2){
                         fullCycle=true;
@@ -200,12 +189,10 @@ public class Patrol extends Sprite {
             }
             addTileToPath(this.position, previousTile);
         }
-        //addTileToPath(this.target, this.position);
         current=path.getHead();
     }
 
     public void addTileToPath(Vector2 coordinate, Vector2 previous) {
-            //Vector2 previous = this.path.last();
             int interpolation = (int) (30/type. getSpeed());
             for (int i=1; i<interpolation; i++) {
                 this.path.addNode(new Vector2((((previous.x - coordinate.x)*-1)/interpolation)*i + previous.x, (((previous.y - coordinate.y)*-1)/interpolation)*i + previous.y));
@@ -215,21 +202,12 @@ public class Patrol extends Sprite {
     }
 
     public void move() {
-        //path.traverseList();
+
         if (moving) {
             Node next=path.getNext(current);
             Vector2 nextTile = path.getData(next);
 
             this.position = nextTile;
-
-            //changeSprite(nextTile);
-
-            /*if (!this.inCollision) {
-                changeSprite(nextTile);
-            }
-            else{
-                moving=false;
-            }*/
             current=next;
             previousTile = nextTile;
 
@@ -237,27 +215,7 @@ public class Patrol extends Sprite {
     }
 
 /**
-     * Changes the direction of the truck depending on the previous tile and the next tile
-     *
-     * @param nextTile  first tile in the queue (next to be followed)
-     */
-
-    /*private void changeSprite(Vector2 nextTile) {
-        if (previousTile != null) {
-            if (nextTile.x > previousTile.x) {
-                setTexture(lookRight);
-            } else if (nextTile.x < previousTile.x) {
-                setTexture(lookLeft);
-            } else if (nextTile.y > previousTile.y) {
-                setTexture(lookUp);
-            } else if (nextTile.y < previousTile.y) {
-                setTexture(lookDown);
-            }
-        }
-    }
-*/
-/**
-     * Deals damage to Fortress by generating a WaterParticle and adding
+     * Deals damage to Firestation by generating a BlasterParticle and adding
      * it to the spray
      *
      * @param station FireStation being attacked
@@ -284,20 +242,6 @@ public class Patrol extends Sprite {
         return this.spray;
     }
 
-
-    /**
-     * Called every tick to check if a Fortress is within the range of
-     *  the truck
-     *
-     * @param firetruck  Fortress' position being checked
-     * @return          <code>true</code> if Fortress is within range
-     *                  <code>false </code> otherwise
-     */
-
-    public boolean firetruckInRange(Vector2 firetruck) {
-        return this.getVisualPosition().dst(firetruck) <= this.type.getRange();
-    }
-
 /**
      * Draws the mini health indicators relative to the truck
      *
@@ -315,7 +259,7 @@ public class Patrol extends Sprite {
 
 
 /**
-     * Draws the FireTruck sprite
+     * Draws the patrol sprite
      *
      * @param mapBatch  Batch that the truck is being
      *                  drawn to (map dependant)
@@ -343,37 +287,12 @@ public class Patrol extends Sprite {
     }
 
     /**
-     * Damages the Fortress depending on the truck's AP
+     * Damages the Station depending on the patrol's AP
      *
-     * @param particle  the particle which damages the fortress
+     * @param particle  the particle which damages the station
      */
     private void damage(BlasterParticle particle) {
-        particle.getTarget().damage(Math.min(this.type.getAP(), particle.getTarget().getHP()));
-    }
-
-/**
-     * Sets time of last attack to unix timestamp provided
-     * @param timestamp  timestamp set as time of last attack
-     */
-
-    public void setTimeOfLastAttack(long timestamp) {
-        this.timeOfLastAttack = timestamp;
-    }
-
-    public void setAttacking(boolean b) {
-        this.attacking = b;
-    }
-
-    public boolean getAttacking(){
-        return this.attacking;
-    }
-
-    public void setMoving(boolean t) {
-        this.moving = t;
-    }
-
-    public long getTimeOfLastAttack() {
-        return timeOfLastAttack;
+        particle.getTarget().damage(0.00001f);
     }
 
     public float getHP() {
@@ -386,24 +305,8 @@ public class Patrol extends Sprite {
         return this.type;
     }
 
-    public void setCollision() {
-        this.inCollision = true;
-    }
-
     public Vector2 getPosition() {
         return this.position;
     }
 
-    public CircularLinkedList getPath() {
-        return this.path;
-    }
-
-
-    public boolean getMoving() {
-        return this.moving;
-    }
-
-    public boolean withinRange(Vector2 targetPos) {
-        return targetPos==this.position;
-    }
 }

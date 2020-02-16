@@ -94,13 +94,6 @@ public class FireStation {
         this.trucks.add(truck);
     }
 
-    public void spawn(Patrol patrol) {
-        if (SoundFX.music_enabled) {
-            SoundFX.sfx_truck_spawn.play();
-        }
-        this.patrols.add(patrol);
-    }
-
     public void drawStats(ShapeRenderer shapeMapRenderer) {
         shapeMapRenderer.rect(this.getPosition().x + 2.26f, this.getPosition().y + 2.9f, 0.6f, 1.2f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
         shapeMapRenderer.rect(this.getPosition().x + 2.38f, this.getPosition().y + 3f, 0.36f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
@@ -154,8 +147,6 @@ public class FireStation {
         this.trucks.remove(truck);
     }
 
-    public void destroyPatrol(Patrol patrol) { this.patrols.remove(patrol); }
-
 
     public void damage(float HP){
         this.HP -= HP;
@@ -191,13 +182,6 @@ public class FireStation {
                     }
                 }
             }
-            /*for (Patrol patrol : this.patrols) {
-                Vector2 patroltile = new Vector2(Math.round(patrol.getPosition().x), Math.round(patrol.getPosition().y));
-                Vector2 truckstile = new Vector2((float)Math.floor(truck.getPosition().x),(float) Math.floor(truck.getPosition().y));
-                if (truckstile.equals(patroltile)) {
-                    patrol.setAttacking(true);
-                }
-            }*/
         }
     }
 
@@ -239,9 +223,6 @@ public class FireStation {
         return this.trucks;
     }
 
-    public ArrayList<Patrol> getPatrol() {
-        return this.patrols;
-    }
 
     public FireTruck getTruck(int i) {
         return this.trucks.get(i);
@@ -251,7 +232,4 @@ public class FireStation {
         return new Vector2(this.x,this.y);
     }
 
-    /*public Patrols getPatrol(int i) {
-        return this.patrols.get(i);
-    }*/
 }

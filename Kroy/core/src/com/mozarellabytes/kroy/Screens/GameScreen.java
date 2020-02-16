@@ -242,7 +242,9 @@ public class GameScreen implements Screen {
             }
         }
 
-        station.drawStats(shapeMapRenderer);
+        if(station.getHP()>0){
+            station.drawStats(shapeMapRenderer);
+        }
 
 
         for (Fortress fortress : fortresses) {
@@ -319,7 +321,7 @@ public class GameScreen implements Screen {
             truck.move();
             truck.updateSpray();
 
-            truck.move();
+            //truck.move();
 
             // manages attacks between trucks and fortresses
             for (Fortress fortress : this.fortresses) {
