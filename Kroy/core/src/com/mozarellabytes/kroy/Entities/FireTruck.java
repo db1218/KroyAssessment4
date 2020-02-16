@@ -594,6 +594,14 @@ public class FireTruck extends Sprite {
     public Vector2 getPosition() {
         return this.position;
     }
+    /**
+     * Gets rounded truck position
+     * Used for patrol collision
+     */
+    public Vector2 getTilePosition() {
+        Vector2 absPos = new Vector2(Math.round(this.position.x), Math.round(this.position.y));
+        return absPos;
+    }
 
     public Queue<Vector2> getTrailPath() {
         return this.trailPath;

@@ -336,7 +336,8 @@ public class GameScreen implements Screen {
             }
 
             for (Patrol patrol : this.patrols) {
-                if (patrol.position.equals(truck.getPosition())) {
+                Vector2 patrolPos = new Vector2(Math.round(patrol.position.x), Math.round(patrol.position.y));
+                if (patrolPos.equals(truck.getTilePosition())) {
                     doDanceOff(truck, patrol);
 
                 }
