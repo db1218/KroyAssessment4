@@ -19,32 +19,33 @@ public enum FortressType {
      * attack points, width, height and sprite.
      */
     Revs ("Revolution", 2500, 7, 100, 10, 5, 3,
-            new Texture(Gdx.files.internal("sprites/fortress/fortress_revs.png")),
-            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")),
-            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png"))),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_full.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_half")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_dead.png"))),
 
     Walmgate ("Walmgate Bar", 1500, 8, 200, 15, 5, 5,
-            new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate.png")),
-            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")),
-            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png"))),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate_full.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate_half.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate_dead.png"))),
 
     Clifford ("Clifford's Tower", 500, 7, 150, 10, 4, 3,
-            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford.png")),
-            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")),
-            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png"))),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford_full.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford_half.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford_dead.png"))),
     CentralHall ("Central Hall", 500, 7, 200, 20, 4, 3,
-            new Texture(Gdx.files.internal("sprites/fortress/fortress.png")),
-            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")),
-            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png"))),
+            new Texture(Gdx.files.internal("sprites/fortress/UoY_central_hall_full.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/UoY_central_hall_half.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/UoY_central_hall_dead.png"))),
 
     Museum ("York Museum", 1500, 8, 180, 20, 4, 3,
-            new Texture(Gdx.files.internal("sprites/fortress/fortress.png")),
-            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")),
-            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png"))),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_yorkshire_museum_full.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_yorkshire_museum_half.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/fortress_yorkshire_museum_dead.png"))),
+    
     Railway ("Railway Museum", 1000, 8, 250, 15, 4, 3,
-            new Texture(Gdx.files.internal("sprites/fortress/fortress.png")),
-            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")),
-            new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png")));
+            new Texture(Gdx.files.internal("sprites/fortress/york_railway_museum_full.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/york_railway_museum_half.png")),
+            new Texture(Gdx.files.internal("sprites/fortress/york_railway_museum_dead.png")));
 
     /** The name for the fortress, visible once the fortress has been clicked on */
     private final String name;
@@ -93,8 +94,8 @@ public enum FortressType {
         this.w = w;
         this.h = h;
         this.textureFull = textureFull; // full hp
-        this.textureHalf =  new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-2.png")); // half hp
-        this.textureDead =  new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford-3.png")); // dead
+        this.textureHalf =  textureHalf; // half hp
+        this.textureDead =  textureDead; // dead
     }
 
     public String getName() { return name; }
