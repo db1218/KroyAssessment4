@@ -154,9 +154,7 @@ public class FireStation {
         this.trucks.remove(truck);
     }
 
-    public void destroyPatrol(Patrol patrol) {
-        this.patrols.remove(patrol);
-    }
+    public void destroyPatrol(Patrol patrol) { this.patrols.remove(patrol); }
 
 
     public void damage(float HP){

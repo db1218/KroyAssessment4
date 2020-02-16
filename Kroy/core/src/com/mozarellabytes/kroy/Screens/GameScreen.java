@@ -89,7 +89,7 @@ public class GameScreen implements Screen {
     /** An arraylist of all the entities that have been destroyed */
     private ArrayList<DestroyedEntity> deadEntities;
 
-    //public FPSLogger fpsCounter;
+    public FPSLogger fpsCounter;
 
     public boolean wasPaused = false;
     /** Play when the game is being played
@@ -105,7 +105,7 @@ public class GameScreen implements Screen {
      */
     public GameScreen(Kroy game) {
         this.game = game;
-        //fpsCounter = new FPSLogger();
+        fpsCounter = new FPSLogger();
 
         difficultyControl = new DifficultyControl();
 
@@ -182,7 +182,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        //fpsCounter.log();
+        fpsCounter.log();
 
         camera.update();
 
@@ -351,8 +351,10 @@ public class GameScreen implements Screen {
         }
 
         if (station.getHP() <= 0) {
-            gameState.setStationDestoyed();
-            deadEntities.add(station.getDestroyedStation());
+            if(!(gameState.hasStationDestoyed())){
+                gameState.setStationDestoyed();
+                deadEntities.add(station.getDestroyedStation());
+            }
             patrols.remove(PatrolType.Station);
         }
 
