@@ -298,15 +298,17 @@ public class ControlsScreen implements Screen {
         game.shapeRenderer.rect(screenWidth / 1.4629f, screenHeight / 2.5297f, 24,  HP / 4f, Color.RED, Color.RED, Color.RED, Color.RED);
         game.shapeRenderer.end();
 
+        /*
         if (count <= 30) {
             drawFireTruckAttacking();
         } else if (count == 60){
             count = 0;
         }
         count++;
+         */
     }
 
-    /** This draws the 'A' above the fire truck */
+    /* This draws the 'A' above the fire truck - Removed*/
     private void drawFireTruckAttacking(){
         game.batch.begin();
         game.font33.draw(game.batch, "A", screenWidth / 1.205f, screenHeight /2.81f);
