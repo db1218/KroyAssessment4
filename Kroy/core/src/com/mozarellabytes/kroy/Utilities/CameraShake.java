@@ -53,7 +53,7 @@ public class CameraShake {
      * @param camera Camera Object (To change its position)
      * @param center Center of camera to allow it to return to its original position
      */
-    public static void update(float delta, Camera camera, Vector2 center){
+    public void update(float delta, Camera camera, Vector2 center){
         internalTimer += delta;
 
         if (internalTimer > amount) {

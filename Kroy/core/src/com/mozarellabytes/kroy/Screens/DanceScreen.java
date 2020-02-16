@@ -14,6 +14,7 @@ import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Patrol;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Minigame.*;
+import com.mozarellabytes.kroy.Utilities.CameraShake;
 import com.mozarellabytes.kroy.Utilities.GUI;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
@@ -64,6 +65,8 @@ public class DanceScreen implements Screen, BeatListener {
 
     private DanceResult lastResult = null;
 
+
+
     public DanceScreen(Kroy game, Screen previousScreen, FireTruck firetruck, Patrol patrol) {
         this.game = game;
         camera = new OrthographicCamera();
@@ -79,6 +82,7 @@ public class DanceScreen implements Screen, BeatListener {
         this.firetruck = firetruck;
         this.firefighter = new Dancer((int) firetruck.getHP());
         this.etDancer = new Dancer((int) patrol.getHP());
+
 
         arrowUpTexture = new Texture(Gdx.files.internal("sprites/dance/arrowUp.png"), true);
         arrowUpTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
@@ -125,6 +129,7 @@ public class DanceScreen implements Screen, BeatListener {
     @Override
     public void render(float delta)
     {
+
         danceMan.update(delta);
 
         if (firefighter.getHealth() <= 0 || etDancer.getHealth() <= 0) {
@@ -168,6 +173,7 @@ public class DanceScreen implements Screen, BeatListener {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+
             int combo = danceMan.getCombo();
             etDancer.damage((int)scaleDamage(combo));
             danceMan.killCombo();
@@ -192,6 +198,7 @@ public class DanceScreen implements Screen, BeatListener {
         Vector2 etLocation = new Vector2((3*camera.viewportWidth)/4-256, camera.viewportHeight/5);
         Vector2 comboHintLocation = new Vector2(camera.viewportWidth/4, (3*camera.viewportHeight)/5);
         game.batch.begin();
+
         // Draw firefighter
         switch (firefighter.getState()) {
             case NONE:

@@ -314,16 +314,13 @@ public class FireTruck extends Sprite {
      */
     private void exploreNeighbours(Vector2 currentPos) {
 
-
         for(int i = 0; i < 4; i++) {
             Vector2 newPos = new Vector2();
             newPos.x = currentPos.x + directionX[i];
             newPos.y = currentPos.y + directionY[i];
 
 
-
             if(newPos.x < 0 || newPos.y < 0) {
-
                 continue;
             }
             if(newPos.x > 47 || newPos.y > 28) {
@@ -334,7 +331,6 @@ public class FireTruck extends Sprite {
                 continue;
             }
             if(vistited[(int)newPos.x][(int)newPos.y]) {
-
                 continue;
             }
 

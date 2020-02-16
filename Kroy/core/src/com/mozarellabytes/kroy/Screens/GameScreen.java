@@ -299,7 +299,7 @@ public class GameScreen implements Screen {
     private void update(float delta) {
         gameState.hasGameEnded(game);
         gameState.firstFortressDestroyed();
-        CameraShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
+        camShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
 
         station.restoreTrucks();
         station.checkForCollisions();
