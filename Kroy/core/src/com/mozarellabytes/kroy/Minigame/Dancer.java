@@ -83,7 +83,7 @@ public class Dancer {
      * @param state true if the dancer is jiving, false if they are not
      */
     public void setJiving(boolean state) {
-        System.out.println("A jive has started");
+        //System.out.println("A jive has started");
         this.jiving = state;
         switch (jiveStep % 4) {
             case 0:

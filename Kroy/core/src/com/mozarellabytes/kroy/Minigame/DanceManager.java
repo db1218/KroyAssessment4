@@ -51,7 +51,7 @@ public class DanceManager {
 
         // Trigger every beat
         if (time >= period) {
-            System.out.println("Beat: " + time);
+            //System.out.println("Beat: " + time);
             choreographer.nextMove();
             time = 0f;
             notifyOnBeat();
