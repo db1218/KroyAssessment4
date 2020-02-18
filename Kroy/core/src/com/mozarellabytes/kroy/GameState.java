@@ -78,7 +78,7 @@ public class GameState {
     }
 
     public boolean firstFortressDestroyed() {
-        if ((fortressesDestroyed == 1)&&(stationDestoyed==false)) {
+        if ((fortressesDestroyed >= 1)&&(stationDestoyed==false)) {
             return true;
         } else{
             return false;
