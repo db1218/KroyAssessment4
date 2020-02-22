@@ -8,14 +8,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Patrol;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Minigame.*;
-import com.mozarellabytes.kroy.Utilities.CameraShake;
-import com.mozarellabytes.kroy.Utilities.GUI;
+import com.mozarellabytes.kroy.GUI.GUI;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
@@ -133,13 +131,13 @@ public class DanceScreen implements Screen, BeatListener {
         danceMan.update(delta);
 
         if (firefighter.getHealth() <= 0 || etDancer.getHealth() <= 0) {
-            this.firetruck.setHP(firefighter.getHealth());
+            this.firetruck.setHP(Math.max(firefighter.getHealth(), 0));
             this.patrol.setHP(etDancer.getHealth());
             GUI gui = new GUI(game, (GameScreen) previousScreen);
             Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) previousScreen, gui));
             gui.idleInfoButton();
             SoundFX.stopMusic();
-            SoundFX.playGameMusic();
+            if (SoundFX.music_enabled) SoundFX.playGameMusic();
             game.setScreen(previousScreen);
         }
 
