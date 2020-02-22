@@ -14,10 +14,7 @@ import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Patrol;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Minigame.*;
-import com.mozarellabytes.kroy.Utilities.CameraShake;
-import com.mozarellabytes.kroy.Utilities.GUI;
-import com.mozarellabytes.kroy.Utilities.GameInputHandler;
-import com.mozarellabytes.kroy.Utilities.SoundFX;
+import com.mozarellabytes.kroy.Utilities.*;
 
 /**
  * The screen for the minigame that triggers when a firetruck meets an ET patrol
@@ -29,6 +26,7 @@ public class DanceScreen implements Screen, BeatListener {
 
     /** Instance of our game that allows us the change screens */
     private final Kroy game;
+    private DanceScreenInputHandler danceInputHandler;
 
     /** Camera to set the projection for the screen */
     private final OrthographicCamera camera;
@@ -54,6 +52,7 @@ public class DanceScreen implements Screen, BeatListener {
     private final Texture etNoneTexture;
     private final Texture etLeftTexture;
     private final Texture etRightTexture;
+    private Texture currentTexture;
 
     private FireTruck firetruck;
     private Patrol patrol;
@@ -117,7 +116,9 @@ public class DanceScreen implements Screen, BeatListener {
         etRightTexture = new Texture(Gdx.files.internal("sprites/dance/et3.png"), true);
         etRightTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
+        currentTexture = firemanNoneTexture;
 
+        danceInputHandler = new DanceScreenInputHandler(this);
         //System.out.println("Got to the dance Screen");
     }
 
@@ -150,38 +151,6 @@ public class DanceScreen implements Screen, BeatListener {
             if (firefighter.getTimeInState() > danceMan.getPhase()/4) {
                 lastResult = DanceResult.MISSED;
             }
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            lastResult = danceMan.takeMove(DanceMove.UP);
-            firefighter.setState(DanceMove.UP);
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            lastResult = danceMan.takeMove(DanceMove.DOWN);
-            firefighter.setState(DanceMove.DOWN);
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
-             lastResult = danceMan.takeMove(DanceMove.LEFT);
-            firefighter.setState(DanceMove.LEFT);
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
-             lastResult = danceMan.takeMove(DanceMove.RIGHT);
-            firefighter.setState(DanceMove.RIGHT);
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-
-            int combo = danceMan.getCombo();
-            etDancer.damage((int)scaleDamage(combo));
-            danceMan.killCombo();
-            //System.out.println("Firetruck health: " + firefighter.getHealth() + " ET health: " + etDancer.getHealth());
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            Gdx.app.exit();
         }
 
         Gdx.gl.glClearColor(51/255f, 34/255f, 99/255f, 1);
@@ -290,11 +259,12 @@ public class DanceScreen implements Screen, BeatListener {
 
     @Override
     public void show() {
-        if (!hasShownTutorial && !((GameScreen)previousScreen).gameState.hasDanceTutorialShown()) {
-            hasShownTutorial = true;
-            ((GameScreen)previousScreen).gameState.setDanceTutorialShown();
-            game.setScreen(new ControlsScreen(game, this, "dance"));
-        }
+        Gdx.input.setInputProcessor(new DanceScreenInputHandler(this));
+        //if (!hasShownTutorial && !((GameScreen)previousScreen).gameState.hasDanceTutorialShown()) {
+           // hasShownTutorial = true;
+          //  ((GameScreen)previousScreen).gameState.setDanceTutorialShown();
+          //  game.setScreen(new ControlsScreen(game, this, "dance"));
+       // }
     }
 
     @Override
@@ -363,5 +333,20 @@ public class DanceScreen implements Screen, BeatListener {
         float offset = height * .2f;
         game.shapeRenderer.rect(x-width/2, y, width, height, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
         game.shapeRenderer.rect(x-width/2 + offset, y + offset, (width - 2*offset) * percentage, height - 2*offset, Color.RED, Color.RED, Color.RED, Color.RED);
+    }
+
+    public void setLastMove(DanceMove move){
+        lastResult = danceMan.takeMove(move);
+        firefighter.setState(move);
+    }
+
+    public void useCombo(){
+        int combo = danceMan.getCombo();
+        etDancer.damage((int)scaleDamage(combo));
+        danceMan.killCombo();
+    }
+
+    public void setFireManTexture(Texture texture){
+        this.currentTexture = texture;
     }
 }
