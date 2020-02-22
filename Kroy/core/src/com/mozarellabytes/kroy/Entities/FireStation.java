@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
@@ -33,15 +35,8 @@ public class FireStation {
 
     private final Rectangle area;
 
-    /** The tile where new FireTrucks are spawned */
-    private final Vector2 spawnTile;
-
     /** A tile inside the station where a truck can be repaired and refilled */
-    private final Vector2 bayTile1;
-
-    /** A second tile inside the station where a truck can be repaired and
-     * refilled */
-    private final Vector2 bayTile2;
+    private ArrayList<Vector2> bayTiles;
 
     /** The sprite image for the station */
     private final Texture texture, deadTexture;
@@ -64,12 +59,11 @@ public class FireStation {
     public FireStation(int x, int y) {
         this.x = x;
         this.y = y;
-        this.w=5;
+        this.w=6;
         this.h=3;
-        this.spawnTile = new Vector2(x+3, y);
-        this.bayTile1 = new Vector2(x+1, y);
-        this.bayTile2 = new Vector2(x+2, y);
-        this.texture = new Texture(Gdx.files.internal("sprites/station/station.png"));
+        bayTiles = new ArrayList<>();
+        for (int i=0; i<4; i++) bayTiles.add(new Vector2(x + i + 1, y));
+        this.texture = new Texture(Gdx.files.internal("sprites/station/extended_station.png"));
         this.deadTexture = new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_dead.png")); // change me pls
         this.trucks = new ArrayList<FireTruck>();
         this.patrols = new ArrayList<Patrol>();
@@ -102,9 +96,9 @@ public class FireStation {
     }
 
     public void drawStats(ShapeRenderer shapeMapRenderer) {
-        shapeMapRenderer.rect(this.getPosition().x + 2.26f, this.getPosition().y + 2.9f, 0.6f, 1.2f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
-        shapeMapRenderer.rect(this.getPosition().x + 2.38f, this.getPosition().y + 3f, 0.36f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-        shapeMapRenderer.rect(this.getPosition().x + 2.38f, this.getPosition().y + 3f, 0.36f, this.getHP() / 100 * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
+        shapeMapRenderer.rect(this.getPosition().x + 2.76f, this.getPosition().y + 2.9f, 0.55f, 1.2f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
+        shapeMapRenderer.rect(this.getPosition().x + 2.86f, this.getPosition().y + 3f, 0.34f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+        shapeMapRenderer.rect(this.getPosition().x + 2.86f, this.getPosition().y + 3f, 0.34f, this.getHP() / 100 * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
     }
 
     /**
@@ -115,9 +109,11 @@ public class FireStation {
     public void restoreTrucks() {
         for (FireTruck truck : this.trucks) {
             if (this.HP > 0) {
-                if (truck.getPosition().equals(this.bayTile1) || truck.getPosition().equals(this.bayTile2)) {
-                    repair(truck);
-                    refill(truck);
+                for (Vector2 bayTile : bayTiles) {
+                    if (truck.getPosition().equals(bayTile)) {
+                        repair(truck);
+                        refill(truck);
+                    }
                 }
              }
         }
@@ -178,7 +174,7 @@ public class FireStation {
         for (FireTruck truck : trucks) {
             for (FireTruck truck2 : trucks) {
                 if (!(truck.equals(truck2))) {
-                    if (!truck.trailPath.isEmpty() && !truck.getPosition().equals(spawnTile)) {
+                    if (!truck.trailPath.isEmpty()) {
                         Vector2 truck2tile = new Vector2(Math.round(truck2.getPosition().x), Math.round(truck2.getPosition().y));
                         Vector2 truckstile = new Vector2((float)Math.floor(truck2.getPosition().x),(float) Math.floor(truck2.getPosition().y));
                         if (!truck2.trailPath.isEmpty() && truck.trailPath.first().equals(truck2.trailPath.first())) {
@@ -233,7 +229,7 @@ public class FireStation {
     /** Draws the firetruck to the gameScreen
      * @param mapBatch batch being used to render to the gameScreen */
     public void draw(Batch mapBatch) {
-        mapBatch.draw(this.texture, this.x, this.y, 5, 3);
+        mapBatch.draw(this.texture, this.x, this.y, this.w, this.h);
     }
     public DestroyedEntity getDestroyedStation(){
         return new DestroyedEntity(this.deadTexture, this.x, this.y, 5, 3);

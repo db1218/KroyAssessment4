@@ -137,7 +137,7 @@ public class GameScreen implements Screen {
                 mapLayers.getIndex("structures3"),
                 mapLayers.getIndex("transparentStructures")};
 
-        station = new FireStation(3, 7);
+        station = new FireStation(2, 7);
 
         spawn(FireTruckType.Emerald);
         spawn(FireTruckType.Amethyst);
@@ -559,8 +559,8 @@ public class GameScreen implements Screen {
      * @param type Type of truck to be spawned (Ocean, Speed)
      */
     private void spawn(FireTruckType type) {
-        SoundFX.sfx_truck_spawn.play();
-        station.spawn(new FireTruck(this, new Vector2(6,7), type));
+        if (SoundFX.music_enabled) SoundFX.sfx_truck_spawn.play();
+        station.spawn(new FireTruck(this, new Vector2(3 + station.getTrucks().size(),7), type));
         gameState.addFireTruck();
     }
 
