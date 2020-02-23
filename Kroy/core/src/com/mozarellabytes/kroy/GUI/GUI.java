@@ -1,19 +1,22 @@
-package com.mozarellabytes.kroy.Utilities;
+package com.mozarellabytes.kroy.GUI;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Fortress;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Screens.GameScreen;
+import com.mozarellabytes.kroy.Utilities.Constants;
+import com.mozarellabytes.kroy.Utilities.SoundFX;
+
+import java.util.ArrayList;
 
 //import javax.jnlp.FileContents;
 
@@ -80,10 +83,13 @@ public class GUI {
     /** Texture of the soundButton that is rendered to the screen */
     private Texture currentSoundTexture;
 
+    private ArrayList<Element> elements;
+    private float padding;
+    private Batch batch;
+    private ShapeRenderer shapeRenderer;
+
     /** Camera to set the projection for the screen */
     private final OrthographicCamera pauseCamera;
-
-    private GlyphLayout layout;
 
     /** Constructor for GUI
      *
@@ -93,10 +99,13 @@ public class GUI {
     public GUI(Kroy game, GameScreen gameScreen) {
         this.game = game;
         this.gameScreen = gameScreen;
-        this.selectedH = 275;
-        this.selectedW = 225;
+        this.selectedH = 250;
+        this.selectedW = 250;
         this.selectedX = 5;
         this.selectedY = Gdx.graphics.getHeight() - 5 - this.selectedH;
+
+        batch = game.batch;
+        shapeRenderer = game.shapeRenderer;
 
         homeButtonIdle = new Texture(Gdx.files.internal("ui/home_idle.png"), true);
         homeButtonIdle.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
@@ -139,40 +148,65 @@ public class GUI {
 
         pauseCamera = new OrthographicCamera();
         pauseCamera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
+
+        padding = 5f;
+        elements = new ArrayList<>();
+        elements.add(new Element(250));
+        elements.add(new Element(30));
+        elements.add(new Element(30));
+        elements.add(new Element(30));
     }
 
-    /**
-     * Renders the health and (when applicable) reserve bars
-     * along with the custom attributes that the entity
-     * possesses
-     *
-     * @param entity    The entity that has been clicked on
-     */
-    public void renderSelectedEntity(Object entity) {
+    public void renderElements() {
+        Gdx.gl20.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        renderBackgrounds();
+        renderEntity();
+        Gdx.gl20.glDisable(GL20.GL_BLEND);
+        batch.begin();
+        renderText();
+        batch.end();
+    }
+
+    private void renderEntity() {
+        Object entity = gameScreen.getSelectedEntity();
         if (entity != null) {
-            Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-            game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            renderSelectedEntityBackground();
-            game.shapeRenderer.end();
-            game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             if (entity instanceof FireTruck) {
                 FireTruck truck = (FireTruck) entity;
-                renderSelectedTruck(truck);
+                renderSelectedEntityBars(truck);
+                shapeRenderer.end();
+                batch.begin();
+                renderSelectedEntityText(truck);
+                batch.end();
             } else if (entity instanceof Fortress) {
                 Fortress fortress = (Fortress) entity;
-                renderSelectedFortress(fortress);
+                renderSelectedEntityBars(fortress);
+                shapeRenderer.end();
+                batch.begin();
+                renderSelectedEntityText(fortress);
+                batch.end();
             }
-            game.shapeRenderer.end();
+        } else {
+            shapeRenderer.end();
         }
     }
 
-    /**
-     * Renders the dark background behind the stats area
-     */
-    private void renderSelectedEntityBackground() {
-        game.shapeRenderer.setColor(0, 0, 0, 0.5f);
-        game.shapeRenderer.rect(selectedX, selectedY, selectedW, selectedH);
+    private void renderBackgrounds() {
+        shapeRenderer.setColor(0, 0, 0, 0.5f);
+        float previousY = Gdx.graphics.getHeight();
+        for (Element element : elements) {
+            previousY -= element.getBackground().height + padding;
+            shapeRenderer.rect(padding, previousY, element.getBackground().width, element.getBackground().height);
+        }
+    }
+
+    private void renderText() {
+        float previousY = Gdx.graphics.getHeight();
+        for (Element element : this.elements) {
+            previousY -= element.getBackground().height + padding;
+            game.font19.draw(batch, element.getText(), padding + 5, previousY + 21);
+        }
     }
 
     /**
@@ -182,23 +216,13 @@ public class GUI {
      * @param truck the FireTruck that owns the stats
      *              that are being displayed
      */
-    private void renderSelectedTruck(FireTruck truck) {
-        renderSelectedEntityBar(truck.getHP(), truck.getType().getMaxHP(), Color.RED, Color.FIREBRICK, 1, 35);
-        renderSelectedEntityBar(truck.getReserve(), truck.getType().getMaxReserve(), Color.CYAN, Color.BLUE, 2, 35);
-        renderSelectedEntityText(truck);
-
+    private void renderSelectedEntityBars(FireTruck truck) {
+        renderSelectedEntityBar(truck.getHP(), truck.getType().getMaxHP(), Color.RED, Color.FIREBRICK, 1);
+        renderSelectedEntityBar(truck.getReserve(), truck.getType().getMaxReserve(), Color.CYAN, Color.BLUE, 2);
     }
 
-    /**
-     * Calls the methods which render the attributes and
-     * health bar of a fortress in the stats area
-     *
-     * @param fortress  the Fortress that owns the stats
-     *                  that are being displayed
-     */
-    private void renderSelectedFortress(Fortress fortress) {
-        renderSelectedEntityBar(fortress.getHP(), fortress.getFortressType().getMaxHP(), Color.RED, Color.FIREBRICK, 1, 50);
-        renderSelectedEntityText(fortress);
+    private void renderSelectedEntityBars(Fortress fortress) {
+        renderSelectedEntityBar(fortress.getHP(), fortress.getFortressType().getMaxHP(), Color.RED, Color.FIREBRICK, 1);
     }
 
     /**
@@ -210,19 +234,17 @@ public class GUI {
      */
     private void renderSelectedEntityText(FireTruck truck) {
         int newLine = 20;
-        game.batch.begin();
-        game.font26.draw(game.batch, truck.getType().getName(), this.selectedX + 10, this.selectedY + this.selectedH - 10);
-        game.font19.draw(game.batch, "HP: ", this.selectedX + 15, this.selectedY + this.selectedH - 50);
-        game.font19.draw(game.batch, String.format("%.1f", truck.getHP()) + " / " + String.format("%.1f", truck.getType().getMaxHP()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine);
-        game.font19.draw(game.batch, "Reserve: ", this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*2);
-        game.font19.draw(game.batch, String.format("%.1f", truck.getReserve()) + " / " + String.format("%.1f", truck.getType().getMaxReserve()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine*3);
-        game.font19.draw(game.batch, "Speed: ", this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*4);
-        game.font19.draw(game.batch, String.format("%.1f", truck.getType().getSpeed()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine*5);
-        game.font19.draw(game.batch, "Range: ", this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*6);
-        game.font19.draw(game.batch, String.format("%.1f", truck.getType().getRange()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine*7);
-        game.font19.draw(game.batch, "AP: ", this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*8);
-        game.font19.draw(game.batch, String.format("%.2f", truck.getType().getAP()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine*9);
-        game.batch.end();
+        game.font26.draw(batch, truck.getType().getName(), this.selectedX + 10, this.selectedY + this.selectedH - 10);
+        game.font19.draw(batch, "HP: ", this.selectedX + 15, this.selectedY + this.selectedH - 50);
+        game.font19.draw(batch, String.format("%.1f", truck.getHP()) + " / " + String.format("%.1f", truck.getType().getMaxHP()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine);
+        game.font19.draw(batch, "Reserve: ", this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*2);
+        game.font19.draw(batch, String.format("%.1f", truck.getReserve()) + " / " + String.format("%.1f", truck.getType().getMaxReserve()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine*3);
+        game.font19.draw(batch, "Speed: ", this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*4);
+        game.font19.draw(batch, String.format("%.1f", truck.getType().getSpeed()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine*5);
+        game.font19.draw(batch, "Range: ", this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*6);
+        game.font19.draw(batch, String.format("%.1f", truck.getType().getRange()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine*7);
+        game.font19.draw(batch, "AP: ", this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*8);
+        game.font19.draw(batch, String.format("%.2f", truck.getType().getAP()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine*9);
     }
 
     /**
@@ -234,18 +256,14 @@ public class GUI {
      */
     private void renderSelectedEntityText(Fortress fortress) {
         int newLine = 20;
-        game.batch.begin();
-        if(fortress.getFortressType().getName().length() > 14){ //Scale down name of the fortress' size if it is large
-            game.font19.draw(game.batch, fortress.getFortressType().getName(), this.selectedX + 10, this.selectedY + this.selectedH - 10);
-        } else
-            game.font26.draw(game.batch, fortress.getFortressType().getName(), this.selectedX + 10, this.selectedY + this.selectedH - 10);
-        game.font19.draw(game.batch, "HP: ", this.selectedX + 15, this.selectedY + this.selectedH - 50);
-        game.font19.draw(game.batch, String.format("%.1f", fortress.getHP()) + " / " + String.format("%.1f", fortress.getFortressType().getMaxHP()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine);
-        game.font19.draw(game.batch, "Range: ", this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*2);
-        game.font19.draw(game.batch, String.format("%.1f", fortress.getFortressType().getRange()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine*3);
-        game.font19.draw(game.batch, "AP: ", this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*4);
-        game.font19.draw(game.batch, String.format("%.2f", fortress.getFortressType().getAP()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine*5);
-        game.batch.end();
+        if(fortress.getFortressType().getName().length() > 14) game.font19.draw(batch, fortress.getFortressType().getName(), this.selectedX + 10, this.selectedY + this.selectedH - 10);
+        else game.font26.draw(batch, fortress.getFortressType().getName(), this.selectedX + 10, this.selectedY + this.selectedH - 10);
+        game.font19.draw(batch, "HP: ", this.selectedX + 15, this.selectedY + this.selectedH - 50);
+        game.font19.draw(batch, String.format("%.1f", fortress.getHP()) + " / " + String.format("%.1f", fortress.getFortressType().getMaxHP()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine);
+        game.font19.draw(batch, "Range: ", this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*2);
+        game.font19.draw(batch, String.format("%.1f", fortress.getFortressType().getRange()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine*3);
+        game.font19.draw(batch, "AP: ", this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLine*4);
+        game.font19.draw(batch, String.format("%.2f", fortress.getFortressType().getAP()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLine*5);
     }
 
     /**
@@ -254,37 +272,58 @@ public class GUI {
      * fortresses. The integers inside the method that
      * have values set to them are customisable to get
      * the desired layout/formatting of the bars
-     *
-     * @param value             the value towards the goal
+     *  @param value             the value towards the goal
      * @param maxValue          the goal
      * @param progressColour    the colour of the value bar
      * @param backgroundColour  the colour behind the value bar
      * @param position          the 'bar number' to allow multiple
-     *                          bars along side each other
-     *                          (1 to infinity)
-     * @param width             the width of the bar (usually 50 or 25)
+*                          bars along side each other
+*                          (1 to infinity)
      */
-    private void renderSelectedEntityBar(float value, float maxValue, Color progressColour, Color backgroundColour, int position, int width) {
-        int whiteW = width;
+    private void renderSelectedEntityBar(float value, float maxValue, Color progressColour, Color backgroundColour, int position) {
         int outerSpacing = 10;
         int innerSpacing = 5;
         int spaceForText = 35;
         int barHeight = this.selectedH - outerSpacing*2 - innerSpacing*2 - spaceForText;
-        int positionSpacer = position * whiteW;
+        int positionSpacer = position * 35;
         int barSpacer = 0;
         if (position > 1) barSpacer = 5;
-        game.shapeRenderer.rect(this.selectedX + this.selectedW - positionSpacer - outerSpacing - barSpacer, this.selectedY + outerSpacing, whiteW, this.selectedH - outerSpacing*2 - spaceForText, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
-        game.shapeRenderer.rect(this.selectedX + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, barHeight, backgroundColour, backgroundColour, backgroundColour, backgroundColour);
-        game.shapeRenderer.rect(this.selectedX + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, value/maxValue*barHeight, progressColour, progressColour, progressColour, progressColour);
+        shapeRenderer.rect(this.selectedX + elements.get(0).getBackground().width - positionSpacer - outerSpacing - barSpacer, this.selectedY + outerSpacing, 35, this.selectedH - outerSpacing*2 - spaceForText, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
+        shapeRenderer.rect(this.selectedX + elements.get(0).getBackground().width - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, 35 - innerSpacing*2, barHeight, backgroundColour, backgroundColour, backgroundColour, backgroundColour);
+        shapeRenderer.rect(this.selectedX + elements.get(0).getBackground().width - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, 35 - innerSpacing*2, value/maxValue*barHeight, progressColour, progressColour, progressColour, progressColour);
     }
+
     /** Renders the buttons to the game screen */
     public void renderButtons() {
-        game.batch.begin();
-        game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
-        game.batch.draw(currentHomeTexture, homeButton.x, homeButton.y, homeButton.width, homeButton.height);
-        game.batch.draw(currentPauseTexture, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
-        game.batch.draw(currentInfoTexture, infoButton.x, infoButton.y, infoButton.width, infoButton.height);
-        game.batch.end();
+        batch.begin();
+        batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
+        batch.draw(currentHomeTexture, homeButton.x, homeButton.y, homeButton.width, homeButton.height);
+        batch.draw(currentPauseTexture, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
+        batch.draw(currentInfoTexture, infoButton.x, infoButton.y, infoButton.width, infoButton.height);
+        batch.end();
+    }
+
+    /** Renders the text to the screen when the game is paused */
+    public void renderPauseScreenText() {
+        GlyphLayout layout = new GlyphLayout();
+        layout.setText(game.font26, "Game paused \n");
+        layout.setText(game.font26, "Press 'ESC' or the Pause button \n To return to the game");
+
+        batch.setProjectionMatrix(pauseCamera.combined);
+        batch.begin();
+        game.font26.draw(batch, layout,pauseCamera.viewportWidth/2 - layout.width/2f, pauseCamera.viewportHeight/2);
+        batch.end();
+    }
+
+    /** Renders the text to the screen when the game is paused */
+    public void renderFreezeScreenText(float freezeCooldown) {
+        GlyphLayout layout = new GlyphLayout();
+        layout.setText(game.font26, String.format("Game Frozen! \n You have %.1f seconds to draw your truck paths \n Or press space when you're ready to go", freezeCooldown));
+
+        batch.setProjectionMatrix(pauseCamera.combined);
+        batch.begin();
+        game.font26.draw(batch, layout,pauseCamera.viewportWidth/2 - layout.width/2f, pauseCamera.viewportHeight - 25);
+        batch.end();
     }
 
     /** Sets the homeButton texture to homeButtonClicked while the homeButton
@@ -299,6 +338,9 @@ public class GUI {
     /** Sets the infoButton texture to "Idle" if the previous was "Clicked",
      * else it sets it to "Clicked" */
     public void clickedInfoButton() {
+        if (SoundFX.music_enabled) {
+            SoundFX.sfx_button_clicked.play();
+        }
         if (currentInfoTexture == infoButtonIdle) {
             currentInfoTexture = infoButtonClicked;
         } else {
@@ -368,76 +410,48 @@ public class GUI {
         }
     }
 
-    /** Renders the text to the screen when the game is paused */
-    public void renderPauseScreenText() {
-        GlyphLayout layout = new GlyphLayout();
-        String pauseText1 =  "Game paused \n";
-        String pauseText2 =  "Press 'P' or the Pause button \n To return to game";
-        layout.setText(game.font26b, pauseText1);
-        layout.setText(game.font26b, pauseText2);
-
-        game.batch.setProjectionMatrix(pauseCamera.combined);
-        game.batch.begin();
-        game.font50b.draw(game.batch, pauseText1, pauseCamera.viewportWidth/2 - layout.width/2.7f, 100);
-        game.font26b.draw(game.batch, pauseText2, pauseCamera.viewportWidth/2 - layout.width/2, 50);
-        game.batch.end();
-    }
-
-    /** Renders a circle around the current selected entity,
-     * showing the maximum range of its attacks
-     * @param entity The currently selected entity as an object
-     * @param shapeMapRenderer The ShapeRenderer for the map
+    /**
+     * Reset the buttons when game screen appears
      */
-    public void renderSelectedEntityRange(Object entity, ShapeRenderer shapeMapRenderer){
-        float x, y, range;
-        if (entity instanceof FireTruck){
-            FireTruck truck = (FireTruck) entity;
-            x = truck.getPosition().x + 0.5f;
-            y = truck.getPosition().y + 0.5f;
-            range = truck.getRange();
-        } else if (entity instanceof Fortress){
-            Fortress fortress = (Fortress) entity;
-            x = fortress.getPosition().x;
-            y = fortress.getPosition().y;
-            range = fortress.getRange();
-        } else {
-            x = -1;
-            y = -1;
-            range = 0;
-        }
-        Gdx.gl.glLineWidth(3);
-        shapeMapRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeMapRenderer.setColor(Color.RED);
-        shapeMapRenderer.circle(x, y, range);
-        shapeMapRenderer.end();
+    public void resetButtons() {
+        idleHomeButton();
+        idleInfoButton();
+        idlePauseButton();
+        idleSoundButton();
     }
 
-    /** Renders the information from the difficulty counter,
-     * includes the current difficulty and time to difficulty change
-     * Displayed in the bottom left.
-     * @param difficultyControl The DifficultyController from the game
-     */
-    public void renderDifficultyCounter(DifficultyControl difficultyControl){
-        layout = new GlyphLayout(game.font25, difficultyControl.getDifficultyOutput());
-        renderDifficultyBackground();
-        float fontX = 10;
-        //float fontY = Gdx.graphics.getHeight() - layout.height/2;
-        float fontY = layout.height + 10;
-        game.batch.begin();
-        game.font25.draw(game.batch, difficultyControl.getDifficultyOutput(), fontX, fontY);
-        game.batch.end();
-    }
-
-    /** Renders the dark background behind the difficulty counter
+    /**
+     * Updates tne difficulty timer on the screen
      *
+     * @param time  until damage increase
      */
-    private void renderDifficultyBackground(){
-        Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        game.shapeRenderer.setColor(0, 0, 0, 0.5f);
-        game.shapeRenderer.rect(0, 0, 325, 55);
-        game.shapeRenderer.end();
+    public void updateDifficultyTime(float time) {
+        Element element = elements.get(1);
+        element.setText(String.format("Damage Increase: %.1f", time));
+        this.elements.set(1, element);
+    }
+
+    /**
+     * Updates difficulty multiplier on the screen
+     *
+     * @param multiplier    the difficulty multiplier
+     */
+    public void updateDifficultyMultiplier(float multiplier) {
+        Element element = elements.get(2);
+        element.setText("Damage Multiplier: " + Math.round(multiplier) + "x");
+        this.elements.set(2, element);
+    }
+
+    /**
+     * Updates freeze cooldown on the screen
+     *
+     * @param cooldown  time until freeze available
+     */
+    public void updateFreezeCooldown(float cooldown) {
+        Element element = elements.get(3);
+        if (cooldown > 0) element.setText(String.format("Pause Cooldown: %.1f", cooldown));
+        else element.setText("Freeze available [SPACE]");
+        this.elements.set(3, element);
     }
 
     public Rectangle getHomeButton() { return this.homeButton; }
@@ -447,5 +461,4 @@ public class GUI {
     public Rectangle getPauseButton() { return this.pauseButton; }
 
     public Rectangle getInfoButton() { return this.infoButton; }
-
 }

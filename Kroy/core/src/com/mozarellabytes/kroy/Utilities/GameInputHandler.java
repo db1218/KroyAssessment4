@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Fortress;
+import com.mozarellabytes.kroy.GUI.GUI;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
 public class GameInputHandler implements InputProcessor {
@@ -39,8 +40,8 @@ public class GameInputHandler implements InputProcessor {
     public boolean keyDown(int keycode) {
         switch (keycode) {
             case Input.Keys.ESCAPE:
-                Gdx.app.exit();
-                System.exit(1);
+                gui.clickedPauseButton();
+                gameScreen.changeState(true);
                 break;
                 /* Outdated code
             case Input.Keys.A:
@@ -62,9 +63,7 @@ public class GameInputHandler implements InputProcessor {
                 gui.idleSoundButton();
                 break;
             case Input.Keys.SPACE:
-            case Input.Keys.P:
-                gui.clickedPauseButton();
-                gameScreen.changeState();
+                gameScreen.changeState(false);
                 break;
             case Input.Keys.Q:
                 if(gameScreen.selectedTruck != null) {
@@ -73,8 +72,6 @@ public class GameInputHandler implements InputProcessor {
                     }
 
                 }
-
-
         }
         return true;
     }
@@ -119,7 +116,7 @@ public class GameInputHandler implements InputProcessor {
 
                 } else if (!gameScreen.checkTrailClick(clickCoordinates) && !checkFortressClick(clickCoordinates)) {
                     gameScreen.selectedTruck = null;
-                    gameScreen.selectedEntity = null;
+                    gameScreen.setSelectedEntity(null);
                 }
             } else {
                 checkFortressClick(clickCoordinates);
@@ -170,7 +167,6 @@ public class GameInputHandler implements InputProcessor {
         checkButtonUnclick(screenX, screenY);
         return true;
     }
-
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
@@ -226,7 +222,6 @@ public class GameInputHandler implements InputProcessor {
         return new Vector2((int) position.x, (int) position.y);
     }
 
-
     /** Checks if the user clicked on the home, pause or sound button
      * and changes the sprite accordingly
      * @param position2d The tile that was clicked
@@ -253,12 +248,12 @@ public class GameInputHandler implements InputProcessor {
     private boolean checkFortressClick(Vector2 position2d) {
         for (Fortress fortress : gameScreen.getFortresses()) {
             if (fortress.getArea().contains(position2d)) {
-                gameScreen.selectedEntity = fortress;
+                gameScreen.setSelectedEntity(fortress);
                 return true;
             }
         }
         gameScreen.selectedTruck = null;
-        gameScreen.selectedEntity = null;
+        gameScreen.setSelectedEntity(null);
         return false;
     }
 
@@ -283,7 +278,7 @@ public class GameInputHandler implements InputProcessor {
         }
 
         if (gui.getPauseButton().contains(screenCoords)){
-            gameScreen.changeState();
+            gameScreen.changeState(true);
         } else {
             gui.idlePauseButton();
         }
@@ -291,5 +286,6 @@ public class GameInputHandler implements InputProcessor {
         if (gui.getInfoButton().contains(screenCoords)){
             gameScreen.toControlScreen();
         }
+        gui.idleInfoButton();
     }
 }

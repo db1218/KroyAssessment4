@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.*;
+import com.mozarellabytes.kroy.GUI.GUI;
 import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.*;
@@ -81,7 +82,7 @@ public class GameScreen implements Screen {
 
     /** The entity that the user has clicked on to show
      * the large stats in the top left corner */
-    public Object selectedEntity;
+    private Object selectedEntity;
 
     /** A class keeping track of the current difficulty and the time to the next change */
     private DifficultyControl difficultyControl;
@@ -91,11 +92,13 @@ public class GameScreen implements Screen {
 
     public FPSLogger fpsCounter;
 
+    public float freezeCooldown;
+
     public boolean wasPaused = false;
     /** Play when the game is being played
      * Pause when the pause button is clicked */
     public enum PlayState {
-        PLAY, PAUSE
+        PLAY, PAUSE, FREEZE
     }
 
     /**
@@ -170,6 +173,8 @@ public class GameScreen implements Screen {
 
         mapBatch = mapRenderer.getBatch();
 
+        freezeCooldown = 0f;
+
         if (SoundFX.music_enabled) {
             SoundFX.sfx_soundtrack.setVolume(.5f);
             SoundFX.sfx_soundtrack.play();
@@ -178,6 +183,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        gui.resetButtons();
     }
 
     @Override
@@ -185,6 +191,8 @@ public class GameScreen implements Screen {
         fpsCounter.log();
 
         camera.update();
+
+        freezeCooldown -= delta; //if counting down
 
         mapRenderer.setView(camera);
         mapRenderer.render(backgroundLayerIndex);
@@ -254,40 +262,47 @@ public class GameScreen implements Screen {
         }
 
         shapeMapRenderer.end();
-        gui.renderSelectedEntityRange(selectedEntity, shapeMapRenderer);
 
-        gui.renderSelectedEntity(selectedEntity);
+        gui.renderElements();
 
         switch (state) {
             case PLAY:
                 this.update(delta);
                 break;
             case PAUSE:
-
                 // render dark background
                 SoundFX.stopTruckAttack();
 
                 Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
-
                 shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-                shapeMapRenderer.setColor(0, 0, 0, 0.1f);
-                shapeMapRenderer.rect(0, 0, this.camera.viewportWidth, this.camera.viewportHeight);
-
+                shapeMapRenderer.setColor(0, 0, 0, 0.5f);
+                shapeMapRenderer.rect(0, 0, camera.viewportWidth, camera.viewportHeight);
                 shapeMapRenderer.end();
 
                 gui.renderPauseScreenText();
                 wasPaused = true;
-
                 break;
+            case FREEZE:
+                // render dark background
+                SoundFX.stopTruckAttack();
 
+                Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
+                shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeMapRenderer.setColor(0, 0, 1f, 0.2f);
+                shapeMapRenderer.rect(0, 0, camera.viewportWidth, camera.viewportHeight);
+                shapeMapRenderer.setColor(0, 0, 0, 0.5f);
+                shapeMapRenderer.rect(camera.viewportWidth/4, 26.5f, camera.viewportWidth/2, 3);
+                shapeMapRenderer.end();
+
+                gui.renderFreezeScreenText(freezeCooldown);
+
+                // exit this mode
+                if (freezeCooldown < 0) {
+                    freezeCooldown = Constants.FREEZE_TIME;
+                    state = PlayState.PLAY;
+                }
         }
         gui.renderButtons();
-
-
-
-        gui.renderDifficultyCounter(difficultyControl);
-
     }
 
     /**
@@ -409,9 +424,7 @@ public class GameScreen implements Screen {
                 gameState.addFortress();
                 deadEntities.add(fortress.createDestroyedFortress());
                 this.fortresses.remove(fortress);
-                if (SoundFX.music_enabled) {
-                    SoundFX.sfx_fortress_destroyed.play();
-                }
+                if (SoundFX.music_enabled) SoundFX.sfx_fortress_destroyed.play();
             }
 
         }
@@ -427,9 +440,10 @@ public class GameScreen implements Screen {
         shapeMapRenderer.end();
         shapeMapRenderer.setColor(Color.WHITE);
 
-        gui.renderSelectedEntity(selectedEntity);
-
         difficultyControl.incrementCurrentTime(delta);
+        gui.updateDifficultyTime(difficultyControl.getTimeSinceLastDifficultyIncrease());
+        gui.updateDifficultyMultiplier(difficultyControl.getDifficultyMultiplier());
+        gui.updateFreezeCooldown(freezeCooldown);
     }
 
     @Override
@@ -564,11 +578,16 @@ public class GameScreen implements Screen {
     }
 
     /** Toggles between Play and Pause state when the Pause button is clicked */
-    public void changeState() {
-        if (this.state.equals(PlayState.PLAY)) {
-            this.state = PlayState.PAUSE;
-        } else {
-            this.state = PlayState.PLAY;
+    public void changeState(boolean pause) {
+        if (pause) {
+            if (state.equals(PlayState.PLAY)) state = PlayState.PAUSE;
+            else state = PlayState.PLAY;
+        } else if (state.equals(PlayState.FREEZE)) {
+            state = PlayState.PLAY;
+            freezeCooldown = 10;
+        } else if (freezeCooldown < 0) {
+            state = PlayState.FREEZE;
+            freezeCooldown = 10;
         }
     }
 
@@ -587,6 +606,15 @@ public class GameScreen implements Screen {
     public PlayState getState() {
         return this.state;
     }
+
+    public void setSelectedEntity(Object entity) {
+        this.selectedEntity = entity;
+    }
+
+    public Object getSelectedEntity() {
+        return this.selectedEntity;
+    }
+
 
 }
 
