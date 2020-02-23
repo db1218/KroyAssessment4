@@ -119,7 +119,6 @@ public class DanceScreen implements Screen, BeatListener {
         this.game.batch.draw(ETDancer.getTexture("ET"), etLocation.x, etLocation.y, 512, 512);
 
         // Render arrows
-
         int i = 0;
         for (DanceMove move : danceMan.getMoveList()) {
             if (move.getArrowTexture() != null){
@@ -238,7 +237,7 @@ public class DanceScreen implements Screen, BeatListener {
 
     @Override
     public void moveResult(DanceResult result) {
-        if (result == DanceResult.WRONG) {
+        if (result.equals(DanceResult.WRONG)){
             this.firefighter.damage(20);
             this.ETDancer.startJive();
         }

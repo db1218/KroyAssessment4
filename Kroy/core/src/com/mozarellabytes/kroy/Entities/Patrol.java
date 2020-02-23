@@ -11,13 +11,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.Entities.FireStation;
 import com.mozarellabytes.kroy.Screens.GameScreen;
-import com.mozarellabytes.kroy.Utilities.CircularLinkedList;
 import com.mozarellabytes.kroy.Utilities.Node;
 
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 
 /**
@@ -36,31 +34,17 @@ public class Patrol extends Sprite {
     /** Defines set of pre-defined attributes */
     public final PatrolType type;
 
+    /**
+     * path the patrol follows; the fewer item in
+     * the path the slower the patrol will go
+     */
+    private final Queue<Vector2> path;
+
     /** Health points */
     private float HP;
 
     /** Position of patrol in tiles */
     public Vector2 position;
-
-    /**
-     * Actual path the patrol follows; the fewer item in
-     * the path the slower the patrol will go
-     */
-    public final CircularLinkedList path;
-
-    public final Queue<Vector2> trailPath;
-
-    public Node current;
-
-    /** If the patrol is currently moving, determines whether the
-     * patrol's position should be updated
-     *
-     * <code>true</code> once the player has drawn a
-     * path and has let go of the mouse click
-     * <code>false</code> once the patrol has got to
-     * the end of the path
-     */
-    private boolean moving;
 
     /**
      * Used to check if the patrol's image should be
@@ -90,9 +74,7 @@ public class Patrol extends Sprite {
         this.type = type;
         this.HP = type.getMaxHP();
         this.position = new Vector2(type.getPoint1().x + 1, type.getPoint1().y);
-        this.path = new CircularLinkedList();
-        this.trailPath = new Queue<Vector2>();
-        this.moving = true;
+        this.path = new Queue<>();
         this.spray = new ArrayList<BlasterParticle>();
         this.nextTile = position;
         this.previousTile = position;
@@ -127,28 +109,31 @@ public class Patrol extends Sprite {
             }
             addTileToPath(this.position, previousTile);
         }
-        current = path.getHead();
     }
 
     public void addTileToPath(Vector2 coordinate, Vector2 previous) {
-        int interpolation = (int) (90/type. getSpeed());
+        int interpolation = (int) (90/type.getSpeed());
         for (int i=1; i<interpolation; i++) {
-            this.path.addNode(new Vector2((((previous.x - coordinate.x)*-1)/interpolation)*i + previous.x, (((previous.y - coordinate.y)*-1)/interpolation)*i + previous.y));
+            this.path.addLast(new Vector2((((previous.x - coordinate.x)*-1)/interpolation)*i + previous.x, (((previous.y - coordinate.y)*-1)/interpolation)*i + previous.y));
         }
         previousTile = new Vector2(((int) coordinate.x), ((int) coordinate.y));
-        this.path.addNode(previousTile);
+        this.path.addLast(previousTile);
     }
 
-    public void move() {
-        if (moving) {
-            Node next = path.getNext(current);
-            Vector2 nextTile = path.getData(next);
-            this.position = nextTile;
-            current = next;
-            previousTile = nextTile;
-        }
+    public void move(){
+        this.position = getFirstInQueue();
+        updateQueue();
     }
 
+    private void updateQueue(){
+        this.path.addLast(getFirstInQueue());
+        this.path.removeFirst();
+    }
+
+    private Vector2 getFirstInQueue(){
+        return this.path.first();
+    }
+    
     /**
     * Deals damage to Firestation by generating a BlasterParticle and adding
     * it to the spray
