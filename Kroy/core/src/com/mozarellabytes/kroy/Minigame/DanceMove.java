@@ -3,6 +3,8 @@ package com.mozarellabytes.kroy.Minigame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
+import java.util.ArrayList;
+
 /**
  * Possible moves that can be taken by dancers
  */
@@ -28,5 +30,6 @@ public enum DanceMove {
     public Texture getFirefighterTexture(){ return this.firefighter; }
     public Texture getETTexture(){return this.ET; }
     public Texture getArrowTexture(){return this.arrow; }
+
 
 }

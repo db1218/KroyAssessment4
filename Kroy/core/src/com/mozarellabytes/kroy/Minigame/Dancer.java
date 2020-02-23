@@ -36,9 +36,7 @@ public class Dancer {
      * @return true if the dancer was killed, else false
      */
     public boolean damage(int amount) {
-        if (amount < 0) {
-            amount = 0;
-        }
+        if (amount < 0) amount = 0;
         this.health -= amount;
         return this.health <= 0;
     }
@@ -113,6 +111,8 @@ public class Dancer {
     }
 
     public Texture getTexture(String entity) {
-        return entity.equals("ET") ? this.getState().getETTexture() : this.getState().getFirefighterTexture();
+        Texture ETTexture = this.getState().getETTexture();
+        Texture firefighterTexture = this.getState().getFirefighterTexture();
+        return entity.equals("ET") ? ETTexture : firefighterTexture;
     }
 }

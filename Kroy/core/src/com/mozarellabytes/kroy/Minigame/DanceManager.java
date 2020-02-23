@@ -25,12 +25,13 @@ public class DanceManager {
     /** List of classes to notify about the beat */
     private List<BeatListener> beatListeners;
 
+    private List<DanceMove> notDanceMoves;
+
     /** The number of successive correct moves the player has performed */
     private int combo = 0;
 
     /** Technical class for deciding upcoming moves */
     private DanceChoreographer choreographer;
-
 
 
     public DanceManager(float tempo) {
@@ -45,35 +46,35 @@ public class DanceManager {
         // Setup dance queue
         this.choreographer = new DanceChoreographer();
         this.beatListeners = new ArrayList<>();
+
+        this.notDanceMoves = new ArrayList<>();
+        this.notDanceMoves.add(DanceMove.WAIT);
+        this.notDanceMoves.add(DanceMove.NONE);
     }
 
     /** Called once a frame to update the dance manager*/
     public void update(float delta) {
-
-
         time += delta;
         halfTime += delta;
 
-        // Trigger every beat
-        if (time >= period) {
-            //System.out.println("Beat: " + time);
-            choreographer.nextMove();
-            time = 0f;
-            notifyOnBeat();
-        }
+        if (time >= period) onBeat();
+        if (halfTime >= period) offBeat();
+    }
 
-        // Trigger every off-beat
-        if (halfTime >= period)
-        {
-            halfTime = 0f;
-            if (!doneThisBeat && getNearestMove() != DanceMove.NONE && getNearestMove() != DanceMove.WAIT) {
-                // Player missed a turn
-                killCombo();
-                missedLastTurn = true;
-            }
-            doneThisBeat = false;
-            notifyOffBeat();
+    private void onBeat() {
+        choreographer.nextMove();
+        time = 0f;
+        notifyOnBeat();
+    }
+
+    private void offBeat() {
+        halfTime = 0f;
+        if (!doneThisBeat && notDanceMoves.contains(getNearestMove())){
+            killCombo();
+            missedLastTurn = true;
         }
+        doneThisBeat = false;
+        notifyOffBeat();
     }
 
     /**
@@ -197,25 +198,19 @@ public class DanceManager {
      * Called if the player made a sufficiently correct move
      * Good moves include GREAT moves, GOOD moves and OKAY moves
      */
-    public void goodMove() {
-        combo++;
-    }
+    public void goodMove() { combo++; }
 
     /**
      * Gets the current number of successive correct moves
      * @return combo size as int
      */
-    public int getCombo() {
-        return this.combo;
-    }
+    public int getCombo() { return this.combo; }
 
     /**
      * Zeroes the combo counter
      * Called when the player makes a WRONG move, MISSES a move or makes a LATE or EARLY move
      */
-    public void killCombo() {
-        combo = 0;
-    }
+    public void killCombo() { combo = 0; }
 
     /**
      * Register an object to be notified when the beat drops

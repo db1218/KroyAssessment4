@@ -15,7 +15,6 @@ public class DanceChoreographer {
     /** Random agent for move selection */
     private Random random;
 
-
     public DanceChoreographer() {
         moveList = new ArrayList<DanceMove>();
         random = new Random();
@@ -49,8 +48,6 @@ public class DanceChoreographer {
      * Gets the queue of upcoming moves
      * @return an array of DanceMoves
      */
-    public List<DanceMove> getMoveList() {
-        return moveList;
-    }
+    public List<DanceMove> getMoveList() { return moveList; }
 
 }
