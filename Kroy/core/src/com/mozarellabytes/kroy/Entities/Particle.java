@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
-public class                Particle {
+public class Particle {
 
     /** Random colour of Rectangle */
     private Color colour;
@@ -32,24 +32,22 @@ public class                Particle {
 
     public Particle(Vector2 startPosition, Vector2 endPosition, Object target) {
         this.target = target;
-        if (target instanceof Fortress){
-            setToWaterColour();
-        } else if (target instanceof FireStation){
-            setToBlasterColour();
-        }
+        if (target instanceof Fortress) setWaterColour();
+        if (target instanceof FireStation) setBlasterColour();
+
         this.size = (float)(Math.random()/5 + 0.1);
-        this.startPosition = new Vector2(startPosition.x + 0.5f, startPosition.y + 0.5f);
+        this.startPosition = new Vector2(startPosition.x, startPosition.y);
         this.currentPosition = startPosition;
         this.targetPosition = endPosition;
         createTargetPosition(endPosition);
     }
 
-    private void setToWaterColour() {
+    private void setWaterColour() {
         this.colours = new Color[] {Color.CYAN, Color.NAVY, Color.BLUE, Color.PURPLE, Color.SKY, Color.TEAL};
         this.colour = colours[(int)(Math.random() * 4)];
     }
 
-    private void setToBlasterColour() {
+    private void setBlasterColour() {
         this.colours = new Color[] {Color.RED, Color.CHARTREUSE, Color.FIREBRICK, Color.MAGENTA, Color.ORANGE, Color.BROWN};
         this.colour = colours[(int)(Math.random() * 4)];
     }

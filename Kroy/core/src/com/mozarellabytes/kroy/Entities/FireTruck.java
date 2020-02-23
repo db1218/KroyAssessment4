@@ -424,7 +424,8 @@ public class FireTruck extends Sprite {
      */
     public void attack(Fortress fortress) {
         if (this.reserve > 0) {
-            this.spray.add(new Particle(this.position, fortress.getPosition(), fortress));
+
+            this.spray.add(new Particle(this.getVisualPosition(), fortress.getPosition(), fortress));
             this.reserve -= Math.min(this.reserve, this.type.getAP());
         }
     }
