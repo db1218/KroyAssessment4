@@ -4,22 +4,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
-/**
- * This class is what a FireTruck uses to attack a
- * Fortress with. It generates a random colour from
- * a list of colours and a random size before heading
- * from the FireTruck towards the Fortress using the
- * interpolation function specified
- */
-public class WaterParticle {
-
-    /** Fortress that WaterParticle is firing at */
-    private final Fortress target;
-
-
+public class                Particle {
 
     /** Random colour of Rectangle */
-    private final Color colour;
+    private Color colour;
 
     /** Random size of the Rectangle */
     private final float size;
@@ -32,40 +20,43 @@ public class WaterParticle {
     /** The current position of the water particle */
     private Vector2 currentPosition;
 
+    private Color[] colours;
+
+    private Object target;
+
     /** The end position of the water particle (the fortress the truck
      * is attacking)
      */
     private Vector2 targetPosition;
 
-    /**
-     * Constructs a WaterParticle with
-     * the following parameters
-     *
-     * @param truck     The FireTruck that the
-     *                  WaterParticle came from
-     * @param target    The Fortress that the
-     *                  WaterParticle is heading
-     *                  towards
-     */
-    public WaterParticle(FireTruck truck, Fortress target) {
+
+    public Particle(Vector2 startPosition, Vector2 endPosition, Object target) {
         this.target = target;
-        Color[] colors = new Color[] {Color.CYAN, Color.NAVY, Color.BLUE, Color.PURPLE, Color.SKY, Color.TEAL};
-        this.colour = colors[(int)(Math.random() * 4)];
+        if (target instanceof Fortress){
+            setToWaterColour();
+        } else if (target instanceof FireStation){
+            setToBlasterColour();
+        }
         this.size = (float)(Math.random()/5 + 0.1);
-        this.startPosition = new Vector2(truck.getPosition().x + 0.5f, truck.getPosition().y + 0.5f);
+        this.startPosition = new Vector2(startPosition.x + 0.5f, startPosition.y + 0.5f);
         this.currentPosition = startPosition;
-        this.targetPosition = target.getPosition();
-        createTargetPosition(target);
+        this.targetPosition = endPosition;
+        createTargetPosition(endPosition);
     }
 
-    /**
-     * Creates the random coordinate within the fortress
-     *
-     * @param fortress the fortress whose target position is being created
-     */
-    private void createTargetPosition(Fortress fortress) {
-        float xCoord = (float)(Math.random()-0.5+fortress.getPosition().x);
-        float yCoord = (float)(Math.random()-0.5+fortress.getPosition().y);
+    private void setToWaterColour() {
+        this.colours = new Color[] {Color.CYAN, Color.NAVY, Color.BLUE, Color.PURPLE, Color.SKY, Color.TEAL};
+        this.colour = colours[(int)(Math.random() * 4)];
+    }
+
+    private void setToBlasterColour() {
+        this.colours = new Color[] {Color.RED, Color.CHARTREUSE, Color.FIREBRICK, Color.MAGENTA, Color.ORANGE, Color.BROWN};
+        this.colour = colours[(int)(Math.random() * 4)];
+    }
+
+    private void createTargetPosition(Vector2 target) {
+        float xCoord = (float)(Math.random()-0.5+target.x);
+        float yCoord = (float)(Math.random()-0.5+target.y);
         this.targetPosition = new Vector2(xCoord, yCoord);
     }
 
@@ -89,7 +80,7 @@ public class WaterParticle {
                 ((int) this.targetPosition.y == (int) this.currentPosition.y));
     }
 
-    public Fortress getTarget() { return this.target; }
+    public Object getTarget() { return this.target; }
 
     public float getSize() { return this.size; }
 
@@ -103,4 +94,6 @@ public class WaterParticle {
     public void setTargetPositionY(float y) {this.targetPosition.y = y;}
 
 }
+
+
 

@@ -13,6 +13,4 @@ public final class Constants {
 
     public static final int FREEZE_TIME = 10;
 
-    private Constants() {
-    }
 }

@@ -26,7 +26,7 @@ public class WaterParticleTest {
         Fortress testFortress = new Fortress(5,5, FortressType.CentralHall);
         Vector2 X = new Vector2(1,1);
         FireTruck testTruck = new FireTruck(gameScreenMock, X, FireTruckType.Ruby);
-        WaterParticle testParticle = new WaterParticle(testTruck, testFortress);
+        Particle testParticle = new Particle(testTruck, testFortress);
         testParticle.setPositionX(1);
         testParticle.setPositionY(5);
         testParticle.setTargetPositionX(1);

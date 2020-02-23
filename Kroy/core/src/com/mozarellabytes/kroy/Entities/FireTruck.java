@@ -1,8 +1,6 @@
 package com.mozarellabytes.kroy.Entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -69,7 +67,7 @@ public class FireTruck extends Sprite {
 
     /** List of particles that the truck uses to attack
      * a Fortress */
-    private final ArrayList<WaterParticle> spray;
+    private final ArrayList<Particle> spray;
 
     /** Whether the mouse has been dragged off a road tile */
     private boolean dragOffMap = false;
@@ -115,7 +113,7 @@ public class FireTruck extends Sprite {
         this.trailPath = new Queue<>();
         this.moving = false;
         this.inCollision = false;
-        this.spray = new ArrayList<WaterParticle>();
+        this.spray = new ArrayList<Particle>();
         this.timeOfLastAttack = System.currentTimeMillis();
     }
 
@@ -426,7 +424,7 @@ public class FireTruck extends Sprite {
      */
     public void attack(Fortress fortress) {
         if (this.reserve > 0) {
-            this.spray.add(new WaterParticle(this, fortress));
+            this.spray.add(new Particle(this.position, fortress.getPosition(), fortress));
             this.reserve -= Math.min(this.reserve, this.type.getAP());
         }
     }
@@ -449,7 +447,7 @@ public class FireTruck extends Sprite {
     public void updateSpray() {
         if (this.spray != null) {
             for (int i=0; i < this.spray.size(); i++) {
-                WaterParticle particle = this.spray.get(i);
+                Particle particle = this.spray.get(i);
                 particle.updatePosition();
                 if (particle.isHit()) {
                     this.damage(particle);
@@ -464,7 +462,7 @@ public class FireTruck extends Sprite {
      *
      * @param particle  The particle to be removed from spray
      */
-    private void removeParticle(WaterParticle particle) {
+    private void removeParticle(Particle particle) {
         this.spray.remove(particle);
     }
 
@@ -473,8 +471,9 @@ public class FireTruck extends Sprite {
      *
      * @param particle  the particle which damages the fortress
      */
-    private void damage(WaterParticle particle) {
-        particle.getTarget().damage(Math.min(this.type.getAP(), particle.getTarget().getHP()));
+    private void damage(Particle particle) {
+        Fortress target = (Fortress)particle.getTarget();
+        target.damage(Math.min(this.type.getAP(), target.getHP()));
     }
 
     /**
@@ -520,7 +519,7 @@ public class FireTruck extends Sprite {
         shapeMapRenderer.rect(this.getPosition().x + 0.266f, this.getPosition().y + 1.4f, 0.2f, this.getReserve() / this.type.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
         shapeMapRenderer.rect(this.getPosition().x + 0.533f, this.getPosition().y + 1.4f, 0.2f, 0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
         shapeMapRenderer.rect(this.getPosition().x + 0.533f, this.getPosition().y + 1.4f, 0.2f, this.getHP() / this.type.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
-        for (WaterParticle particle : this.getSpray()) {
+        for (Particle particle : this.getSpray()) {
             shapeMapRenderer.rect(particle.getPosition().x, particle.getPosition().y, particle.getSize(), particle.getSize(), particle.getColour(), particle.getColour(), particle.getColour(), particle.getColour());
         }
     }
@@ -599,7 +598,7 @@ public class FireTruck extends Sprite {
         return this.path;
     }
 
-    private ArrayList<WaterParticle> getSpray() {
+    private ArrayList<Particle> getSpray() {
         return this.spray;
     }
 

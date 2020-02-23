@@ -1,19 +1,14 @@
 package com.mozarellabytes.kroy.Entities;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
-import com.mozarellabytes.kroy.Entities.FireStation;
 import com.mozarellabytes.kroy.Screens.GameScreen;
-import com.mozarellabytes.kroy.Utilities.Node;
 
-import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.ArrayList;
 
@@ -59,7 +54,7 @@ public class Patrol extends Sprite {
      * List of particles that the patrol uses to attack
      * a Fortress
      */
-    private final ArrayList<BlasterParticle> spray;
+    private final ArrayList<Particle> spray;
 
     /**
      * Constructs a new Patrol at a position and of a certain type
@@ -75,7 +70,7 @@ public class Patrol extends Sprite {
         this.HP = type.getMaxHP();
         this.position = new Vector2(type.getPoint1().x + 1, type.getPoint1().y);
         this.path = new Queue<>();
-        this.spray = new ArrayList<BlasterParticle>();
+        this.spray = new ArrayList<Particle>();
         this.nextTile = position;
         this.previousTile = position;
         definePath();
@@ -133,7 +128,7 @@ public class Patrol extends Sprite {
     private Vector2 getFirstInQueue(){
         return this.path.first();
     }
-    
+
     /**
     * Deals damage to Firestation by generating a BlasterParticle and adding
     * it to the spray
@@ -141,13 +136,13 @@ public class Patrol extends Sprite {
     * @param station FireStation being attacked
     */
     public void attack(FireStation station) {
-        this.spray.add(new BlasterParticle(this, station));
+        this.spray.add(new Particle(this.getPosition(), station.getPosition(), station));
     }
 
     public void updateSpray() {
         if (this.spray != null) {
             for (int i=0; i < this.spray.size(); i++) {
-                BlasterParticle particle = this.spray.get(i);
+                Particle particle = this.spray.get(i);
                 particle.updatePosition();
                 if (particle.isHit()) {
                     this.damage(particle);
@@ -157,7 +152,7 @@ public class Patrol extends Sprite {
         }
     }
 
-    private ArrayList<BlasterParticle> getSpray() {
+    private ArrayList<Particle> getSpray() {
         return this.spray;
     }
 
@@ -170,7 +165,7 @@ public class Patrol extends Sprite {
         shapeMapRenderer.rect(this.getPosition().x + 0.2f, this.getPosition().y + 1.3f, 0.4f, 0.8f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
         shapeMapRenderer.rect(this.getPosition().x + 0.3f, this.getPosition().y + 1.4f, 0.2f, 0.6f, Color.OLIVE, Color.OLIVE, Color.OLIVE, Color.OLIVE);
         shapeMapRenderer.rect(this.getPosition().x + 0.3f, this.getPosition().y + 1.4f, 0.2f, this.getHP() / this.type.getMaxHP() * 0.6f, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN);
-        for (BlasterParticle particle : this.getSpray()) {
+        for (Particle particle : this.getSpray()) {
             shapeMapRenderer.rect(particle.getPosition().x, particle.getPosition().y, particle.getSize(), particle.getSize(), particle.getColour(), particle.getColour(), particle.getColour(), particle.getColour());
         }
     }
@@ -185,7 +180,7 @@ public class Patrol extends Sprite {
         mapBatch.draw(this, this.position.x, this.position.y, 1, 1);
     }
 
-    private void removeParticle(BlasterParticle particle) {
+    private void removeParticle(Particle particle) {
         this.spray.remove(particle);
     }
 
@@ -194,8 +189,9 @@ public class Patrol extends Sprite {
      *
      * @param particle  the particle which damages the station
      */
-    private void damage(BlasterParticle particle) {
-        particle.getTarget().damage(0.15f);
+    private void damage(Particle particle) {
+        FireStation station = (FireStation) particle.getTarget();
+        station.damage(0.15f);
     }
 
     public float getHP() {
