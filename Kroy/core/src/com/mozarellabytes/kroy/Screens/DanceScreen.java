@@ -1,7 +1,6 @@
 package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -13,20 +12,21 @@ import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Patrol;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Minigame.*;
+import com.mozarellabytes.kroy.Utilities.*;
 import com.mozarellabytes.kroy.GUI.GUI;
-import com.mozarellabytes.kroy.Utilities.GameInputHandler;
-import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 /**
  * The screen for the minigame that triggers when a firetruck meets an ET patrol
  */
 
-
-
+//ToDo  Sort out how to get the control screen to show up without messing
+    // with the input handler, also scene2D to get everything aligned??
 public class DanceScreen implements Screen, BeatListener {
 
     /** Instance of our game that allows us the change screens */
     private final Kroy game;
+
+    private DanceScreenInputHandler danceInputHandler;
 
     /** Camera to set the projection for the screen */
     private final OrthographicCamera camera;
@@ -37,32 +37,24 @@ public class DanceScreen implements Screen, BeatListener {
     private Screen previousScreen;
     private boolean hasShownTutorial = false;
 
-    private final Texture arrowUpTexture;
-    private final Texture arrowDownTexture;
-    private final Texture arrowLeftTexture;
-    private final Texture arrowRightTexture;
     private final Texture targetBoxTexture;
-    private final Texture waitTexture;
-    private final Texture firemanNoneTexture;
-    private final Texture firemanWaitTexture;
-    private final Texture firemanLeftTexture;
-    private final Texture firemanRightTexture;
-    private final Texture firemanUpTexture;
-    private final Texture firemanDownTexture;
-    private final Texture etNoneTexture;
-    private final Texture etLeftTexture;
-    private final Texture etRightTexture;
 
     private FireTruck firetruck;
     private Patrol patrol;
     private Dancer firefighter;
-    private Dancer etDancer;
+    private Dancer ETDancer;
+
+    private final Vector2 arrowsOrigin;
+    private final Vector2 resultLocation;
+    private final Vector2 comboLocation;
+    private final Vector2 firefighterLocation;
+    private final Vector2 etLocation;
+    private final Vector2 comboHintLocation;
 
     private final int ARROW_DISPLACEMENT = 128;
     private final int ARROW_SIZE = 96;
 
     private DanceResult lastResult = null;
-
 
 
     public DanceScreen(Kroy game, Screen previousScreen, FireTruck firetruck, Patrol patrol) {
@@ -72,51 +64,25 @@ public class DanceScreen implements Screen, BeatListener {
         this.previousScreen = previousScreen;
 
         this.danceMan = new DanceManager(120f);
-        danceMan.subscribeToBeat(this);
+        this.danceMan.subscribeToBeat(this);
         SoundFX.playDanceoffMusic();
 
-        //System.out.println("Firetruck health: " + firetruck.getHP() + " ET health: " + patrol.getHP());
         this.patrol = patrol;
         this.firetruck = firetruck;
         this.firefighter = new Dancer((int) firetruck.getHP());
-        this.etDancer = new Dancer((int) patrol.getHP());
+        this.ETDancer = new Dancer((int) patrol.getHP());
 
+        this.targetBoxTexture = new Texture(Gdx.files.internal("sprites/dance/targetBox.png"), true);
+        this.targetBoxTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
-        arrowUpTexture = new Texture(Gdx.files.internal("sprites/dance/arrowUp.png"), true);
-        arrowUpTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        arrowDownTexture = new Texture(Gdx.files.internal("sprites/dance/arrowDown.png"), true);
-        arrowDownTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        arrowLeftTexture = new Texture(Gdx.files.internal("sprites/dance/arrowLeft.png"), true);
-        arrowLeftTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        arrowRightTexture = new Texture(Gdx.files.internal("sprites/dance/arrowRight.png"), true);
-        arrowRightTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        targetBoxTexture = new Texture(Gdx.files.internal("sprites/dance/targetBox.png"), true);
-        targetBoxTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        waitTexture = new Texture(Gdx.files.internal("sprites/dance/wait.png"), true);
-        waitTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        this.arrowsOrigin = new Vector2(camera.viewportWidth/2-ARROW_SIZE/2, camera.viewportHeight/3);
+        this.resultLocation = new Vector2(0, camera.viewportHeight/4);
+        this.comboLocation = new Vector2(0, camera.viewportHeight/7);
+        this.firefighterLocation = new Vector2(camera.viewportWidth/4-256, camera.viewportHeight/5);
+        this.etLocation = new Vector2((3*camera.viewportWidth)/4-256, camera.viewportHeight/5);
+        this.comboHintLocation = new Vector2(camera.viewportWidth/4, (3*camera.viewportHeight)/5);
 
-        firemanNoneTexture = new Texture(Gdx.files.internal("sprites/dance/firefighter1.png"), true);
-        firemanNoneTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        firemanWaitTexture = new Texture(Gdx.files.internal("sprites/dance/firefighter2.png"), true);
-        firemanWaitTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        firemanLeftTexture = new Texture(Gdx.files.internal("sprites/dance/firefighter3.png"), true);
-        firemanLeftTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        firemanRightTexture = new Texture(Gdx.files.internal("sprites/dance/firefighter4.png"), true);
-        firemanRightTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        firemanUpTexture = new Texture(Gdx.files.internal("sprites/dance/firefighter5.png"), true);
-        firemanUpTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        firemanDownTexture = new Texture(Gdx.files.internal("sprites/dance/firefighter6.png"), true);
-        firemanDownTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-
-        etNoneTexture = new Texture(Gdx.files.internal("sprites/dance/et1.png"), true);
-        etNoneTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        etLeftTexture = new Texture(Gdx.files.internal("sprites/dance/et2.png"), true);
-        etLeftTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        etRightTexture = new Texture(Gdx.files.internal("sprites/dance/et3.png"), true);
-        etRightTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-
-
-        //System.out.println("Got to the dance Screen");
+        this.danceInputHandler = new DanceScreenInputHandler(this);
     }
 
     /**
@@ -130,56 +96,15 @@ public class DanceScreen implements Screen, BeatListener {
 
         danceMan.update(delta);
 
-        if (firefighter.getHealth() <= 0 || etDancer.getHealth() <= 0) {
-            this.firetruck.setHP(Math.max(firefighter.getHealth(), 0));
-            this.patrol.setHP(etDancer.getHealth());
-            GUI gui = new GUI(game, (GameScreen) previousScreen);
-            Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) previousScreen, gui));
-            gui.idleInfoButton();
-            SoundFX.stopMusic();
-            if (SoundFX.music_enabled) SoundFX.playGameMusic();
-            game.setScreen(previousScreen);
-        }
+        checkIfOver();
 
         firefighter.addTimeInState(delta);
-        etDancer.addTimeInState(delta);
+        ETDancer.addTimeInState(delta);
 
         if (danceMan.hasMissedLastBeat()) {
             if (firefighter.getTimeInState() > danceMan.getPhase()/4) {
                 lastResult = DanceResult.MISSED;
             }
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            lastResult = danceMan.takeMove(DanceMove.UP);
-            firefighter.setState(DanceMove.UP);
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            lastResult = danceMan.takeMove(DanceMove.DOWN);
-            firefighter.setState(DanceMove.DOWN);
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
-             lastResult = danceMan.takeMove(DanceMove.LEFT);
-            firefighter.setState(DanceMove.LEFT);
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
-             lastResult = danceMan.takeMove(DanceMove.RIGHT);
-            firefighter.setState(DanceMove.RIGHT);
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-
-            int combo = danceMan.getCombo();
-            etDancer.damage((int)scaleDamage(combo));
-            danceMan.killCombo();
-            //System.out.println("Firetruck health: " + firefighter.getHealth() + " ET health: " + etDancer.getHealth());
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            Gdx.app.exit();
         }
 
         Gdx.gl.glClearColor(51/255f, 34/255f, 99/255f, 1);
@@ -189,84 +114,21 @@ public class DanceScreen implements Screen, BeatListener {
 
         game.batch.setProjectionMatrix(camera.combined);
 
-        Vector2 arrowsOrigin = new Vector2(camera.viewportWidth/2-ARROW_SIZE/2, camera.viewportHeight/3);
-        Vector2 resultLocation = new Vector2(0, camera.viewportHeight/4);
-        Vector2 comboLocation = new Vector2(0, camera.viewportHeight/7);
-        Vector2 firemanLocation = new Vector2(camera.viewportWidth/4-256, camera.viewportHeight/5);
-        Vector2 etLocation = new Vector2((3*camera.viewportWidth)/4-256, camera.viewportHeight/5);
-        Vector2 comboHintLocation = new Vector2(camera.viewportWidth/4, (3*camera.viewportHeight)/5);
         game.batch.begin();
 
-        // Draw firefighter
-        switch (firefighter.getState()) {
-            case NONE:
-                game.batch.draw(firemanNoneTexture, firemanLocation.x, firemanLocation.y, 512, 512);
-                break;
-            case WAIT:
-                game.batch.draw(firemanWaitTexture, firemanLocation.x, firemanLocation.y, 512, 512);
-                break;
-            case UP:
-                game.batch.draw(firemanUpTexture, firemanLocation.x, firemanLocation.y, 512, 512);
-                break;
-            case DOWN:
-                game.batch.draw(firemanDownTexture, firemanLocation.x, firemanLocation.y, 512, 512);
-                break;
-            case LEFT:
-                game.batch.draw(firemanLeftTexture, firemanLocation.x, firemanLocation.y, 512, 512);
-                break;
-            case RIGHT:
-                game.batch.draw(firemanRightTexture, firemanLocation.x, firemanLocation.y, 512, 512);
-                break;
-        }
-
-        // Draw et
-        switch (etDancer.getState()) {
-            case NONE:
-                game.batch.draw(etNoneTexture, etLocation.x, etLocation.y, 512, 512);
-                break;
-            case WAIT:
-                break;
-            case UP:
-                break;
-            case DOWN:
-                break;
-            case LEFT:
-                game.batch.draw(etLeftTexture, etLocation.x, etLocation.y, 512, 512);
-                break;
-            case RIGHT:
-                game.batch.draw(etRightTexture, etLocation.x, etLocation.y, 512, 512);
-                break;
-        }
+        game.batch.draw(firefighter.getTexture("firefighter"), firefighterLocation.x, firefighterLocation.y, 512, 512);
+        game.batch.draw(ETDancer.getTexture("ET"), etLocation.x, etLocation.y, 512, 512);
 
         // Render arrows
-        int i = 0;
-        for (DanceMove d : danceMan.getMoveList()) {
-            Color c =  game.batch.getColor();
-            if (i == 0) {
-                //Set transparency for the bottom move
-                game.batch.setColor(c.r, c.b, c.g, 1f-phaseLerp(danceMan.getPhase()));
-            }
-            switch (d) {
-                case UP:
-            game.batch.draw(arrowUpTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - phaseLerp(danceMan.getPhase()) * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
-                break;
-                case DOWN:
-            game.batch.draw(arrowDownTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - phaseLerp(danceMan.getPhase()) * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
-                break;
-                case LEFT:
-            game.batch.draw(arrowLeftTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - phaseLerp(danceMan.getPhase()) * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
-                break;
-                case RIGHT:
-            game.batch.draw(arrowRightTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - phaseLerp(danceMan.getPhase()) * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
-                break;
-                case WAIT:
-//            game.batch.draw(waitTexture, arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - phaseLerp(danceMan.getPhase()) * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
-                break;
 
+        int i = 0;
+        for (DanceMove move : danceMan.getMoveList()) {
+            if (move.getArrowTexture() != null){
+                game.batch.draw(move.getArrowTexture(), arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - phaseLerp(danceMan.getPhase()) * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
             }
-            game.batch.setColor(c.r, c.b, c.g, 1f);
             i++;
         }
+
         game.batch.draw(targetBoxTexture, arrowsOrigin.x, arrowsOrigin.y, ARROW_SIZE, ARROW_SIZE);
 
         if (danceMan.getCombo() > 2) {
@@ -279,20 +141,19 @@ public class DanceScreen implements Screen, BeatListener {
 
         game.font60.draw(game.batch, danceMan.getCombo() + "x", comboLocation.x, comboLocation.y, camera.viewportWidth, 1, false);
         game.batch.end();
-        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        game.shapeRenderer.setProjectionMatrix(camera.combined);
-        drawHealthbar(camera.viewportWidth/4, camera.viewportHeight/5, firefighter.getHealth()/firetruck.type.getMaxHP());
-        drawHealthbar((camera.viewportWidth * 3)/4, camera.viewportHeight/5, etDancer.getHealth()/patrol.type.getMaxHP());
-        game.shapeRenderer.end();
+
+        drawHealthBars();
+
     }
 
     @Override
     public void show() {
-        if (!hasShownTutorial && !((GameScreen)previousScreen).gameState.hasDanceTutorialShown()) {
-            hasShownTutorial = true;
-            ((GameScreen)previousScreen).gameState.setDanceTutorialShown();
-            game.setScreen(new ControlsScreen(game, this, "dance"));
-        }
+        Gdx.input.setInputProcessor(new DanceScreenInputHandler(this));
+        //if (!hasShownTutorial && !((GameScreen)previousScreen).gameState.hasDanceTutorialShown()) {
+           // hasShownTutorial = true;
+          //  ((GameScreen)previousScreen).gameState.setDanceTutorialShown();
+          //  game.setScreen(new ControlsScreen(game, this, "dance"));
+       // }
     }
 
     @Override
@@ -320,34 +181,25 @@ public class DanceScreen implements Screen, BeatListener {
 
     }
 
-    public static float phaseLerp(float phase) {
-        return (float) Math.pow(2, 10f * (phase-1));
-    }
-
-    public static float scaleDamage(float combo) {
-        return (float) (20 * (Math.pow(1.2, combo)-1f));
-    }
-
-    public void onBeat() {
-        etDancer.updateJive();
-    }
-
-    @Override
-    public void offBeat() {
-        //System.out.println("Offbeat");
-        if (firefighter.getTimeInState() > danceMan.getPhase()/2) {
-            firefighter.setState(DanceMove.WAIT);
+    private void checkIfOver() {
+        if (firefighter.getHealth() <= 0 || ETDancer.getHealth() <= 0) {
+            this.firetruck.setHP(firefighter.getHealth());
+            this.patrol.setHP(ETDancer.getHealth());
+            GUI gui = new GUI(game, (GameScreen) previousScreen);
+            Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) previousScreen, gui));
+            gui.idleInfoButton();
+            SoundFX.stopMusic();
+            SoundFX.playGameMusic();
+            game.setScreen(previousScreen);
         }
-        etDancer.updateJive();
     }
 
-    @Override
-    public void moveResult(DanceResult result) {
-        if (result == DanceResult.WRONG) {
-            firefighter.damage(20);
-            etDancer.setJiving(true);
-            //System.out.println("Firetruck health: " + firefighter.getHealth() + " ET health: " + etDancer.getHealth());
-        };
+    private void drawHealthBars() {
+        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        game.shapeRenderer.setProjectionMatrix(camera.combined);
+        drawHealthbar(camera.viewportWidth/4, camera.viewportHeight/5, firefighter.getHealth()/firetruck.type.getMaxHP());
+        drawHealthbar((camera.viewportWidth * 3)/4, camera.viewportHeight/5, ETDancer.getHealth()/patrol.type.getMaxHP());
+        game.shapeRenderer.end();
     }
 
     /** Draws a health bar
@@ -362,4 +214,45 @@ public class DanceScreen implements Screen, BeatListener {
         game.shapeRenderer.rect(x-width/2, y, width, height, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
         game.shapeRenderer.rect(x-width/2 + offset, y + offset, (width - 2*offset) * percentage, height - 2*offset, Color.RED, Color.RED, Color.RED, Color.RED);
     }
+
+
+    public static float phaseLerp(float phase) {
+        return (float) Math.pow(2, 10f * (phase-1));
+    }
+
+    public static float scaleDamage(float combo) {
+        return (float) (20 * (Math.pow(1.2, combo)-1f));
+    }
+
+    public void onBeat() {
+        ETDancer.updateJive();
+    }
+
+    @Override
+    public void offBeat() {
+        if (firefighter.getTimeInState() > danceMan.getPhase()/2) {
+            firefighter.setState(DanceMove.WAIT);
+        }
+        ETDancer.updateJive();
+    }
+
+    @Override
+    public void moveResult(DanceResult result) {
+        if (result == DanceResult.WRONG) {
+            firefighter.damage(20);
+            ETDancer.setJiving(true);
+        }
+    }
+
+    public void setLastMove(DanceMove move){
+        lastResult = danceMan.takeMove(move);
+        firefighter.setState(move);
+    }
+
+    public void useCombo(){
+        int combo = danceMan.getCombo();
+        ETDancer.damage((int)scaleDamage(combo));
+        danceMan.killCombo();
+    }
+
 }

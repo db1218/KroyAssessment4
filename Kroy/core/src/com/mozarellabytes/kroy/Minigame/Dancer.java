@@ -1,5 +1,7 @@
 package com.mozarellabytes.kroy.Minigame;
 
+import com.badlogic.gdx.graphics.Texture;
+
 /** Class for entities that are taking part in the dance-off */
 public class Dancer {
     /** The amount of health the dancer has left*/
@@ -127,5 +129,9 @@ public class Dancer {
                 this.state = DanceMove.NONE;
             }
         }
+    }
+
+    public Texture getTexture(String entity) {
+        return entity.equals("ET") ? this.getState().getETTexture() : this.getState().getFirefighterTexture();
     }
 }
