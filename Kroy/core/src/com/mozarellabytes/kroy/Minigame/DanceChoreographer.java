@@ -13,35 +13,26 @@ public class DanceChoreographer {
     private List<DanceMove> moveList;
 
     /** Random agent for move selection */
-    private Random random = new Random();
+    private Random random;
 
 
     public DanceChoreographer() {
         moveList = new ArrayList<DanceMove>();
+        random = new Random();
 
         for (int i = 0; i < MOVE_LIST_LENGTH; i++) {
             moveList.add(DanceMove.NONE);
         }
     }
 
-    /**
-     * Gets the queue of upcoming moves
-     * @return an array of DanceMoves
-     */
-    public DanceMove[] getMoveList() {
-        DanceMove[] moves = new DanceMove[MOVE_LIST_LENGTH];
-        for (int i = 0; i < MOVE_LIST_LENGTH; i++) {
-            moves[i] = moveList.get(i);
-        }
-        return moves;
-    }
 
     /**
      * Consumes and returns the danceMove at the head of the queue
      * @return the next dance move
      */
     public DanceMove nextMove() {
-        moveList.add(DanceMove.values()[random.nextInt(5)]);
+        int rand = random.nextInt(DanceMove.values().length);
+        moveList.add(DanceMove.values()[rand]);
         return moveList.remove(0);
     }
 
@@ -53,4 +44,13 @@ public class DanceChoreographer {
             moveList.set(i, DanceMove.NONE);
         }
     }
+
+    /**
+     * Gets the queue of upcoming moves
+     * @return an array of DanceMoves
+     */
+    public List<DanceMove> getMoveList() {
+        return moveList;
+    }
+
 }

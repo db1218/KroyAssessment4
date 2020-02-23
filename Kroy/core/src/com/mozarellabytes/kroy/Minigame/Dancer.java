@@ -82,25 +82,9 @@ public class Dancer {
 
     /**
      * Sets the dancer to perform an automatic celebratory dance
-     * @param state true if the dancer is jiving, false if they are not
      */
-    public void setJiving(boolean state) {
-        //System.out.println("A jive has started");
-        this.jiving = state;
-        switch (jiveStep % 4) {
-            case 0:
-                this.setState(DanceMove.LEFT);
-                break;
-            case 1:
-                this.setState(DanceMove.NONE);
-                break;
-            case 2:
-                this.setState(DanceMove.RIGHT);
-                break;
-            case 3:
-                this.setState(DanceMove.NONE);
-                break;
-        }
+    public void jive() {
+        this.jiving = true;
     }
 
     /**
@@ -109,7 +93,7 @@ public class Dancer {
     public void updateJive() {
         if (this.isJiving()) {
             jiveStep++;
-            switch (jiveStep % 4) {
+            switch (jiveStep % 3) {
                 case 0:
                     this.setState(DanceMove.LEFT);
                     break;
@@ -118,9 +102,6 @@ public class Dancer {
                     break;
                 case 2:
                     this.setState(DanceMove.RIGHT);
-                    break;
-                case 3:
-                    this.setState(DanceMove.NONE);
                     break;
             }
             if (jiveStep >= 8) {

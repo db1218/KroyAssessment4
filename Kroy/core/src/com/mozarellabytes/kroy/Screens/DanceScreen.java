@@ -132,7 +132,7 @@ public class DanceScreen implements Screen, BeatListener {
         game.batch.draw(targetBoxTexture, arrowsOrigin.x, arrowsOrigin.y, ARROW_SIZE, ARROW_SIZE);
 
         if (danceMan.getCombo() > 2) {
-            game.font50.draw(game.batch, "Press [SPACE] to use combo!", comboHintLocation.x, (comboHintLocation.y + danceMan.getBeatProxemity()* camera.viewportHeight/32), camera.viewportWidth, 1, false);
+            game.font50.draw(game.batch, "Press [SPACE] to use combo!", comboHintLocation.x, (comboHintLocation.y + danceMan.getBeatProximity()* camera.viewportHeight/32), camera.viewportWidth, 1, false);
         }
 
         if (lastResult != null) {
@@ -148,12 +148,13 @@ public class DanceScreen implements Screen, BeatListener {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(new DanceScreenInputHandler(this));
-        //if (!hasShownTutorial && !((GameScreen)previousScreen).gameState.hasDanceTutorialShown()) {
-           // hasShownTutorial = true;
-          //  ((GameScreen)previousScreen).gameState.setDanceTutorialShown();
-          //  game.setScreen(new ControlsScreen(game, this, "dance"));
-       // }
+        if (!hasShownTutorial && !((GameScreen)previousScreen).gameState.hasDanceTutorialShown()) {
+            hasShownTutorial = true;
+            ((GameScreen)previousScreen).gameState.setDanceTutorialShown();
+            game.setScreen(new ControlsScreen(game, this, "dance"));
+        } else {
+            Gdx.input.setInputProcessor(new DanceScreenInputHandler(this));
+        }
     }
 
     @Override
@@ -240,7 +241,7 @@ public class DanceScreen implements Screen, BeatListener {
     public void moveResult(DanceResult result) {
         if (result == DanceResult.WRONG) {
             firefighter.damage(20);
-            ETDancer.setJiving(true);
+            ETDancer.jive();
         }
     }
 

@@ -209,9 +209,7 @@ public class ControlsScreen implements Screen {
         if (screen.equals("game") || screen.equals("menu")) {
             damageFortressHP();
             drawFortressHealthBar();
-        } else if (screen.equals("dance")) {
         }
-
         renderExitButton();
 
     }
@@ -259,10 +257,9 @@ public class ControlsScreen implements Screen {
             Gdx.input.setInputProcessor(new MenuInputHandler((MenuScreen)parent));
             this.game.setScreen(parent);
         } else if (this.screen.equals("dance")) {
+            Gdx.input.setInputProcessor(new DanceScreenInputHandler((DanceScreen)parent));
             this.game.setScreen(parent);
-        }
-        else if (this.screen.equals("dance")){
-            this.game.setScreen(parent);
+
         }
     }
 
