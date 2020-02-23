@@ -11,7 +11,6 @@ public class DanceScreenInputHandler implements InputProcessor {
     DanceScreen danceScreen;
 
     public DanceScreenInputHandler(DanceScreen danceScreen){
-        Gdx.app.log("keycode", "create");
         this.danceScreen = danceScreen;
     }
 

@@ -20,8 +20,6 @@ import com.mozarellabytes.kroy.GUI.GUI;
  * The screen for the minigame that triggers when a firetruck meets an ET patrol
  */
 
-//ToDo  Sort out how to get the control screen to show up without messing
-    // with the input handler, also scene2D to get everything aligned??
 public class DanceScreen implements Screen, BeatListener {
 
     /** Instance of our game that allows us the change screens */
@@ -95,16 +93,16 @@ public class DanceScreen implements Screen, BeatListener {
     public void render(float delta)
     {
 
-        danceMan.update(delta);
+        this.danceMan.update(delta);
 
         checkIfOver();
 
-        firefighter.addTimeInState(delta);
-        ETDancer.addTimeInState(delta);
+        this.firefighter.addTimeInState(delta);
+        this.ETDancer.addTimeInState(delta);
 
-        if (danceMan.hasMissedLastBeat()) {
-            if (firefighter.getTimeInState() > danceMan.getPhase()/4) {
-                lastResult = DanceResult.MISSED;
+        if (this.danceMan.hasMissedLastBeat()) {
+            if (this.firefighter.getTimeInState() > this.danceMan.getPhase()/4) {
+                this.lastResult = DanceResult.MISSED;
             }
         }
 
@@ -113,35 +111,35 @@ public class DanceScreen implements Screen, BeatListener {
 
         camera.update();
 
-        game.batch.setProjectionMatrix(camera.combined);
+        this.game.batch.setProjectionMatrix(camera.combined);
 
-        game.batch.begin();
+        this.game.batch.begin();
 
-        game.batch.draw(firefighter.getTexture("firefighter"), firefighterLocation.x, firefighterLocation.y, 512, 512);
-        game.batch.draw(ETDancer.getTexture("ET"), etLocation.x, etLocation.y, 512, 512);
+        this.game.batch.draw(firefighter.getTexture("firefighter"), firefighterLocation.x, firefighterLocation.y, 512, 512);
+        this.game.batch.draw(ETDancer.getTexture("ET"), etLocation.x, etLocation.y, 512, 512);
 
         // Render arrows
 
         int i = 0;
         for (DanceMove move : danceMan.getMoveList()) {
             if (move.getArrowTexture() != null){
-                game.batch.draw(move.getArrowTexture(), arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - phaseLerp(danceMan.getPhase()) * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
+                this.game.batch.draw(move.getArrowTexture(), arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - phaseLerp(danceMan.getPhase()) * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
             }
             i++;
         }
 
-        game.batch.draw(targetBoxTexture, arrowsOrigin.x, arrowsOrigin.y, ARROW_SIZE, ARROW_SIZE);
+        this.game.batch.draw(targetBoxTexture, arrowsOrigin.x, arrowsOrigin.y, ARROW_SIZE, ARROW_SIZE);
 
         if (danceMan.getCombo() > 2) {
-            game.font50.draw(game.batch, "Press [SPACE] to use combo!", comboHintLocation.x, (comboHintLocation.y + danceMan.getBeatProximity()* camera.viewportHeight/32), camera.viewportWidth, 1, false);
+            this.game.font50.draw(game.batch, "Press [SPACE] to use combo!", comboHintLocation.x, (comboHintLocation.y + danceMan.getBeatProximity()* camera.viewportHeight/32), camera.viewportWidth, 1, false);
         }
 
         if (lastResult != null) {
-            game.font120.draw(game.batch, lastResult.toString(), resultLocation.x, resultLocation.y,camera.viewportWidth, 1, false);
+            this.game.font120.draw(game.batch, lastResult.toString(), resultLocation.x, resultLocation.y,camera.viewportWidth, 1, false);
         }
 
-        game.font60.draw(game.batch, danceMan.getCombo() + "x", comboLocation.x, comboLocation.y, camera.viewportWidth, 1, false);
-        game.batch.end();
+        this.game.font60.draw(game.batch, danceMan.getCombo() + "x", comboLocation.x, comboLocation.y, camera.viewportWidth, 1, false);
+        this.game.batch.end();
 
         drawHealthBars();
 
@@ -150,9 +148,9 @@ public class DanceScreen implements Screen, BeatListener {
     @Override
     public void show() {
         if (!hasShownTutorial && !((GameScreen)previousScreen).gameState.hasDanceTutorialShown()) {
-            hasShownTutorial = true;
+            this.hasShownTutorial = true;
             ((GameScreen)previousScreen).gameState.setDanceTutorialShown();
-            game.setScreen(new ControlsScreen(game, this, "dance"));
+            this.game.setScreen(new ControlsScreen(game, this, "dance"));
         } else {
             Gdx.input.setInputProcessor(new DanceScreenInputHandler(this));
         }
@@ -192,16 +190,16 @@ public class DanceScreen implements Screen, BeatListener {
             gui.idleInfoButton();
             SoundFX.stopMusic();
             if (SoundFX.music_enabled) SoundFX.playGameMusic();
-            game.setScreen(previousScreen);
+            this.game.setScreen(previousScreen);
         }
     }
 
     private void drawHealthBars() {
-        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        game.shapeRenderer.setProjectionMatrix(camera.combined);
+        this.game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        this.game.shapeRenderer.setProjectionMatrix(camera.combined);
         drawHealthbar(camera.viewportWidth/4, camera.viewportHeight/5, firefighter.getHealth()/firetruck.type.getMaxHP());
         drawHealthbar((camera.viewportWidth * 3)/4, camera.viewportHeight/5, ETDancer.getHealth()/patrol.type.getMaxHP());
-        game.shapeRenderer.end();
+        this.game.shapeRenderer.end();
     }
 
     /** Draws a health bar
@@ -213,8 +211,8 @@ public class DanceScreen implements Screen, BeatListener {
         int width = 500;
         int height = 50;
         float offset = height * .2f;
-        game.shapeRenderer.rect(x-width/2, y, width, height, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
-        game.shapeRenderer.rect(x-width/2 + offset, y + offset, (width - 2*offset) * percentage, height - 2*offset, Color.RED, Color.RED, Color.RED, Color.RED);
+        this.game.shapeRenderer.rect(x-width/2, y, width, height, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
+        this.game.shapeRenderer.rect(x-width/2 + offset, y + offset, (width - 2*offset) * percentage, height - 2*offset, Color.RED, Color.RED, Color.RED, Color.RED);
     }
 
 
@@ -227,34 +225,34 @@ public class DanceScreen implements Screen, BeatListener {
     }
 
     public void onBeat() {
-        ETDancer.updateJive();
+        this.ETDancer.updateJive();
     }
 
     @Override
     public void offBeat() {
         if (firefighter.getTimeInState() > danceMan.getPhase()/2) {
-            firefighter.setState(DanceMove.WAIT);
+            this.firefighter.setState(DanceMove.WAIT);
         }
-        ETDancer.updateJive();
+        this.ETDancer.updateJive();
     }
 
     @Override
     public void moveResult(DanceResult result) {
         if (result == DanceResult.WRONG) {
-            firefighter.damage(20);
-            ETDancer.jive();
+            this.firefighter.damage(20);
+            this.ETDancer.startJive();
         }
     }
 
     public void setLastMove(DanceMove move){
-        lastResult = danceMan.takeMove(move);
-        firefighter.setState(move);
+        this.lastResult = this.danceMan.takeMove(move);
+        this.firefighter.setState(move);
     }
 
     public void useCombo(){
         int combo = danceMan.getCombo();
-        ETDancer.damage((int)scaleDamage(combo));
-        danceMan.killCombo();
+        this.ETDancer.damage((int)scaleDamage(combo));
+        this.danceMan.killCombo();
     }
 
 }

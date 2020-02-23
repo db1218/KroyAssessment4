@@ -16,11 +16,11 @@ public class DanceChoreographer {
     private Random random;
 
     public DanceChoreographer() {
-        moveList = new ArrayList<DanceMove>();
-        random = new Random();
+        this.moveList = new ArrayList<DanceMove>();
+        this.random = new Random();
 
         for (int i = 0; i < MOVE_LIST_LENGTH; i++) {
-            moveList.add(DanceMove.NONE);
+            this.moveList.add(DanceMove.NONE);
         }
     }
 
@@ -30,9 +30,10 @@ public class DanceChoreographer {
      * @return the next dance move
      */
     public DanceMove nextMove() {
-        int rand = random.nextInt(DanceMove.values().length);
-        moveList.add(DanceMove.values()[rand]);
-        return moveList.remove(0);
+        int rand = this.random.nextInt(DanceMove.values().length);
+        DanceMove randomMove = DanceMove.values()[rand];
+        this.moveList.add(randomMove);
+        return this.moveList.remove(0);
     }
 
     /**
@@ -48,6 +49,6 @@ public class DanceChoreographer {
      * Gets the queue of upcoming moves
      * @return an array of DanceMoves
      */
-    public List<DanceMove> getMoveList() { return moveList; }
+    public List<DanceMove> getMoveList() { return this.moveList; }
 
 }

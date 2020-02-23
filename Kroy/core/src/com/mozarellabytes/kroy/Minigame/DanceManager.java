@@ -53,21 +53,21 @@ public class DanceManager {
 
     /** Called once a frame to update the dance manager*/
     public void update(float delta) {
-        time += delta;
-        halfTime += delta;
+        this.time += delta;
+        this.halfTime += delta;
 
-        if (time >= period) onBeat();
-        if (halfTime >= period) offBeat();
+        if (this.time >= this.period) onBeat();
+        if (this.halfTime >= this.period) offBeat();
     }
 
     private void onBeat() {
-        choreographer.nextMove();
-        time = 0f;
+        this.choreographer.nextMove();
+        this.time = 0f;
         notifyOnBeat();
     }
 
     private void offBeat() {
-        halfTime = 0f;
+        this.halfTime = 0f;
         if (!doneThisBeat && !notDanceMoves.contains(getNearestMove()) ){
             killCombo();
             missedLastTurn = true;
@@ -161,7 +161,7 @@ public class DanceManager {
      * @return array of DanceMoves
      */
     public List<DanceMove> getMoveList() {
-        return choreographer.getMoveList();
+        return this.choreographer.getMoveList();
     }
 
     /**
