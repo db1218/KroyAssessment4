@@ -132,6 +132,6 @@ public class Dancer {
     }
 
     public Texture getTexture(String entity) {
-        return entity.equals("ET") ? this.getState().getETTexture() : this.getState().getFireManTexture();
+        return entity.equals("ET") ? this.getState().getETTexture() : this.getState().getFirefighterTexture();
     }
 }

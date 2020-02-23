@@ -41,12 +41,12 @@ public class DanceScreen implements Screen, BeatListener {
     private FireTruck firetruck;
     private Patrol patrol;
     private Dancer firefighter;
-    private Dancer etDancer;
+    private Dancer ETDancer;
 
     private final Vector2 arrowsOrigin;
     private final Vector2 resultLocation;
     private final Vector2 comboLocation;
-    private final Vector2 firemanLocation;
+    private final Vector2 firefighterLocation;
     private final Vector2 etLocation;
     private final Vector2 comboHintLocation;
 
@@ -69,7 +69,7 @@ public class DanceScreen implements Screen, BeatListener {
         this.patrol = patrol;
         this.firetruck = firetruck;
         this.firefighter = new Dancer((int) firetruck.getHP());
-        this.etDancer = new Dancer((int) patrol.getHP());
+        this.ETDancer = new Dancer((int) patrol.getHP());
 
         this.targetBoxTexture = new Texture(Gdx.files.internal("sprites/dance/targetBox.png"), true);
         this.targetBoxTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
@@ -77,7 +77,7 @@ public class DanceScreen implements Screen, BeatListener {
         this.arrowsOrigin = new Vector2(camera.viewportWidth/2-ARROW_SIZE/2, camera.viewportHeight/3);
         this.resultLocation = new Vector2(0, camera.viewportHeight/4);
         this.comboLocation = new Vector2(0, camera.viewportHeight/7);
-        this.firemanLocation = new Vector2(camera.viewportWidth/4-256, camera.viewportHeight/5);
+        this.firefighterLocation = new Vector2(camera.viewportWidth/4-256, camera.viewportHeight/5);
         this.etLocation = new Vector2((3*camera.viewportWidth)/4-256, camera.viewportHeight/5);
         this.comboHintLocation = new Vector2(camera.viewportWidth/4, (3*camera.viewportHeight)/5);
 
@@ -98,7 +98,7 @@ public class DanceScreen implements Screen, BeatListener {
         checkIfOver();
 
         firefighter.addTimeInState(delta);
-        etDancer.addTimeInState(delta);
+        ETDancer.addTimeInState(delta);
 
         if (danceMan.hasMissedLastBeat()) {
             if (firefighter.getTimeInState() > danceMan.getPhase()/4) {
@@ -115,8 +115,8 @@ public class DanceScreen implements Screen, BeatListener {
 
         game.batch.begin();
 
-        game.batch.draw(firefighter.getTexture("fireman"), firemanLocation.x, firemanLocation.y, 512, 512);
-        game.batch.draw(etDancer.getTexture("ET"), etLocation.x, etLocation.y, 512, 512);
+        game.batch.draw(firefighter.getTexture("firefighter"), firefighterLocation.x, firefighterLocation.y, 512, 512);
+        game.batch.draw(ETDancer.getTexture("ET"), etLocation.x, etLocation.y, 512, 512);
 
         // Render arrows
 
@@ -181,9 +181,9 @@ public class DanceScreen implements Screen, BeatListener {
     }
 
     private void checkIfOver() {
-        if (firefighter.getHealth() <= 0 || etDancer.getHealth() <= 0) {
+        if (firefighter.getHealth() <= 0 || ETDancer.getHealth() <= 0) {
             this.firetruck.setHP(firefighter.getHealth());
-            this.patrol.setHP(etDancer.getHealth());
+            this.patrol.setHP(ETDancer.getHealth());
             GUI gui = new GUI(game, (GameScreen) previousScreen);
             Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) previousScreen, gui));
             gui.idleInfoButton();
@@ -197,7 +197,7 @@ public class DanceScreen implements Screen, BeatListener {
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         game.shapeRenderer.setProjectionMatrix(camera.combined);
         drawHealthbar(camera.viewportWidth/4, camera.viewportHeight/5, firefighter.getHealth()/firetruck.type.getMaxHP());
-        drawHealthbar((camera.viewportWidth * 3)/4, camera.viewportHeight/5, etDancer.getHealth()/patrol.type.getMaxHP());
+        drawHealthbar((camera.viewportWidth * 3)/4, camera.viewportHeight/5, ETDancer.getHealth()/patrol.type.getMaxHP());
         game.shapeRenderer.end();
     }
 
@@ -224,7 +224,7 @@ public class DanceScreen implements Screen, BeatListener {
     }
 
     public void onBeat() {
-        etDancer.updateJive();
+        ETDancer.updateJive();
     }
 
     @Override
@@ -232,14 +232,14 @@ public class DanceScreen implements Screen, BeatListener {
         if (firefighter.getTimeInState() > danceMan.getPhase()/2) {
             firefighter.setState(DanceMove.WAIT);
         }
-        etDancer.updateJive();
+        ETDancer.updateJive();
     }
 
     @Override
     public void moveResult(DanceResult result) {
         if (result == DanceResult.WRONG) {
             firefighter.damage(20);
-            etDancer.setJiving(true);
+            ETDancer.setJiving(true);
         }
     }
 
@@ -250,7 +250,7 @@ public class DanceScreen implements Screen, BeatListener {
 
     public void useCombo(){
         int combo = danceMan.getCombo();
-        etDancer.damage((int)scaleDamage(combo));
+        ETDancer.damage((int)scaleDamage(combo));
         danceMan.killCombo();
     }
 
