@@ -33,7 +33,6 @@ public class DanceManager {
     /** Technical class for deciding upcoming moves */
     private DanceChoreographer choreographer;
 
-
     public DanceManager(float tempo) {
 
         // Setup tempo
@@ -69,7 +68,7 @@ public class DanceManager {
 
     private void offBeat() {
         halfTime = 0f;
-        if (!doneThisBeat && notDanceMoves.contains(getNearestMove())){
+        if (!doneThisBeat && !notDanceMoves.contains(getNearestMove()) ){
             killCombo();
             missedLastTurn = true;
         }
