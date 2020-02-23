@@ -128,7 +128,7 @@ public class Patrol extends Sprite {
         this.gameScreen = gameScreen;
         this.type = type;
         this.HP = type.getMaxHP();
-        this.position = new Vector2(type.getPoint1().x + 1,type.getPoint1().y);
+        this.position = new Vector2(type.getPoint1().x + 1, type.getPoint1().y);
         this.path = new CircularLinkedList();
         this.trailPath = new Queue<Vector2>();
         this.moving = true;
@@ -148,79 +148,57 @@ public class Patrol extends Sprite {
      * Called every tick and updates the paths to simulate the patrol moving along the
      * path
      */
-
-
-    public void definePath(){
+    public void definePath() {
         addTileToPath(this.position,type.getPoint1());
 
-        boolean fullCycle=false;
-        int counter=0;
+        boolean fullCycle = false;
+        int counter = 0;
 
-        while(!fullCycle){
-            if(this.type.getTarget().x>this.position.x){
-                nextTile.x=this.position.x+1;
-            }
-            else if(this.type.getTarget().y>this.position.y){
-                nextTile.y=this.position.y+1;
-            }
-            else if(this.type.getTarget().x<this.position.x){
-                nextTile.x=this.position.x-1;
-            }
-            else if(this.type.getTarget().y<this.position.y) {
-                nextTile.y=this.position.y-1;
-            }
-            else{
-                if(this.position.equals(type.getPoint2())){
-                    type.setTarget(type.getPoint3());
-                }
-                else if(this.position.equals(type.getPoint3())){
-                    type.setTarget(type.getPoint4());
-                }
-                else if(this.position.equals(type.getPoint4())){
-                    type.setTarget(type.getPoint1());
-                }
-                else{
+        while (!fullCycle){
+            if (this.type.getTarget().x>this.position.x) nextTile.x = this.position.x+1;
+            else if (this.type.getTarget().y>this.position.y) nextTile.y = this.position.y+1;
+            else if (this.type.getTarget().x<this.position.x) nextTile.x = this.position.x-1;
+            else if (this.type.getTarget().y<this.position.y) nextTile.y = this.position.y-1;
+            else {
+                if (this.position.equals(type.getPoint2())) type.setTarget(type.getPoint3());
+                else if (this.position.equals(type.getPoint3())) type.setTarget(type.getPoint4());
+                else if (this.position.equals(type.getPoint4())) type.setTarget(type.getPoint1());
+                else {
                     type.setTarget(type.getPoint2());
                     counter++;
-                    if(counter==2){
-                        fullCycle=true;
-                    }
+                    if (counter==2) fullCycle = true;
                 }
             }
             addTileToPath(this.position, previousTile);
         }
-        current=path.getHead();
+        current = path.getHead();
     }
 
     public void addTileToPath(Vector2 coordinate, Vector2 previous) {
-            int interpolation = (int) (90/type. getSpeed());
-            for (int i=1; i<interpolation; i++) {
-                this.path.addNode(new Vector2((((previous.x - coordinate.x)*-1)/interpolation)*i + previous.x, (((previous.y - coordinate.y)*-1)/interpolation)*i + previous.y));
-            }
-        previousTile=new Vector2(((int) coordinate.x), ((int) coordinate.y));
+        int interpolation = (int) (90/type. getSpeed());
+        for (int i=1; i<interpolation; i++) {
+            this.path.addNode(new Vector2((((previous.x - coordinate.x)*-1)/interpolation)*i + previous.x, (((previous.y - coordinate.y)*-1)/interpolation)*i + previous.y));
+        }
+        previousTile = new Vector2(((int) coordinate.x), ((int) coordinate.y));
         this.path.addNode(previousTile);
     }
 
     public void move() {
-
         if (moving) {
-            Node next=path.getNext(current);
+            Node next = path.getNext(current);
             Vector2 nextTile = path.getData(next);
-
             this.position = nextTile;
-            current=next;
+            current = next;
             previousTile = nextTile;
-
         }
     }
 
-/**
-     * Deals damage to Firestation by generating a BlasterParticle and adding
-     * it to the spray
-     *
-     * @param station FireStation being attacked
-     */
-
+    /**
+    * Deals damage to Firestation by generating a BlasterParticle and adding
+    * it to the spray
+    *
+    * @param station FireStation being attacked
+    */
     public void attack(FireStation station) {
         this.spray.add(new BlasterParticle(this, station));
     }

@@ -158,9 +158,9 @@ public class GameScreen implements Screen {
         patrols.add(new Patrol(this,PatrolType.Peach));
         patrols.add(new Patrol(this,PatrolType.Violet));
         patrols.add(new Patrol(this,PatrolType.Yellow));
-        patrols.add(new Patrol(this,PatrolType.Station));
+        patrols.add(new Patrol(this,PatrolType.Boss));
 
-        deadEntities = new ArrayList<>(7                           );
+        deadEntities = new ArrayList<>(7);
 
 
         // sets the origin point to which all of the polygon's local vertices are relative to.
@@ -196,7 +196,7 @@ public class GameScreen implements Screen {
             truck.drawSprite(mapBatch);
         }
 
-       if(!gameState.hasStationDestoyed()) {
+        if(!gameState.hasStationDestoyed()) {
             station.draw(mapBatch);
        }
 
@@ -214,7 +214,7 @@ public class GameScreen implements Screen {
 
         mapBatch.begin();
         for (Patrol patrol : this.patrols) {
-            if(patrol.getType().equals(PatrolType.Station)){
+            if(patrol.getType().equals(PatrolType.Boss)){
                 if(gameState.firstFortressDestroyed()){
                     patrol.drawSprite(mapBatch);
                 }
@@ -232,7 +232,7 @@ public class GameScreen implements Screen {
         }
 
         for (Patrol patrol : this.patrols) {
-            if(patrol.getType().equals(PatrolType.Station)){
+            if(patrol.getType().equals(PatrolType.Boss)){
                 if(gameState.firstFortressDestroyed()){
                     patrol.drawStats(shapeMapRenderer);
                 }
@@ -245,7 +245,6 @@ public class GameScreen implements Screen {
         if(station.getHP()>0){
             station.drawStats(shapeMapRenderer);
         }
-
 
         for (Fortress fortress : fortresses) {
             fortress.drawStats(shapeMapRenderer);
@@ -358,7 +357,7 @@ public class GameScreen implements Screen {
                 gameState.setStationDestoyed();
                 deadEntities.add(station.getDestroyedStation());
             }
-            patrols.remove(PatrolType.Station);
+            patrols.remove(PatrolType.Boss);
         }
 
         for (int i=0;i<this.patrols.size();i++) {
@@ -366,9 +365,9 @@ public class GameScreen implements Screen {
 
             patrol.updateSpray();
 
-            if(patrol.getType().equals(PatrolType.Station)){
+            if(patrol.getType().equals(PatrolType.Boss)){
                 if((gameState.firstFortressDestroyed())){
-                    if((patrol.getPosition().equals(PatrolType.Station.getPoint4()))){
+                    if((patrol.getPosition().equals(PatrolType.Boss.getPoint4()))){
                         patrol.attack(station);
                     }
                     else{
@@ -391,8 +390,8 @@ public class GameScreen implements Screen {
             }
             if (patrol.getHP() <= 0) {
                 patrols.remove(patrol);
-                if((patrol.getType().equals(PatrolType.Station))&&(!gameState.hasStationDestoyed())){
-                    patrols.add(new Patrol(this,PatrolType.Station));
+                if((patrol.getType().equals(PatrolType.Boss))&&(!gameState.hasStationDestoyed())){
+                    patrols.add(new Patrol(this,PatrolType.Boss));
                 }
             }
         }
