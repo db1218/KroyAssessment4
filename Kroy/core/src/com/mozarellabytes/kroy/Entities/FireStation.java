@@ -23,17 +23,10 @@ import com.mozarellabytes.kroy.Utilities.SoundFX;
 public class FireStation {
 
     /**
-     * X and Y co-ordinates of the FireStation's position on the game screen
+     * Coordinates and dimensions of the FireStation in the game screen
      * in tiles
      */
-    private final int x,y;
-
-    private final int w;
-
-    /** The height of the sprite measured in tiles */
-    private final int h;
-
-    private final Rectangle area;
+    private final int x, y, w, h;
 
     /** A tile inside the station where a truck can be repaired and refilled */
     private ArrayList<Vector2> bayTiles;
@@ -45,8 +38,9 @@ public class FireStation {
      * @link FireTruck */
     private final ArrayList<FireTruck> trucks;
 
-    private final ArrayList<Patrol> patrols;
-
+    /**
+     * Health of the fortress
+     */
     private float HP;
 
     /**
@@ -59,20 +53,15 @@ public class FireStation {
     public FireStation(int x, int y) {
         this.x = x;
         this.y = y;
-        this.w=6;
-        this.h=3;
+        this.w = 6;
+        this.h = 3;
         bayTiles = new ArrayList<>();
         for (int i=0; i<4; i++) bayTiles.add(new Vector2(x + i + 1, y));
         this.texture = new Texture(Gdx.files.internal("sprites/station/extended_station.png"));
         this.deadTexture = new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_dead.png")); // change me pls
         this.trucks = new ArrayList<FireTruck>();
-        this.patrols = new ArrayList<Patrol>();
         this.HP=100.0f;
-        this.area = new Rectangle(this.x - (float) this.w/2, this.y - (float) this.h/2,
-                this.w, this.h);
     }
-
-
 
     /**
      * Creates a fire truck of type specified from FireTruckType. It signals to
@@ -88,13 +77,11 @@ public class FireStation {
         this.trucks.add(truck);
     }
 
-    public void spawn(Patrol patrol) {
-        if (SoundFX.music_enabled) {
-            SoundFX.sfx_truck_spawn.play();
-        }
-        this.patrols.add(patrol);
-    }
-
+    /**
+     * Draw the fire station health above the fire station
+     *
+     * @param shapeMapRenderer  renderer to draw to
+     */
     public void drawStats(ShapeRenderer shapeMapRenderer) {
         shapeMapRenderer.rect(this.getPosition().x + 2.76f, this.getPosition().y + 2.9f, 0.55f, 1.2f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
         shapeMapRenderer.rect(this.getPosition().x + 2.86f, this.getPosition().y + 3f, 0.34f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
@@ -118,7 +105,6 @@ public class FireStation {
              }
         }
     }
-
 
     /**
      * Increments the truck's HP until the truck's HP equals the truck's maximum
@@ -152,18 +138,14 @@ public class FireStation {
         this.trucks.remove(truck);
     }
 
-    public void destroyPatrol(Patrol patrol) {
-        this.patrols.remove(patrol);
-    }
-
-
+    /**
+     * Reduce health of fire station by HP
+     * @param HP    amount to reduce health by
+     */
     public void damage(float HP){
         this.HP -= HP;
     }
 
-    public float getHP() {
-        return this.HP;
-    }
     /**
      * Checks that no more than one truck occupies a tile at a time by checking trucks
      * are not moving towards each other and that a moving truck is not going to go onto
@@ -191,13 +173,6 @@ public class FireStation {
                     }
                 }
             }
-            /*for (Patrol patrol : this.patrols) {
-                Vector2 patroltile = new Vector2(Math.round(patrol.getPosition().x), Math.round(patrol.getPosition().y));
-                Vector2 truckstile = new Vector2((float)Math.floor(truck.getPosition().x),(float) Math.floor(truck.getPosition().y));
-                if (truckstile.equals(patroltile)) {
-                    patrol.setAttacking(true);
-                }
-            }*/
         }
     }
 
@@ -225,22 +200,25 @@ public class FireStation {
         truck2.addTileToPath(hold);
     }
 
-
     /** Draws the firetruck to the gameScreen
      * @param mapBatch batch being used to render to the gameScreen */
     public void draw(Batch mapBatch) {
         mapBatch.draw(this.texture, this.x, this.y, this.w, this.h);
     }
+
+    /**
+     * @return the destroyed texture object
+     */
     public DestroyedEntity getDestroyedStation(){
         return new DestroyedEntity(this.deadTexture, this.x, this.y, 5, 3);
     }
 
-    public ArrayList<FireTruck> getTrucks() {
-        return this.trucks;
+    public float getHP() {
+        return this.HP;
     }
 
-    public ArrayList<Patrol> getPatrol() {
-        return this.patrols;
+    public ArrayList<FireTruck> getTrucks() {
+        return this.trucks;
     }
 
     public FireTruck getTruck(int i) {
@@ -250,8 +228,4 @@ public class FireStation {
     public Vector2 getPosition() {
         return new Vector2(this.x,this.y);
     }
-
-    /*public Patrols getPatrol(int i) {
-        return this.patrols.get(i);
-    }*/
 }

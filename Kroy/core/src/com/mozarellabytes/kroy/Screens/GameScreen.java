@@ -72,6 +72,9 @@ public class GameScreen implements Screen {
     /** List of Fortresses currently active on the map */
     private final ArrayList<Fortress> fortresses;
 
+    /**
+     * List of patrols current active around the map
+     */
     private final ArrayList<Patrol> patrols;
 
     /** Where the FireEngines' spawn, refill and repair */
@@ -92,9 +95,15 @@ public class GameScreen implements Screen {
 
     public FPSLogger fpsCounter;
 
-    public float freezeCooldown;
+    /**
+     * Cooldown for the freeze feature to prevent it being too overpowered
+     */
+    private float freezeCooldown;
+
+    private boolean truckAttack;
 
     public boolean wasPaused = false;
+
     /** Play when the game is being played
      * Pause when the pause button is clicked */
     public enum PlayState {
@@ -165,7 +174,6 @@ public class GameScreen implements Screen {
 
         deadEntities = new ArrayList<>(7);
 
-
         // sets the origin point to which all of the polygon's local vertices are relative to.
         for (FireTruck truck : station.getTrucks()) {
             truck.setOrigin(Constants.TILE_WxH / 2, Constants.TILE_WxH / 2);
@@ -174,6 +182,8 @@ public class GameScreen implements Screen {
         mapBatch = mapRenderer.getBatch();
 
         freezeCooldown = 0f;
+        truckAttack = false;
+        gui.updateAttackMode(truckAttack);
 
         if (SoundFX.music_enabled) {
             SoundFX.sfx_soundtrack.setVolume(.5f);
@@ -344,7 +354,7 @@ public class GameScreen implements Screen {
                 }
                 if (truck.fortressInRange(fortress.getPosition())) {
                     gameState.incrementTrucksInAttackRange();
-                    truck.attack(fortress);
+                    if (isTruckAttackEnabled()) truck.attack(fortress);
                     break;
                 }
             }
@@ -589,6 +599,19 @@ public class GameScreen implements Screen {
             state = PlayState.FREEZE;
             freezeCooldown = 10;
         }
+    }
+
+    /**
+     * Enables/Disables auto attack
+     */
+    public void toggleTruckAttack() {
+        truckAttack = !truckAttack;
+        if (truckAttack && SoundFX.music_enabled && this.gameState.getTrucksInAttackRange() > 0) SoundFX.playTruckAttack();
+        gui.updateAttackMode(truckAttack);
+    }
+
+    public boolean isTruckAttackEnabled() {
+        return this.truckAttack;
     }
 
     public FireStation getStation() {

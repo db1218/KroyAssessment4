@@ -30,101 +30,62 @@ import java.util.LinkedList;
 public class Patrol extends Sprite {
 
 
-/** Enables access to functions in GameScreen */
-
+    /** Enables access to functions in GameScreen */
     private final GameScreen gameScreen;
 
-
-/** Defines set of pre-defined attributes */
-
+    /** Defines set of pre-defined attributes */
     public final PatrolType type;
 
-
-/** Health points */
-
+    /** Health points */
     private float HP;
 
-
-/** Position of patrol in tiles */
-
+    /** Position of patrol in tiles */
     public Vector2 position;
 
-
-/** Actual path the truck follows; the fewer item in
-     * the path the slower the truck will go */
-
+    /**
+     * Actual path the patrol follows; the fewer item in
+     * the path the slower the patrol will go
+     */
     public final CircularLinkedList path;
-
 
     public final Queue<Vector2> trailPath;
 
-
     public Node current;
 
-    /** If the truck is currently moving, determines whether the
-     * truck's position should be updated
+    /** If the patrol is currently moving, determines whether the
+     * patrol's position should be updated
      *
      * <code>true</code> once the player has drawn a
      * path and has let go of the mouse click
-     * <code>false</code> once the truck has got to
-     * the end of the path */
-
+     * <code>false</code> once the patrol has got to
+     * the end of the path
+     */
     private boolean moving;
 
-
-/** If the truck is attacking a Fortress
-     *
-     * <code>true</code> 'A' key is pressed
-     * <code>false</code> 'A' key is not pressed */
-
-    private boolean attacking;
-
-
-/** Whether the truck has an unresolved collision
-     * with another truck */
-
-    private boolean inCollision;
-
-
-/** Used to check if the truck's image should be
-     * changed to match the direction it is facing */
-
+    /**
+     * Used to check if the patrol's image should be
+     * changed to match the direction it is facing
+     */
     private Vector2 previousTile;
 
     private Vector2 nextTile;
 
 
-    /** Time since fortress has attacked the truck */
-
-    private long timeOfLastAttack;
-
-
-    private Vector2 target;
-
-    /** List of particles that the truck uses to attack
-     * a Fortress */
-
+    /**
+     * List of particles that the patrol uses to attack
+     * a Fortress
+     */
     private final ArrayList<BlasterParticle> spray;
 
-
-/** Texture for each
-     * patrol*/
-
-    private final Texture texture;
-
-
-
-/**
+    /**
      * Constructs a new Patrol at a position and of a certain type
      * which have been passed in
      *
      * @param gameScreen    used to access functions in GameScreen
      * @param type          used to have predefined attributes
      */
-
     public Patrol(GameScreen gameScreen, PatrolType type) {
         super(type.getTexture());
-
         this.gameScreen = gameScreen;
         this.type = type;
         this.HP = type.getMaxHP();
@@ -132,14 +93,9 @@ public class Patrol extends Sprite {
         this.path = new CircularLinkedList();
         this.trailPath = new Queue<Vector2>();
         this.moving = true;
-        this.attacking = false;
-        this.inCollision = false;
         this.spray = new ArrayList<BlasterParticle>();
-        this.timeOfLastAttack = System.currentTimeMillis();
-        this.nextTile=position;
-        this.previousTile=position;
-        this.texture = type.getTexture();
-
+        this.nextTile = position;
+        this.previousTile = position;
         definePath();
     }
 
@@ -220,12 +176,11 @@ public class Patrol extends Sprite {
         return this.spray;
     }
 
-/**
-     * Draws the mini health indicators relative to the truck
-     *
-     * @param shapeMapRenderer  Renderer that the stats are being drawn to (map  dependant)
-     */
-
+    /**
+    * Draws the mini health indicators relative to the patrol
+    *
+    * @param shapeMapRenderer  Renderer that the stats are being drawn to (map  dependant)
+    */
     public void drawStats(ShapeRenderer shapeMapRenderer) {
         shapeMapRenderer.rect(this.getPosition().x + 0.2f, this.getPosition().y + 1.3f, 0.4f, 0.8f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
         shapeMapRenderer.rect(this.getPosition().x + 0.3f, this.getPosition().y + 1.4f, 0.2f, 0.6f, Color.OLIVE, Color.OLIVE, Color.OLIVE, Color.OLIVE);
@@ -235,30 +190,15 @@ public class Patrol extends Sprite {
         }
     }
 
-
-/**
-     * Draws the patrol sprite
-     *
-     * @param mapBatch  Batch that the truck is being
-     *                  drawn to (map dependant)
-     */
-
+    /**
+    * Draws the patrol sprite
+    *
+    * @param mapBatch  Batch that the patrol is being
+    *                  drawn to (map dependant)
+    */
     public void drawSprite(Batch mapBatch) {
         mapBatch.draw(this, this.position.x, this.position.y, 1, 1);
     }
-
-
-/**
-     * Helper method that returns where the truck is visually to the player. This is used when
-     * checking the range when attacking the Fortress and getting attacked by the Fortress
-     *
-     * @return a vector where the truck is visually
-     */
-
-    public Vector2 getVisualPosition() {
-        return new Vector2(this.position.x + 0.5f, this.position.y + 0.5f);
-    }
-
 
     private void removeParticle(BlasterParticle particle) {
         this.spray.remove(particle);
@@ -286,25 +226,4 @@ public class Patrol extends Sprite {
     public Vector2 getPosition() {
         return this.position;
     }
-
-    public CircularLinkedList getPath() {
-        return this.path;
-    }
-
-
-    public boolean getMoving() {
-        return this.moving;
-    }
-
-    public boolean withinRange(Vector2 targetPos) {
-        return targetPos==this.position;
-    }
-
-    public void setTargetX(float x) {this.type.getTarget().x = x;}
-    public void setTargetY(float y) {this.type.getTarget().y = y;}
-    public void setPositionX(float x) {this.position.x = x;}
-    public void setPositionY(float y) {this.position.y = y;}
-    public float getPositionX() {return nextTile.x;}
-    public float getPositionY() {return nextTile.y;}
-
 }

@@ -43,17 +43,6 @@ public class GameInputHandler implements InputProcessor {
                 gui.clickedPauseButton();
                 gameScreen.changeState(true);
                 break;
-                /* Outdated code
-            case Input.Keys.A:
-                System.out.println(gameScreen.gameState.getTrucksInAttackRange());
-                if (SoundFX.music_enabled && gameScreen.gameState.getTrucksInAttackRange() > 0) {
-                    SoundFX.playTruckAttack();
-                }
-                for (FireTruck truck: gameScreen.getStation().getTrucks()){
-                    truck.setAttacking(true);
-                }
-                break;
-                 */
             case Input.Keys.C:
                 gameScreen.toControlScreen();
                 break;
@@ -66,12 +55,10 @@ public class GameInputHandler implements InputProcessor {
                 gameScreen.changeState(false);
                 break;
             case Input.Keys.Q:
-                if(gameScreen.selectedTruck != null) {
-                    if (!gameScreen.selectedTruck.getMoving()) {
-                        gameScreen.selectedTruck.resetPath();
-                    }
-
-                }
+                if(gameScreen.selectedTruck != null && !gameScreen.selectedTruck.getMoving()) gameScreen.selectedTruck.resetPath();
+                break;
+            case Input.Keys.A:
+                gameScreen.toggleTruckAttack();
         }
         return true;
     }

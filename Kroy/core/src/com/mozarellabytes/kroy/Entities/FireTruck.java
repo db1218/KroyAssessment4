@@ -71,7 +71,6 @@ public class FireTruck extends Sprite {
      * a Fortress */
     private final ArrayList<WaterParticle> spray;
 
-
     /** Whether the mouse has been dragged off a road tile */
     private boolean dragOffMap = false;
     /** Whether the path finding algorithm has reached the end*/
@@ -96,6 +95,7 @@ public class FireTruck extends Sprite {
     private Vector2[] newPath;
 
     private Vector2 previous;
+
     /**
      * Constructs a new FireTruck at a position and of a certain type
      * which have been passed in
@@ -106,7 +106,6 @@ public class FireTruck extends Sprite {
      */
     public FireTruck(GameScreen gameScreen, Vector2 position, FireTruckType type) {
         super(type.getLookDown());
-
         this.gameScreen = gameScreen;
         this.type = type;
         this.HP = type.getMaxHP();
@@ -223,7 +222,6 @@ public class FireTruck extends Sprite {
                 }
             }
         }
-
 
     /**
      * Used when drawing the path to check whether the next tile to be added to the path is
@@ -554,12 +552,6 @@ public class FireTruck extends Sprite {
     public void setTimeOfLastAttack(long timestamp) {
         this.timeOfLastAttack = timestamp;
     }
-
-    /*
-    public void setAttacking(boolean b) {
-        this.attacking = b;
-    }
-     */
 
     public void setMoving(boolean t) {
         this.moving = t;

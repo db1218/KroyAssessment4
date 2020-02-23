@@ -155,6 +155,7 @@ public class GUI {
         elements.add(new Element(30));
         elements.add(new Element(30));
         elements.add(new Element(30));
+        elements.add(new Element(30));
     }
 
     public void renderElements() {
@@ -267,19 +268,19 @@ public class GUI {
     }
 
     /**
-     * Renders the stat bars which are currently used to
-     * show the health/reserve of trucks and health of
-     * fortresses. The integers inside the method that
-     * have values set to them are customisable to get
-     * the desired layout/formatting of the bars
-     *  @param value             the value towards the goal
-     * @param maxValue          the goal
-     * @param progressColour    the colour of the value bar
-     * @param backgroundColour  the colour behind the value bar
-     * @param position          the 'bar number' to allow multiple
-*                          bars along side each other
-*                          (1 to infinity)
-     */
+    * Renders the stat bars which are currently used to
+    * show the health/reserve of trucks and health of
+    * fortresses. The integers inside the method that
+    * have values set to them are customisable to get
+    * the desired layout/formatting of the bars
+    *  @param value             the value towards the goal
+    * @param maxValue          the goal
+    * @param progressColour    the colour of the value bar
+    * @param backgroundColour  the colour behind the value bar
+    * @param position          the 'bar number' to allow multiple
+    *                          bars along side each other
+    *                          (1 to infinity)
+    */
     private void renderSelectedEntityBar(float value, float maxValue, Color progressColour, Color backgroundColour, int position) {
         int outerSpacing = 10;
         int innerSpacing = 5;
@@ -452,6 +453,18 @@ public class GUI {
         if (cooldown > 0) element.setText(String.format("Pause Cooldown: %.1f", cooldown));
         else element.setText("Freeze available [SPACE]");
         this.elements.set(3, element);
+    }
+
+    /**
+     * Updates the attack mode whenever the user clicks A
+     * @param autoAttack    <code>true</code> if autoattack is enabled
+     *                      <code>false</code> otherwise
+     */
+    public void updateAttackMode(boolean autoAttack) {
+        Element element = elements.get(4);
+        if (autoAttack) element.setText("Truck attack: ENABLED [A]");
+        else element.setText("Truck attack: DISABLED [A]");
+        this.elements.set(4, element);
     }
 
     public Rectangle getHomeButton() { return this.homeButton; }

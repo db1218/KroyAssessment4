@@ -39,7 +39,6 @@ public class GameState {
         this.activeFireTrucks++;
     }
 
-
     public void setStationDestoyed() {
         this.stationDestoyed = true;
     }
