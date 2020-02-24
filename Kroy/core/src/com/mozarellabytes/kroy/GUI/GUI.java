@@ -456,14 +456,14 @@ public class GUI {
     }
 
     /**
-     * Updates the attack mode whenever the user clicks A
-     * @param autoAttack    <code>true</code> if autoattack is enabled
+     * Updates truck attack whenever the user clicks A
+     * @param truckAttack    <code>true</code> if truck attack is enabled
      *                      <code>false</code> otherwise
      */
-    public void updateAttackMode(boolean autoAttack) {
+    public void updateAttackMode(boolean truckAttack) {
         Element element = elements.get(4);
-        if (autoAttack) element.setText("Truck attack: ENABLED [A]");
-        else element.setText("Truck attack: DISABLED [A]");
+        if (truckAttack) element.setText("Truck attack: ON [A]");
+        else element.setText("Truck attack: OFF [A]");
         this.elements.set(4, element);
     }
 

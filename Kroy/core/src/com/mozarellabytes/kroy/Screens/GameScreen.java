@@ -587,7 +587,9 @@ public class GameScreen implements Screen {
         gameState.addFireTruck();
     }
 
-    /** Toggles between Play and Pause state when the Pause button is clicked */
+    /**
+     * Toggles between Play and Pause state when the Pause button is clicked
+     */
     public void changeState(boolean pause) {
         if (pause) {
             if (state.equals(PlayState.PLAY)) state = PlayState.PAUSE;
