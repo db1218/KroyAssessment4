@@ -198,7 +198,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        fpsCounter.log();
+//        fpsCounter.log();
 
         camera.update();
 
@@ -260,7 +260,7 @@ public class GameScreen implements Screen {
             }
         }
 
-        if(station.getHP()>0){
+        if(station.getHP()>0) {
             station.drawStats(shapeMapRenderer);
         }
 
@@ -312,6 +312,7 @@ public class GameScreen implements Screen {
                     state = PlayState.PLAY;
                 }
         }
+
         gui.renderButtons();
     }
 
@@ -444,8 +445,6 @@ public class GameScreen implements Screen {
         } else {
             SoundFX.stopTruckAttack();
         }
-
-        //System.out.println(SoundFX.isPlaying);
 
         shapeMapRenderer.end();
         shapeMapRenderer.setColor(Color.WHITE);

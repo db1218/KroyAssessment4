@@ -93,21 +93,18 @@ public class GameInputHandler implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);
-
-            if (gameScreen.isRoad((int) clickCoordinates.x, (int) clickCoordinates.y)) {
-
-                if (gameScreen.checkClick(clickCoordinates)) {
-                    gameScreen.selectedTruck.resetPath();
-                    gameScreen.selectedTruck.addTileToPath(clickCoordinates);
-                    System.out.print("\n" + clickCoordinates + "\n" + gameScreen.selectedTruck.getMoving());
-
-                } else if (!gameScreen.checkTrailClick(clickCoordinates) && !checkFortressClick(clickCoordinates)) {
-                    gameScreen.selectedTruck = null;
-                    gameScreen.setSelectedEntity(null);
-                }
-            } else {
-                checkFortressClick(clickCoordinates);
+        if (gameScreen.isRoad((int) clickCoordinates.x, (int) clickCoordinates.y)) {
+            if (gameScreen.checkClick(clickCoordinates)) {
+                gameScreen.selectedTruck.resetPath();
+                gameScreen.selectedTruck.addTileToPath(clickCoordinates);
+                System.out.print("\n" + clickCoordinates + "\n" + gameScreen.selectedTruck.getMoving());
+            } else if (!gameScreen.checkTrailClick(clickCoordinates) && !checkFortressClick(clickCoordinates)) {
+                gameScreen.selectedTruck = null;
+                gameScreen.setSelectedEntity(null);
             }
+        } else {
+            checkFortressClick(clickCoordinates);
+        }
 
         checkButtonClick(new Vector2(screenX, Gdx.graphics.getHeight() - screenY));
         return true;
@@ -119,12 +116,10 @@ public class GameInputHandler implements InputProcessor {
      * @return whether the input was processed */
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-
             if (gameScreen.selectedTruck != null) {
                 Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);
                 gameScreen.selectedTruck.addTileToPath(clickCoordinates);
             }
-
         return true;
     }
 
@@ -139,6 +134,7 @@ public class GameInputHandler implements InputProcessor {
 
             if (gameScreen.selectedTruck != null) {
                 if (!gameScreen.selectedTruck.trailPath.isEmpty()) {
+                    gameScreen.selectedTruck.addPathSegment(generateClickCoordinates(screenX, screenY), false);
                     if (doTrucksHaveSameLastTile()){
                         giveTrucksDifferentLastTiles(gameScreen.selectedTruck);
                     }
