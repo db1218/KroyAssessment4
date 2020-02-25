@@ -40,7 +40,7 @@ public class FireTruck extends Sprite {
 
     /** The visual path that users can see when drawing
      * a firetruck's path */
-    public Queue<Vector2> trailPath;
+    public Queue<Vector2> pathSegment;
 
     /** If the truck is currently moving, determines whether the
      * truck's position should be updated
@@ -73,7 +73,7 @@ public class FireTruck extends Sprite {
     /** All possible routes from an end tile to a new tile are stored in this */
     Queue<Vector2> positions;
 
-    Stack<Queue<Vector2>> pathSegments;
+    public Queue<Queue<Vector2>> pathSegments;
 
     /** Current tile */
     Vector2 currentPos;
@@ -91,7 +91,6 @@ public class FireTruck extends Sprite {
     /** Path firetruck actually uses*/
     private Vector2[] newPath;
 
-
     /**
      * Constructs a new FireTruck at a position and of a certain type
      * which have been passed in
@@ -108,11 +107,12 @@ public class FireTruck extends Sprite {
         this.reserve = type.getMaxReserve();
         this.position = position;
         this.path = new Queue<>();
-        this.trailPath = new Queue<>();
+        this.pathSegment = new Queue<>();
         this.moving = false;
         this.inCollision = false;
         this.spray = new ArrayList<Particle>();
         this.timeOfLastAttack = System.currentTimeMillis();
+        this.pathSegments = new Queue<>();
     }
 
     /**
@@ -121,18 +121,31 @@ public class FireTruck extends Sprite {
      */
     public void move() {
         if (moving) {
-            if (this.path.size > 0) {
-                Vector2 nextTile = path.first();
-                this.position = nextTile;
+            if (this.pathSegments.size > 0) {
+                if (this.pathSegments.first().size > 0) {
+                    if (!path.isEmpty()) {
+                        Vector2 nextTile = path.first();
+                        this.position = nextTile;
 
-                if (!this.trailPath.isEmpty() && (int) this.position.x == this.trailPath.first().x && (int) this.position.y == this.trailPath.first().y) {
-                    this.trailPath.removeFirst();
+                        System.out.println();
+                        System.out.println("Position x: " + position.x);
+                        System.out.println("Position y: " + position.y);
+                        System.out.println("Path x: " + pathSegments.first().first().x);
+                        System.out.println("Path y: " + pathSegments.first().first().y);
+
+                        if (Math.round(position.x) == pathSegments.first().first().x && Math.round(position.y) == pathSegments.first().first().y) {
+                            System.out.println("Remove: " + pathSegments.first().first());
+                            pathSegments.first().removeFirst();
+                        }
+                        if (!this.inCollision) {
+                            changeSprite(nextTile);
+                        }
+                        previousTile = nextTile;
+                        path.removeFirst();
+                    }
+                } else {
+                    this.pathSegments.removeFirst();
                 }
-                if (!this.inCollision) {
-                    changeSprite(nextTile);
-                }
-                previousTile = nextTile;
-                path.removeFirst();
             } else {
                 moving = false;
             }
@@ -167,14 +180,11 @@ public class FireTruck extends Sprite {
      * @param coordinate    Position on the screen that the user's mouse is being
      *                      dragged over
      */
-    public void addTileToPath(Vector2 coordinate) {
+    public void addTileToPathSegment(Vector2 coordinate) {
         if (isValidDraw(coordinate)) {
             if (!dragOffMap) {
-                if (this.path.size > 0) {
-                    interpolateMove(this.path.last(), coordinate, (int) (40 / type.getSpeed()));
-                }
-                this.trailPath.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
-                this.path.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
+                this.pathSegment.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
+                addSuggestedPathSegment(coordinate);
             } else {
                 //dragged off map
                 dragOffMap = false;
@@ -182,15 +192,35 @@ public class FireTruck extends Sprite {
         }
     }
 
-    public void addPathSegment(Vector2 coordinate, boolean concrete) {
-        newPath = findPath(coordinate, this.path.last());
-        System.out.println(Arrays.toString(newPath));
-
-        for (Vector2 position : newPath) {
-            interpolateMove(this.path.last(), position, (int) (40 / type.getSpeed()));
-            this.trailPath.addLast(position);
-            if (concrete) this.path.addLast(position);
+    public void addSuggestedPathSegment(Vector2 coordinate) {
+        clearQueueSetFirst(this.pathSegment.first());
+        for (Vector2 position : findPath(coordinate, this.pathSegment.first())) {
+            this.pathSegment.addLast(position);
         }
+    }
+
+    public void generatePathFromTrailPath() {
+        for (Queue<Vector2> pathSegment : this.pathSegments) {
+            for (int i=1; i<pathSegment.size; i++) {
+                interpolateMove(pathSegment.get(i-1), pathSegment.get(i), (int)(40/type.getSpeed()));
+            }
+        }
+    }
+
+    public void addPathSegmentToRoute() {
+        this.pathSegments.addLast(cloneQueue(this.pathSegment));
+        this.pathSegment.clear();
+    }
+
+    public Queue<Vector2> cloneQueue(Queue<Vector2> oldQueue) {
+        Queue<Vector2> newQueue = new Queue<>();
+        for (Vector2 vector : oldQueue) newQueue.addLast(vector);
+        return newQueue;
+    }
+
+    private void clearQueueSetFirst(Vector2 first) {
+        this.pathSegment.clear();
+        this.pathSegment.addLast(first);
     }
 
     /**
@@ -219,14 +249,14 @@ public class FireTruck extends Sprite {
     private boolean isValidDraw(Vector2 coordinate) {
         if (coordinate.y < 28) {
             if (gameScreen.isRoad((Math.round(coordinate.x)), (Math.round(coordinate.y)))) {
-                if (this.path.isEmpty()) {
-                    return this.getPosition().equals(coordinate);
-                } else {
-                    if (!this.path.last().equals(coordinate)) {
-                        float distanceFromLastTile = (int) Math.abs(this.path.last().x - coordinate.x) + (int) Math.abs(this.path.last().y - coordinate.y);
-                        dragOffMap = distanceFromLastTile > 1;
+                if (this.pathSegment.isEmpty()) {
+                    if (this.getPosition().equals(coordinate)) {
                         return true;
+                    } else if (!this.pathSegments.isEmpty()) {
+                        return this.pathSegments.last().last().equals(coordinate);
                     }
+                } else {
+                    return !this.pathSegment.last().equals(coordinate);
                 }
             }
         }
@@ -335,7 +365,7 @@ public class FireTruck extends Sprite {
         reconstructedPath = new LinkedList<>();
         for(Vector2 at = endPos; at != null; at = prev[convertVector2ToIntPositionInMap(at)]) {
             if(at == startPos) {
-                if(!this.trailPath.isEmpty()) continue;
+                if(!this.pathSegment.isEmpty()) continue;
             }
             reconstructedPath.add(at);
         }
@@ -375,7 +405,7 @@ public class FireTruck extends Sprite {
      */
     public void resetPath() {
         this.path.clear();
-        this.trailPath.clear();
+        this.pathSegment.clear();
     }
 
     /**
@@ -459,15 +489,27 @@ public class FireTruck extends Sprite {
      * @param mapBatch  Batch that the path is being drawn to (map dependant)
      */
     public void drawPath(Batch mapBatch) {
-        if (!this.trailPath.isEmpty()) {
+        if (!this.pathSegment.isEmpty()) {
             mapBatch.setColor(this.type.getTrailColour());
-            for (Vector2 tile : this.trailPath) {
-                if (tile.equals(this.trailPath.last())) {
+            for (Vector2 tile : this.pathSegment) {
+                if (tile.equals(this.pathSegment.last())) {
                     mapBatch.draw(this.type.getTrailImageEnd(), tile.x, tile.y, 1, 1);
                 }
                 mapBatch.draw(this.type.getTrailImage(), tile.x, tile.y, 1, 1);
             }
             mapBatch.setColor(Color.WHITE);
+        }
+        if (!this.pathSegments.isEmpty()) {
+            for (Queue<Vector2> queue : this.pathSegments) {
+                mapBatch.setColor(this.type.getTrailColour());
+                for (Vector2 tile : queue) {
+                    if (tile.equals(queue.last())) {
+                        mapBatch.draw(this.type.getTrailImageEnd(), tile.x, tile.y, 1, 1);
+                    }
+                    mapBatch.draw(this.type.getTrailImage(), tile.x, tile.y, 1, 1);
+                }
+                mapBatch.setColor(Color.WHITE);
+            }
         }
     }
 
@@ -554,8 +596,8 @@ public class FireTruck extends Sprite {
         return absPos;
     }
 
-    public Queue<Vector2> getTrailPath() {
-        return this.trailPath;
+    public Queue<Vector2> getPathSegment() {
+        return this.pathSegment;
     }
 
     public Queue<Vector2> getPath() {

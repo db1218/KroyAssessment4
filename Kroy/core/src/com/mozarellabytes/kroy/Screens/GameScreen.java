@@ -526,8 +526,8 @@ public class GameScreen implements Screen {
      */
     public boolean checkTrailClick(Vector2 position) {
         for (int i=this.station.getTrucks().size()-1; i>=0; i--) {
-            if (!this.station.getTruck(i).path.isEmpty()) {
-                if (position.equals(this.station.getTruck(i).path.last())) {
+            if (!this.station.getTruck(i).pathSegments.isEmpty()) {
+                if (position.equals(this.station.getTruck(i).pathSegments.last().last())) {
                     this.selectedTruck = this.station.getTruck(i);
                     this.selectedEntity = this.station.getTruck(i);
                     return true;

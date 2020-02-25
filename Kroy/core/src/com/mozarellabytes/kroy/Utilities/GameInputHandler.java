@@ -65,17 +65,7 @@ public class GameInputHandler implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        /*
-        if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
-            if (keycode == Input.Keys.A) {
-                SoundFX.stopTruckAttack();
-                for (FireTruck truck : gameScreen.getStation().getTrucks()) {
-                    truck.setAttacking(false);
-                }
-            }
-        }
-         */
-        return true;
+        return false;
     }
 
     @Override
@@ -96,8 +86,7 @@ public class GameInputHandler implements InputProcessor {
         if (gameScreen.isRoad((int) clickCoordinates.x, (int) clickCoordinates.y)) {
             if (gameScreen.checkClick(clickCoordinates)) {
                 gameScreen.selectedTruck.resetPath();
-                gameScreen.selectedTruck.addTileToPath(clickCoordinates);
-                System.out.print("\n" + clickCoordinates + "\n" + gameScreen.selectedTruck.getMoving());
+                gameScreen.selectedTruck.addTileToPathSegment(clickCoordinates);
             } else if (!gameScreen.checkTrailClick(clickCoordinates) && !checkFortressClick(clickCoordinates)) {
                 gameScreen.selectedTruck = null;
                 gameScreen.setSelectedEntity(null);
@@ -116,10 +105,10 @@ public class GameInputHandler implements InputProcessor {
      * @return whether the input was processed */
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-            if (gameScreen.selectedTruck != null) {
-                Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);
-                gameScreen.selectedTruck.addTileToPath(clickCoordinates);
-            }
+        if (gameScreen.selectedTruck != null) {
+            Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);
+            gameScreen.selectedTruck.addTileToPathSegment(clickCoordinates);
+        }
         return true;
     }
 
@@ -131,21 +120,20 @@ public class GameInputHandler implements InputProcessor {
      * @return whether the input was processed */
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-
-            if (gameScreen.selectedTruck != null) {
-                if (!gameScreen.selectedTruck.trailPath.isEmpty()) {
-                    gameScreen.selectedTruck.addPathSegment(generateClickCoordinates(screenX, screenY), false);
-                    if (doTrucksHaveSameLastTile()){
-                        giveTrucksDifferentLastTiles(gameScreen.selectedTruck);
-                    }
+        if (gameScreen.selectedTruck != null) {
+            if (!gameScreen.selectedTruck.pathSegment.isEmpty()) {
+                gameScreen.selectedTruck.addPathSegmentToRoute();
+                if (doTrucksHaveSameLastTile()){
+                    giveTrucksDifferentLastTiles(gameScreen.selectedTruck);
                 }
-                if(this.gameScreen.getState().equals((GameScreen.PlayState.PAUSE))) {
-                    gameScreen.selectedTruck.setMoving(false);
-                } else {
-                    gameScreen.selectedTruck.setMoving(true);
-                }
-
             }
+            if (this.gameScreen.getState().equals((GameScreen.PlayState.PAUSE))) {
+                gameScreen.selectedTruck.setMoving(false);
+            } else {
+                gameScreen.selectedTruck.setMoving(true);
+            }
+            gameScreen.selectedTruck.generatePathFromTrailPath();
+        }
 
         checkButtonUnclick(screenX, screenY);
         return true;
@@ -169,11 +157,11 @@ public class GameInputHandler implements InputProcessor {
     private boolean doTrucksHaveSameLastTile() {
         for (FireTruck truck : gameScreen.getStation().getTrucks()) {
             if (!truck.equals(gameScreen.selectedTruck)) {
-                if (!truck.getPath().isEmpty() && !truck.getTrailPath().isEmpty()){
-                    if (truck.trailPath.last().equals(gameScreen.selectedTruck.trailPath.last())){
+                if (!truck.getPath().isEmpty() && !truck.getPathSegment().isEmpty()){
+                    if (truck.pathSegment.last().equals(gameScreen.selectedTruck.pathSegment.last())){
                         return true;
                     }
-                } else if (truck.getPosition().equals(gameScreen.selectedTruck.trailPath.last())) {
+                } else if (!gameScreen.selectedTruck.pathSegment.isEmpty() && truck.getPosition().equals(gameScreen.selectedTruck.pathSegment.last())) {
                     return true;
                 }
             }
@@ -187,8 +175,8 @@ public class GameInputHandler implements InputProcessor {
      *                      on different tiles
      */
     private void giveTrucksDifferentLastTiles(FireTruck selectedTruck){
-        selectedTruck.trailPath.removeLast();
-        while (!selectedTruck.trailPath.isEmpty() && !selectedTruck.trailPath.last().equals(selectedTruck.path.last())) {
+        selectedTruck.pathSegment.removeLast();
+        while (!selectedTruck.pathSegment.isEmpty() && !selectedTruck.pathSegment.last().equals(selectedTruck.path.last())) {
             selectedTruck.path.removeLast();
         }
     }
