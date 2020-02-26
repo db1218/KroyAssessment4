@@ -138,7 +138,9 @@ public class GameInputHandler implements InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
         if (gameScreen.selectedTruck != null) {
-            if (!gameScreen.selectedTruck.trailPath.isEmpty()) {
+            if (!gameScreen.selectedTruck.pathSegment.isEmpty()) {
+                gameScreen.selectedTruck.addPathSegmentToRoute();
+                gameScreen.selectedTruck.generatePathFromTrailPath();
                 if (doTrucksHaveSameLastTile()){
                     giveTrucksDifferentLastTiles(gameScreen.selectedTruck);
                 }
@@ -148,7 +150,6 @@ public class GameInputHandler implements InputProcessor {
             } else {
                 gameScreen.selectedTruck.setMoving(true);
             }
-
         }
 
         checkButtonUnclick(screenX, screenY);

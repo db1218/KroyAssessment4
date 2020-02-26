@@ -128,8 +128,18 @@ public class FireTruck extends Sprite {
                 Vector2 nextTile = path.first();
                 this.position = nextTile;
 
-                if (!this.trailPath.isEmpty() && (int) this.position.x == this.trailPath.first().x && (int) this.position.y == this.trailPath.first().y) {
-                    this.trailPath.removeFirst();
+                        if (position.x == pathSegments.first().first().x && position.y == pathSegments.first().first().y) {
+                            pathSegments.first().removeFirst();
+                        }
+
+                        if (!this.inCollision) {
+                            changeSprite(nextTile);
+                        }
+                        previousTile = nextTile;
+                        path.removeFirst();
+                    }
+                } else {
+                    this.pathSegments.removeFirst();
                 }
                 if (!this.inCollision) {
                     changeSprite(nextTile);
@@ -190,7 +200,11 @@ public class FireTruck extends Sprite {
                 int interpolation = (int) (40 / type.getSpeed());
                 previous = this.path.last();
 
-                newPath = findPath(coordinate, this.path.last());
+    public void generatePathFromTrailPath() {
+        for (int i=1; i<pathSegments.last().size; i++) {
+            interpolateMove(pathSegments.last().get(i-1), pathSegments.last().get(i), (int)(40/type.getSpeed()));
+        }
+    }
 
                 if(counter >= 2) {
                     try {
@@ -203,22 +217,19 @@ public class FireTruck extends Sprite {
 
                 } else {
 
-                }
-
-                for (int i = 0; i < newPath.length; i++) {
-
-                    for(int j = 1; j < interpolation; j++) {
-                        this.path.addLast(new Vector2((((previous.x - newPath[i].x) * -1) / interpolation) * j + previous.x, (((previous.y - newPath[i].y) * -1) / interpolation) * j + previous.y));
-
-                    }
-
-                    this.trailPath.addLast(new Vector2(newPath[i]));
-                    this.path.addLast(new Vector2(newPath[i]));
-                    previous = this.path.last();
-
-                }
-            }
+    /**
+     * Interpolation function to generate smooth path between
+     * two adjacent tiles
+     *
+     * @param previousTile  previous tile truck is from
+     * @param currentTile   current tile truck is on
+     * @param interpolation decides how slow it goes
+     */
+    private void interpolateMove(Vector2 previousTile, Vector2 currentTile, int interpolation) {
+        for (int j = 0; j < interpolation; j++) {
+            this.path.addLast(new Vector2((((previousTile.x - currentTile.x) * -1) / interpolation) * j + previousTile.x, (((previousTile.y - currentTile.y) * -1) / interpolation) * j + previousTile.y));
         }
+        this.path.addLast(new Vector2(currentTile.x, currentTile.y));
     }
 
     /**
@@ -233,8 +244,15 @@ public class FireTruck extends Sprite {
     private boolean isValidDraw(Vector2 coordinate) {
         if (coordinate.y < 28) {
             if (gameScreen.isRoad((Math.round(coordinate.x)), (Math.round(coordinate.y)))) {
-                if (this.path.isEmpty()) {
-                    return this.getPosition().equals(coordinate);
+                if (this.pathSegments.isEmpty()) {
+                    return true;
+                }
+                if (this.pathSegment.isEmpty()) {
+                    if (this.getPosition().equals(coordinate)) {
+                        return true;
+                    } else if (!this.pathSegments.isEmpty()) {
+                        return this.pathSegments.last().last().equals(coordinate);
+                    }
                 } else {
                     if (!this.path.last().equals(coordinate)) {
                         if((int) Math.abs(this.path.last().x - coordinate.x) + (int) Math.abs(this.path.last().y - coordinate.y) >= 2) {
@@ -506,6 +524,18 @@ public class FireTruck extends Sprite {
                 mapBatch.draw(this.type.getTrailImage(), tile.x, tile.y, 1, 1);
             }
             mapBatch.setColor(Color.WHITE);
+        }
+        if (!this.pathSegments.isEmpty()) {
+            for (Queue<Vector2> queue : this.pathSegments) {
+                mapBatch.setColor(this.type.getTrailColour());
+                for (Vector2 tile : queue) {
+                    if (tile.equals(pathSegments.last().last())) {
+                        mapBatch.draw(this.type.getTrailImageEnd(), tile.x, tile.y, 1, 1);
+                    }
+                    mapBatch.draw(this.type.getTrailImage(), tile.x, tile.y, 1, 1);
+                }
+                mapBatch.setColor(Color.WHITE);
+            }
         }
     }
 
