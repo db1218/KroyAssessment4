@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.mozarellabytes.kroy.GUI.GUI;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.*;
 
@@ -208,9 +209,7 @@ public class ControlsScreen implements Screen {
         if (screen.equals("game") || screen.equals("menu")) {
             damageFortressHP();
             drawFortressHealthBar();
-        } else if (screen.equals("dance")) {
         }
-
         renderExitButton();
 
     }
@@ -258,10 +257,9 @@ public class ControlsScreen implements Screen {
             Gdx.input.setInputProcessor(new MenuInputHandler((MenuScreen)parent));
             this.game.setScreen(parent);
         } else if (this.screen.equals("dance")) {
+            Gdx.input.setInputProcessor(new DanceScreenInputHandler((DanceScreen)parent));
             this.game.setScreen(parent);
-        }
-        else if (this.screen.equals("dance")){
-            this.game.setScreen(parent);
+
         }
     }
 

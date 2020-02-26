@@ -35,10 +35,8 @@ public class DifficultyControl {
      *
      * @return A String containing the current difficulty and time to the next difficulty increment
      */
-    public String getDifficultyOutput(){
-        DecimalFormat decimalFormat = new DecimalFormat("#.0");
-        return ("Difficulty:" + String.valueOf(currentDifficulty) + "\n" +
-                "Time To Increase:" + decimalFormat.format(currentTime));
+    public float getTimeSinceLastDifficultyIncrease() {
+        return this.currentTime;
     }
 
     /** Checks if enough time has passed for the difficulty to increment
@@ -56,6 +54,6 @@ public class DifficultyControl {
      * @return A float equal to one tenth of the current difficulty level
      */
     public float getDifficultyMultiplier(){
-        return (currentDifficulty + 10)/10;
+        return (currentDifficulty + 10)/10f;
     }
 }

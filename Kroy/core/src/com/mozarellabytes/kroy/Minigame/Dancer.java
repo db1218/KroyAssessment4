@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.Minigame;
 
+import com.badlogic.gdx.graphics.Texture;
+
+import java.util.ArrayList;
+
 /** Class for entities that are taking part in the dance-off */
 public class Dancer {
     /** The amount of health the dancer has left*/
@@ -7,25 +11,31 @@ public class Dancer {
     private DanceMove state;
     private float timeInState;
 
+    private int stepsInJive;
+
     /** Whether the dancer is doing a preset dance */
     private boolean jiving;
 
     /** How far through the jive the dancer is */
     private int jiveStep;
 
+    private ArrayList jiveRoutine;
 
     public Dancer(int maxHealth) {
         this.health = maxHealth;
         this.state = DanceMove.NONE;
         this.timeInState = 0f;
         this.jiving = false;
+        this.jiveRoutine = new ArrayList();
+        this.stepsInJive = 8;
+
+        createRoutine();
     }
 
-    /**
-     * Returns the current health of the dancer
-     * */
-    public int getHealth() {
-        return health;
+    private void createRoutine() {
+        this.jiveRoutine.add(DanceMove.LEFT);
+        this.jiveRoutine.add(DanceMove.NONE);
+        this.jiveRoutine.add(DanceMove.RIGHT);
     }
 
     /**
@@ -34,19 +44,9 @@ public class Dancer {
      * @return true if the dancer was killed, else false
      */
     public boolean damage(int amount) {
-        if (amount < 0) {
-            amount = 0;
-        }
+        if (amount < 0) amount = 0;
         this.health -= amount;
         return this.health <= 0;
-    }
-
-    /**
-     * Gets the current state of the dancer
-     * @return a Dancemove
-     */
-    public DanceMove getState() {
-        return this.state;
     }
 
     /**
@@ -66,6 +66,41 @@ public class Dancer {
         this.timeInState += delta;
     }
 
+
+    /**
+     * Sets the dancer to perform an automatic celebratory dance
+     */
+    public void startJive() {
+        this.jiving = true;
+    }
+
+    /**
+     * Sends an update to the dancer so that if they are jiving they can change moves in time to the music
+     */
+    public void updateJive() {
+        if (this.jiving) jive();
+        if (this.jiveStep >= this.stepsInJive) stopJiving();
+    }
+
+    private void jive(){
+        this.jiveStep++;
+        int stepIndex = this.jiveStep % 3;
+        DanceMove move = (DanceMove)jiveRoutine.get(stepIndex);
+        this.setState(move);
+    }
+
+    private void stopJiving() {
+        this.jiving = false;
+        this.jiveStep = 0;
+        this.state = DanceMove.NONE;
+    }
+
+    public Texture getTexture(String entity) {
+        Texture ETTexture = this.state.getETTexture();
+        Texture firefighterTexture = this.state.getFirefighterTexture();
+        return entity.equals("ET") ? ETTexture : firefighterTexture;
+    }
+
     /**
      * Returns the amount of time that the dancer has been in its current state in seconds
      * @return time in state
@@ -73,59 +108,20 @@ public class Dancer {
     public float getTimeInState() { return this.timeInState; }
 
     /**
-     * A dancer is jiving when it is performing an automatic celebratory dance
-     * @return true if the dancer is jiving, else false
+     * Gets the current state of the dancer
+     * @return a Dancemove
      */
-    public boolean isJiving() { return this.jiving; }
-
-    /**
-     * Sets the dancer to perform an automatic celebratory dance
-     * @param state true if the dancer is jiving, false if they are not
-     */
-    public void setJiving(boolean state) {
-        //System.out.println("A jive has started");
-        this.jiving = state;
-        switch (jiveStep % 4) {
-            case 0:
-                this.setState(DanceMove.LEFT);
-                break;
-            case 1:
-                this.setState(DanceMove.NONE);
-                break;
-            case 2:
-                this.setState(DanceMove.RIGHT);
-                break;
-            case 3:
-                this.setState(DanceMove.NONE);
-                break;
-        }
+    public DanceMove getState() {
+        return this.state;
     }
 
     /**
-     * Sends an update to the dancer so that if they are jiving they can change moves in time to the music
-     */
-    public void updateJive() {
-        if (this.isJiving()) {
-            jiveStep++;
-            switch (jiveStep % 4) {
-                case 0:
-                    this.setState(DanceMove.LEFT);
-                    break;
-                case 1:
-                    this.setState(DanceMove.NONE);
-                    break;
-                case 2:
-                    this.setState(DanceMove.RIGHT);
-                    break;
-                case 3:
-                    this.setState(DanceMove.NONE);
-                    break;
-            }
-            if (jiveStep >= 8) {
-                this.jiving = false;
-                this.jiveStep = 0;
-                this.state = DanceMove.NONE;
-            }
-        }
+     * Returns the current health of the dancer
+     * */
+    public int getHealth() {
+        return this.health;
     }
+
+
+
 }

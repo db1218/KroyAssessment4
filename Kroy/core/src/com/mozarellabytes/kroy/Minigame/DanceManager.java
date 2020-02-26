@@ -1,9 +1,5 @@
 package com.mozarellabytes.kroy.Minigame;
 
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.Vector2;
-import com.mozarellabytes.kroy.Utilities.CameraShake;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +25,13 @@ public class DanceManager {
     /** List of classes to notify about the beat */
     private List<BeatListener> beatListeners;
 
+    private List<DanceMove> notDanceMoves;
+
     /** The number of successive correct moves the player has performed */
     private int combo = 0;
 
     /** Technical class for deciding upcoming moves */
     private DanceChoreographer choreographer;
-
-
 
     public DanceManager(float tempo) {
 
@@ -49,35 +45,35 @@ public class DanceManager {
         // Setup dance queue
         this.choreographer = new DanceChoreographer();
         this.beatListeners = new ArrayList<>();
+
+        this.notDanceMoves = new ArrayList<>();
+        this.notDanceMoves.add(DanceMove.WAIT);
+        this.notDanceMoves.add(DanceMove.NONE);
     }
 
     /** Called once a frame to update the dance manager*/
     public void update(float delta) {
+        this.time += delta;
+        this.halfTime += delta;
 
+        if (this.time >= this.period) onBeat();
+        if (this.halfTime >= this.period) offBeat();
+    }
 
-        time += delta;
-        halfTime += delta;
+    private void onBeat() {
+        this.choreographer.nextMove();
+        this.time = 0f;
+        notifyOnBeat();
+    }
 
-        // Trigger every beat
-        if (time >= period) {
-            //System.out.println("Beat: " + time);
-            choreographer.nextMove();
-            time = 0f;
-            notifyOnBeat();
+    private void offBeat() {
+        this.halfTime = 0f;
+        if (!doneThisBeat && !notDanceMoves.contains(getNearestMove()) ){
+            killCombo();
+            missedLastTurn = true;
         }
-
-        // Trigger every off-beat
-        if (halfTime >= period)
-        {
-            halfTime = 0f;
-            if (!doneThisBeat && getNearestMove() != DanceMove.NONE && getNearestMove() != DanceMove.WAIT) {
-                // Player missed a turn
-                killCombo();
-                missedLastTurn = true;
-            }
-            doneThisBeat = false;
-            notifyOffBeat();
-        }
+        doneThisBeat = false;
+        notifyOffBeat();
     }
 
     /**
@@ -93,7 +89,7 @@ public class DanceManager {
      * Gets the distance to the nearest beat where .5f is equidistant between two beats and 0f is directly on the beat
      * @return float distance to nearest beat
      */
-    public float getBeatProxemity() {
+    public float getBeatProximity() {
         return 2 * Math.abs(getPhase()-.5f);
     }
 
@@ -116,44 +112,39 @@ public class DanceManager {
         // This is the first attempted move this beat
         if (!doneThisBeat)
         {
-            float proxemity = getBeatProxemity();
+            float proximity = getBeatProximity();
             float phase = getPhase();
-            if (proxemity > .95f) {
-                doneThisBeat = true;
+
+            DanceResult result;
+
+            doneThisBeat = true;
+
+            if (proximity > .95f) {
                 goodMove();
-                notifyResult(DanceResult.GREAT);
-                return DanceResult.GREAT;
+                result = DanceResult.GREAT;
             }
-            else if (proxemity > .9f) {
-                doneThisBeat = true;
+            else if (proximity > .9f) {
                 goodMove();
-                notifyResult(DanceResult.GOOD);
-                return DanceResult.GOOD;
+                result = DanceResult.GOOD;
             }
-            else if (proxemity > .8) {
-                doneThisBeat = true;
+            else if (proximity > .8) {
                 goodMove();
-                notifyResult(DanceResult.OKAY);
-                return DanceResult.OKAY;
+                result = DanceResult.OKAY;
             }
-            else if (proxemity > .5 && phase > .5f) {
-                doneThisBeat = true;
+            else if (proximity > .5 && phase > .5f) {
                 killCombo();
-                notifyResult(DanceResult.EARLY);
-                return DanceResult.EARLY;
+                result = DanceResult.EARLY;
             }
-            else if (proxemity > .5 && phase < .5f) {
-                doneThisBeat = true;
+            else if (proximity > .5 && phase < .5f) {
                 killCombo();
-                notifyResult(DanceResult.LATE);
-                return DanceResult.LATE;
+                result = DanceResult.LATE;
             }
             else {
-                doneThisBeat = true;
                 wrongMove();
-                notifyResult(DanceResult.WRONG);
-                return DanceResult.WRONG;
+                result = DanceResult.WRONG;
             }
+            notifyResult(result);
+            return result;
         }
         // Player attempted two moves this beat, punish them :)
         else
@@ -169,8 +160,8 @@ public class DanceManager {
      * gets the queue of upcoming DanceMoves
      * @return array of DanceMoves
      */
-    public DanceMove[] getMoveList() {
-        return choreographer.getMoveList();
+    public List<DanceMove> getMoveList() {
+        return this.choreographer.getMoveList();
     }
 
     /**
@@ -179,11 +170,9 @@ public class DanceManager {
      * @return DanceMove that on the nearest beat
      */
     public DanceMove getNearestMove() {
-        if (this.getPhase() < .5f) {
-            return choreographer.getMoveList()[0];
-        } else {
-            return choreographer.getMoveList()[1];
-        }
+        DanceMove previousBeat = choreographer.getMoveList().get(0);
+        DanceMove nextBeat = choreographer.getMoveList().get(1);
+        return this.getPhase() < .5f ? previousBeat : nextBeat;
     }
 
     /**
@@ -208,25 +197,19 @@ public class DanceManager {
      * Called if the player made a sufficiently correct move
      * Good moves include GREAT moves, GOOD moves and OKAY moves
      */
-    public void goodMove() {
-        combo++;
-    }
+    public void goodMove() { combo++; }
 
     /**
      * Gets the current number of successive correct moves
      * @return combo size as int
      */
-    public int getCombo() {
-        return this.combo;
-    }
+    public int getCombo() { return this.combo; }
 
     /**
      * Zeroes the combo counter
      * Called when the player makes a WRONG move, MISSES a move or makes a LATE or EARLY move
      */
-    public void killCombo() {
-        combo = 0;
-    }
+    public void killCombo() { combo = 0; }
 
     /**
      * Register an object to be notified when the beat drops
@@ -240,8 +223,8 @@ public class DanceManager {
      * Notify subscribed beat listeners that an onbeat has occured
      */
     public void notifyOnBeat() {
-        for (BeatListener b : beatListeners) {
-            b.onBeat();
+        for (BeatListener listener : beatListeners) {
+            listener.onBeat();
         }
     }
 
@@ -249,8 +232,8 @@ public class DanceManager {
      * Notify subscribed beat listeners that an offbeat has occured
      */
     public void notifyOffBeat() {
-        for (BeatListener b : beatListeners) {
-            b.offBeat();
+        for (BeatListener listener : beatListeners) {
+            listener.offBeat();
         }
     }
 
@@ -259,8 +242,8 @@ public class DanceManager {
      * @param result
      */
     public void notifyResult(DanceResult result) {
-        for (BeatListener b : beatListeners) {
-            b.moveResult(result);
+        for (BeatListener listener : beatListeners) {
+            listener.moveResult(result);
         }
     }
 }

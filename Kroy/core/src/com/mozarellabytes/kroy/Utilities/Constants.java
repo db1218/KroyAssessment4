@@ -11,6 +11,6 @@ public final class Constants {
 
     public static final float TILE_WxH = 48f; //Tile width and height in pixels
 
-    private Constants() {
-    }
+    public static final int FREEZE_TIME = 10;
+
 }

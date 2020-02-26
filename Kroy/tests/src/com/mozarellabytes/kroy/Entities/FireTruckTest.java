@@ -35,9 +35,9 @@ public class FireTruckTest {
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,11);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,11);
         fireTruck.setMoving(true);
-        fireTruck.addTileToPath(new Vector2(10,10));
-        fireTruck.addTileToPath(new Vector2(10,11));
-        fireTruck.addTileToPath(new Vector2(11,11));
+        fireTruck.addTileToPathSegment(new Vector2(10,10));
+        fireTruck.addTileToPathSegment(new Vector2(10,11));
+        fireTruck.addTileToPathSegment(new Vector2(11,11));
         for (int i=0; i<25; i++) {
             fireTruck.move();
         }
@@ -52,9 +52,9 @@ public class FireTruckTest {
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,11);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,11);
         fireTruck.setMoving(true);
-        fireTruck.addTileToPath(new Vector2(10,10));
-        fireTruck.addTileToPath(new Vector2(10,11));
-        fireTruck.addTileToPath(new Vector2(11,11));
+        fireTruck.addTileToPathSegment(new Vector2(10,10));
+        fireTruck.addTileToPathSegment(new Vector2(10,11));
+        fireTruck.addTileToPathSegment(new Vector2(11,11));
         for (int i=0; i<25; i++) {
             fireTruck.move();
         }
@@ -69,9 +69,9 @@ public class FireTruckTest {
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,11);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,11);
         fireTruck.setMoving(true);
-        fireTruck.addTileToPath(new Vector2(10,10));
-        fireTruck.addTileToPath(new Vector2(10,11));
-        fireTruck.addTileToPath(new Vector2(11,11));
+        fireTruck.addTileToPathSegment(new Vector2(10,10));
+        fireTruck.addTileToPathSegment(new Vector2(10,11));
+        fireTruck.addTileToPathSegment(new Vector2(11,11));
         for (int i=0; i<50; i++) {
             fireTruck.move();
         }
@@ -241,8 +241,8 @@ public class FireTruckTest {
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,10);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,11);
         fireTruck.setMoving(true);
-        fireTruck.addTileToPath(new Vector2(10,10));
-        fireTruck.addTileToPath(new Vector2(10,11));
+        fireTruck.addTileToPathSegment(new Vector2(10,10));
+        fireTruck.addTileToPathSegment(new Vector2(10,11));
         for (int i=0; i<50; i++) {
             fireTruck.move();
         }

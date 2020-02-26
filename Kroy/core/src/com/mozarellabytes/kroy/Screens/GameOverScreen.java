@@ -40,7 +40,7 @@ public class GameOverScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
 
-        backgroundLogo = new Texture(Gdx.files.internal("images/backgroundLogo.png"), true);
+        backgroundLogo = new Texture(Gdx.files.internal("images/backgroundLogo.jpg"), true);
         backgroundLogo.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         Gdx.input.setInputProcessor(new GameOverInputHandler(game));
