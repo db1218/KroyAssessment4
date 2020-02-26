@@ -198,7 +198,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-//        fpsCounter.log();
+        fpsCounter.log();
 
         camera.update();
 
@@ -216,7 +216,7 @@ public class GameScreen implements Screen {
 
         if(!gameState.hasStationDestoyed()) {
             station.draw(mapBatch);
-       }
+        }
 
         for (Fortress fortress : this.fortresses) {
             fortress.draw(mapBatch);
@@ -260,7 +260,7 @@ public class GameScreen implements Screen {
             }
         }
 
-        if(station.getHP()>0) {
+        if(station.getHP()>0){
             station.drawStats(shapeMapRenderer);
         }
 
@@ -312,7 +312,6 @@ public class GameScreen implements Screen {
                     state = PlayState.PLAY;
                 }
         }
-
         gui.renderButtons();
     }
 
@@ -334,9 +333,9 @@ public class GameScreen implements Screen {
         for (int i = 0; i < station.getTrucks().size(); i++) {
             FireTruck truck = station.getTruck(i);
 
-             if(!truck.path.isEmpty() && wasPaused) {
-                 truck.setMoving(true);
-             }
+            if(!truck.path.isEmpty() && wasPaused) {
+                truck.setMoving(true);
+            }
 
             if(i == station.getTrucks().size()-1) {
                 wasPaused = false;
@@ -446,6 +445,8 @@ public class GameScreen implements Screen {
             SoundFX.stopTruckAttack();
         }
 
+        //System.out.println(SoundFX.isPlaying);
+
         shapeMapRenderer.end();
         shapeMapRenderer.setColor(Color.WHITE);
 
@@ -526,8 +527,8 @@ public class GameScreen implements Screen {
      */
     public boolean checkTrailClick(Vector2 position) {
         for (int i=this.station.getTrucks().size()-1; i>=0; i--) {
-            if (!this.station.getTruck(i).pathSegments.isEmpty()) {
-                if (position.equals(this.station.getTruck(i).pathSegments.last().last())) {
+            if (!this.station.getTruck(i).path.isEmpty()) {
+                if (position.equals(this.station.getTruck(i).path.last())) {
                     this.selectedTruck = this.station.getTruck(i);
                     this.selectedEntity = this.station.getTruck(i);
                     return true;
@@ -641,4 +642,3 @@ public class GameScreen implements Screen {
 
 
 }
-

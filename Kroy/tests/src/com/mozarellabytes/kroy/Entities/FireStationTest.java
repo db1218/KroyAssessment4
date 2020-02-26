@@ -10,8 +10,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import com.mozarellabytes.kroy.Entities.FireTruckType.*;
 
 
+import com.mozarellabytes.kroy.Entities.FireTruckType.*;
 import static org.junit.Assert.*;
 
 @RunWith(GdxTestRunner.class)
@@ -103,9 +105,9 @@ public class FireStationTest {
         station.spawn(fireTruck2);
 
         fireTruck1.setMoving(true);
-        fireTruck1.addTileToPathSegment(new Vector2(11, 11));
-        fireTruck1.addTileToPathSegment(new Vector2(11, 12));
-        fireTruck1.addTileToPathSegment(new Vector2(11, 13));
+        fireTruck1.addTileToPath(new Vector2(11, 11));
+        fireTruck1.addTileToPath(new Vector2(11, 12));
+        fireTruck1.addTileToPath(new Vector2(11, 13));
         for (int i=0; i<100; i++) {
             station.checkForCollisions();
             fireTruck1.move();
@@ -129,16 +131,16 @@ public class FireStationTest {
         station.spawn(fireTruck2);
 
         fireTruck1.setMoving(true);
-        fireTruck1.addTileToPathSegment(new Vector2(11, 11));
-        fireTruck1.addTileToPathSegment(new Vector2(11, 12));
-        fireTruck1.addTileToPathSegment(new Vector2(11, 13));
-        fireTruck1.addTileToPathSegment(new Vector2(11, 14));
+        fireTruck1.addTileToPath(new Vector2(11, 11));
+        fireTruck1.addTileToPath(new Vector2(11, 12));
+        fireTruck1.addTileToPath(new Vector2(11, 13));
+        fireTruck1.addTileToPath(new Vector2(11, 14));
 
         fireTruck2.setMoving(true);
-        fireTruck2.addTileToPathSegment(new Vector2(11, 14));
-        fireTruck2.addTileToPathSegment(new Vector2(11, 13));
-        fireTruck2.addTileToPathSegment(new Vector2(11, 12));
-        fireTruck2.addTileToPathSegment(new Vector2(11, 11));
+        fireTruck2.addTileToPath(new Vector2(11, 14));
+        fireTruck2.addTileToPath(new Vector2(11, 13));
+        fireTruck2.addTileToPath(new Vector2(11, 12));
+        fireTruck2.addTileToPath(new Vector2(11, 11));
         for (int i=0; i<100; i++) {
             station.checkForCollisions();
             fireTruck1.move();
