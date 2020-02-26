@@ -104,6 +104,8 @@ public class GameScreen implements Screen {
 
     public boolean wasPaused = false;
 
+    public Powerup heart;
+
     /** Play when the game is being played
      * Pause when the pause button is clicked */
     public enum PlayState {
@@ -189,6 +191,9 @@ public class GameScreen implements Screen {
             SoundFX.sfx_soundtrack.setVolume(.5f);
             SoundFX.sfx_soundtrack.play();
         }
+
+        heart = new Powerup(0, new Vector2(13, 6));
+
     }
 
     @Override
@@ -208,6 +213,8 @@ public class GameScreen implements Screen {
         mapRenderer.render(backgroundLayerIndex);
 
         mapBatch.begin();
+
+        heart.update(mapBatch);
 
         for (FireTruck truck : station.getTrucks()) {
             truck.drawPath(mapBatch);

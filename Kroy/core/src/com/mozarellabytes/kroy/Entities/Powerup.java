@@ -23,26 +23,23 @@ public class Powerup {
 
     private void setType(int type) {
         if (type == 0) {
-            this.animation = new Animation<TextureRegion>(0.033f, atlas.findRegions("heart"), Animation.PlayMode.LOOP);
+            this.animation = new Animation<TextureRegion>(.032f, atlas.findRegions("heart"), Animation.PlayMode.LOOP);
         } else if (type == 1) {
-            this.animation = new Animation<TextureRegion>(0.033f, atlas.findRegions("water"), Animation.PlayMode.LOOP);
+            this.animation = new Animation<TextureRegion>(.032f, atlas.findRegions("water"), Animation.PlayMode.LOOP);
         } else {
-            this.animation = new Animation<TextureRegion>(0.033f, atlas.findRegions("shield"), Animation.PlayMode.LOOP);
+            this.animation = new Animation<TextureRegion>(.032f, atlas.findRegions("shield"), Animation.PlayMode.LOOP);
         }
     }
 
-    public boolean update(Batch mapBatch){
+    public void update(Batch mapBatch){
         // Accumulate amount of time that has passed
-        elapsedTime = Gdx.graphics.getDeltaTime();
+        elapsedTime += Gdx.graphics.getDeltaTime();
 
         // Get current frame of animation for the current stateTime
         TextureRegion currentFrame = animation.getKeyFrame(elapsedTime, true);
         mapBatch.draw(currentFrame, position.x, position.y, 1, 1);
-        if(elapsedTime > animation.getAnimationDuration()){
-            return true;
-        }
-        return false;
     }
+    
 
     public Vector2 getPosition() {
         return this.position;
