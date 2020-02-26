@@ -5,10 +5,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
@@ -156,18 +154,18 @@ public class FireStation {
         for (FireTruck truck : trucks) {
             for (FireTruck truck2 : trucks) {
                 if (!(truck.equals(truck2))) {
-                    if (!truck.trailPath.isEmpty()) {
+                    if (!truck.pathSegment.isEmpty()) {
                         Vector2 truck2tile = new Vector2(Math.round(truck2.getPosition().x), Math.round(truck2.getPosition().y));
                         Vector2 truckstile = new Vector2((float)Math.floor(truck2.getPosition().x),(float) Math.floor(truck2.getPosition().y));
-                        if (!truck2.trailPath.isEmpty() && truck.trailPath.first().equals(truck2.trailPath.first())) {
+                        if (!truck2.pathSegment.isEmpty() && truck.pathSegment.first().equals(truck2.pathSegment.first())) {
                             truck.setCollision();
                             truck2.setCollision();
                             resetTruck(truck, truck2);
-                        } else if (truck.trailPath.first().equals(truck2tile)) {
+                        } else if (truck.pathSegment.first().equals(truck2tile)) {
                             resetTruck(truck, truck2);
-                            truck.trailPath.clear();
-                            truck2.trailPath.clear();
-                        } else if (truck.trailPath.first().equals(truckstile)) {
+                            truck.pathSegment.clear();
+                            truck2.pathSegment.clear();
+                        } else if (truck.pathSegment.first().equals(truckstile)) {
                             resetTruck(truck, truck2);
                         }
                     }
@@ -189,15 +187,15 @@ public class FireStation {
             SoundFX.sfx_horn.play();
         }
 
-        Vector2 hold = truck.trailPath.first();
+        Vector2 hold = truck.pathSegment.first();
 
         truck.resetPath();
-        truck.addTileToPath(truck.getPosition());
-        truck.addTileToPath(new Vector2 ((float)Math.floor(truck.getX()),(float)Math.floor(truck.getY())));
+        truck.addTileToPathSegment(truck.getPosition());
+        truck.addTileToPathSegment(new Vector2 ((float)Math.floor(truck.getX()),(float)Math.floor(truck.getY())));
 
         truck2.resetPath();
-        truck2.addTileToPath(truck2.getPosition());
-        truck2.addTileToPath(hold);
+        truck2.addTileToPathSegment(truck2.getPosition());
+        truck2.addTileToPathSegment(hold);
     }
 
     /** Draws the firetruck to the gameScreen

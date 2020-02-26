@@ -98,7 +98,7 @@ public class GameInputHandler implements InputProcessor {
 
             if (gameScreen.checkClick(clickCoordinates)) {
                 gameScreen.selectedTruck.resetPath();
-                gameScreen.selectedTruck.addTileToPath(clickCoordinates);
+                gameScreen.selectedTruck.addTileToPathSegment(clickCoordinates);
                 System.out.print("\n" + clickCoordinates + "\n" + gameScreen.selectedTruck.getMoving());
 
             } else if (!gameScreen.checkTrailClick(clickCoordinates) && !checkFortressClick(clickCoordinates)) {
@@ -122,7 +122,7 @@ public class GameInputHandler implements InputProcessor {
 
         if (gameScreen.selectedTruck != null) {
             Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);
-            gameScreen.selectedTruck.addTileToPath(clickCoordinates);
+            gameScreen.selectedTruck.addTileToPathSegment(clickCoordinates);
         }
 
         return true;
@@ -174,11 +174,11 @@ public class GameInputHandler implements InputProcessor {
     private boolean doTrucksHaveSameLastTile() {
         for (FireTruck truck : gameScreen.getStation().getTrucks()) {
             if (!truck.equals(gameScreen.selectedTruck)) {
-                if (!truck.getPath().isEmpty() && !truck.getTrailPath().isEmpty()){
-                    if (truck.trailPath.last().equals(gameScreen.selectedTruck.trailPath.last())){
+                if (!truck.getPath().isEmpty() && !truck.getPathSegment().isEmpty()){
+                    if (truck.pathSegments.last().last().equals(gameScreen.selectedTruck.pathSegments.last().last())){
                         return true;
                     }
-                } else if (truck.getPosition().equals(gameScreen.selectedTruck.trailPath.last())) {
+                } else if (truck.getPosition().equals(gameScreen.selectedTruck.pathSegments.last().last())) {
                     return true;
                 }
             }
@@ -192,8 +192,8 @@ public class GameInputHandler implements InputProcessor {
      *                      on different tiles
      */
     private void giveTrucksDifferentLastTiles(FireTruck selectedTruck){
-        selectedTruck.trailPath.removeLast();
-        while (!selectedTruck.trailPath.isEmpty() && !selectedTruck.trailPath.last().equals(selectedTruck.path.last())) {
+        selectedTruck.pathSegment.removeLast();
+        while (!selectedTruck.pathSegment.isEmpty() && !selectedTruck.pathSegment.last().equals(selectedTruck.path.last())) {
             selectedTruck.path.removeLast();
         }
     }
