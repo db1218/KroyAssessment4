@@ -110,7 +110,7 @@ public class FireTruck extends Sprite {
         this.reserve = type.getMaxReserve();
         this.position = position;
         this.path = new Queue<>();
-        this.trailPath = new Queue<>();
+        this.trailPath = new Queue<>();dew
         this.moving = false;
         this.inCollision = false;
         this.spray = new ArrayList<Particle>();
