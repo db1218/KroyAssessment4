@@ -600,6 +600,7 @@ public class GameScreen implements Screen {
             else state = PlayState.PLAY;
         } else if (state.equals(PlayState.FREEZE)) {
             state = PlayState.PLAY;
+            station.clearAllTruckPathStacks();
             freezeCooldown = 10;
         } else if (freezeCooldown < 0) {
             state = PlayState.FREEZE;

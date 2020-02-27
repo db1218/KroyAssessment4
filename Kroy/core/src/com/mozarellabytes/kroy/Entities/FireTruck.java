@@ -9,10 +9,7 @@ import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.*;
 
 /**
  * FireTruck is an entity that the player controls. It navigates the map on the
@@ -46,6 +43,8 @@ public class FireTruck extends Sprite {
     public final Queue<Vector2> pathSegment;
 
     public final Queue<Queue<Vector2>> pathSegments;
+
+    public Stack<Queue<Vector2>> pathSegmentsStack;
 
     /** If the truck is currently moving, determines whether the
      * truck's position should be updated
@@ -108,9 +107,10 @@ public class FireTruck extends Sprite {
         this.path = new Queue<>();
         this.pathSegment = new Queue<>();
         this.pathSegments = new Queue<>();
+        this.pathSegmentsStack = new Stack<>();
         this.moving = false;
         this.inCollision = false;
-        this.spray = new ArrayList<Particle>();
+        this.spray = new ArrayList<>();
         this.timeOfLastAttack = System.currentTimeMillis();
     }
 
@@ -164,6 +164,18 @@ public class FireTruck extends Sprite {
         return newQueue;
     }
 
+    private Queue<Queue<Vector2>> clone2DQueue(Queue<Queue<Vector2>> oldQueue) {
+        Queue<Queue<Vector2>> newQueue = new Queue<>();
+        for (Queue<Vector2> queue : oldQueue) {
+            Queue<Vector2> newSubQueue = new Queue<>();
+            for (Vector2 vector2 : queue) {
+                newSubQueue.addLast(vector2);
+            }
+            newQueue.addLast(newSubQueue);
+        }
+        return newQueue;
+    }
+
     private void clearQueueSetFirst(Vector2 first) {
         this.pathSegment.clear();
         this.pathSegment.addLast(first);
@@ -200,7 +212,7 @@ public class FireTruck extends Sprite {
                 this.pathSegment.addLast(new Vector2(((int)coordinate.x),((int)coordinate.y)));
                 addSuggestedPathSegment(coordinate);
             } else {
-                dragOffMap=false;
+                dragOffMap = false;
             }
         }
     }
@@ -210,7 +222,7 @@ public class FireTruck extends Sprite {
         for (Vector2 position : findPath(coordinate, this.pathSegment.first())) this.pathSegment.addLast(position);
     }
 
-    public void generatePathFromTrailPath() {
+    public void generatePathFromSegments() {
         if (!pathSegments.isEmpty()) {
             for (int i=1; i<pathSegments.last().size; i++) {
                 interpolateMove(pathSegments.last().get(i-1), pathSegments.last().get(i), (int)(40/type.getSpeed()));
@@ -615,7 +627,48 @@ public class FireTruck extends Sprite {
         return this.moving;
     }
 
-    public  float getRange(){
+    public  float getRange() {
         return this.type.getRange();
+    }
+
+    public void undoSegment() {
+        if (this.pathSegments.size > 0) {
+            if (this.pathSegments.size == 1) {
+                boolean alreadyAdded = false;
+                for (Queue<Vector2> queue : pathSegmentsStack) {
+                    if (pathSegments.first().first().equals(queue.first())) alreadyAdded = true;
+                }
+
+                if (!alreadyAdded) {
+                    pathSegmentsStack.push(cloneQueue(pathSegments.first()));
+                    while (this.pathSegments.first().size > 1) {
+                        this.pathSegments.first().removeLast();
+                    }
+                    this.path.clear();
+                    interpolateMove(this.position, this.pathSegments.first().first(), (int)(40/type.getSpeed()));
+                }
+            } else {
+                pathSegmentsStack.push(pathSegments.removeLast());
+                this.path.clear();
+            }
+        }
+        System.out.println("REDO");
+        System.out.println("Segments: " + this.pathSegments);
+        System.out.println("Stack: " + this.pathSegmentsStack);
+    }
+
+    public void redoSegment() {
+        if (!pathSegmentsStack.empty()) {
+            pathSegments.addLast(pathSegmentsStack.pop());
+        }
+        this.path.clear();
+        this.generatePathFromSegments();
+        System.out.println("REDO");
+        System.out.println("Segments: " + this.pathSegments);
+        System.out.println("Stack: " + this.pathSegmentsStack);
+    }
+
+    public void clearPathSegmentsStack() {
+        pathSegmentsStack.clear();
     }
 }

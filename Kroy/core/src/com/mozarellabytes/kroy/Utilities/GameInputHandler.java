@@ -59,6 +59,13 @@ public class GameInputHandler implements InputProcessor {
                 break;
             case Input.Keys.A:
                 gameScreen.toggleTruckAttack();
+                break;
+            case Input.Keys.LEFT:
+                gameScreen.selectedTruck.undoSegment();
+                break;
+            case Input.Keys.RIGHT:
+                gameScreen.selectedTruck.redoSegment();
+                break;
         }
         return true;
     }
@@ -138,7 +145,7 @@ public class GameInputHandler implements InputProcessor {
                 }
                 if (gameScreen.selectedTruck.canPathSegmentBeAddedToRoute()) {
                     gameScreen.selectedTruck.addPathSegmentToRoute();
-                    gameScreen.selectedTruck.generatePathFromTrailPath();
+                    gameScreen.selectedTruck.generatePathFromSegments();
                 }
             }
             if(this.gameScreen.getState().equals((GameScreen.PlayState.PAUSE))) {
@@ -147,7 +154,6 @@ public class GameInputHandler implements InputProcessor {
                 gameScreen.selectedTruck.setMoving(true);
             }
         }
-
         checkButtonUnclick(screenX, screenY);
         return true;
     }
@@ -190,7 +196,6 @@ public class GameInputHandler implements InputProcessor {
     private void giveTrucksDifferentLastTiles(FireTruck selectedTruck) {
         selectedTruck.pathSegment.removeLast();
     }
-
 
     /** Maps the position of where the user clicked on the screen to the tile that they clicked on
      *

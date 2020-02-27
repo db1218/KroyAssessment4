@@ -190,6 +190,10 @@ public class FireStation {
         mapBatch.draw(this.texture, this.x, this.y, this.w, this.h);
     }
 
+    public void clearAllTruckPathStacks() {
+        for (FireTruck truck : trucks) truck.clearPathSegmentsStack();
+    }
+
     /**
      * @return the destroyed texture object
      */
