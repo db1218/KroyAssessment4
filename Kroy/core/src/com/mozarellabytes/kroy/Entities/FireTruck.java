@@ -140,9 +140,8 @@ public class FireTruck extends Sprite {
             } else {
                 moving = false;
             }
-            if (this.path.isEmpty() && inCollision) {
-                inCollision = false;
-            }
+        } else if (this.path.isEmpty() && inCollision) {
+            inCollision = false;
         }
     }
 
