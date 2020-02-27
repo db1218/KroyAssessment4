@@ -89,12 +89,6 @@ public class FireTruck extends Sprite {
     Vector2[] prev;
     /** the shortest path between 2 points */
     LinkedList<Vector2> reconstructedPath;
-    /**Checks if the mouse was dragged off the road multiple times in one instance**/
-    private int counter = 0;
-    /** Path fireturch actually uses*/
-    private Vector2[] newPath;
-
-    private Vector2 previous;
 
     /**
      * Constructs a new FireTruck at a position and of a certain type
@@ -131,13 +125,9 @@ public class FireTruck extends Sprite {
                     if (!path.isEmpty()) {
                         Vector2 nextTile = path.first();
                         this.position = nextTile;
-
-                        System.out.println();
-
                         if (position.x == pathSegments.first().first().x && position.y == pathSegments.first().first().y) {
                             pathSegments.first().removeFirst();
                         }
-
                         if (!this.inCollision) {
                             changeSprite(nextTile);
                         }
@@ -154,6 +144,14 @@ public class FireTruck extends Sprite {
                 inCollision = false;
             }
         }
+    }
+
+    public boolean canPathSegmentBeAddedToRoute() {
+        if (!this.pathSegment.first().equals(this.pathSegment.last())) {
+            return true;
+        }
+        this.pathSegment.clear();
+        return false;
     }
 
     public void addPathSegmentToRoute() {
@@ -198,15 +196,15 @@ public class FireTruck extends Sprite {
      *                      dragged over
      */
     public void addTileToPathSegment(Vector2 coordinate){
-        if(isValidDraw(coordinate)){
-            if(!dragOffMap){
+        if (isValidDraw(coordinate)) {
+            if (!dragOffMap) {
                 this.pathSegment.addLast(new Vector2(((int)coordinate.x),((int)coordinate.y)));
                 addSuggestedPathSegment(coordinate);
-                } else {
-                    dragOffMap=false;
-                }
+            } else {
+                dragOffMap=false;
             }
         }
+    }
 
     private void addSuggestedPathSegment(Vector2 coordinate) {
         clearQueueSetFirst(this.pathSegment.first());
@@ -214,8 +212,10 @@ public class FireTruck extends Sprite {
     }
 
     public void generatePathFromTrailPath() {
-        for (int i=1; i<pathSegments.last().size; i++) {
-            interpolateMove(pathSegments.last().get(i-1), pathSegments.last().get(i), (int)(40/type.getSpeed()));
+        if (!pathSegments.isEmpty()) {
+            for (int i=1; i<pathSegments.last().size; i++) {
+                interpolateMove(pathSegments.last().get(i-1), pathSegments.last().get(i), (int)(40/type.getSpeed()));
+            }
         }
     }
 
@@ -259,6 +259,7 @@ public class FireTruck extends Sprite {
         }
         return false;
     }
+
     /**
      * Finds a path between two points
      *
@@ -269,15 +270,8 @@ public class FireTruck extends Sprite {
      */
     private Vector2[] findPath(Vector2 endPos, Vector2 startPos) {
         positions = new Queue<>();
-
-
-        Vector2 start = startPos;
-        Vector2 goal = endPos;
-
-
         vistited = new boolean[48][29];
         prev = new Vector2[1392];
-
 
         for(int i=0; i<48; i++){
             for(int j=0; j<29; j++){
@@ -285,30 +279,21 @@ public class FireTruck extends Sprite {
             }
         }
 
-        positions.addLast(start);
-
-        vistited[(int) start.x][(int) start.y] = true;
-
+        positions.addLast(startPos);
+        vistited[(int) startPos.x][(int) startPos.y] = true;
 
         while (!positions.isEmpty()) {
-
-
             currentPos = positions.removeLast();
-
-            if(currentPos.x == goal.x && currentPos.y == goal.y) {
+            if(currentPos.x == endPos.x && currentPos.y == endPos.y) {
                 reachedEnd = true;
                 break;
             }
-
             exploreNeighbours(currentPos);
-
-
         }
 
-        return shortestPath(goal, start);
-
-
+        return shortestPath(endPos, startPos);
     }
+
     /**
      * Searches area around a tile and checks if it is a valid place to move
      *
@@ -316,12 +301,10 @@ public class FireTruck extends Sprite {
 
      */
     private void exploreNeighbours(Vector2 currentPos) {
-
         for(int i = 0; i < 4; i++) {
             Vector2 newPos = new Vector2();
             newPos.x = currentPos.x + directionX[i];
             newPos.y = currentPos.y + directionY[i];
-
 
             if(newPos.x < 0 || newPos.y < 0) {
                 continue;
@@ -337,12 +320,8 @@ public class FireTruck extends Sprite {
                 continue;
             }
 
-
-
             positions.addFirst(newPos);
-
             vistited[(int)newPos.x] [(int)newPos.y] = true;
-
             prev[convertVector2ToIntPositionInMap(newPos)] = currentPos;
         }
     }
@@ -395,7 +374,7 @@ public class FireTruck extends Sprite {
         }
 
         reverse(path);
-        return  path;
+        return path;
     }
 
     /**
@@ -425,6 +404,12 @@ public class FireTruck extends Sprite {
         this.pathSegment.clear();
     }
 
+    public void collided() {
+        this.inCollision = true;
+        this.path.clear();
+        this.pathSegments.clear();
+    }
+
     /**
      * Deals damage to Fortress by generating a WaterParticle and adding
      * it to the spray
@@ -433,7 +418,6 @@ public class FireTruck extends Sprite {
      */
     public void attack(Fortress fortress) {
         if (this.reserve > 0) {
-
             this.spray.add(new Particle(this.getVisualPosition(), fortress.getPosition(), fortress));
             this.reserve -= Math.min(this.reserve, this.type.getAP());
         }
@@ -603,13 +587,17 @@ public class FireTruck extends Sprite {
     public Vector2 getPosition() {
         return this.position;
     }
+
+    public void setPosition(Vector2 newPosition) {
+        this.position = newPosition;
+    }
+
     /**
      * Gets rounded truck position
      * Used for patrol collision
      */
     public Vector2 getTilePosition() {
-        Vector2 absPos = new Vector2(Math.round(this.position.x), Math.round(this.position.y));
-        return absPos;
+        return new Vector2(Math.round(this.position.x), Math.round(this.position.y));
     }
 
     public Queue<Vector2> getPathSegment() {

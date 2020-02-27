@@ -93,14 +93,10 @@ public class GameInputHandler implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);
-
         if (gameScreen.isRoad((int) clickCoordinates.x, (int) clickCoordinates.y)) {
-
             if (gameScreen.checkClick(clickCoordinates)) {
                 gameScreen.selectedTruck.resetPath();
                 gameScreen.selectedTruck.addTileToPathSegment(clickCoordinates);
-                System.out.print("\n" + clickCoordinates + "\n" + gameScreen.selectedTruck.getMoving());
-
             } else if (!gameScreen.checkTrailClick(clickCoordinates) && !checkFortressClick(clickCoordinates)) {
                 gameScreen.selectedTruck = null;
                 gameScreen.setSelectedEntity(null);
@@ -108,7 +104,6 @@ public class GameInputHandler implements InputProcessor {
         } else {
             checkFortressClick(clickCoordinates);
         }
-
         checkButtonClick(new Vector2(screenX, Gdx.graphics.getHeight() - screenY));
         return true;
     }
@@ -136,13 +131,14 @@ public class GameInputHandler implements InputProcessor {
      * @return whether the input was processed */
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-
         if (gameScreen.selectedTruck != null) {
             if (!gameScreen.selectedTruck.pathSegment.isEmpty()) {
-                gameScreen.selectedTruck.addPathSegmentToRoute();
-                gameScreen.selectedTruck.generatePathFromTrailPath();
-                if (doTrucksHaveSameLastTile()){
+                if (doTrucksHaveSameLastTile()) {
                     giveTrucksDifferentLastTiles(gameScreen.selectedTruck);
+                }
+                if (gameScreen.selectedTruck.canPathSegmentBeAddedToRoute()) {
+                    gameScreen.selectedTruck.addPathSegmentToRoute();
+                    gameScreen.selectedTruck.generatePathFromTrailPath();
                 }
             }
             if(this.gameScreen.getState().equals((GameScreen.PlayState.PAUSE))) {
@@ -174,11 +170,11 @@ public class GameInputHandler implements InputProcessor {
     private boolean doTrucksHaveSameLastTile() {
         for (FireTruck truck : gameScreen.getStation().getTrucks()) {
             if (!truck.equals(gameScreen.selectedTruck)) {
-                if (!truck.getPath().isEmpty() && !truck.getPathSegment().isEmpty()){
-                    if (truck.pathSegments.last().last().equals(gameScreen.selectedTruck.pathSegments.last().last())){
+                if (!truck.pathSegments.isEmpty() && !truck.pathSegments.last().isEmpty()){
+                    if (truck.pathSegments.last().last().equals(gameScreen.selectedTruck.pathSegment.last())) {
                         return true;
                     }
-                } else if (truck.getPosition().equals(gameScreen.selectedTruck.pathSegments.last().last())) {
+                } else if (truck.getPosition().equals(gameScreen.selectedTruck.pathSegment.last())) {
                     return true;
                 }
             }
@@ -191,12 +187,15 @@ public class GameInputHandler implements InputProcessor {
      * @param selectedTruck the truck that has to be moved so the two trucks end up
      *                      on different tiles
      */
-    private void giveTrucksDifferentLastTiles(FireTruck selectedTruck){
+    private void giveTrucksDifferentLastTiles(FireTruck selectedTruck) {
         selectedTruck.pathSegment.removeLast();
-        while (!selectedTruck.pathSegment.isEmpty() && !selectedTruck.pathSegment.last().equals(selectedTruck.path.last())) {
+        while (!selectedTruck.pathSegment.isEmpty() &&
+                !selectedTruck.path.isEmpty() &&
+                !selectedTruck.pathSegment.last().equals(selectedTruck.path.last())) {
             selectedTruck.path.removeLast();
         }
     }
+
 
     /** Maps the position of where the user clicked on the screen to the tile that they clicked on
      *

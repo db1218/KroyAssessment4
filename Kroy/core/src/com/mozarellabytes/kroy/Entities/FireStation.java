@@ -151,23 +151,17 @@ public class FireStation {
      * trucks is called.
      */
     public void checkForCollisions() {
-        for (FireTruck truck : trucks) {
+        for (FireTruck truck1 : trucks) {
             for (FireTruck truck2 : trucks) {
-                if (!(truck.equals(truck2))) {
-                    if (!truck.pathSegment.isEmpty()) {
-                        Vector2 truck2tile = new Vector2(Math.round(truck2.getPosition().x), Math.round(truck2.getPosition().y));
-                        Vector2 truckstile = new Vector2((float)Math.floor(truck2.getPosition().x),(float) Math.floor(truck2.getPosition().y));
-                        if (!truck2.pathSegment.isEmpty() && truck.pathSegment.first().equals(truck2.pathSegment.first())) {
-                            truck.setCollision();
-                            truck2.setCollision();
-                            resetTruck(truck, truck2);
-                        } else if (truck.pathSegment.first().equals(truck2tile)) {
-                            resetTruck(truck, truck2);
-                            truck.pathSegment.clear();
-                            truck2.pathSegment.clear();
-                        } else if (truck.pathSegment.first().equals(truckstile)) {
-                            resetTruck(truck, truck2);
-                        }
+                if (!truck1.equals(truck2) &&
+                        !truck1.pathSegments.isEmpty() &&
+                        !truck1.pathSegments.first().isEmpty()) {
+                    Vector2 truck1tile = new Vector2((float)Math.floor(truck1.getPosition().x),(float)Math.floor(truck1.getPosition().y));
+                    Vector2 truck2tile = new Vector2((float)Math.floor(truck2.getPosition().x),(float)Math.floor(truck2.getPosition().y));
+                    if (truck1.pathSegments.first().first().equals(truck2tile)) {
+                        truck1.setPosition(truck1tile);
+                        truck2.setPosition(truck2tile);
+                        resetTrucks(truck1, truck2);
                     }
                 }
             }
@@ -179,23 +173,15 @@ public class FireStation {
      * the nearest tile to their path, the trucks move to this tile so that after the
      * collision the trucks are positioned at the centre of adjacent tiles.
      *
-     * @param truck one truck involved in the collision
+     * @param truck1 one truck involved in the collision
      * @param truck2 the second truck involved in the collision
      */
-    private void resetTruck(FireTruck truck, FireTruck truck2) {
+    private void resetTrucks(FireTruck truck1, FireTruck truck2) {
         if (SoundFX.music_enabled) {
             SoundFX.sfx_horn.play();
         }
-
-        Vector2 hold = truck.pathSegment.first();
-
-        truck.resetPath();
-        truck.addTileToPathSegment(truck.getPosition());
-        truck.addTileToPathSegment(new Vector2 ((float)Math.floor(truck.getX()),(float)Math.floor(truck.getY())));
-
-        truck2.resetPath();
-        truck2.addTileToPathSegment(truck2.getPosition());
-        truck2.addTileToPathSegment(hold);
+        truck1.collided();
+        truck2.collided();
     }
 
     /** Draws the firetruck to the gameScreen
