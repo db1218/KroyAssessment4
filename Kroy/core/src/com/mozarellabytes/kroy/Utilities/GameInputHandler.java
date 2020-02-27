@@ -189,11 +189,6 @@ public class GameInputHandler implements InputProcessor {
      */
     private void giveTrucksDifferentLastTiles(FireTruck selectedTruck) {
         selectedTruck.pathSegment.removeLast();
-        while (!selectedTruck.pathSegment.isEmpty() &&
-                !selectedTruck.path.isEmpty() &&
-                !selectedTruck.pathSegment.last().equals(selectedTruck.path.last())) {
-            selectedTruck.path.removeLast();
-        }
     }
 
 
