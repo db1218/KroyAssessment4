@@ -15,7 +15,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Give permission
-      run: chmod +x gradlew
+    - name: Add Permission
+      run: chmod +x Kroy/gradlew
     - name: Build with Gradle
-      run: ./gradlew desktop:dist
+      run: ./Kroy/gradlew -p Kroy desktop:dist
