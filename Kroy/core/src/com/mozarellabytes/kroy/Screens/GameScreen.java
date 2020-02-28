@@ -102,8 +102,6 @@ public class GameScreen implements Screen {
 
     private boolean truckAttack;
 
-    public boolean wasPaused = false;
-
     public Powerup heart;
 
     /** Play when the game is being played
@@ -208,8 +206,6 @@ public class GameScreen implements Screen {
 
         camera.update();
 
-        freezeCooldown -= delta; //if counting down
-
         mapRenderer.setView(camera);
         mapRenderer.render(backgroundLayerIndex);
 
@@ -298,7 +294,6 @@ public class GameScreen implements Screen {
                 shapeMapRenderer.end();
 
                 gui.renderPauseScreenText();
-                wasPaused = true;
                 break;
             case FREEZE:
                 // render dark background
@@ -333,6 +328,8 @@ public class GameScreen implements Screen {
         gameState.firstFortressDestroyed();
         camShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
 
+        freezeCooldown -= delta;
+
         station.restoreTrucks();
         station.checkForCollisions();
 
@@ -343,19 +340,8 @@ public class GameScreen implements Screen {
         for (int i = 0; i < station.getTrucks().size(); i++) {
             FireTruck truck = station.getTruck(i);
 
-            if(!truck.path.isEmpty() && wasPaused) {
-                truck.setMoving(true);
-            }
-
-            if(i == station.getTrucks().size()-1) {
-                wasPaused = false;
-            }
-
-
             truck.move();
             truck.updateSpray();
-
-            //truck.move();
 
             // manages attacks between trucks and fortresses
             for (Fortress fortress : this.fortresses) {
@@ -512,6 +498,10 @@ public class GameScreen implements Screen {
         return false;
     }
 
+    public boolean isNotPaused() {
+        return state != PlayState.PAUSE;
+    }
+
     /**
      * Gets the coordinates of the tile that the truck is closest to
      *
@@ -608,10 +598,10 @@ public class GameScreen implements Screen {
                 if (state.equals(PlayState.FREEZE)) {
                     state = PlayState.PLAY;
                     station.recalculateTruckPaths();
-                    freezeCooldown = 2;
+                    freezeCooldown = 10;
                 } else if (freezeCooldown < 0) {
                     state = PlayState.FREEZE;
-                    freezeCooldown = 100;
+                    freezeCooldown = 10;
                 }
                 break;
         }

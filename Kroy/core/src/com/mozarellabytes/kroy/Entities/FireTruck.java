@@ -228,6 +228,7 @@ public class FireTruck extends Sprite {
                 interpolateMove(pathSegments.last().get(i-1), pathSegments.last().get(i), (int)(40/type.getSpeed()));
             }
         }
+        moving = true;
     }
 
     public void generatePathFromAllSegments() {
@@ -240,6 +241,7 @@ public class FireTruck extends Sprite {
                 }
             }
         }
+        moving = true;
     }
 
     /**
