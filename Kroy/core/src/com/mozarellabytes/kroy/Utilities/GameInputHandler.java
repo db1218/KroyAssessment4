@@ -128,7 +128,8 @@ public class GameInputHandler implements InputProcessor {
                 }
                 if (gameScreen.selectedTruck.canPathSegmentBeAddedToRoute()) {
                     gameScreen.selectedTruck.addPathSegmentToRoute();
-                    gameScreen.selectedTruck.generatePathFromLastSegments();
+                    if (gameScreen.getState().equals(GameScreen.PlayState.PLAY))
+                        gameScreen.selectedTruck.generatePathFromLastSegments();
                 }
             }
             if(this.gameScreen.getState().equals((GameScreen.PlayState.PAUSE))) {

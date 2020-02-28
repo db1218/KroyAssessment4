@@ -232,6 +232,8 @@ public class FireTruck extends Sprite {
 
     public void generatePathFromAllSegments() {
         if (!pathSegments.isEmpty()) {
+            this.path.clear();
+            interpolateMove(this.position, this.pathSegments.first().first(), (int) (40 / type.getSpeed()));
             for (Queue<Vector2> queue : pathSegments) {
                 for (int i=1; i<queue.size; i++) {
                     interpolateMove(queue.get(i-1), queue.get(i), (int)(40/type.getSpeed()));

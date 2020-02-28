@@ -608,10 +608,10 @@ public class GameScreen implements Screen {
                 if (state.equals(PlayState.FREEZE)) {
                     state = PlayState.PLAY;
                     station.recalculateTruckPaths();
-                    freezeCooldown = 10;
+                    freezeCooldown = 2;
                 } else if (freezeCooldown < 0) {
                     state = PlayState.FREEZE;
-                    freezeCooldown = 10;
+                    freezeCooldown = 100;
                 }
                 break;
         }
