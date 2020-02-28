@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
+
+import com.mozarellabytes.kroy.Screens.GameScreen;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 
@@ -19,6 +21,8 @@ import com.mozarellabytes.kroy.Utilities.SoundFX;
  */
 
 public class FireStation {
+
+    private final GameScreen gameScreen;
 
     /**
      * Coordinates and dimensions of the FireStation in the game screen
@@ -48,7 +52,8 @@ public class FireStation {
      * @param x  x coordinate of Station in tiles (lower left point)
      * @param y  y coordinate of Station in tiles (lower left point)
      */
-    public FireStation(int x, int y) {
+    public FireStation(int x, int y, GameScreen gameScreen) {
+        this.gameScreen = gameScreen;
         this.x = x;
         this.y = y;
         this.w = 6;
@@ -190,8 +195,36 @@ public class FireStation {
         mapBatch.draw(this.texture, this.x, this.y, this.w, this.h);
     }
 
-    public void clearAllTruckPathStacks() {
-        for (FireTruck truck : trucks) truck.clearPathSegmentsStack();
+    /** Checks if the user has drawn more than one truck to the same end tile.
+     *
+     * @return <code> true </code> If more than one truck has the same end tile
+     *      * <code> false </code> Otherwise
+     */
+    public boolean doTrucksHaveSameLastTile() {
+        for (FireTruck truck : this.getTrucks()) {
+            if (!truck.equals(gameScreen.selectedTruck)) {
+                if (!truck.pathSegments.isEmpty() && !truck.pathSegments.last().isEmpty()) {
+                    if (truck.pathSegments.last().last().equals(gameScreen.selectedTruck.pathSegment.last())) {
+                        return true;
+                    } else if (truck.getPosition().equals(gameScreen.selectedTruck.pathSegment.last())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Just as game screen is being unfrozen,
+     * the truck's segment stacks are cleared
+     * and their new paths are calculated
+     */
+    public void recalculateTruckPaths() {
+        for (FireTruck truck : trucks) {
+            truck.clearPathSegmentsStack();
+            truck.generatePathFromAllSegments();
+        }
     }
 
     /**

@@ -151,7 +151,7 @@ public class GameScreen implements Screen {
                 mapLayers.getIndex("structures3"),
                 mapLayers.getIndex("transparentStructures")};
 
-        station = new FireStation(2, 7);
+        station = new FireStation(2, 7, this);
 
         spawn(FireTruckType.Emerald);
         spawn(FireTruckType.Amethyst);
@@ -592,19 +592,25 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Toggles between Play and Pause state when the Pause button is clicked
+     * Toggles between PLAY, PAUSE and FREEZE state when the Pause button is clicked
+     * or when the SPACE bar is clicked
      */
-    public void changeState(boolean pause) {
-        if (pause) {
-            if (state.equals(PlayState.PLAY)) state = PlayState.PAUSE;
-            else state = PlayState.PLAY;
-        } else if (state.equals(PlayState.FREEZE)) {
-            state = PlayState.PLAY;
-            station.clearAllTruckPathStacks();
-            freezeCooldown = 10;
-        } else if (freezeCooldown < 0) {
-            state = PlayState.FREEZE;
-            freezeCooldown = 10;
+    public void changeState(PlayState action) {
+        switch (action) {
+            case PAUSE:
+                if (state.equals(PlayState.PLAY)) state = PlayState.PAUSE;
+                else state = PlayState.PLAY;
+                break;
+            case FREEZE:
+                if (state.equals(PlayState.FREEZE)) {
+                    state = PlayState.PLAY;
+                    station.recalculateTruckPaths();
+                    freezeCooldown = 10;
+                } else if (freezeCooldown < 0) {
+                    state = PlayState.FREEZE;
+                    freezeCooldown = 10;
+                }
+                break;
         }
     }
 
@@ -615,6 +621,13 @@ public class GameScreen implements Screen {
         truckAttack = !truckAttack;
         if (truckAttack && SoundFX.music_enabled && this.gameState.getTrucksInAttackRange() > 0) SoundFX.playTruckAttack();
         gui.updateAttackMode(truckAttack);
+    }
+
+    /** The method for giving trucks that have the same end tiles adjacent end tiles
+     * so that they do not end up on the same tile
+     */
+    public void shortenActiveSegment() {
+        selectedTruck.pathSegment.removeLast();
     }
 
     public boolean isTruckAttackEnabled() {

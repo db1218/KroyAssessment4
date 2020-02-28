@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Fortress;
 import com.mozarellabytes.kroy.GUI.GUI;
 import com.mozarellabytes.kroy.Screens.GameScreen;
@@ -41,7 +40,7 @@ public class GameInputHandler implements InputProcessor {
         switch (keycode) {
             case Input.Keys.ESCAPE:
                 gui.clickedPauseButton();
-                gameScreen.changeState(true);
+                gameScreen.changeState(GameScreen.PlayState.PAUSE);
                 break;
             case Input.Keys.C:
                 gameScreen.toControlScreen();
@@ -52,37 +51,23 @@ public class GameInputHandler implements InputProcessor {
                 gui.idleSoundButton();
                 break;
             case Input.Keys.SPACE:
-                gameScreen.changeState(false);
-                break;
-            case Input.Keys.Q:
-                if(gameScreen.selectedTruck != null && !gameScreen.selectedTruck.getMoving()) gameScreen.selectedTruck.resetPath();
+                gameScreen.changeState(GameScreen.PlayState.FREEZE);
                 break;
             case Input.Keys.A:
                 gameScreen.toggleTruckAttack();
                 break;
             case Input.Keys.LEFT:
-                gameScreen.selectedTruck.undoSegment();
+                if (gameScreen.selectedTruck != null) gameScreen.selectedTruck.undoSegment();
                 break;
             case Input.Keys.RIGHT:
-                gameScreen.selectedTruck.redoSegment();
-                break;
+                if (gameScreen.selectedTruck != null) gameScreen.selectedTruck.redoSegment();
         }
         return true;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        /*
-        if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
-            if (keycode == Input.Keys.A) {
-                SoundFX.stopTruckAttack();
-                for (FireTruck truck : gameScreen.getStation().getTrucks()) {
-                    truck.setAttacking(false);
-                }
-            }
-        }
-         */
-        return true;
+        return false;
     }
 
     @Override
@@ -121,12 +106,10 @@ public class GameInputHandler implements InputProcessor {
      * @return whether the input was processed */
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-
         if (gameScreen.selectedTruck != null) {
             Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);
             gameScreen.selectedTruck.addTileToPathSegment(clickCoordinates);
         }
-
         return true;
     }
 
@@ -140,12 +123,12 @@ public class GameInputHandler implements InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if (gameScreen.selectedTruck != null) {
             if (!gameScreen.selectedTruck.pathSegment.isEmpty()) {
-                if (doTrucksHaveSameLastTile()) {
-                    giveTrucksDifferentLastTiles(gameScreen.selectedTruck);
+                if (gameScreen.getStation().doTrucksHaveSameLastTile()) {
+                    gameScreen.shortenActiveSegment();
                 }
                 if (gameScreen.selectedTruck.canPathSegmentBeAddedToRoute()) {
                     gameScreen.selectedTruck.addPathSegmentToRoute();
-                    gameScreen.selectedTruck.generatePathFromSegments();
+                    gameScreen.selectedTruck.generatePathFromLastSegments();
                 }
             }
             if(this.gameScreen.getState().equals((GameScreen.PlayState.PAUSE))) {
@@ -166,35 +149,6 @@ public class GameInputHandler implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
-    }
-
-    /** Checks if the user has drawn more than one truck to the same end tile.
-     *
-     * @return <code> true </code> If more than one truck has the same end tile
-     *      * <code> false </code> Otherwise
-     */
-    private boolean doTrucksHaveSameLastTile() {
-        for (FireTruck truck : gameScreen.getStation().getTrucks()) {
-            if (!truck.equals(gameScreen.selectedTruck)) {
-                if (!truck.pathSegments.isEmpty() && !truck.pathSegments.last().isEmpty()){
-                    if (truck.pathSegments.last().last().equals(gameScreen.selectedTruck.pathSegment.last())) {
-                        return true;
-                    }
-                } else if (truck.getPosition().equals(gameScreen.selectedTruck.pathSegment.last())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /** The method for giving trucks that have the same end tiles adjacent end tiles
-     * so that they do not end up on the same tile
-     * @param selectedTruck the truck that has to be moved so the two trucks end up
-     *                      on different tiles
-     */
-    private void giveTrucksDifferentLastTiles(FireTruck selectedTruck) {
-        selectedTruck.pathSegment.removeLast();
     }
 
     /** Maps the position of where the user clicked on the screen to the tile that they clicked on
@@ -265,7 +219,7 @@ public class GameInputHandler implements InputProcessor {
         }
 
         if (gui.getPauseButton().contains(screenCoords)){
-            gameScreen.changeState(true);
+            gameScreen.changeState(GameScreen.PlayState.PAUSE);
         } else {
             gui.idlePauseButton();
         }

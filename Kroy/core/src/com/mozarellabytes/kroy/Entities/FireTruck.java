@@ -222,10 +222,20 @@ public class FireTruck extends Sprite {
         for (Vector2 position : findPath(coordinate, this.pathSegment.first())) this.pathSegment.addLast(position);
     }
 
-    public void generatePathFromSegments() {
+    public void generatePathFromLastSegments() {
         if (!pathSegments.isEmpty()) {
             for (int i=1; i<pathSegments.last().size; i++) {
                 interpolateMove(pathSegments.last().get(i-1), pathSegments.last().get(i), (int)(40/type.getSpeed()));
+            }
+        }
+    }
+
+    public void generatePathFromAllSegments() {
+        if (!pathSegments.isEmpty()) {
+            for (Queue<Vector2> queue : pathSegments) {
+                for (int i=1; i<queue.size; i++) {
+                    interpolateMove(queue.get(i-1), queue.get(i), (int)(40/type.getSpeed()));
+                }
             }
         }
     }
@@ -631,41 +641,54 @@ public class FireTruck extends Sprite {
         return this.type.getRange();
     }
 
+    /**
+     * "Undo" a segment from the queue of segments that make up the
+     * path that the truck follows. This can only happen when the game
+     * is frozen and makes sure the truck ends up in a tile
+     */
     public void undoSegment() {
-        if (this.pathSegments.size > 0) {
-            if (this.pathSegments.size == 1) {
-                boolean alreadyAdded = false;
-                for (Queue<Vector2> queue : pathSegmentsStack) {
-                    if (pathSegments.first().first().equals(queue.first())) alreadyAdded = true;
-                }
+        if (this.gameScreen.getState().equals(GameScreen.PlayState.FREEZE)) {
 
-                if (!alreadyAdded) {
-                    pathSegmentsStack.push(cloneQueue(pathSegments.first()));
-                    while (this.pathSegments.first().size > 1) {
-                        this.pathSegments.first().removeLast();
+            // can only undo a segment if there is a segment to undo
+            if (this.pathSegments.size > 0) {
+
+                /* when there is one last segment in the list and a one tile segment
+                must be kept to prevent the truck getting stuck between tiles*/
+                if (this.pathSegments.size == 1) {
+                    boolean alreadyAdded = false;
+                    for (Queue<Vector2> queue : pathSegmentsStack) if (pathSegments.first().first().equals(queue.first())) alreadyAdded = true;
+                    if (!alreadyAdded) {
+                        // adds little bit onto path to make sure the truck ends up in the next tile
+                        pathSegmentsStack.push(cloneQueue(pathSegments.first()));
+                        while (this.pathSegments.first().size > 1)  this.pathSegments.first().removeLast();
+                        interpolateMove(this.position, this.pathSegments.first().first(), (int) (40 / type.getSpeed()));
                     }
+                } else {
+                    // pushes the undo to the stack so that it can then be re-added after using the redo method
                     this.path.clear();
-                    interpolateMove(this.position, this.pathSegments.first().first(), (int)(40/type.getSpeed()));
+                    pathSegmentsStack.push(pathSegments.removeLast());
                 }
-            } else {
-                pathSegmentsStack.push(pathSegments.removeLast());
-                this.path.clear();
             }
         }
-        System.out.println("REDO");
-        System.out.println("Segments: " + this.pathSegments);
-        System.out.println("Stack: " + this.pathSegmentsStack);
     }
 
+    /**
+     * "Redo" a segment that you just removed
+     * with the "undo" method and only works when the
+     * game is frozen and there is something to redo
+     */
     public void redoSegment() {
-        if (!pathSegmentsStack.empty()) {
-            pathSegments.addLast(pathSegmentsStack.pop());
+        if (this.gameScreen.getState().equals(GameScreen.PlayState.FREEZE)) {
+            this.path.clear();
+            if (!pathSegmentsStack.empty()) {
+                // this is to make sure that the first "safety" segment doesn't mess things up
+                if (pathSegments.size == 1 && pathSegments.first().size < 2) {
+                    pathSegments.removeFirst();
+                }
+                pathSegments.addLast(pathSegmentsStack.pop());
+            }
+
         }
-        this.path.clear();
-        this.generatePathFromSegments();
-        System.out.println("REDO");
-        System.out.println("Segments: " + this.pathSegments);
-        System.out.println("Stack: " + this.pathSegmentsStack);
     }
 
     public void clearPathSegmentsStack() {
