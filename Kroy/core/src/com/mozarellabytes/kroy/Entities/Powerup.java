@@ -13,11 +13,13 @@ public class Powerup {
     private int boost;
     private Vector2 position;
     private float elapsedTime;
+    private TextureRegion currentFrame;
 
     public Powerup(int type, Vector2 position) {
         this.type = type;
         this.position = position;
         this.atlas = new TextureAtlas(Gdx.files.internal("sprites/powerups/powerup.atlas"));
+        this.currentFrame = new TextureRegion();
         setType(type);
     }
 
@@ -31,15 +33,25 @@ public class Powerup {
         }
     }
 
-    public void update(Batch mapBatch){
+    /**
+     * Updates the power up animation
+     */
+    public void update() {
         // Accumulate amount of time that has passed
         elapsedTime += Gdx.graphics.getDeltaTime();
 
         // Get current frame of animation for the current stateTime
-        TextureRegion currentFrame = animation.getKeyFrame(elapsedTime, true);
+        currentFrame = animation.getKeyFrame(elapsedTime, true);
+    }
+
+    /**
+     * Renders the current power up animation frame
+     *
+     * @param mapBatch  to render to
+     */
+    public void render(Batch mapBatch) {
         mapBatch.draw(currentFrame, position.x, position.y, 1, 1);
     }
-    
 
     public Vector2 getPosition() {
         return this.position;

@@ -193,6 +193,7 @@ public class GameScreen implements Screen {
         }
 
         heart = new Powerup(0, new Vector2(13, 6));
+        heart.update();
 
     }
 
@@ -214,7 +215,7 @@ public class GameScreen implements Screen {
 
         mapBatch.begin();
 
-        heart.update(mapBatch);
+        heart.render(mapBatch);
 
         for (FireTruck truck : station.getTrucks()) {
             truck.drawPath(mapBatch);
@@ -336,6 +337,8 @@ public class GameScreen implements Screen {
         station.checkForCollisions();
 
         gameState.setTrucksInAttackRange(0);
+
+        heart.update();
 
         for (int i = 0; i < station.getTrucks().size(); i++) {
             FireTruck truck = station.getTruck(i);
