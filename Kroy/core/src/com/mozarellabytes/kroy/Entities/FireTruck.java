@@ -33,6 +33,9 @@ public class FireTruck extends Sprite {
     /** Water Reserve */
     private float reserve;
 
+    private BubbleThought bubble;
+    private boolean hasBubble = false;
+
     /** Position of FireTruck in tiles */
     private Vector2 position;
 
@@ -191,6 +194,24 @@ public class FireTruck extends Sprite {
     public void repair(float HP) {
         this.HP += HP;
     }
+
+    /** Updates the bubble sprite based on the truck's stats
+    public void updateBubble(Batch batch) {
+        if (!hasBubble) {
+            if (this.getReserve() < this.type.getMaxReserve() / 2f) {
+                bubble = new BubbleThought(1, this.getPosition());
+            }
+            else if (this.getHP() < this.type.getMaxHP() / 2f) {
+                bubble = new BubbleThought(0, this.getPosition());
+            }
+            bubble.update(batch);
+            hasBubble = true;
+        } else {
+            bubble.setPosition(this.getPosition());
+            bubble.update(batch);
+        }
+    }
+     */
 
     /**
      * Increases the Reserve of the truck

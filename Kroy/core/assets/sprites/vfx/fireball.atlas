@@ -1,0 +1,321 @@
+
+fireball.png
+size: 1024,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+fireball
+  rotate: false
+  xy: 2, 134
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 34
+fireball
+  rotate: false
+  xy: 2, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 36
+fireball
+  rotate: false
+  xy: 68, 134
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 43
+fireball
+  rotate: false
+  xy: 2, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 7
+fireball
+  rotate: false
+  xy: 68, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 42
+fireball
+  rotate: false
+  xy: 134, 134
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 41
+fireball
+  rotate: false
+  xy: 68, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 20
+fireball
+  rotate: false
+  xy: 134, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 21
+fireball
+  rotate: false
+  xy: 200, 134
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 0
+fireball
+  rotate: false
+  xy: 134, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 1
+fireball
+  rotate: false
+  xy: 200, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 2
+fireball
+  rotate: false
+  xy: 266, 134
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 3
+fireball
+  rotate: false
+  xy: 200, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 4
+fireball
+  rotate: false
+  xy: 266, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 5
+fireball
+  rotate: false
+  xy: 332, 134
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 6
+fireball
+  rotate: false
+  xy: 266, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 40
+fireball
+  rotate: false
+  xy: 332, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 8
+fireball
+  rotate: false
+  xy: 398, 134
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 9
+fireball
+  rotate: false
+  xy: 332, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 22
+fireball
+  rotate: false
+  xy: 398, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 28
+fireball
+  rotate: false
+  xy: 464, 134
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 16
+fireball
+  rotate: false
+  xy: 398, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 25
+fireball
+  rotate: false
+  xy: 464, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 35
+fireball
+  rotate: false
+  xy: 530, 134
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 38
+fireball
+  rotate: false
+  xy: 464, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 24
+fireball
+  rotate: false
+  xy: 530, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 30
+fireball
+  rotate: false
+  xy: 596, 134
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 31
+fireball
+  rotate: false
+  xy: 530, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 17
+fireball
+  rotate: false
+  xy: 596, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 33
+fireball
+  rotate: false
+  xy: 662, 134
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 12
+fireball
+  rotate: false
+  xy: 596, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 13
+fireball
+  rotate: false
+  xy: 662, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 14
+fireball
+  rotate: false
+  xy: 728, 134
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 37
+fireball
+  rotate: false
+  xy: 662, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 10
+fireball
+  rotate: false
+  xy: 728, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 39
+fireball
+  rotate: false
+  xy: 794, 134
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 18
+fireball
+  rotate: false
+  xy: 728, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 19
+fireball
+  rotate: false
+  xy: 794, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 23
+fireball
+  rotate: false
+  xy: 860, 134
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 26
+fireball
+  rotate: false
+  xy: 794, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 15
+fireball
+  rotate: false
+  xy: 860, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 27
+fireball
+  rotate: false
+  xy: 926, 134
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 44
+fireball
+  rotate: false
+  xy: 860, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 11
+fireball
+  rotate: false
+  xy: 926, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 32
+fireball
+  rotate: false
+  xy: 926, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 29

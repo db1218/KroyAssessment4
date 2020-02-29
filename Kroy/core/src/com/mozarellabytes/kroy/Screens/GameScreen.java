@@ -26,6 +26,7 @@ import com.mozarellabytes.kroy.Utilities.*;
 
 
 import java.util.ArrayList;
+import java.util.Timer;
 
 /**
  * The Screen that our game is played in.
@@ -85,6 +86,9 @@ public class GameScreen implements Screen {
      * List of patrols current active around the map
      */
     private final ArrayList<Patrol> patrols;
+
+    /** List of VFX */
+    private ArrayList<VFX> vfx;
 
     /** Where the FireEngines' spawn, refill and repair */
     private final FireStation station;
@@ -171,6 +175,8 @@ public class GameScreen implements Screen {
         spawn(FireTruckType.Sapphire);
         spawn(FireTruckType.Ruby);
 
+        vfx = new ArrayList<VFX>();
+
         fortresses = new ArrayList<Fortress>();
         fortresses.add(new Fortress(12, 23.5f, FortressType.Revs));
         fortresses.add(new Fortress(30.5f, 22.5f, FortressType.Walmgate));
@@ -241,6 +247,7 @@ public class GameScreen implements Screen {
         for (FireTruck truck : station.getTrucks()) {
             truck.drawPath(mapBatch);
             truck.drawSprite(mapBatch);
+            //truck.updateBubble(mapBatch);
         }
 
         if(!gameState.hasStationDestoyed()) {
@@ -269,6 +276,10 @@ public class GameScreen implements Screen {
             else{
                 patrol.drawSprite(mapBatch);
             }
+        }
+
+        for (VFX vfx : this.vfx) {
+            vfx.update(mapBatch);
         }
         mapBatch.end();
 
@@ -303,6 +314,7 @@ public class GameScreen implements Screen {
         shapeMapRenderer.end();
 
         gui.renderElements();
+
 
         switch (state) {
             case PLAY:
@@ -401,6 +413,7 @@ public class GameScreen implements Screen {
             if(!(gameState.hasStationDestoyed())){
                 gameState.setStationDestoyed();
                 deadEntities.add(station.getDestroyedStation());
+
             }
             patrols.remove(PatrolType.Boss);
         }
@@ -453,6 +466,12 @@ public class GameScreen implements Screen {
             if (fortress.getHP() <= 0) {
                 gameState.addFortress();
                 deadEntities.add(fortress.createDestroyedFortress());
+                float x = fortress.getPosition().x;
+                float y = fortress.getPosition().y;
+                this.vfx.add(new VFX(0, new Vector2(x-1f, y-3f)));
+                this.vfx.add(new VFX(0, new Vector2(x-3.5f, y-3)));
+                this.vfx.add(new VFX(0, new Vector2(x-3f, y-2f)));
+                this.vfx.add(new VFX(0, new Vector2(x-2f, y-2.5f)));
                 this.fortresses.remove(fortress);
                 if (SoundFX.music_enabled) SoundFX.sfx_fortress_destroyed.play();
             }
