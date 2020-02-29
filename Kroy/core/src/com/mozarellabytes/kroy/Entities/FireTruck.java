@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.OrderedMap;
 import com.badlogic.gdx.utils.Queue;
+import com.mozarellabytes.kroy.Descriptors.Desc;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
@@ -698,4 +700,15 @@ public class FireTruck extends Sprite {
     public void clearPathSegmentsStack() {
         pathSegmentsStack.clear();
     }
+
+    public Desc.FireTruck getSave() {
+        Desc.FireTruck desc = new Desc.FireTruck();
+        desc.type = this.type.name();
+        desc.health = this.getHP();
+        desc.water = this.getReserve();
+        desc.x = (int) Math.floor(this.getPosition().x);
+        desc.x = (int) Math.floor(this.getPosition().y);
+        return desc;
+    }
+
 }

@@ -2,6 +2,7 @@ package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -9,6 +10,11 @@ import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
+import com.badlogic.gdx.utils.OrderedMap;
+import com.mozarellabytes.kroy.Descriptors.Desc;
 import com.mozarellabytes.kroy.Entities.*;
 import com.mozarellabytes.kroy.GUI.GUI;
 import com.mozarellabytes.kroy.GameState;
@@ -104,6 +110,8 @@ public class GameScreen implements Screen {
 
     public Powerup heart;
 
+    private FileHandle file;
+
     /** Play when the game is being played
      * Pause when the pause button is clicked */
     public enum PlayState {
@@ -192,6 +200,8 @@ public class GameScreen implements Screen {
 
         heart = new Powerup(0, new Vector2(13, 6));
         heart.update();
+
+        file = Gdx.files.local("bin/save.json");
 
     }
 
@@ -651,5 +661,16 @@ public class GameScreen implements Screen {
         return this.selectedEntity;
     }
 
+    /**
+     * Save the game to a JSON file which can then be resumed
+     */
+    public void saveGameState() {
+        Json json = new Json(JsonWriter.OutputType.json);
+        OrderedMap<String, Object> map = new OrderedMap<>();
+        OrderedMap<String, Object> entitiesMap = new OrderedMap<>();
+        entitiesMap.put("FireTrucks", station.getFireTrucksDescriptor());
+        map.put("Entities", entitiesMap);
+        file.writeString(json.prettyPrint(map),false);
+    }
 
 }

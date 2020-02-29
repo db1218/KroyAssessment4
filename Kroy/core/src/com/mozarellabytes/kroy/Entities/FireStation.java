@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
 
+import com.mozarellabytes.kroy.Descriptors.Desc;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
@@ -248,5 +249,13 @@ public class FireStation {
 
     public Vector2 getPosition() {
         return new Vector2(this.x,this.y);
+    }
+
+    public Desc.FireTruck[] getFireTrucksDescriptor() {
+        Desc.FireTruck[] fireTrucks = new Desc.FireTruck[this.getTrucks().size()];
+        for (int i=0; i<fireTrucks.length; i++) {
+            fireTrucks[i] = this.getTruck(i).getSave();
+        }
+        return fireTrucks;
     }
 }

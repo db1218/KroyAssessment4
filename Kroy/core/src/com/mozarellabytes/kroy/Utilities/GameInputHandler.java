@@ -50,6 +50,9 @@ public class GameInputHandler implements InputProcessor {
                 gui.changeSound();
                 gui.idleSoundButton();
                 break;
+            case Input.Keys.K:
+                gameScreen.saveGameState();
+                break;
             case Input.Keys.SPACE:
                 if (gameScreen.isNotPaused()) gameScreen.changeState(GameScreen.PlayState.FREEZE);
                 break;
@@ -57,10 +60,10 @@ public class GameInputHandler implements InputProcessor {
                 if (gameScreen.isNotPaused()) gameScreen.toggleTruckAttack();
                 break;
             case Input.Keys.LEFT:
-                if (gameScreen.isNotPaused() && gameScreen.selectedTruck != null) gameScreen.selectedTruck.undoSegment();
+                if (gameScreen.selectedTruck != null) gameScreen.selectedTruck.undoSegment();
                 break;
             case Input.Keys.RIGHT:
-                if (gameScreen.isNotPaused() && gameScreen.selectedTruck != null) gameScreen.selectedTruck.redoSegment();
+                if (gameScreen.selectedTruck != null) gameScreen.selectedTruck.redoSegment();
         }
         return true;
     }
