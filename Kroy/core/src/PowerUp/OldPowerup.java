@@ -1,11 +1,10 @@
-package com.mozarellabytes.kroy.Entities;
+package PowerUp;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector2;
 
-public class Powerup {
+public class OldPowerup implements Power {
 
     private int type; //0 = health | 1 = water | 2 = shield
     private TextureAtlas atlas;
@@ -15,7 +14,7 @@ public class Powerup {
     private float elapsedTime;
     private TextureRegion currentFrame;
 
-    public Powerup(int type, Vector2 position) {
+    public OldPowerup(int type, Vector2 position) {
         this.type = type;
         this.position = position;
         this.atlas = new TextureAtlas(Gdx.files.internal("sprites/powerups/powerup.atlas"));
@@ -56,6 +55,12 @@ public class Powerup {
     public Vector2 getPosition() {
         return this.position;
     }
+
+    @Override
+    public void yop() {
+        Gdx.app.log("power","up");
+    }
+
     public int getType() {
         return this.type;
     }
@@ -63,4 +68,6 @@ public class Powerup {
     public void dispose() {
         this.atlas.dispose();
     }
+
+    ;
 }

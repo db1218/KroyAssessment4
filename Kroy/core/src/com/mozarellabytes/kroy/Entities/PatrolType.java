@@ -87,12 +87,6 @@ public enum PatrolType {
     public float getSpeed() {
         return this.speed;
     }
-    public String getName() {
-        return this.name;
-    }
-    public float getAP() {
-        return this.AP;
-    }
     public Texture getTexture(){
         return this.texture;
     }

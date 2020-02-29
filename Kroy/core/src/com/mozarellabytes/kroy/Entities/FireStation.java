@@ -75,9 +75,7 @@ public class FireStation {
      *
      */
     public void spawn(FireTruck truck) {
-        if (SoundFX.music_enabled) {
-            SoundFX.sfx_truck_spawn.play();
-        }
+        if (SoundFX.music_enabled) SoundFX.sfx_truck_spawn.play();
         this.trucks.add(truck);
     }
 

@@ -1,5 +1,10 @@
 package com.mozarellabytes.kroy.Screens;
 
+import PowerUp.Heart;
+import PowerUp.Water;
+import PowerUp.Shield;
+import PowerUp.Power;
+import PowerUp.PowerUp;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -10,11 +15,9 @@ import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.OrderedMap;
-import com.mozarellabytes.kroy.Descriptors.Desc;
 import com.mozarellabytes.kroy.Entities.*;
 import com.mozarellabytes.kroy.GUI.GUI;
 import com.mozarellabytes.kroy.GameState;
@@ -108,7 +111,11 @@ public class GameScreen implements Screen {
 
     private boolean truckAttack;
 
-    public Powerup heart;
+    public PowerUp heart;
+    public PowerUp shield;
+    public PowerUp water;
+
+    private ArrayList<PowerUp> powerUps;
 
     private FileHandle file;
 
@@ -198,9 +205,17 @@ public class GameScreen implements Screen {
             SoundFX.sfx_soundtrack.play();
         }
 
-        heart = new Powerup(0, new Vector2(13, 6));
-        heart.update();
+        heart = new Heart( new Vector2(13, 6));
+        shield = new Shield(new Vector2(10,3));
+        water = new Water(new Vector2(8,3));
 
+        powerUps = new ArrayList<PowerUp>();
+
+        powerUps.add(heart);
+        powerUps.add(shield);
+        powerUps.add(water);
+
+        for (PowerUp power : powerUps) power.update();
         file = Gdx.files.local("bin/save.json");
 
     }
@@ -221,7 +236,7 @@ public class GameScreen implements Screen {
 
         mapBatch.begin();
 
-        heart.render(mapBatch);
+        for (PowerUp power : powerUps) power.render(mapBatch);
 
         for (FireTruck truck : station.getTrucks()) {
             truck.drawPath(mapBatch);
@@ -345,7 +360,7 @@ public class GameScreen implements Screen {
 
         gameState.setTrucksInAttackRange(0);
 
-        heart.update();
+        for (PowerUp power : powerUps) power.update();
 
         for (int i = 0; i < station.getTrucks().size(); i++) {
             FireTruck truck = station.getTruck(i);
@@ -672,5 +687,7 @@ public class GameScreen implements Screen {
         map.put("Entities", entitiesMap);
         file.writeString(json.prettyPrint(map),false);
     }
+
+
 
 }
