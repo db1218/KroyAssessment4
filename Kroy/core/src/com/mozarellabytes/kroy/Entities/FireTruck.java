@@ -94,6 +94,8 @@ public class FireTruck extends Sprite {
     /** the shortest path between 2 points */
     LinkedList<Vector2> reconstructedPath;
 
+    private boolean inShield;
+
     /**
      * Constructs a new FireTruck at a position and of a certain type
      * which have been passed in
@@ -117,6 +119,7 @@ public class FireTruck extends Sprite {
         this.inCollision = false;
         this.spray = new ArrayList<>();
         this.timeOfLastAttack = System.currentTimeMillis();
+        this.inShield = false;
     }
 
     /**
@@ -732,4 +735,10 @@ public class FireTruck extends Sprite {
         return desc;
     }
 
+    public boolean inShield() {
+        return this.inShield;
+    }
+    public void setShield(boolean b){
+        this.inShield = b;
+    }
 }

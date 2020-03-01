@@ -213,7 +213,7 @@ public class GameScreen implements Screen {
 
         heart = new Heart( new Vector2(13, 6));
         shield = new Shield(new Vector2(10,3));
-        water = new Water(new Vector2(8,3));
+        water = new Water(new Vector2(9,2));
 
         powerUps = new ArrayList<PowerUp>();
 
@@ -242,7 +242,11 @@ public class GameScreen implements Screen {
 
         mapBatch.begin();
 
-        for (PowerUp power : powerUps) power.render(mapBatch);
+        for (PowerUp power : powerUps) {
+            if (power.getCanBeRendered()) {
+                power.render(mapBatch);
+            }
+        }
 
         for (FireTruck truck : station.getTrucks()) {
             truck.drawPath(mapBatch);
@@ -377,12 +381,20 @@ public class GameScreen implements Screen {
         for (int i = 0; i < station.getTrucks().size(); i++) {
             FireTruck truck = station.getTruck(i);
 
+            ArrayList<PowerUp> powerUpsToRemove = new ArrayList<PowerUp>();
+
+            for (PowerUp power : powerUps){
+                if (power.getPosition().equals(truck.getPosition())) power.invokePower(truck);
+                if (power.getCanBeDestroyed()) powerUpsToRemove.add(power);
+            }
+            powerUps.removeAll(powerUpsToRemove);
+
             truck.move();
             truck.updateSpray();
 
             // manages attacks between trucks and fortresses
             for (Fortress fortress : this.fortresses) {
-                if (fortress.withinRange(truck.getVisualPosition())) {
+                if (fortress.withinRange(truck.getVisualPosition()) & !truck.inShield()) {
                     fortress.attack(truck, true, difficultyControl.getDifficultyMultiplier());
                 }
                 if (truck.fortressInRange(fortress.getPosition())) {
@@ -408,6 +420,8 @@ public class GameScreen implements Screen {
                 }
             }
         }
+
+
 
         if (station.getHP() <= 0) {
             if(!(gameState.hasStationDestoyed())){
