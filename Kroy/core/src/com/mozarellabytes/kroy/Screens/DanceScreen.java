@@ -82,6 +82,7 @@ public class DanceScreen implements Screen, BeatListener {
         this.comboHintLocation = new Vector2(camera.viewportWidth/4, (3*camera.viewportHeight)/5);
 
         this.danceInputHandler = new DanceScreenInputHandler(this);
+        Gdx.app.log("in dance screen", "yas");
     }
 
     /**

@@ -96,6 +96,9 @@ public class FireTruck extends Sprite {
 
     private boolean inShield;
 
+    private float AP;
+    private float range;
+
     /**
      * Constructs a new FireTruck at a position and of a certain type
      * which have been passed in
@@ -120,6 +123,8 @@ public class FireTruck extends Sprite {
         this.spray = new ArrayList<>();
         this.timeOfLastAttack = System.currentTimeMillis();
         this.inShield = false;
+        this.AP = this.type.getAP();
+        this.range = this.type.getRange();
     }
 
     /**
@@ -470,7 +475,7 @@ public class FireTruck extends Sprite {
     public void attack(Fortress fortress) {
         if (this.reserve > 0) {
             this.spray.add(new Particle(this.getVisualPosition(), fortress.getPosition(), fortress));
-            this.reserve -= Math.min(this.reserve, this.type.getAP());
+            this.reserve -= Math.min(this.reserve, this.AP);
         }
     }
 
@@ -483,7 +488,7 @@ public class FireTruck extends Sprite {
      *                  <code>false </code> otherwise
      */
     public boolean fortressInRange(Vector2 fortress) {
-        return this.getVisualPosition().dst(fortress) <= this.type.getRange();
+        return this.getVisualPosition().dst(fortress) <= this.getRange();
     }
 
     /**
@@ -518,7 +523,7 @@ public class FireTruck extends Sprite {
      */
     private void damage(Particle particle) {
         Fortress target = (Fortress)particle.getTarget();
-        target.damage(Math.min(this.type.getAP(), target.getHP()));
+        target.damage(Math.min(this.AP, target.getHP()));
     }
 
     /**
@@ -667,9 +672,7 @@ public class FireTruck extends Sprite {
         return this.moving;
     }
 
-    public  float getRange() {
-        return this.type.getRange();
-    }
+    public  float getRange() { return this.range; }
 
     /**
      * "Undo" a segment from the queue of segments that make up the
@@ -741,4 +744,11 @@ public class FireTruck extends Sprite {
     public void setShield(boolean b){
         this.inShield = b;
     }
+
+    public void setAP(float AP){ this.AP = AP; }
+
+    public float getAP() { return this.AP; }
+
+    public void setRange(float range) { this.range = range;}
+
 }

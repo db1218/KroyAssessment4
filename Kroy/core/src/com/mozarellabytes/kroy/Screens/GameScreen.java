@@ -1,9 +1,9 @@
 package com.mozarellabytes.kroy.Screens;
 
 import PowerUp.Heart;
-import PowerUp.Water;
 import PowerUp.Shield;
-import PowerUp.Power;
+import PowerUp.Range;
+import PowerUp.Water;
 import PowerUp.PowerUp;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -26,7 +26,6 @@ import com.mozarellabytes.kroy.Utilities.*;
 
 
 import java.util.ArrayList;
-import java.util.Timer;
 
 /**
  * The Screen that our game is played in.
@@ -118,6 +117,7 @@ public class GameScreen implements Screen {
     public PowerUp heart;
     public PowerUp shield;
     public PowerUp water;
+    public PowerUp range;
 
     private ArrayList<PowerUp> powerUps;
 
@@ -213,13 +213,15 @@ public class GameScreen implements Screen {
 
         heart = new Heart( new Vector2(13, 6));
         shield = new Shield(new Vector2(10,3));
-        water = new Water(new Vector2(9,2));
+        water = new Water(new Vector2(9,10));
+        range = new Range(new Vector2(10,4));
 
         powerUps = new ArrayList<PowerUp>();
 
         powerUps.add(heart);
         powerUps.add(shield);
         powerUps.add(water);
+        powerUps.add(range);
 
         for (PowerUp power : powerUps) power.update();
         file = Gdx.files.local("bin/save.json");
@@ -288,6 +290,10 @@ public class GameScreen implements Screen {
         mapBatch.end();
 
         shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        for (PowerUp power : powerUps){
+            power.drawStats(shapeMapRenderer);
+        }
 
         for (FireTruck truck : station.getTrucks()) {
             truck.drawStats(shapeMapRenderer);
@@ -407,7 +413,7 @@ public class GameScreen implements Screen {
             for (Patrol patrol : this.patrols) {
                 Vector2 patrolPos = new Vector2(Math.round(patrol.position.x), Math.round(patrol.position.y));
                 if (patrolPos.equals(truck.getTilePosition())) {
-//                    doDanceOff(truck, patrol);
+                    doDanceOff(truck, patrol);
                 }
             }
 

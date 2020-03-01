@@ -1,15 +1,16 @@
 package PowerUp;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.mozarellabytes.kroy.Entities.FireTruck;
 
-import java.util.ArrayList;
-
-public abstract class PowerUp implements Power {
+public abstract class PowerUp {
 
     private Animation<TextureRegion> animation;
     private TextureAtlas atlas;
@@ -17,8 +18,8 @@ public abstract class PowerUp implements Power {
     private float elapsedTime;
     private TextureRegion currentFrame;
 
-    private boolean canBeRendered;
-    private boolean canBeDestroyed;
+    boolean canBeRendered;
+    boolean canBeDestroyed;
 
     public PowerUp(Vector2 position, String animationType) {
         this.position = position;
@@ -40,6 +41,15 @@ public abstract class PowerUp implements Power {
         currentFrame = animation.getKeyFrame(elapsedTime, true);
     }
 
+    public void drawStats(ShapeRenderer shapeMapRenderer) {
+        // Need to make this the same as the timer
+        shapeMapRenderer.rect(this.getPosition().x - 0.1f, this.getPosition().y + 1.4f, 1.2f, 0.55f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
+        shapeMapRenderer.rect(this.getPosition().x, this.getPosition().y + 1.5f, 1f, 0.34f, Color.GOLDENROD, Color.GOLDENROD, Color.GOLDENROD, Color.GOLDENROD);
+        shapeMapRenderer.rect(this.getPosition().x, this.getPosition().y + 1.5f, 1f, 0.34f, Color.GOLD, Color.GOLD, Color.GOLD, Color.GOLD);
+    }
+
+
+
     public Vector2 getPosition() {
         return this.position;
     }
@@ -47,8 +57,6 @@ public abstract class PowerUp implements Power {
     public void dispose() {
         this.atlas.dispose();
     }
-
-    public void yop(){Gdx.app.log("power", "pow");}
 
     public boolean getCanBeRendered() {
         return this.canBeRendered;
@@ -58,12 +66,11 @@ public abstract class PowerUp implements Power {
         return this.canBeDestroyed;
     }
 
-    public void setCanBeRendered(boolean b){
-        this.canBeRendered = b;
+    void removePowerUp() {
+        canBeRendered = false;
+        canBeDestroyed = true;
     }
 
-    public void setCanBeDestroyed(boolean b){
-        this.canBeDestroyed = b;
-    }
+    public abstract void invokePower(FireTruck truck);
 
 }

@@ -9,19 +9,16 @@ public class Water extends PowerUp {
         super(position, "water");
     }
 
-
     @Override
     public void invokePower(FireTruck truck) {
-        int fullReserve = (int)truck.type.getMaxReserve();
-        int currentReserve = (int) truck.getReserve();
-        truck.refill(fullReserve - currentReserve);
+        refillReserve(truck);
         removePowerUp();
     }
 
-    private void removePowerUp() {
-        setCanBeRendered(false);
-        setCanBeDestroyed(true);
+    private void refillReserve(FireTruck truck) {
+        int maxReserve = (int)truck.type.getMaxReserve();
+        int currentReserve = (int) truck.getReserve();
+        truck.refill(maxReserve - currentReserve);
     }
-
 
 }

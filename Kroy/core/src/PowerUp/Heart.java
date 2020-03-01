@@ -11,14 +11,13 @@ public class Heart extends PowerUp {
 
     @Override
     public void invokePower(FireTruck truck) {
-        int fullHP = (int)truck.type.getMaxHP();
-        truck.setHP(fullHP);
+        restoreHealth(truck);
         removePowerUp();
     }
 
-    private void removePowerUp() {
-        setCanBeRendered(false);
-        setCanBeDestroyed(true);
+    private void restoreHealth(FireTruck truck) {
+        int fullHP = (int)truck.type.getMaxHP();
+        truck.setHP(fullHP);
     }
 
 }

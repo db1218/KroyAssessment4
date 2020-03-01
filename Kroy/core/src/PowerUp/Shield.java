@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 
-
 public class Shield extends PowerUp {
 
     float timeInShield;
@@ -20,8 +19,8 @@ public class Shield extends PowerUp {
     @Override
     public void update() {
         super.update();
-        if (this.truck != null) {
-            this.setCanBeRendered(false);
+        if (truck != null) {
+            canBeRendered = false;
             elapsedTime += Gdx.graphics.getRawDeltaTime();
             checkIfFinishedShield();
         }
@@ -33,12 +32,10 @@ public class Shield extends PowerUp {
         truck.setShield(true);
     }
 
-
     private void checkIfFinishedShield() {
         if (elapsedTime >= timeInShield){
-            this.truck.setShield(false);
-            this.elapsedTime = 0;
-            this.setCanBeDestroyed(true);
+            truck.setShield(false);
+            canBeDestroyed = true;
         }
     }
 
