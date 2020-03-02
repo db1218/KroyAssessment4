@@ -690,13 +690,12 @@ public class GameScreen implements Screen {
 
 
     private void generatePowerUp() {
-        if (powerUps.size() <= 5){
+        if (powerUps.size() <= Constants.NUMBER_OF_POWERUPS){
             ArrayList<PowerUp> possiblePowerUp = PowerUp.createNewPowers();
             Random rand = new Random();
             int index = rand.nextInt(possiblePowerUp.size());
             PowerUp powerup = possiblePowerUp.get(index);
             powerup.update();
-            powerup.setActive();
             powerUps.add(powerup);
         }
     }
