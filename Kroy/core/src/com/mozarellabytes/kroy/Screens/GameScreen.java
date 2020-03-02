@@ -137,7 +137,7 @@ public class GameScreen implements Screen {
         Array fireTruckArray = (Array) entities.get("FireTrucks");
         for (int i=0; i<fireTruckArray.size; i++) {
             Desc.FireTruck desc = json.fromJson(Desc.FireTruck.class, fireTruckArray.get(i).toString());
-            station.spawn(new FireTruck(this, desc.x, desc.y, desc.type, desc.health, desc.reserve));
+            station.spawn(new FireTruck(this, desc.x, desc.y, desc.type, desc.health, desc.reserve, desc.rotation));
             gameState.addFireTruck();
         }
 

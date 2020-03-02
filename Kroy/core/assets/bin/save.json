@@ -17,6 +17,7 @@
 		},
 		{
 			"type": "Amethyst",
+			"rotation": "up",
 			"x": 4,
 			"y": 7,
 			"health": 230,
@@ -24,16 +25,18 @@
 		},
 		{
 			"type": "Sapphire",
-			"x": 5,
+			"rotation": "up",
+			"x": 6,
 			"y": 7,
 			"health": 120,
 			"reserve": 250
 		},
 		{
 			"type": "Ruby",
-			"x": 24,
-			"y": 13,
-			"health": 120,
+			"rotation": "up",
+			"x": 5,
+			"y": 7,
+			"health": 150,
 			"reserve": 100
 		}
 	],
@@ -42,19 +45,19 @@
 			"type": "Revs",
 			"x": 12,
 			"y": 23.5,
-			"health": 100
+			"health": 57.359024
 		},
 		{
 			"type": "Walmgate",
 			"x": 30.5,
 			"y": 22.5,
-			"health": 200
+			"health": 173.43939
 		},
 		{
 			"type": "Railway",
 			"x": 16.5,
 			"y": 3.5,
-			"health": 250
+			"health": 148.00156
 		},
 		{
 			"type": "Clifford",
@@ -78,6 +81,6 @@
 },
 "Difficulty": {
 	"class": "com.mozarellabytes.kroy.Utilities.DifficultyControl",
-	"currentTime": 51.934265
+	"currentTime": 14.848178
 }
 }

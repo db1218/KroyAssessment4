@@ -98,6 +98,7 @@ public class FireTruck extends Sprite {
 
     private float AP;
     private float range;
+    private String rotation;
 
     /**
      * Constructs a new FireTruck at a position and of a certain type
@@ -113,7 +114,8 @@ public class FireTruck extends Sprite {
         this.HP = type.getMaxHP();
         this.reserve = type.getMaxReserve();
         this.position = position;
-        setup(gameScreen);
+        this.rotation = "down";
+        setup(gameScreen, rotation);
     }
 
     /**
@@ -125,13 +127,14 @@ public class FireTruck extends Sprite {
      * @param HP
      * @param reserve
      */
-    public FireTruck(GameScreen gameScreen, float x, float y, String typeString, float HP, float reserve) {
+    public FireTruck(GameScreen gameScreen, float x, float y, String typeString, float HP, float reserve, String rotation) {
         super(FireTruckType.valueOf(typeString).getLookDown());
         this.type = FireTruckType.valueOf(typeString);
         this.HP = HP;
         this.reserve = reserve;
         this.position = new Vector2(x, y);
-        setup(gameScreen);
+        this.rotation = rotation;
+        setup(gameScreen, rotation);
     }
 
     /**
@@ -139,7 +142,7 @@ public class FireTruck extends Sprite {
      * is being made, or loaded from a save state
      * @param gameScreen
      */
-    private void setup(GameScreen gameScreen) {
+    private void setup(GameScreen gameScreen, String rotation) {
         this.gameScreen = gameScreen;
         this.path = new Queue<>();
         this.pathSegment = new Queue<>();
@@ -152,6 +155,8 @@ public class FireTruck extends Sprite {
         this.inShield = false;
         this.AP = this.type.getAP();
         this.range = this.type.getRange();
+        System.out.println(rotation);
+        this.setTexture(type.getLook(rotation));
     }
 
     /**
@@ -469,12 +474,16 @@ public class FireTruck extends Sprite {
         if (previousTile != null) {
             if (nextTile.x > previousTile.x) {
                 setTexture(this.type.getLookRight());
+                rotation = "right";
             } else if (nextTile.x < previousTile.x) {
                 setTexture(this.type.getLookLeft());
+                rotation = "left";
             } else if (nextTile.y > previousTile.y) {
                 setTexture(this.type.getLookUp());
+                rotation = "up";
             } else if (nextTile.y < previousTile.y) {
                 setTexture(this.type.getLookDown());
+                rotation = "down";
             }
         }
     }
@@ -762,12 +771,14 @@ public class FireTruck extends Sprite {
         desc.reserve = this.getReserve();
         desc.x = (int) Math.floor(this.getPosition().x);
         desc.y = (int) Math.floor(this.getPosition().y);
+        desc.rotation = this.rotation;
         return desc;
     }
 
     public boolean inShield() {
         return this.inShield;
     }
+
     public void setShield(boolean b){
         this.inShield = b;
     }
@@ -778,4 +789,7 @@ public class FireTruck extends Sprite {
 
     public void setRange(float range) { this.range = range;}
 
+    public void setLook(String rotation) {
+
+    }
 }
