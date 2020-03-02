@@ -9,6 +9,10 @@ public class Heart extends PowerUp {
         super(position, "heart");
     }
 
+    public Heart() {
+        super("heart");
+    }
+
     @Override
     public void invokePower(FireTruck truck) {
         restoreHealth(truck);

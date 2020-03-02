@@ -11,6 +11,11 @@ public class Range extends PowerUp {
     int rangeIncrease;
     FireTruck truck;
 
+
+    public Range() {
+        super("shield");
+    }
+
     public Range(Vector2 position) {
         super(position, "shield");
         timeInRange = 10;

@@ -21,6 +21,14 @@ public abstract class PowerUp {
     boolean canBeRendered;
     boolean canBeDestroyed;
 
+    public PowerUp(String animationType){
+        this.atlas = new TextureAtlas(Gdx.files.internal("sprites/powerups/powerup.atlas"));
+        this.currentFrame = new TextureRegion();
+        this.animation = new Animation<TextureRegion>(.032f, atlas.findRegions(animationType), Animation.PlayMode.LOOP);
+        this.canBeRendered = true;
+        this.canBeDestroyed = false;
+    }
+
     public PowerUp(Vector2 position, String animationType) {
         this.position = position;
         this.atlas = new TextureAtlas(Gdx.files.internal("sprites/powerups/powerup.atlas"));
@@ -72,5 +80,10 @@ public abstract class PowerUp {
     }
 
     public abstract void invokePower(FireTruck truck);
+
+    public void setPosition(Vector2 position){
+        this.position = position;
+    }
+
 
 }

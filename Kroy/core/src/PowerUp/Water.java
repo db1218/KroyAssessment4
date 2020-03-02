@@ -5,6 +5,11 @@ import com.mozarellabytes.kroy.Entities.FireTruck;
 
 public class Water extends PowerUp {
 
+
+    public Water() {
+        super("water");
+    }
+
     public Water(Vector2 position) {
         super(position, "water");
     }

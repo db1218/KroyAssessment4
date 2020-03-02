@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.OrderedMap;
+import com.badlogic.gdx.utils.Timer;
 import com.mozarellabytes.kroy.Entities.*;
 import com.mozarellabytes.kroy.GUI.GUI;
 import com.mozarellabytes.kroy.GameState;
@@ -26,6 +27,7 @@ import com.mozarellabytes.kroy.Utilities.*;
 
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * The Screen that our game is played in.
@@ -33,6 +35,9 @@ import java.util.ArrayList;
  * clicks the Start button, and exits when
  * the player wins or loses the game
  */
+
+
+
 public class GameScreen implements Screen {
 
     /** Instance of our game that allows us the change screens */
@@ -114,12 +119,16 @@ public class GameScreen implements Screen {
 
     private boolean truckAttack;
 
+    private Timer powerupTimer;
+
     public PowerUp heart;
     public PowerUp shield;
     public PowerUp water;
     public PowerUp range;
 
     private ArrayList<PowerUp> powerUps;
+    private ArrayList<PowerUp> possiblePowerups;
+    private ArrayList<Vector2> powerupLocations;
 
     private FileHandle file;
 
@@ -216,17 +225,83 @@ public class GameScreen implements Screen {
         water = new Water(new Vector2(9,10));
         range = new Range(new Vector2(10,4));
 
+
         powerUps = new ArrayList<PowerUp>();
+        possiblePowerups = new ArrayList<PowerUp>();
 
-        powerUps.add(heart);
-        powerUps.add(shield);
-        powerUps.add(water);
-        powerUps.add(range);
+        possiblePowerups.add(new Heart());
+        possiblePowerups.add(new Shield());
+        possiblePowerups.add(new Water());
+        possiblePowerups.add(new Range());
 
-        for (PowerUp power : powerUps) power.update();
+        powerupLocations = new ArrayList<Vector2>();
+        populatePowerupLocations();
+
+
+        powerupTimer = new Timer();
+        powerupTimer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                generatePowerUp();
+            }
+        }, 2,4);
+
+
+       // for (PowerUp power : powerUps) power.update();
         file = Gdx.files.local("bin/save.json");
 
     }
+
+    private void populatePowerupLocations() {
+        powerupLocations.add(new Vector2(10,3));
+        powerupLocations.add(new Vector2(9,4));
+        powerupLocations.add(new Vector2(15,2));
+    }
+
+    private void generatePowerUp() {
+        if (powerUps.size() < 20){
+            Vector2 location = generateRandomLocation();
+            Random rand = new Random();
+            int index = rand.nextInt(possiblePowerups.size());
+            PowerUp powerup;
+            switch (index){
+                case 0 :
+                    powerup = new Heart(location);
+                    break;
+                case 1 :
+                    powerup = new Shield(location);
+                    break;
+                case 2:
+                    powerup = new Range(location);
+                    break;
+                case 3:
+                    powerup = new Water(location);
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + index);
+            }
+            powerup.setPosition(location);
+            powerup.update();
+            powerUps.add(powerup);
+        }
+    }
+
+    private Vector2 generateRandomLocation() {
+        Random rand = new Random();
+        int index = rand.nextInt(powerupLocations.size());
+        Vector2 location = powerupLocations.get(index);
+        checkIfPositionIsPopulated(location);
+        return new Vector2(location);
+    }
+
+    private void checkIfPositionIsPopulated(Vector2 location) {
+        for(PowerUp power: powerUps){
+            if (power.getPosition() == location) {
+                generateRandomLocation();
+            }
+        }
+    }
+
 
     @Override
     public void show() {
@@ -244,11 +319,6 @@ public class GameScreen implements Screen {
 
         mapBatch.begin();
 
-        for (PowerUp power : powerUps) {
-            if (power.getCanBeRendered()) {
-                power.render(mapBatch);
-            }
-        }
 
         for (FireTruck truck : station.getTrucks()) {
             truck.drawPath(mapBatch);
@@ -258,6 +328,14 @@ public class GameScreen implements Screen {
 
         if(!gameState.hasStationDestoyed()) {
             station.draw(mapBatch);
+        }
+
+        if (!powerUps.isEmpty()) {
+            for (PowerUp power : powerUps) {
+                if (power.getCanBeRendered()) {
+                    power.render(mapBatch);
+                }
+            }
         }
 
         for (Fortress fortress : this.fortresses) {
