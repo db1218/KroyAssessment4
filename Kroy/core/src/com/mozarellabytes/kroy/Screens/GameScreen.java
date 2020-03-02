@@ -310,7 +310,7 @@ public class GameScreen implements Screen {
                     patrol.drawStats(shapeMapRenderer);
                 }
             }
-            else{
+            else {
                 patrol.drawStats(shapeMapRenderer);
             }
         }
@@ -387,21 +387,24 @@ public class GameScreen implements Screen {
 
         gameState.setTrucksInAttackRange(0);
 
-        for (PowerUp power : powerUps) power.update();
+        ArrayList<PowerUp> powerUpsToRemove = new ArrayList<PowerUp>();
+
+        for (PowerUp power : powerUps) {
+            power.update();
+            if (power.getCanBeDestroyed()) powerUpsToRemove.add(power);
+        }
+
+        powerUps.removeAll(powerUpsToRemove);
 
         for (int i = 0; i < station.getTrucks().size(); i++) {
             FireTruck truck = station.getTruck(i);
 
-            ArrayList<PowerUp> powerUpsToRemove = new ArrayList<PowerUp>();
+            truck.move();
+            truck.updateSpray();
 
             for (PowerUp power : powerUps){
                 if (power.getPosition().equals(truck.getPosition())) power.invokePower(truck);
-                if (power.getCanBeDestroyed()) powerUpsToRemove.add(power);
             }
-            powerUps.removeAll(powerUpsToRemove);
-
-            truck.move();
-            truck.updateSpray();
 
             // manages attacks between trucks and fortresses
             for (Fortress fortress : this.fortresses) {
@@ -688,11 +691,12 @@ public class GameScreen implements Screen {
 
     private void generatePowerUp() {
         if (powerUps.size() <= 5){
-            ArrayList<PowerUp> pow = PowerUp.createNewPowers();
+            ArrayList<PowerUp> possiblePowerUp = PowerUp.createNewPowers();
             Random rand = new Random();
-            int index = rand.nextInt(pow.size());
-            PowerUp powerup = pow.get(index);
+            int index = rand.nextInt(possiblePowerUp.size());
+            PowerUp powerup = possiblePowerUp.get(index);
             powerup.update();
+            powerup.setActive();
             powerUps.add(powerup);
         }
     }

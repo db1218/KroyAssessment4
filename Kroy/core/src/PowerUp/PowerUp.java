@@ -21,6 +21,10 @@ public abstract class PowerUp {
     private float elapsedTime;
     private TextureRegion currentFrame;
 
+    private float timeOnScreen;
+
+    private boolean active;
+
     private ArrayList<Vector2> locations;
 
     boolean canBeRendered;
@@ -35,6 +39,8 @@ public abstract class PowerUp {
         this.locations = new ArrayList<>();
         populateLocations();
         this.position = generateRandomLocation();
+        this.active = false;
+        this.timeOnScreen = 5;
     }
 
     public void update() {
@@ -42,6 +48,7 @@ public abstract class PowerUp {
         elapsedTime += Gdx.graphics.getDeltaTime();
         // Get current frame of animation for the current stateTime
         currentFrame = animation.getKeyFrame(elapsedTime, true);
+        if (active) timeOnScreen();
     }
 
     public void render(Batch mapBatch) {
@@ -52,7 +59,7 @@ public abstract class PowerUp {
         // Need to make this the same as the timer
         shapeMapRenderer.rect(this.getPosition().x - 0.1f, this.getPosition().y + 1.4f, 1.2f, 0.55f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
         shapeMapRenderer.rect(this.getPosition().x, this.getPosition().y + 1.5f, 1f, 0.34f, Color.GOLDENROD, Color.GOLDENROD, Color.GOLDENROD, Color.GOLDENROD);
-        shapeMapRenderer.rect(this.getPosition().x, this.getPosition().y + 1.5f, 1f, 0.34f, Color.GOLD, Color.GOLD, Color.GOLD, Color.GOLD);
+        shapeMapRenderer.rect(this.getPosition().x, this.getPosition().y + 1.5f, timeOnScreen / 5, 0.34f, Color.GOLD, Color.GOLD, Color.GOLD, Color.GOLD);
     }
 
     public static ArrayList<PowerUp> createNewPowers(){
@@ -82,6 +89,13 @@ public abstract class PowerUp {
     void removePowerUp() {
         canBeRendered = false;
         canBeDestroyed = true;
+    }
+
+    public void setActive(){ active = true; }
+
+    public void timeOnScreen(){
+        timeOnScreen -= Gdx.graphics.getDeltaTime();
+        if (timeOnScreen <= 0) removePowerUp();
     }
 
     public void dispose() {
