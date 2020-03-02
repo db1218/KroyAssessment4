@@ -5,13 +5,7 @@ import com.mozarellabytes.kroy.Entities.FireTruck;
 
 public class Heart extends PowerUp {
 
-    public Heart(Vector2 position) {
-        super(position, "heart");
-    }
-
-    public Heart() {
-        super("heart");
-    }
+    public Heart() { super("heart"); }
 
     @Override
     public void invokePower(FireTruck truck) {

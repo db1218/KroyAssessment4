@@ -14,14 +14,11 @@ public class Range extends PowerUp {
 
     public Range() {
         super("shield");
-    }
-
-    public Range(Vector2 position) {
-        super(position, "shield");
         timeInRange = 10;
         elapsedTime = 0;
         rangeIncrease = 3;
     }
+
 
     @Override
     public void invokePower(FireTruck truck) {

@@ -27,6 +27,7 @@ import com.mozarellabytes.kroy.Utilities.*;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -120,15 +121,7 @@ public class GameScreen implements Screen {
     private boolean truckAttack;
 
     private Timer powerupTimer;
-
-    public PowerUp heart;
-    public PowerUp shield;
-    public PowerUp water;
-    public PowerUp range;
-
     private ArrayList<PowerUp> powerUps;
-    private ArrayList<PowerUp> possiblePowerups;
-    private ArrayList<Vector2> powerupLocations;
 
     private FileHandle file;
 
@@ -220,23 +213,7 @@ public class GameScreen implements Screen {
             SoundFX.sfx_soundtrack.play();
         }
 
-        heart = new Heart( new Vector2(13, 6));
-        shield = new Shield(new Vector2(10,3));
-        water = new Water(new Vector2(9,10));
-        range = new Range(new Vector2(10,4));
-
-
         powerUps = new ArrayList<PowerUp>();
-        possiblePowerups = new ArrayList<PowerUp>();
-
-        possiblePowerups.add(new Heart());
-        possiblePowerups.add(new Shield());
-        possiblePowerups.add(new Water());
-        possiblePowerups.add(new Range());
-
-        powerupLocations = new ArrayList<Vector2>();
-        populatePowerupLocations();
-
 
         powerupTimer = new Timer();
         powerupTimer.scheduleTask(new Timer.Task() {
@@ -250,56 +227,6 @@ public class GameScreen implements Screen {
        // for (PowerUp power : powerUps) power.update();
         file = Gdx.files.local("bin/save.json");
 
-    }
-
-    private void populatePowerupLocations() {
-        powerupLocations.add(new Vector2(10,3));
-        powerupLocations.add(new Vector2(9,4));
-        powerupLocations.add(new Vector2(15,2));
-    }
-
-    private void generatePowerUp() {
-        if (powerUps.size() < 20){
-            Vector2 location = generateRandomLocation();
-            Random rand = new Random();
-            int index = rand.nextInt(possiblePowerups.size());
-            PowerUp powerup;
-            switch (index){
-                case 0 :
-                    powerup = new Heart(location);
-                    break;
-                case 1 :
-                    powerup = new Shield(location);
-                    break;
-                case 2:
-                    powerup = new Range(location);
-                    break;
-                case 3:
-                    powerup = new Water(location);
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + index);
-            }
-            powerup.setPosition(location);
-            powerup.update();
-            powerUps.add(powerup);
-        }
-    }
-
-    private Vector2 generateRandomLocation() {
-        Random rand = new Random();
-        int index = rand.nextInt(powerupLocations.size());
-        Vector2 location = powerupLocations.get(index);
-        checkIfPositionIsPopulated(location);
-        return new Vector2(location);
-    }
-
-    private void checkIfPositionIsPopulated(Vector2 location) {
-        for(PowerUp power: powerUps){
-            if (power.getPosition() == location) {
-                generateRandomLocation();
-            }
-        }
     }
 
 
@@ -756,6 +683,18 @@ public class GameScreen implements Screen {
         truckAttack = !truckAttack;
         if (truckAttack && SoundFX.music_enabled && this.gameState.getTrucksInAttackRange() > 0) SoundFX.playTruckAttack();
         gui.updateAttackMode(truckAttack);
+    }
+
+
+    private void generatePowerUp() {
+        if (powerUps.size() <= 5){
+            ArrayList<PowerUp> pow = PowerUp.createNewPowers();
+            Random rand = new Random();
+            int index = rand.nextInt(pow.size());
+            PowerUp powerup = pow.get(index);
+            powerup.update();
+            powerUps.add(powerup);
+        }
     }
 
     /** The method for giving trucks that have the same end tiles adjacent end tiles

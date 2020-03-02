@@ -1,7 +1,6 @@
 package PowerUp;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 
 public class Shield extends PowerUp {
@@ -10,16 +9,12 @@ public class Shield extends PowerUp {
     float elapsedTime;
     FireTruck truck;
 
-
     public Shield() {
         super("shield");
-    }
-
-    public Shield(Vector2 position) {
-        super(position, "shield");
         timeInShield = 5;
         elapsedTime = 0;
     }
+
 
     @Override
     public void update() {
