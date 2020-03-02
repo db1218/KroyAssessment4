@@ -76,7 +76,8 @@ public class Kroy extends Game {
 		font50b = generator.generateFont(parameter);
 
 	//	this.setScreen(new SplashScreen(this));
-		this.setScreen(new GameScreen(this));
+//		this.setScreen(new GameScreen(this));
+		this.setScreen(new GameScreen(this, "save"));
 
 	}
 	//Kroy game, Screen previousScreen, FireTruck firetruck, Patrol patrol

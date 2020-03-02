@@ -4,8 +4,16 @@ public class Desc {
     public static class FireTruck {
         public String type;
         public int x, y;
-        public float health, water;
+        public float health, reserve;
     }
 
+    public static class FireStation {
+        public float x, y, health;
+    }
+
+    public static class Fortress {
+        public String type;
+        public float x, y, health;
+    }
 }
 

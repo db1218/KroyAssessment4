@@ -1,10 +1,7 @@
 package com.mozarellabytes.kroy.Screens;
 
-import PowerUp.Heart;
-import PowerUp.Shield;
-import PowerUp.Range;
-import PowerUp.Water;
-import PowerUp.PowerUp;
+import com.badlogic.gdx.utils.*;
+import com.mozarellabytes.kroy.PowerUp.PowerUp;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -15,10 +12,7 @@ import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter;
-import com.badlogic.gdx.utils.OrderedMap;
-import com.badlogic.gdx.utils.Timer;
+import com.mozarellabytes.kroy.Descriptors.Desc;
 import com.mozarellabytes.kroy.Entities.*;
 import com.mozarellabytes.kroy.GUI.GUI;
 import com.mozarellabytes.kroy.GameState;
@@ -27,7 +21,6 @@ import com.mozarellabytes.kroy.Utilities.*;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -36,35 +29,33 @@ import java.util.Random;
  * clicks the Start button, and exits when
  * the player wins or loses the game
  */
-
-
-
 public class GameScreen implements Screen {
 
     /** Instance of our game that allows us the change screens */
-    private final Kroy game;
+    private Kroy game;
 
     /** Renders our tiled map */
-    private final OrthogonalTiledMapRenderer mapRenderer;
+    private OrthogonalTiledMapRenderer mapRenderer;
 
     /** Camera to set the projection for the screen */
-    private final OrthographicCamera camera;
+    private OrthographicCamera camera;
 
     /** Renders shapes such as the health/reserve
      * stat bars above entities */
-    private final ShapeRenderer shapeMapRenderer;
+    private ShapeRenderer shapeMapRenderer;
 
     /** Stores the layers of our tiled map */
-    private final MapLayers mapLayers;
+    private MapLayers mapLayers;
 
     /** Stores the structures layers, stores the background layer */
-    private final int[] structureLayersIndices, backgroundLayerIndex;
+    private int[] structureLayersIndices;
+    private int[] backgroundLayerIndex;
 
     /** Batch that has dimensions in line with the 40x25 map */
-    private final Batch mapBatch;
+    private Batch mapBatch;
 
     /** Used for shaking the camera when a bomb hits a truck */
-    private final CameraShake camShake;
+    private CameraShake camShake;
 
     /** Stores whether the game is running or is paused */
     private PlayState state;
@@ -75,28 +66,28 @@ public class GameScreen implements Screen {
      * coordinates, e.g. big stat bars, buttons, pause
      * screen
      */
-    private final GUI gui;
+    private GUI gui;
 
     /**
      * Stores the progress through the game. It keeps
      * track of trucks/fortresses and will end the game
      * once an end game condition has been met
      */
-    public final GameState gameState;
+    public GameState gameState;
 
     /** List of Fortresses currently active on the map */
-    private final ArrayList<Fortress> fortresses;
+    private ArrayList<Fortress> fortresses;
 
     /**
      * List of patrols current active around the map
      */
-    private final ArrayList<Patrol> patrols;
+    private ArrayList<Patrol> patrols;
 
     /** List of VFX */
     private ArrayList<VFX> vfx;
 
     /** Where the FireEngines' spawn, refill and repair */
-    private final FireStation station;
+    private FireStation station;
 
     /** The FireTruck that the user is currently drawing a path for */
     public FireTruck selectedTruck;
@@ -131,16 +122,79 @@ public class GameScreen implements Screen {
         PLAY, PAUSE, FREEZE
     }
 
+    public GameScreen(Kroy game, String saveFile) {
+        setup(game);
+        Json json = new Json();
+        file = Gdx.files.local("bin/" + saveFile + ".json");
+        OrderedMap<String, Object> save = json.fromJson(OrderedMap.class, file.readString());
+        OrderedMap<String, Object> entities = (OrderedMap<String, Object>) save.get("Entities");
+
+        // fire station
+        Desc.FireStation fireStationDesc = (Desc.FireStation) entities.get("FireStation");
+        station = new FireStation(this, fireStationDesc.x, fireStationDesc.y, fireStationDesc.health);
+
+        // fire trucks
+        Array fireTruckArray = (Array) entities.get("FireTrucks");
+        for (int i=0; i<fireTruckArray.size; i++) {
+            Desc.FireTruck desc = json.fromJson(Desc.FireTruck.class, fireTruckArray.get(i).toString());
+            station.spawn(new FireTruck(this, desc.x, desc.y, desc.type, desc.health, desc.reserve));
+            gameState.addFireTruck();
+        }
+
+        // fortresses
+        Array fortressArray = (Array) entities.get("Fortresses");
+        for (int i=0; i<fortressArray.size; i++) {
+            Desc.Fortress desc = json.fromJson(Desc.Fortress.class, fortressArray.get(i).toString());
+            fortresses.add(new Fortress(desc.x, desc.y, desc.type, desc.health));
+        }
+
+
+    }
+
     /**
      * Constructor which has the game passed in
      *
      * @param game LibGdx game
      */
     public GameScreen(Kroy game) {
+        setup(game);
+
+        // Entity related stuff
+        station = new FireStation(this,2, 7, 100);
+
+        spawn(FireTruckType.Emerald);
+        spawn(FireTruckType.Amethyst);
+        spawn(FireTruckType.Sapphire);
+        spawn(FireTruckType.Ruby);
+
+        fortresses.add(new Fortress(12, 23.5f, FortressType.Revs));
+        fortresses.add(new Fortress(30.5f, 22.5f, FortressType.Walmgate));
+        fortresses.add(new Fortress(16.5f, 3.5f, FortressType.Railway));
+        fortresses.add(new Fortress(32f, 1.5f, FortressType.Clifford));
+        fortresses.add(new Fortress(41.95f, 23.5f, FortressType.Museum));
+        fortresses.add(new Fortress(44f, 11f, FortressType.CentralHall));
+
+        patrols.add(new Patrol(this,PatrolType.Blue));
+        patrols.add(new Patrol(this,PatrolType.Green));
+        patrols.add(new Patrol(this,PatrolType.Peach));
+        patrols.add(new Patrol(this,PatrolType.Violet));
+        patrols.add(new Patrol(this,PatrolType.Yellow));
+        patrols.add(new Patrol(this,PatrolType.Boss));
+
+        // sets the origin point to which all of the polygon's local vertices are relative to.
+        for (FireTruck truck : station.getTrucks()) {
+            truck.setOrigin(Constants.TILE_WxH / 2, Constants.TILE_WxH / 2);
+        }
+
+    }
+
+    private void setup(Kroy game) {
         this.game = game;
         fpsCounter = new FPSLogger();
 
         difficultyControl = new DifficultyControl();
+
+        file = Gdx.files.local("bin/save.json");
 
         state = PlayState.PLAY;
 
@@ -170,43 +224,13 @@ public class GameScreen implements Screen {
                 mapLayers.getIndex("structures3"),
                 mapLayers.getIndex("transparentStructures")};
 
-        station = new FireStation(2, 7, this);
-
-        spawn(FireTruckType.Emerald);
-        spawn(FireTruckType.Amethyst);
-        spawn(FireTruckType.Sapphire);
-        spawn(FireTruckType.Ruby);
+        mapBatch = mapRenderer.getBatch();
 
         vfx = new ArrayList<VFX>();
 
-        fortresses = new ArrayList<Fortress>();
-        fortresses.add(new Fortress(12, 23.5f, FortressType.Revs));
-        fortresses.add(new Fortress(30.5f, 22.5f, FortressType.Walmgate));
-        fortresses.add(new Fortress(16.5f, 3.5f, FortressType.Railway));
-        fortresses.add(new Fortress(32f, 1.5f, FortressType.Clifford));
-        fortresses.add(new Fortress(41.95f, 23.5f, FortressType.Museum));
-        fortresses.add(new Fortress(44f, 11f, FortressType.CentralHall));
-
-        patrols = new ArrayList<Patrol>();
-        patrols.add(new Patrol(this,PatrolType.Blue));
-        patrols.add(new Patrol(this,PatrolType.Green));
-        patrols.add(new Patrol(this,PatrolType.Peach));
-        patrols.add(new Patrol(this,PatrolType.Violet));
-        patrols.add(new Patrol(this,PatrolType.Yellow));
-        patrols.add(new Patrol(this,PatrolType.Boss));
-
-        deadEntities = new ArrayList<>(7);
-
-        // sets the origin point to which all of the polygon's local vertices are relative to.
-        for (FireTruck truck : station.getTrucks()) {
-            truck.setOrigin(Constants.TILE_WxH / 2, Constants.TILE_WxH / 2);
-        }
-
-        mapBatch = mapRenderer.getBatch();
-
         freezeCooldown = 0f;
         truckAttack = false;
-        gui.updateAttackMode(truckAttack);
+        gui.updateAttackMode(false);
 
         if (SoundFX.music_enabled) {
             SoundFX.sfx_soundtrack.setVolume(.5f);
@@ -224,11 +248,14 @@ public class GameScreen implements Screen {
         }, 2,4);
 
 
-       // for (PowerUp power : powerUps) power.update();
-        file = Gdx.files.local("bin/save.json");
+        // for (com.mozarellabytes.kroy.PowerUp power : powerUps) power.update();
+
+        // arrays to hold entities
+        fortresses = new ArrayList<Fortress>();
+        patrols = new ArrayList<Patrol>();
+        deadEntities = new ArrayList<>(7);
 
     }
-
 
     @Override
     public void show() {
@@ -688,7 +715,6 @@ public class GameScreen implements Screen {
         gui.updateAttackMode(truckAttack);
     }
 
-
     private void generatePowerUp() {
         if (powerUps.size() <= Constants.NUMBER_OF_POWERUPS){
             ArrayList<PowerUp> possiblePowerUp = PowerUp.createNewPowers();
@@ -740,13 +766,24 @@ public class GameScreen implements Screen {
      */
     public void saveGameState() {
         Json json = new Json(JsonWriter.OutputType.json);
-        OrderedMap<String, Object> map = new OrderedMap<>();
+
         OrderedMap<String, Object> entitiesMap = new OrderedMap<>();
+        entitiesMap.put("FireStation", this.station.getDescriptor());
         entitiesMap.put("FireTrucks", station.getFireTrucksDescriptor());
+        entitiesMap.put("Fortresses", this.getFortressesDescriptor());
+
+        OrderedMap<String, Object> map = new OrderedMap<>();
         map.put("Entities", entitiesMap);
+        map.put("Difficulty", difficultyControl);
         file.writeString(json.prettyPrint(map),false);
     }
 
-
+    private Desc.Fortress[] getFortressesDescriptor() {
+        Desc.Fortress[] fortresses = new Desc.Fortress[getFortresses().size()];
+        for (int i=0; i<fortresses.length; i++) {
+            fortresses[i] = getFortresses().get(i).getSave();
+        }
+        return fortresses;
+    }
 
 }

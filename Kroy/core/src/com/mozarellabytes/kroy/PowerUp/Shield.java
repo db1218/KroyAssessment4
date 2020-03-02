@@ -1,4 +1,4 @@
-package PowerUp;
+package com.mozarellabytes.kroy.PowerUp;
 
 import com.badlogic.gdx.Gdx;
 import com.mozarellabytes.kroy.Entities.FireTruck;

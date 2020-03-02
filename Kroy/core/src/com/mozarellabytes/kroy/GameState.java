@@ -53,10 +53,6 @@ public class GameState {
         this.activeFireTrucks--;
     }
 
-    public void removePatrol() {
-        this.activePatrols--;
-    }
-
     /** Adds one to fortressesDestroyed when a user has destroyed a
      * fortress */
     public void addFortress() {
