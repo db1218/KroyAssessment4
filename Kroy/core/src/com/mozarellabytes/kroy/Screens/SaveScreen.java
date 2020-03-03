@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -41,8 +42,6 @@ public class SaveScreen implements Screen {
     private final ShapeRenderer shapeRenderer;
     private final Stage stage;
 
-    // SGX UI skin created by Raymond "Raeleus" Buckley.
-
     // actors
     private final Label titleLabel;
     private final ImageButton closeButton;
@@ -66,11 +65,10 @@ public class SaveScreen implements Screen {
 
         // create widget groups
         Table mainTable = new Table(); // stores everything in
-        Table savesTable = new Table(); // shows the game saves
+        VerticalGroup savesTable = new VerticalGroup(); // shows the game saves
         ScrollPane savesScroll = new ScrollPane(savesTable); // shows the game saves
         Table selectedTable = new Table(); // displays the selected save for more information
         HorizontalGroup header = new HorizontalGroup();
-        Table body = new Table();
         HorizontalGroup footer = new HorizontalGroup();
 
         // create actors
@@ -85,12 +83,20 @@ public class SaveScreen implements Screen {
 
         titleLabel = new Label("Game Saves", new Label.LabelStyle(game.font60, Color.WHITE));
 
-        Label testLabel = new Label("Test", new Label.LabelStyle(game.font33, Color.WHITE));
         Label testLabel2 = new Label("Test 2", new Label.LabelStyle(game.font33, Color.WHITE));
 
         titleLabel.setAlignment(Align.left);
 
-        savesTable.add(testLabel);
+        for(FileHandle file : Gdx.files.internal("saves/").list()) {
+            SavedElement save = new SavedElement(file.nameWithoutExtension());
+            Table saveItemTable = new Table();
+            saveItemTable.row().expand();
+            saveItemTable.add(new ImageButton(closeImage)).colspan(1);
+            saveItemTable.add(new Label(file.name(), new Label.LabelStyle(game.font33, Color.WHITE))).colspan(2);
+            savesTable.addActor(saveItemTable);
+        }
+
+        savesTable.expand();
 
         selectedTable.add(testLabel2);
 

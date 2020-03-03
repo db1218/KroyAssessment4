@@ -55,7 +55,7 @@ public class FireStation {
      * @param x  x coordinate of Station in tiles (lower left point)
      * @param y  y coordinate of Station in tiles (lower left point)
      */
-    public FireStation(GameScreen gameScreen, float x, float y, float HP) {
+    public FireStation(float x, float y, float HP) {
         this.x = x;
         this.y = y;
         this.w = 6;
@@ -269,5 +269,11 @@ public class FireStation {
         desc.y = this.y;
         desc.health = y;
         return desc;
+    }
+
+    public void setGameScreen(GameScreen gameScreen) {
+        this.gameScreen = gameScreen;
+        for (FireTruck truck : this.trucks)
+            truck.setGameScreen(gameScreen);
     }
 }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
+import com.mozarellabytes.kroy.Descriptors.Desc;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
 
@@ -22,18 +23,14 @@ import java.util.ArrayList;
 
 public class Patrol extends Sprite {
 
-
-    /** Enables access to functions in GameScreen */
-    private final GameScreen gameScreen;
-
     /** Defines set of pre-defined attributes */
-    public final PatrolType type;
+    public PatrolType type;
 
     /**
      * path the patrol follows; the fewer item in
      * the path the slower the patrol will go
      */
-    private final Queue<Vector2> path;
+    private Queue<Vector2> path;
 
     /** Health points */
     private float HP;
@@ -49,26 +46,42 @@ public class Patrol extends Sprite {
 
     private Vector2 nextTile;
 
-
     /**
      * List of particles that the patrol uses to attack
      * a Fortress
      */
-    private final ArrayList<Particle> spray;
+    private ArrayList<Particle> spray;
 
     /**
-     * Constructs a new Patrol at a position and of a certain type
+     * Constructs a Patrol from save at a position and of a certain type
      * which have been passed in
      *
-     * @param gameScreen    used to access functions in GameScreen
      * @param type          used to have predefined attributes
      */
-    public Patrol(GameScreen gameScreen, PatrolType type) {
+    public Patrol(PatrolType type) {
         super(type.getTexture());
-        this.gameScreen = gameScreen;
         this.type = type;
         this.HP = type.getMaxHP();
         this.position = new Vector2(type.getPoint1().x + 1, type.getPoint1().y);
+        setup();
+    }
+
+    /**
+     * Constructs a Patrol from save at a position and of a certain type
+     * which have been passed in
+     *
+     * @param type          used to have predefined attributes
+     */
+    public Patrol(String type, float HP, float x, float y, float targetX, float targetY) {
+        super(PatrolType.valueOf(type).getTexture());
+        this.type = PatrolType.valueOf(type);
+        this.type.setTarget(new Vector2(targetX, targetY));
+        this.HP = HP;
+        this.position = new Vector2(x, y);
+        setup();
+    }
+
+    private void setup() {
         this.path = new Queue<>();
         this.spray = new ArrayList<Particle>();
         this.nextTile = position;
@@ -76,18 +89,19 @@ public class Patrol extends Sprite {
         definePath();
     }
 
-
     /**
      * Called every tick and updates the paths to simulate the patrol moving along the
      * path
      */
     public void definePath() {
-        addTileToPath(this.position,type.getPoint1());
+        addTileToPath(this.position, type.getPoint1());
 
         boolean fullCycle = false;
         int counter = 0;
 
-        while (!fullCycle){
+        System.out.println(position);
+
+        while (!fullCycle) {
             if (this.type.getTarget().x>this.position.x) nextTile.x = this.position.x+1;
             else if (this.type.getTarget().y>this.position.y) nextTile.y = this.position.y+1;
             else if (this.type.getTarget().x<this.position.x) nextTile.x = this.position.x-1;
@@ -115,7 +129,7 @@ public class Patrol extends Sprite {
         this.path.addLast(previousTile);
     }
 
-    public void move(){
+    public void move() {
         this.position = getFirstInQueue();
         updateQueue();
     }
@@ -207,4 +221,16 @@ public class Patrol extends Sprite {
     public Vector2 getPosition() {
         return this.position;
     }
+
+    public Desc.Patrol getSave() {
+        Desc.Patrol desc = new Desc.Patrol();
+        desc.type = this.type.name();
+        desc.health = this.getHP();
+        desc.x = (float) Math.floor(this.getPosition().x);
+        desc.y = (float) Math.floor(this.getPosition().y);
+        desc.targetX = (float) Math.floor(this.type.getTarget().x);
+        desc.targetY = (float) Math.floor(this.type.getTarget().y);
+        return desc;
+    }
+
 }

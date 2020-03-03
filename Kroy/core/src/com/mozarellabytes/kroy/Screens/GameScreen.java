@@ -122,33 +122,26 @@ public class GameScreen implements Screen {
         PLAY, PAUSE, FREEZE
     }
 
-    public GameScreen(Kroy game, String saveFile) {
+    public GameScreen(Kroy game, SavedElement save) {
         setup(game);
-        Json json = new Json();
-        file = Gdx.files.local("saves/" + saveFile + ".json");
-        OrderedMap<String, Object> save = json.fromJson(OrderedMap.class, file.readString());
-        OrderedMap<String, Object> entities = (OrderedMap<String, Object>) save.get("Entities");
 
-        // fire station
-        Desc.FireStation fireStationDesc = (Desc.FireStation) entities.get("FireStation");
-        station = new FireStation(this, fireStationDesc.x, fireStationDesc.y, fireStationDesc.health);
+        System.out.println("Hello");
 
-        // fire trucks
-        Array fireTruckArray = (Array) entities.get("FireTrucks");
-        for (int i=0; i<fireTruckArray.size; i++) {
-            Desc.FireTruck desc = json.fromJson(Desc.FireTruck.class, fireTruckArray.get(i).toString());
-            station.spawn(new FireTruck(this, desc.x, desc.y, desc.type, desc.health, desc.reserve, desc.rotation));
-            gameState.addFireTruck();
-        }
+        // fire station (including fire trucks)
+        station = save.getFireStation();
+        station.setGameScreen(this);
+
+        // game state
+        gameState = save.getGameState();
 
         // fortresses
-        Array fortressArray = (Array) entities.get("Fortresses");
-        for (int i=0; i<fortressArray.size; i++) {
-            Desc.Fortress desc = json.fromJson(Desc.Fortress.class, fortressArray.get(i).toString());
-            fortresses.add(new Fortress(desc.x, desc.y, desc.type, desc.health));
-        }
+        fortresses = save.getFortresses();
 
+        // difficulty control
+        difficultyControl = save.getDifficultyControl();
 
+        // patrols
+        patrols = save.getPatrols();
     }
 
     /**
@@ -160,7 +153,8 @@ public class GameScreen implements Screen {
         setup(game);
 
         // Entity related stuff
-        station = new FireStation(this,2, 7, 100);
+        station = new FireStation(2, 7, 100);
+        station.setGameScreen(this);
 
         spawn(FireTruckType.Emerald);
         spawn(FireTruckType.Amethyst);
@@ -174,25 +168,24 @@ public class GameScreen implements Screen {
         fortresses.add(new Fortress(41.95f, 23.5f, FortressType.Museum));
         fortresses.add(new Fortress(44f, 11f, FortressType.CentralHall));
 
-        patrols.add(new Patrol(this,PatrolType.Blue));
-        patrols.add(new Patrol(this,PatrolType.Green));
-        patrols.add(new Patrol(this,PatrolType.Peach));
-        patrols.add(new Patrol(this,PatrolType.Violet));
-        patrols.add(new Patrol(this,PatrolType.Yellow));
-        patrols.add(new Patrol(this,PatrolType.Boss));
+        patrols.add(new Patrol(PatrolType.Blue));
+        patrols.add(new Patrol(PatrolType.Green));
+        patrols.add(new Patrol(PatrolType.Peach));
+        patrols.add(new Patrol(PatrolType.Violet));
+        patrols.add(new Patrol(PatrolType.Yellow));
 
         // sets the origin point to which all of the polygon's local vertices are relative to.
         for (FireTruck truck : station.getTrucks()) {
             truck.setOrigin(Constants.TILE_WxH / 2, Constants.TILE_WxH / 2);
         }
 
+        difficultyControl = new DifficultyControl();
+
     }
 
     private void setup(Kroy game) {
         this.game = game;
         fpsCounter = new FPSLogger();
-
-        difficultyControl = new DifficultyControl();
 
         file = Gdx.files.local("saves/save.json");
 
@@ -306,14 +299,7 @@ public class GameScreen implements Screen {
 
         mapBatch.begin();
         for (Patrol patrol : this.patrols) {
-            if(patrol.getType().equals(PatrolType.Boss)){
-                if(gameState.firstFortressDestroyed()){
-                    patrol.drawSprite(mapBatch);
-                }
-            }
-            else{
-                patrol.drawSprite(mapBatch);
-            }
+            patrol.drawSprite(mapBatch);
         }
 
         for (VFX vfx : this.vfx) {
@@ -463,8 +449,6 @@ public class GameScreen implements Screen {
             }
         }
 
-
-
         if (station.getHP() <= 0) {
             if(!(gameState.hasStationDestoyed())){
                 gameState.setStationDestoyed();
@@ -475,37 +459,24 @@ public class GameScreen implements Screen {
         }
 
         for (int i=0;i<this.patrols.size();i++) {
-            Patrol patrol=this.patrols.get(i);
-
+            Patrol patrol = this.patrols.get(i);
             patrol.updateSpray();
-
-            if(patrol.getType().equals(PatrolType.Boss)){
-                if((gameState.firstFortressDestroyed())){
-                    if((patrol.getPosition().equals(PatrolType.Boss.getPoint4()))){
-                        patrol.attack(station);
-                    }
-                    else{
-                        patrol.move();
-                    }
+            if (patrol.getType().equals(PatrolType.Boss)) {
+                if((patrol.getPosition().equals(PatrolType.Boss.getPoint4()))){
+                    patrol.attack(station);
+                } else{
+                    patrol.move();
                 }
-                else{
-                    if(gameState.hasStationDestoyed()){
-                        patrols.remove(patrol);
-
-                        //patrol.move();
-                        /*if((patrol.getPosition().equals(PatrolType.Station.getPoint1()))){
-                            patrols.remove(patrol);
-                        }*/
-                    }
+                if(gameState.hasStationDestoyed()){
+                    patrols.remove(patrol);
                 }
-            }
-            else{
+            } else {
                 patrol.move();
             }
             if (patrol.getHP() <= 0) {
                 patrols.remove(patrol);
                 if((patrol.getType().equals(PatrolType.Boss))&&(!gameState.hasStationDestoyed())){
-                    patrols.add(new Patrol(this,PatrolType.Boss));
+                    patrols.add(new Patrol(PatrolType.Boss));
                 }
             }
         }
@@ -521,6 +492,8 @@ public class GameScreen implements Screen {
             // check if fortress is destroyed
             if (fortress.getHP() <= 0) {
                 gameState.addFortress();
+                if (gameState.firstFortressDestroyed())
+                    patrols.add(new Patrol(PatrolType.Boss));
                 deadEntities.add(fortress.createDestroyedFortress());
                 float x = fortress.getPosition().x;
                 float y = fortress.getPosition().y;
@@ -781,19 +754,29 @@ public class GameScreen implements Screen {
         entitiesMap.put("FireStation", this.station.getDescriptor());
         entitiesMap.put("FireTrucks", station.getFireTrucksDescriptor());
         entitiesMap.put("Fortresses", this.getFortressesDescriptor());
+        entitiesMap.put("Patrols", this.getPatrolsDescriptor());
 
         OrderedMap<String, Object> map = new OrderedMap<>();
         map.put("Entities", entitiesMap);
         map.put("Difficulty", difficultyControl);
+        map.put("GameState", gameState);
         file.writeString(json.prettyPrint(map),false);
     }
 
     private Desc.Fortress[] getFortressesDescriptor() {
-        Desc.Fortress[] fortresses = new Desc.Fortress[getFortresses().size()];
+        Desc.Fortress[] fortresses = new Desc.Fortress[this.fortresses.size()];
         for (int i=0; i<fortresses.length; i++) {
-            fortresses[i] = getFortresses().get(i).getSave();
+            fortresses[i] = this.fortresses.get(i).getSave();
         }
         return fortresses;
+    }
+
+    private Desc.Patrol[] getPatrolsDescriptor() {
+        Desc.Patrol[] patrols = new Desc.Patrol[this.patrols.size()];
+        for (int i=0; i<patrols.length; i++) {
+            patrols[i] = this.patrols.get(i).getSave();
+        }
+        return patrols;
     }
 
 }

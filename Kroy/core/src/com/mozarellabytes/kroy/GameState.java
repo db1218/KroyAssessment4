@@ -73,11 +73,7 @@ public class GameState {
     }
 
     public boolean firstFortressDestroyed() {
-        if ((fortressesDestroyed >= 1)&&(stationDestoyed==false)) {
-            return true;
-        } else{
-            return false;
-        }
+        return (fortressesDestroyed >= 1) && (!stationDestoyed);
     }
 
     /** Triggers the appropriate game over screen depending

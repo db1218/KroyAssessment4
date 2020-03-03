@@ -120,21 +120,20 @@ public class FireTruck extends Sprite {
 
     /**
      * Construct a FireTruck from a saved state
-     * @param gameScreen
      * @param x
      * @param y
      * @param typeString
      * @param HP
      * @param reserve
      */
-    public FireTruck(GameScreen gameScreen, float x, float y, String typeString, float HP, float reserve, String rotation) {
+    public FireTruck(float x, float y, String typeString, float HP, float reserve, String rotation) {
         super(FireTruckType.valueOf(typeString).getLookDown());
         this.type = FireTruckType.valueOf(typeString);
         this.HP = HP;
         this.reserve = reserve;
         this.position = new Vector2(x, y);
         this.rotation = rotation;
-        setup(gameScreen, rotation);
+        setup(null, rotation);
     }
 
     /**
@@ -155,7 +154,6 @@ public class FireTruck extends Sprite {
         this.inShield = false;
         this.AP = this.type.getAP();
         this.range = this.type.getRange();
-        System.out.println(rotation);
         this.setTexture(type.getLook(rotation));
     }
 
@@ -791,5 +789,9 @@ public class FireTruck extends Sprite {
 
     public void setLook(String rotation) {
 
+    }
+
+    public void setGameScreen(GameScreen gameScreen) {
+        this.gameScreen = gameScreen;
     }
 }
