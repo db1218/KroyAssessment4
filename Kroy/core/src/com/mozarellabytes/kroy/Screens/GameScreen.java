@@ -125,7 +125,7 @@ public class GameScreen implements Screen {
     public GameScreen(Kroy game, String saveFile) {
         setup(game);
         Json json = new Json();
-        file = Gdx.files.local("bin/" + saveFile + ".json");
+        file = Gdx.files.local("saves/" + saveFile + ".json");
         OrderedMap<String, Object> save = json.fromJson(OrderedMap.class, file.readString());
         OrderedMap<String, Object> entities = (OrderedMap<String, Object>) save.get("Entities");
 
@@ -194,7 +194,7 @@ public class GameScreen implements Screen {
 
         difficultyControl = new DifficultyControl();
 
-        file = Gdx.files.local("bin/save.json");
+        file = Gdx.files.local("saves/save.json");
 
         state = PlayState.PLAY;
 

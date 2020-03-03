@@ -26,9 +26,9 @@
 		{
 			"type": "Sapphire",
 			"rotation": "up",
-			"x": 6,
-			"y": 7,
-			"health": 120,
+			"x": 13,
+			"y": 11,
+			"health": 90,
 			"reserve": 250
 		},
 		{
@@ -81,6 +81,6 @@
 },
 "Difficulty": {
 	"class": "com.mozarellabytes.kroy.Utilities.DifficultyControl",
-	"currentTime": 14.848178
+	"currentTime": 53.591133
 }
 }
