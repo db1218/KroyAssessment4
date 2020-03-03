@@ -21,6 +21,9 @@ public abstract class PowerUp {
     private float elapsedTime;
     private TextureRegion currentFrame;
 
+    public ArrayList<PowerUp> currentPowerups;
+
+    private float timeLeftOnScreen;
     private float timeOnScreen;
 
     private ArrayList<Vector2> locations;
@@ -37,7 +40,8 @@ public abstract class PowerUp {
         this.locations = new ArrayList<>();
         populateLocations();
         this.position = generateRandomLocation();
-        this.timeOnScreen = 5;
+        this.timeOnScreen = 15;
+        this.timeLeftOnScreen = timeOnScreen;
     }
 
     public void update() {
@@ -53,8 +57,8 @@ public abstract class PowerUp {
     }
 
     private void updateTimeOnScreen(){
-        timeOnScreen -= Gdx.graphics.getDeltaTime();
-        if (timeOnScreen <= 0) removePowerUp();
+        timeLeftOnScreen -= Gdx.graphics.getDeltaTime();
+        if (timeLeftOnScreen <= 0) removePowerUp();
     }
 
     void removePowerUp() {
@@ -67,9 +71,11 @@ public abstract class PowerUp {
     }
 
     public void drawStats(ShapeRenderer shapeMapRenderer) {
-        shapeMapRenderer.rect(this.getPosition().x - 0.1f, this.getPosition().y + 1.4f, 1.2f, 0.55f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
-        shapeMapRenderer.rect(this.getPosition().x, this.getPosition().y + 1.5f, 1f, 0.34f, Color.GOLDENROD, Color.GOLDENROD, Color.GOLDENROD, Color.GOLDENROD);
-        shapeMapRenderer.rect(this.getPosition().x, this.getPosition().y + 1.5f, timeOnScreen / 5, 0.34f, Color.GOLD, Color.GOLD, Color.GOLD, Color.GOLD);
+        if (this.canBeRendered) {
+            shapeMapRenderer.rect(this.getPosition().x - 0.1f, this.getPosition().y + 1.4f, 1.2f, 0.55f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
+            shapeMapRenderer.rect(this.getPosition().x, this.getPosition().y + 1.5f, 1f, 0.34f, Color.GOLDENROD, Color.GOLDENROD, Color.GOLDENROD, Color.GOLDENROD);
+            shapeMapRenderer.rect(this.getPosition().x, this.getPosition().y + 1.5f, timeLeftOnScreen / timeOnScreen, 0.34f, Color.GOLD, Color.GOLD, Color.GOLD, Color.GOLD);
+        }
     }
 
     public static ArrayList<PowerUp> createNewPowers(){
@@ -81,17 +87,40 @@ public abstract class PowerUp {
         return possiblePowerups;
     }
 
+    // need to work out how to stop them from spawning in the same location
     private Vector2 generateRandomLocation() {
         Random rand = new Random();
         int index = rand.nextInt(locations.size());
         return locations.get(index);
     }
 
+    private boolean checkNotSameLocation(Vector2 vector2){
+        if(!(this.currentPowerups == null)) {
+            for (PowerUp power : this.currentPowerups) {
+                if (power.position == vector2) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 
     protected void populateLocations(){
-        locations.add(new Vector2(10,3));
-        locations.add(new Vector2(9,4));
-        locations.add(new Vector2(15,2));
+        locations.add(new Vector2(30,3));
+        locations.add(new Vector2(17,10));
+        locations.add(new Vector2(13,12));
+        locations.add(new Vector2(8,27));
+        locations.add(new Vector2(1,10));
+        locations.add(new Vector2(17,20));
+        locations.add(new Vector2(26,12));
+        locations.add(new Vector2(25,20));
+        locations.add(new Vector2(34,17));
+        locations.add(new Vector2(26,27));
+        locations.add(new Vector2(37,22));
+        locations.add(new Vector2(44,15));
+        locations.add(new Vector2(41,7));
+        locations.add(new Vector2(30,3));
     }
 
 

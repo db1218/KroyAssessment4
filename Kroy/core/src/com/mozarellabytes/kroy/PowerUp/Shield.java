@@ -1,7 +1,10 @@
 package com.mozarellabytes.kroy.PowerUp;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
+
+import java.util.ArrayList;
 
 public class Shield extends PowerUp {
 
@@ -21,6 +24,7 @@ public class Shield extends PowerUp {
         super.update();
         if (truck != null) {
             canBeRendered = false;
+            this.setPosition(new Vector2(0,0));
             elapsedTime += Gdx.graphics.getRawDeltaTime();
             checkIfFinishedShield();
         }

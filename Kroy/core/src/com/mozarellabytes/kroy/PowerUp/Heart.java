@@ -2,6 +2,8 @@ package com.mozarellabytes.kroy.PowerUp;
 
 import com.mozarellabytes.kroy.Entities.FireTruck;
 
+import java.util.ArrayList;
+
 public class Heart extends PowerUp {
 
     public Heart() { super("heart"); }

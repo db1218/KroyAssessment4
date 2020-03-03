@@ -2,6 +2,8 @@ package com.mozarellabytes.kroy.PowerUp;
 
 import com.mozarellabytes.kroy.Entities.FireTruck;
 
+import java.util.ArrayList;
+
 public class Water extends PowerUp {
 
     public Water() {
@@ -19,5 +21,6 @@ public class Water extends PowerUp {
         int currentReserve = (int) truck.getReserve();
         truck.refill(maxReserve - currentReserve);
     }
+
 
 }

@@ -245,7 +245,7 @@ public class GameScreen implements Screen {
             public void run() {
                 generatePowerUp();
             }
-        }, 2,4);
+        }, 1,1);
 
 
         // for (com.mozarellabytes.kroy.PowerUp power : powerUps) power.update();
@@ -430,7 +430,8 @@ public class GameScreen implements Screen {
             truck.updateSpray();
 
             for (PowerUp power : powerUps){
-                if (power.getPosition().equals(truck.getPosition())) power.invokePower(truck);
+                if (power.getPosition().equals(truck.getPosition()))
+                    power.invokePower(truck);
             }
 
             // manages attacks between trucks and fortresses
@@ -721,9 +722,18 @@ public class GameScreen implements Screen {
             Random rand = new Random();
             int index = rand.nextInt(possiblePowerUp.size());
             PowerUp powerup = possiblePowerUp.get(index);
-            powerup.update();
-            powerUps.add(powerup);
+            if (!checkIfPowerupInLocation(powerup)) {
+                powerup.update();
+                powerUps.add(powerup);
+            }
         }
+    }
+
+    private boolean checkIfPowerupInLocation(PowerUp powerUp){
+        for (PowerUp power : powerUps){
+            if (power.getPosition().equals(powerUp.getPosition())) return true;
+        }
+        return false;
     }
 
     /** The method for giving trucks that have the same end tiles adjacent end tiles

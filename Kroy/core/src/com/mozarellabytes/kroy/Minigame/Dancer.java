@@ -45,6 +45,7 @@ public class Dancer {
      */
     public boolean damage(int amount) {
         if (amount < 0) amount = 0;
+
         this.health -= amount;
         return this.health <= 0;
     }

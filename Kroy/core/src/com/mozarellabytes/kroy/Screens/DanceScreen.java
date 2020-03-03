@@ -239,7 +239,9 @@ public class DanceScreen implements Screen, BeatListener {
     @Override
     public void moveResult(DanceResult result) {
         if (result.equals(DanceResult.WRONG)){
-            this.firefighter.damage(20);
+            if (!this.firetruck.inShield()) {
+                this.firefighter.damage(20);
+            }
             this.ETDancer.startJive();
         }
     }

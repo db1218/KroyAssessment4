@@ -2,6 +2,9 @@ package com.mozarellabytes.kroy.PowerUp;
 
 import com.badlogic.gdx.Gdx;
 import com.mozarellabytes.kroy.Entities.FireTruck;
+import com.mozarellabytes.kroy.Screens.GameScreen;
+
+import java.util.ArrayList;
 
 public class Range extends PowerUp {
 
@@ -12,7 +15,7 @@ public class Range extends PowerUp {
 
 
     public Range() {
-        super("shield");
+        super("heart");
         timeInRange = 10;
         elapsedTime = 0;
         rangeIncrease = 3;
