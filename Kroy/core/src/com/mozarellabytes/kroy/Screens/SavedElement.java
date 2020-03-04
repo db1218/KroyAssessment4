@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class SavedElement {
 
     private String timestamp;
+    private String getEnTimestamp;
     private Texture screenshot;
     private Label title;
     private Label progressStats;
@@ -39,6 +40,8 @@ public class SavedElement {
         file = Gdx.files.local("saves/" + timestamp + "/data.json");
         data = json.fromJson(OrderedMap.class, file.readString());
         OrderedMap<String, Object> entities = (OrderedMap<String, Object>) data.get("Entities");
+
+        this.getEnTimestamp = (String) data.get("enTimestamp");
 
         // game state
         gameState = (GameState) data.get("GameState");
@@ -100,5 +103,9 @@ public class SavedElement {
 
     public String getTimestamp() {
         return this.timestamp;
+    }
+
+    public String getEnTimestamp() {
+        return this.getEnTimestamp;
     }
 }

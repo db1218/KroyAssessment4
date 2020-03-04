@@ -35,6 +35,19 @@ public class MenuScreen implements Screen {
      * startClickedTexture if the start button has been pressed */
     private Texture currentStartTexture;
 
+    /** Rectangle containing the position of the saves button */
+    private final Rectangle savesButton;
+
+    /** Texture of the saves button when it has not been clicked */
+    private final Texture savesIdleTexture;
+
+    /** Texture of the saves button when has been clicked */
+    private final Texture savesClickedTexture;
+
+    /** Contains the current state of the saves button:
+     * savesIdleTexture if the start button is not being pressed,
+     * savesClickedTexture if the start button has been pressed */
+    private Texture currentSavesTexture;
 
     /** Rectangle containing the position of the control button */
     private final Rectangle controlsButton;
@@ -84,6 +97,11 @@ public class MenuScreen implements Screen {
         startClickedTexture = new Texture(Gdx.files.internal("ui/start_clicked.png"), true);
         startClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
+        savesIdleTexture = new Texture(Gdx.files.internal("ui/controls_idle.png"), true);
+        savesIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        savesClickedTexture = new Texture(Gdx.files.internal("ui/controls_clicked.png"), true);
+        savesClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+
         controlsIdleTexture = new Texture(Gdx.files.internal("ui/controls_idle.png"), true);
         controlsIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
         controlsClickedTexture = new Texture(Gdx.files.internal("ui/controls_clicked.png"), true);
@@ -109,6 +127,7 @@ public class MenuScreen implements Screen {
         }
 
         currentStartTexture = startIdleTexture;
+        currentSavesTexture = savesIdleTexture;
         currentControlsTexture = controlsIdleTexture;
 
         startButton = new Rectangle();
@@ -117,11 +136,17 @@ public class MenuScreen implements Screen {
         startButton.x = (int) (camera.viewportWidth/2 - startButton.width/2);
         startButton.y = (int) ((camera.viewportHeight/2 - startButton.height/2) * 0.8);
 
+        savesButton = new Rectangle();
+        savesButton.width = (float) (currentSavesTexture.getWidth()*0.75);
+        savesButton.height = (float) (currentSavesTexture.getHeight()*0.75);
+        savesButton.x = (int) (camera.viewportWidth/2 - savesButton.width/2);
+        savesButton.y = (int) ((camera.viewportHeight/2 - savesButton.height/2) * 0.5);
+
         controlsButton = new Rectangle();
         controlsButton.width = (float) (currentControlsTexture.getWidth()*0.75);
         controlsButton.height = (float) (currentControlsTexture.getHeight()*0.75);
         controlsButton.x = (int) (camera.viewportWidth/2 - controlsButton.width/2);
-        controlsButton.y = (int) ((camera.viewportHeight/2 - controlsButton.height/2)*0.4);
+        controlsButton.y = (int) ((camera.viewportHeight/2 - controlsButton.height/2)*0.2);
 
         soundButton = new Rectangle();
         soundButton.width = 50;
@@ -154,6 +179,7 @@ public class MenuScreen implements Screen {
         game.batch.begin();
         game.batch.draw(backgroundImage, 0, 0, camera.viewportWidth, camera.viewportHeight);
         game.batch.draw(currentStartTexture, startButton.x, startButton.y, startButton.width, startButton.height);
+        game.batch.draw(currentSavesTexture, savesButton.x, savesButton.y, savesButton.width, savesButton.height);
         game.batch.draw(currentControlsTexture, controlsButton.x, controlsButton.y, controlsButton.width, controlsButton.height);
         game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
         game.batch.end();
@@ -220,6 +246,14 @@ public class MenuScreen implements Screen {
         currentControlsTexture = controlsClickedTexture;
     }
 
+    /** Changes the texture of the controls button when it has been clicked on */
+    public void clickedSavesButton() {
+        if (SoundFX.music_enabled){
+            SoundFX.sfx_button_clicked.play();
+        }
+        currentSavesTexture = savesClickedTexture;
+    }
+
     /** Changes the texture of the sound button when it has been clicked on */
     public void clickedSoundButton() {
         if (SoundFX.music_enabled){
@@ -252,6 +286,11 @@ public class MenuScreen implements Screen {
         currentControlsTexture = controlsIdleTexture;
     }
 
+    /** The texture of the saves button when it has not been clicked on */
+    public void idleSavesButton() {
+        currentSavesTexture = savesIdleTexture;
+    }
+
     /** The texture of the sound button when it has not been clicked on */
     public void idleSoundButton() {
         if (SoundFX.music_enabled){
@@ -262,11 +301,20 @@ public class MenuScreen implements Screen {
     }
 
     /** Changes the screen from the menu screen to the control screen */
-    public void toControlScreen(){ game.setScreen(new ControlsScreen(game, this, "menu")); }
+    public void toControlScreen() {
+        game.setScreen(new ControlsScreen(game, this, "menu"));
+    }
+
+    /** Changes the screen from the menu screen to the saves screen */
+    public void toSavesScreen() {
+        game.setScreen(new SaveScreen(game, this));
+    }
 
     public Rectangle getStartButton() { return startButton; }
 
     public Rectangle getControlsButton() { return controlsButton; }
 
     public Rectangle getSoundButton() {return soundButton; }
+
+    public Rectangle getSavesButton() {return savesButton; }
 }

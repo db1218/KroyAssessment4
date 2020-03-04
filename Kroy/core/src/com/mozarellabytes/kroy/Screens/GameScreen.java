@@ -144,8 +144,6 @@ public class GameScreen implements Screen {
 
         // patrols
         patrols = save.getPatrols();
-
-
     }
 
     /**
@@ -765,6 +763,7 @@ public class GameScreen implements Screen {
     public void saveGameState() {
         Json json = new Json(JsonWriter.OutputType.json);
         String timestamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
+        String enTimestamp = new SimpleDateFormat("dd MMM YYYY HH:mm:ss").format(new Date());
 
         OrderedMap<String, Object> entitiesMap = new OrderedMap<>();
         entitiesMap.put("FireStation", this.station.getDescriptor());
@@ -774,11 +773,10 @@ public class GameScreen implements Screen {
 
         OrderedMap<String, Object> map = new OrderedMap<>();
         map.put("Timestamp", timestamp);
+        map.put("enTimestamp", enTimestamp);
         map.put("Entities", entitiesMap);
         map.put("Difficulty", difficultyControl);
         map.put("GameState", gameState);
-
-
 
         file = Gdx.files.local("saves/" + timestamp + "/data.json");
         file.writeString(json.prettyPrint(map),false);

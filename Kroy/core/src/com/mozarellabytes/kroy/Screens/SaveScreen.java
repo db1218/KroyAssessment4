@@ -11,17 +11,23 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mozarellabytes.kroy.Kroy;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Screen to find all information about a Save and select
@@ -58,14 +64,14 @@ public class SaveScreen implements Screen {
 
         // create stage
         stage = new Stage(viewport, game.batch);
-        stage.setDebugAll(true);
+//        stage.setDebugAll(true);
         Gdx.input.setInputProcessor(stage);
 
         // create widget groups
         Table table = new Table(); // stores everything in
         VerticalGroup savesList = new VerticalGroup();
         ScrollPane savesScroll = new ScrollPane(savesList, new Skin(Gdx.files.internal("skin/uiskin.json"), new TextureAtlas("skin/uiskin.atlas"))); // shows the game saves
-        Table selectedTable = new Table(); // displays the selected save for more information
+        savesScroll.setScrollbarsVisible(true);
         HorizontalGroup header = new HorizontalGroup();
         HorizontalGroup footer = new HorizontalGroup();
 
@@ -83,16 +89,15 @@ public class SaveScreen implements Screen {
         titleLabel.setAlignment(Align.left);
 
         for(FileHandle file : Gdx.files.internal("saves/").list()) {
-
             SavedElement save = new SavedElement(file.nameWithoutExtension());
             Image screenshot = new Image(new Texture("saves/" + save.getTimestamp() + "/screenshot.png"));
-            screenshot.setSize(200, 100);
             Table saveItemTable = new Table();
             saveItemTable.row().padBottom(10).minHeight(150);
-            saveItemTable.add(screenshot);
+            saveItemTable.add(screenshot).size(Gdx.graphics.getWidth()/4f, Gdx.graphics.getHeight()/4f);
 
             VerticalGroup list = new VerticalGroup();
-            Label timestampLabel = new Label(save.getTimestamp(), new Label.LabelStyle(game.font33, Color.WHITE));
+            Label timestampLabel = new Label(save.getEnTimestamp(), new Label.LabelStyle(game.font26, Color.WHITE));
+            timestampLabel.setName("timestamp");
             timestampLabel.setAlignment(Align.right);
             Label fireTrucksAliveLabel = new Label("Fire Trucks alive: " + save.getFireTrucks().size(), new Label.LabelStyle(game.font19, Color.WHITE));
             fireTrucksAliveLabel.setAlignment(Align.right);
@@ -110,10 +115,15 @@ public class SaveScreen implements Screen {
 
             saveItemTable.add(list);
             savesList.addActor(saveItemTable);
-        }
+            saveItemTable.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    startGame(save);
+                }
 
-        Label testLabel2 = new Label("Test 2", new Label.LabelStyle(game.font33, Color.WHITE));
-        selectedTable.add(testLabel2);
+            });
+        }
 
         header.addActor(titleLabel);
         footer.addActor(closeButton);
@@ -125,12 +135,11 @@ public class SaveScreen implements Screen {
 
         // add header to table
         table.setFillParent(true);
-        table.add(header).expandX().pad(40).left().colspan(4);
+        table.add(header).expandX().pad(40).left();
         table.row().expand();
-        table.add(savesScroll).padLeft(40).colspan(1).expandY();
-        table.add(selectedTable).padRight(40).colspan(3);
+        table.add(savesScroll).padLeft(40).padRight(40).expandY();
         table.row();
-        table.add(footer).expandX().pad(40).right().colspan(4);
+        table.add(footer).expandX().pad(40).right();
 
 
         stage.addActor(table);
@@ -198,5 +207,9 @@ public class SaveScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    public void startGame(SavedElement save) {
+        game.setScreen(new GameScreen(game, save));
     }
 }
