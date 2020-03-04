@@ -108,6 +108,20 @@ public enum FireTruckType {
 
     public Texture getTrailImageEnd() { return this.trailImageEnd; }
 
+    public Texture getLook(String rotation) {
+        if (rotation == null) return getLookDown();
+        switch (rotation) {
+            case "right":
+                return getLookRight();
+            case "left":
+                return getLookLeft();
+            case "up":
+                return getLookUp();
+            default:
+                return getLookDown();
+        }
+    }
+
     public Texture getLookLeft() { return this.lookLeft; }
 
     public Texture getLookRight() { return this.lookRight; }

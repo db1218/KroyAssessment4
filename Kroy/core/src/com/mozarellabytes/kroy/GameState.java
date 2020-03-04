@@ -53,10 +53,6 @@ public class GameState {
         this.activeFireTrucks--;
     }
 
-    public void removePatrol() {
-        this.activePatrols--;
-    }
-
     /** Adds one to fortressesDestroyed when a user has destroyed a
      * fortress */
     public void addFortress() {
@@ -77,11 +73,7 @@ public class GameState {
     }
 
     public boolean firstFortressDestroyed() {
-        if ((fortressesDestroyed >= 1)&&(stationDestoyed==false)) {
-            return true;
-        } else{
-            return false;
-        }
+        return (fortressesDestroyed >= 1) && (!stationDestoyed);
     }
 
     /** Triggers the appropriate game over screen depending

@@ -23,23 +23,25 @@ import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 public class FireStation {
 
-    private final GameScreen gameScreen;
+    private GameScreen gameScreen;
 
     /**
      * Coordinates and dimensions of the FireStation in the game screen
      * in tiles
      */
-    private final int x, y, w, h;
+    private final float x, y;
+    private final int w, h;
 
     /** A tile inside the station where a truck can be repaired and refilled */
     private ArrayList<Vector2> bayTiles;
 
     /** The sprite image for the station */
-    private final Texture texture, deadTexture;
+    private Texture texture;
+    private Texture deadTexture;
 
     /** List of active fire trucks
      * @link FireTruck */
-    private final ArrayList<FireTruck> trucks;
+    private ArrayList<FireTruck> trucks;
 
     /**
      * Health of the fortress
@@ -53,18 +55,22 @@ public class FireStation {
      * @param x  x coordinate of Station in tiles (lower left point)
      * @param y  y coordinate of Station in tiles (lower left point)
      */
-    public FireStation(int x, int y, GameScreen gameScreen) {
-        this.gameScreen = gameScreen;
+    public FireStation(float x, float y, float HP) {
         this.x = x;
         this.y = y;
         this.w = 6;
         this.h = 3;
+        this.HP = HP;
+        setup(gameScreen);
+    }
+
+    private void setup(GameScreen gameScreen) {
+        this.gameScreen = gameScreen;
         bayTiles = new ArrayList<>();
         for (int i=0; i<4; i++) bayTiles.add(new Vector2(x + i + 1, y));
         this.texture = new Texture(Gdx.files.internal("sprites/station/extended_station.png"));
         this.deadTexture = new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_dead.png")); // change me pls
         this.trucks = new ArrayList<FireTruck>();
-        this.HP=100.0f;
     }
 
     /**
@@ -255,5 +261,19 @@ public class FireStation {
             fireTrucks[i] = this.getTruck(i).getSave();
         }
         return fireTrucks;
+    }
+
+    public Desc.FireStation getDescriptor() {
+        Desc.FireStation desc = new Desc.FireStation();
+        desc.x = this.x;
+        desc.y = this.y;
+        desc.health = y;
+        return desc;
+    }
+
+    public void setGameScreen(GameScreen gameScreen) {
+        this.gameScreen = gameScreen;
+        for (FireTruck truck : this.trucks)
+            truck.setGameScreen(gameScreen);
     }
 }

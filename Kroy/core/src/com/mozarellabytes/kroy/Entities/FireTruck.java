@@ -22,7 +22,7 @@ import java.util.*;
 public class FireTruck extends Sprite {
 
     /** Enables access to functions in GameScreen */
-    private final GameScreen gameScreen;
+    private GameScreen gameScreen;
 
     /** Defines set of pre-defined attributes */
     public final FireTruckType type;
@@ -41,13 +41,13 @@ public class FireTruck extends Sprite {
 
     /** Actual path the truck follows; the fewer item in
      * the path the slower the truck will go */
-    public final Queue<Vector2> path;
+    public Queue<Vector2> path;
 
     /** The visual path that users can see when drawing
      * a firetruck's path */
-    public final Queue<Vector2> pathSegment;
+    public Queue<Vector2> pathSegment;
 
-    public final Queue<Queue<Vector2>> pathSegments;
+    public Queue<Queue<Vector2>> pathSegments;
 
     public Stack<Queue<Vector2>> pathSegmentsStack;
 
@@ -73,7 +73,7 @@ public class FireTruck extends Sprite {
 
     /** List of particles that the truck uses to attack
      * a Fortress */
-    private final ArrayList<Particle> spray;
+    private ArrayList<Particle> spray;
 
     /** Whether the mouse has been dragged off a road tile */
     private boolean dragOffMap = false;
@@ -94,6 +94,12 @@ public class FireTruck extends Sprite {
     /** the shortest path between 2 points */
     LinkedList<Vector2> reconstructedPath;
 
+    private boolean inShield;
+
+    private float AP;
+    private float range;
+    private String rotation;
+
     /**
      * Constructs a new FireTruck at a position and of a certain type
      * which have been passed in
@@ -104,11 +110,39 @@ public class FireTruck extends Sprite {
      */
     public FireTruck(GameScreen gameScreen, Vector2 position, FireTruckType type) {
         super(type.getLookDown());
-        this.gameScreen = gameScreen;
         this.type = type;
         this.HP = type.getMaxHP();
         this.reserve = type.getMaxReserve();
         this.position = position;
+        this.rotation = "down";
+        setup(gameScreen, rotation);
+    }
+
+    /**
+     * Construct a FireTruck from a saved state
+     * @param x
+     * @param y
+     * @param typeString
+     * @param HP
+     * @param reserve
+     */
+    public FireTruck(float x, float y, String typeString, float HP, float reserve, String rotation) {
+        super(FireTruckType.valueOf(typeString).getLookDown());
+        this.type = FireTruckType.valueOf(typeString);
+        this.HP = HP;
+        this.reserve = reserve;
+        this.position = new Vector2(x, y);
+        this.rotation = rotation;
+        setup(null, rotation);
+    }
+
+    /**
+     * Initialise common objects independent on if a new FireTruck
+     * is being made, or loaded from a save state
+     * @param gameScreen
+     */
+    private void setup(GameScreen gameScreen, String rotation) {
+        this.gameScreen = gameScreen;
         this.path = new Queue<>();
         this.pathSegment = new Queue<>();
         this.pathSegments = new Queue<>();
@@ -117,6 +151,10 @@ public class FireTruck extends Sprite {
         this.inCollision = false;
         this.spray = new ArrayList<>();
         this.timeOfLastAttack = System.currentTimeMillis();
+        this.inShield = false;
+        this.AP = this.type.getAP();
+        this.range = this.type.getRange();
+        this.setTexture(type.getLook(rotation));
     }
 
     /**
@@ -434,12 +472,16 @@ public class FireTruck extends Sprite {
         if (previousTile != null) {
             if (nextTile.x > previousTile.x) {
                 setTexture(this.type.getLookRight());
+                rotation = "right";
             } else if (nextTile.x < previousTile.x) {
                 setTexture(this.type.getLookLeft());
+                rotation = "left";
             } else if (nextTile.y > previousTile.y) {
                 setTexture(this.type.getLookUp());
+                rotation = "up";
             } else if (nextTile.y < previousTile.y) {
                 setTexture(this.type.getLookDown());
+                rotation = "down";
             }
         }
     }
@@ -467,7 +509,7 @@ public class FireTruck extends Sprite {
     public void attack(Fortress fortress) {
         if (this.reserve > 0) {
             this.spray.add(new Particle(this.getVisualPosition(), fortress.getPosition(), fortress));
-            this.reserve -= Math.min(this.reserve, this.type.getAP());
+            this.reserve -= Math.min(this.reserve, this.AP);
         }
     }
 
@@ -480,7 +522,7 @@ public class FireTruck extends Sprite {
      *                  <code>false </code> otherwise
      */
     public boolean fortressInRange(Vector2 fortress) {
-        return this.getVisualPosition().dst(fortress) <= this.type.getRange();
+        return this.getVisualPosition().dst(fortress) <= this.getRange();
     }
 
     /**
@@ -515,7 +557,7 @@ public class FireTruck extends Sprite {
      */
     private void damage(Particle particle) {
         Fortress target = (Fortress)particle.getTarget();
-        target.damage(Math.min(this.type.getAP(), target.getHP()));
+        target.damage(Math.min(this.AP, target.getHP()));
     }
 
     /**
@@ -664,9 +706,7 @@ public class FireTruck extends Sprite {
         return this.moving;
     }
 
-    public  float getRange() {
-        return this.type.getRange();
-    }
+    public  float getRange() { return this.range; }
 
     /**
      * "Undo" a segment from the queue of segments that make up the
@@ -726,10 +766,32 @@ public class FireTruck extends Sprite {
         Desc.FireTruck desc = new Desc.FireTruck();
         desc.type = this.type.name();
         desc.health = this.getHP();
-        desc.water = this.getReserve();
+        desc.reserve = this.getReserve();
         desc.x = (int) Math.floor(this.getPosition().x);
-        desc.x = (int) Math.floor(this.getPosition().y);
+        desc.y = (int) Math.floor(this.getPosition().y);
+        desc.rotation = this.rotation;
         return desc;
     }
 
+    public boolean inShield() {
+        return this.inShield;
+    }
+
+    public void setShield(boolean b){
+        this.inShield = b;
+    }
+
+    public void setAP(float AP){ this.AP = AP; }
+
+    public float getAP() { return this.AP; }
+
+    public void setRange(float range) { this.range = range;}
+
+    public void setLook(String rotation) {
+
+    }
+
+    public void setGameScreen(GameScreen gameScreen) {
+        this.gameScreen = gameScreen;
+    }
 }

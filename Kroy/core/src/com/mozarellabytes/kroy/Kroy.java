@@ -40,7 +40,7 @@ public class Kroy extends Game {
 
 	@Override
 	public void create () {
-		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+//		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
@@ -75,8 +75,10 @@ public class Kroy extends Game {
 		parameter.size = 50;
 		font50b = generator.generateFont(parameter);
 
-	//	this.setScreen(new SplashScreen(this));
-		this.setScreen(new GameScreen(this));
+//		this.setScreen(new SplashScreen(this));
+//		this.setScreen(new GameScreen(this));
+		this.setScreen(new GameScreen(this, new SavedElement("save")));
+//		this.setScreen(new SaveScreen(thi®s, null));
 
 	}
 	//Kroy game, Screen previousScreen, FireTruck firetruck, Patrol patrol

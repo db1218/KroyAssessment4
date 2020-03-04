@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import com.mozarellabytes.kroy.Descriptors.Desc;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.ArrayList;
@@ -19,10 +20,10 @@ public class Fortress {
     private final Vector2 position;
 
     /*** Where the Fortress lies on the map */
-    private final Rectangle area;
+    private Rectangle area;
 
     /*** List of bombs that are active */
-    private final ArrayList<Bomb> bombs;
+    private ArrayList<Bomb> bombs;
 
     /*** Gives Fortress certain stats */
     private final FortressType fortressType;
@@ -36,9 +37,20 @@ public class Fortress {
      * @param type  Type of Fortress to give certain stats
      */
     public Fortress(float x, float y, FortressType type) {
-        this.fortressType = type;
         this.position = new Vector2(x, y);
+        this.fortressType = type;
         this.HP = type.getMaxHP();
+        setup();
+    }
+
+    public Fortress(float x, float y, String typeString, float HP) {
+        this.position = new Vector2(x, y);
+        this.fortressType = FortressType.valueOf(typeString);
+        this.HP = HP;
+        setup();
+    }
+
+    public void setup() {
         this.bombs = new ArrayList<Bomb>();
         this.area = new Rectangle(this.position.x - (float) this.fortressType.getW()/2, this.position.y - (float) this.fortressType.getH()/2,
                 this.fortressType.getW(), this.fortressType.getH());
@@ -160,4 +172,12 @@ public class Fortress {
         return this.fortressType.getRange();
     }
 
+    public Desc.Fortress getSave() {
+        Desc.Fortress desc = new Desc.Fortress();
+        desc.type = this.fortressType.name();
+        desc.health = this.getHP();
+        desc.x = this.getPosition().x;
+        desc.y = this.getPosition().y;
+        return desc;
+    }
 }

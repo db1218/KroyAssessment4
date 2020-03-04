@@ -1,0 +1,86 @@
+{
+"Entities": {
+	"class": "com.badlogic.gdx.utils.OrderedMap",
+	"FireStation": {
+		"class": "com.mozarellabytes.kroy.Descriptors.Desc$FireStation",
+		"x": 2,
+		"y": 7,
+		"health": 7
+	},
+	"FireTrucks": [
+		{
+			"type": "Emerald",
+			"x": 3,
+			"y": 7,
+			"health": 100,
+			"reserve": 120
+		},
+		{
+			"type": "Amethyst",
+			"rotation": "up",
+			"x": 4,
+			"y": 7,
+			"health": 230,
+			"reserve": 280
+		},
+		{
+			"type": "Sapphire",
+			"rotation": "up",
+			"x": 13,
+			"y": 11,
+			"health": 90,
+			"reserve": 250
+		},
+		{
+			"type": "Ruby",
+			"rotation": "up",
+			"x": 5,
+			"y": 7,
+			"health": 150,
+			"reserve": 100
+		}
+	],
+	"Fortresses": [
+		{
+			"type": "Revs",
+			"x": 12,
+			"y": 23.5,
+			"health": 57.359024
+		},
+		{
+			"type": "Walmgate",
+			"x": 30.5,
+			"y": 22.5,
+			"health": 173.43939
+		},
+		{
+			"type": "Railway",
+			"x": 16.5,
+			"y": 3.5,
+			"health": 148.00156
+		},
+		{
+			"type": "Clifford",
+			"x": 32,
+			"y": 1.5,
+			"health": 150
+		},
+		{
+			"type": "Museum",
+			"x": 41.95,
+			"y": 23.5,
+			"health": 180
+		},
+		{
+			"type": "CentralHall",
+			"x": 44,
+			"y": 11,
+			"health": 200
+		}
+	]
+},
+"Difficulty": {
+	"class": "com.mozarellabytes.kroy.Utilities.DifficultyControl",
+	"currentTime": 53.591133
+}
+}

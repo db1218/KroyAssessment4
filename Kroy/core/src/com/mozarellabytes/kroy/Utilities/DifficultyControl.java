@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 
 public class DifficultyControl {
     /** The value of the current difficulty level */
-    private Integer currentDifficulty;
+    private int currentDifficulty;
 
     /** The amount of time, in seconds, for the difficulty to increment by one */
     private float difficultyChangeInterval;
@@ -15,10 +15,16 @@ public class DifficultyControl {
 
     /** The constructor for DifficultyControl
      */
-    public DifficultyControl(){
-        currentDifficulty = 0;
+    public DifficultyControl(int currentDifficulty, float currentTime) {
+        this.currentDifficulty = currentDifficulty;
         difficultyChangeInterval = 60f;
-        currentTime = 60;
+        this.currentTime = currentTime;
+    }
+
+    public DifficultyControl() {
+        this.currentDifficulty = 0;
+        difficultyChangeInterval = 60f;
+        this.currentTime = 0;
     }
 
 
