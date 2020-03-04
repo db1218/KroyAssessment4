@@ -23,7 +23,8 @@ public class Desc {
 
     public static class Patrol {
         public String type;
-        public float x, y, health, targetX, targetY;
+        public float x, y, health;
+        public Queue<Vector2> path;
     }
 }
 

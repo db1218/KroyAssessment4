@@ -12,8 +12,8 @@ public class Shield extends PowerUp {
     float elapsedTime;
     FireTruck truck;
 
-    public Shield() {
-        super("shield");
+    public Shield(Vector2 location) {
+        super("shield", location);
         timeInShield = 5;
         elapsedTime = 0;
     }

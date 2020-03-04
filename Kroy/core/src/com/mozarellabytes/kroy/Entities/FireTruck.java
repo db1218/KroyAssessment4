@@ -791,6 +791,8 @@ public class FireTruck extends Sprite {
 
     }
 
+    public void makeFreezeAvailable() { gameScreen.setFreezeCooldown(0); }
+
     public void setGameScreen(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
     }

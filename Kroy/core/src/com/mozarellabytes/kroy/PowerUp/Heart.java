@@ -1,12 +1,13 @@
 package com.mozarellabytes.kroy.PowerUp;
 
+import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 
 import java.util.ArrayList;
 
 public class Heart extends PowerUp {
 
-    public Heart() { super("heart"); }
+    public Heart(Vector2 location) { super("heart", location); }
 
     @Override
     public void invokePower(FireTruck truck) {

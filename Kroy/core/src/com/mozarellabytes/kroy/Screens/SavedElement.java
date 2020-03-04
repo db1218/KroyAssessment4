@@ -34,9 +34,9 @@ public class SavedElement {
     private DifficultyControl difficultyControl;
 
     public SavedElement(String timestamp) {
-        this.timestamp = timestamp;
         Json json = new Json();
-        file = Gdx.files.local("saves/" + timestamp + ".json");
+        this.timestamp = timestamp;
+        file = Gdx.files.local("saves/" + timestamp + "/data.json");
         data = json.fromJson(OrderedMap.class, file.readString());
         OrderedMap<String, Object> entities = (OrderedMap<String, Object>) data.get("Entities");
 
@@ -67,22 +67,19 @@ public class SavedElement {
         Array patrolArray = (Array) entities.get("Patrols");
         for (int i=0; i<patrolArray.size; i++) {
             Desc.Patrol desc = json.fromJson(Desc.Patrol.class, patrolArray.get(i).toString());
-            patrols.add(new Patrol(desc.type, desc.health, desc.x, desc.y, desc.targetX, desc.targetY));
+            patrols.add(new Patrol(desc.type, desc.health, desc.x, desc.y, desc.path));
         }
-
-        System.out.println("hi2");
-
 
         difficultyControl = (DifficultyControl) data.get("Difficulty");
 
     }
 
-    public void getData() {
-
-    }
-
     public FireStation getFireStation() {
         return fireStation;
+    }
+
+    public ArrayList<FireTruck> getFireTrucks() {
+        return this.fireStation.getTrucks();
     }
 
     public ArrayList<Fortress> getFortresses() {
@@ -99,5 +96,9 @@ public class SavedElement {
 
     public ArrayList<Patrol> getPatrols() {
         return this.patrols;
+    }
+
+    public String getTimestamp() {
+        return this.timestamp;
     }
 }

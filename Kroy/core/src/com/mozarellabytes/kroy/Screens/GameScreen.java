@@ -20,8 +20,13 @@ import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.*;
 
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
+import java.util.zip.Deflater;
 
 /**
  * The Screen that our game is played in.
@@ -113,6 +118,7 @@ public class GameScreen implements Screen {
 
     private Timer powerupTimer;
     private ArrayList<PowerUp> powerUps;
+    private ArrayList<Vector2> powerUpLocations;
 
     private FileHandle file;
 
@@ -123,13 +129,11 @@ public class GameScreen implements Screen {
     }
 
     public GameScreen(Kroy game, SavedElement save) {
-        setup(game);
-
-        System.out.println("Hello");
-
         // fire station (including fire trucks)
         station = save.getFireStation();
         station.setGameScreen(this);
+
+        setup(game);
 
         // game state
         gameState = save.getGameState();
@@ -142,6 +146,8 @@ public class GameScreen implements Screen {
 
         // patrols
         patrols = save.getPatrols();
+
+
     }
 
     /**
@@ -150,11 +156,11 @@ public class GameScreen implements Screen {
      * @param game LibGdx game
      */
     public GameScreen(Kroy game) {
-        setup(game);
-
         // Entity related stuff
         station = new FireStation(2, 7, 100);
         station.setGameScreen(this);
+
+        setup(game);
 
         spawn(FireTruckType.Emerald);
         spawn(FireTruckType.Amethyst);
@@ -181,13 +187,12 @@ public class GameScreen implements Screen {
 
         difficultyControl = new DifficultyControl();
 
+
     }
 
     private void setup(Kroy game) {
         this.game = game;
         fpsCounter = new FPSLogger();
-
-        file = Gdx.files.local("saves/save.json");
 
         state = PlayState.PLAY;
 
@@ -236,12 +241,12 @@ public class GameScreen implements Screen {
         powerupTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
-                generatePowerUp();
+                canCreatePowerUp();
             }
         }, 1,1);
 
-
-        // for (com.mozarellabytes.kroy.PowerUp power : powerUps) power.update();
+        powerUpLocations = new ArrayList<>();
+        generatePowerUpLocations();
 
         // arrays to hold entities
         fortresses = new ArrayList<Fortress>();
@@ -318,17 +323,10 @@ public class GameScreen implements Screen {
         }
 
         for (Patrol patrol : this.patrols) {
-            if(patrol.getType().equals(PatrolType.Boss)){
-                if(gameState.firstFortressDestroyed()){
-                    patrol.drawStats(shapeMapRenderer);
-                }
-            }
-            else {
-                patrol.drawStats(shapeMapRenderer);
-            }
+            patrol.drawStats(shapeMapRenderer);
         }
 
-        if(station.getHP()>0){
+        if (station.getHP() > 0) {
             station.drawStats(shapeMapRenderer);
         }
 
@@ -435,43 +433,36 @@ public class GameScreen implements Screen {
             for (Patrol patrol : this.patrols) {
                 Vector2 patrolPos = new Vector2(Math.round(patrol.position.x), Math.round(patrol.position.y));
                 if (patrolPos.equals(truck.getTilePosition())) {
-                    doDanceOff(truck, patrol);
+//                    doDanceOff(truck, patrol);
                 }
             }
 
             // check if truck is destroyed
-            if (truck.getHP() <= 0) {
-                gameState.removeFireTruck();
-                station.destroyTruck(truck);
-                if (truck.equals(this.selectedTruck)) {
-                    this.selectedTruck = null;
-                }
-            }
+            checkIfTruckDestroyed(truck);
         }
 
         if (station.getHP() <= 0) {
             if(!(gameState.hasStationDestoyed())){
                 gameState.setStationDestoyed();
                 deadEntities.add(station.getDestroyedStation());
-
             }
             patrols.remove(PatrolType.Boss);
         }
 
         for (int i=0;i<this.patrols.size();i++) {
             Patrol patrol = this.patrols.get(i);
-            patrol.updateSpray();
+            patrol.updateBossSpray();
             if (patrol.getType().equals(PatrolType.Boss)) {
-                if((patrol.getPosition().equals(PatrolType.Boss.getPoint4()))){
+                if ((patrol.getDoublePosition().equals(PatrolType.Boss.getPoints().get(2)))){
                     patrol.attack(station);
                 } else{
-                    patrol.move();
+                    patrol.move(0.01);
                 }
                 if(gameState.hasStationDestoyed()){
                     patrols.remove(patrol);
                 }
             } else {
-                patrol.move();
+                patrol.move(0.05);
             }
             if (patrol.getHP() <= 0) {
                 patrols.remove(patrol);
@@ -520,6 +511,16 @@ public class GameScreen implements Screen {
         gui.updateDifficultyTime(difficultyControl.getTimeSinceLastDifficultyIncrease());
         gui.updateDifficultyMultiplier(difficultyControl.getDifficultyMultiplier());
         gui.updateFreezeCooldown(freezeCooldown);
+    }
+
+    void checkIfTruckDestroyed(FireTruck truck) {
+        if (truck.getHP() <= 0) {
+            gameState.removeFireTruck();
+            station.destroyTruck(truck);
+            if (truck.equals(this.selectedTruck)) {
+                this.selectedTruck = null;
+            }
+        }
     }
 
     @Override
@@ -644,7 +645,7 @@ public class GameScreen implements Screen {
      */
     public void doDanceOff(FireTruck firetruck, Patrol et) {
         SoundFX.stopMusic();
-        game.setScreen(new DanceScreen(game, this, firetruck, et));
+        game.setScreen(new DanceScreen(game, gameState,this, firetruck, et));
     }
 
     /**
@@ -689,22 +690,33 @@ public class GameScreen implements Screen {
         gui.updateAttackMode(truckAttack);
     }
 
-    private void generatePowerUp() {
-        if (powerUps.size() <= Constants.NUMBER_OF_POWERUPS){
-            ArrayList<PowerUp> possiblePowerUp = PowerUp.createNewPowers();
-            Random rand = new Random();
-            int index = rand.nextInt(possiblePowerUp.size());
-            PowerUp powerup = possiblePowerUp.get(index);
-            if (!checkIfPowerupInLocation(powerup)) {
-                powerup.update();
-                powerUps.add(powerup);
+    private void canCreatePowerUp() {
+        if (powerUps.size() < Constants.NUMBER_OF_POWERUPS) {
+            Vector2 powerupLocation = generateRandomLocation();
+            if (!checkIfPowerupInLocation(powerupLocation)) {
+                createPowerUp(powerupLocation);
             }
         }
     }
 
-    private boolean checkIfPowerupInLocation(PowerUp powerUp){
+    private Vector2 generateRandomLocation() {
+        Random rand = new Random();
+        int index = rand.nextInt(powerUpLocations.size());
+        return powerUpLocations.get(index);
+    }
+
+    private void createPowerUp(Vector2 location) {
+        ArrayList<PowerUp> possiblePowerUp = PowerUp.createNewPowers(location);
+        Random rand = new Random();
+        int index = rand.nextInt(possiblePowerUp.size());
+        PowerUp powerup = possiblePowerUp.get(index);
+        powerup.update();
+        powerUps.add(powerup);
+    }
+
+    private boolean checkIfPowerupInLocation(Vector2 newPowerUpLocation){
         for (PowerUp power : powerUps){
-            if (power.getPosition().equals(powerUp.getPosition())) return true;
+            if (power.getPosition().equals(newPowerUpLocation)) return true;
         }
         return false;
     }
@@ -744,11 +756,16 @@ public class GameScreen implements Screen {
         return this.selectedEntity;
     }
 
+    public void setFreezeCooldown(float time){
+        freezeCooldown = time;
+    }
+
     /**
      * Save the game to a JSON file which can then be resumed
      */
     public void saveGameState() {
         Json json = new Json(JsonWriter.OutputType.json);
+        String timestamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
 
         OrderedMap<String, Object> entitiesMap = new OrderedMap<>();
         entitiesMap.put("FireStation", this.station.getDescriptor());
@@ -757,10 +774,30 @@ public class GameScreen implements Screen {
         entitiesMap.put("Patrols", this.getPatrolsDescriptor());
 
         OrderedMap<String, Object> map = new OrderedMap<>();
+        map.put("Timestamp", timestamp);
         map.put("Entities", entitiesMap);
         map.put("Difficulty", difficultyControl);
         map.put("GameState", gameState);
+
+
+
+        file = Gdx.files.local("saves/" + timestamp + "/data.json");
         file.writeString(json.prettyPrint(map),false);
+
+        takeScreenshot(timestamp);
+    }
+
+    private void takeScreenshot(String filename) {
+        byte[] pixels = ScreenUtils.getFrameBufferPixels(0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), true);
+
+        // this loop makes sure the whole screenshot is opaque and looks exactly like what the user is seeing
+        for(int i = 4; i < pixels.length; i += 4)
+            pixels[i - 1] = (byte) 255;
+
+        Pixmap pixmap = new Pixmap(Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), Pixmap.Format.RGBA8888);
+        BufferUtils.copy(pixels, 0, pixmap.getPixels(), pixels.length);
+        PixmapIO.writePNG(Gdx.files.local("saves/" + filename + "/screenshot.png"), pixmap);
+        pixmap.dispose();
     }
 
     private Desc.Fortress[] getFortressesDescriptor() {
@@ -778,5 +815,19 @@ public class GameScreen implements Screen {
         }
         return patrols;
     }
+
+    private void generatePowerUpLocations() {
+        ArrayList<Vector2> bayTiles = station.getBayTiles();
+        for (int width = 0; width < Constants.TILE_WIDTH; width++){
+            for (int height = 0 ; height < Constants.TILE_HEIGHT; height++){
+                Vector2 tile = new Vector2(width, height);
+                if (isRoad(width, height) && !bayTiles.contains(tile)){
+                    powerUpLocations.add(tile);
+                }
+            }
+        }
+    }
+
+
 
 }
