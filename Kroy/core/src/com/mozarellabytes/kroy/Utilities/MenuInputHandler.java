@@ -38,6 +38,7 @@ public class MenuInputHandler implements InputProcessor {
             case Input.Keys.S:
                 menu.clickedSoundButton();
                 menu.changeSound();
+                break;
         }
         return true;
     }
