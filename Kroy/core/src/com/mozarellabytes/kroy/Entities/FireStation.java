@@ -284,4 +284,6 @@ public class FireStation {
         for (FireTruck truck : this.trucks)
             truck.setGameScreen(gameScreen);
     }
+
+    public ArrayList<Vector2> getBayTiles() { return this.bayTiles; }
 }

@@ -1,6 +1,7 @@
 package com.mozarellabytes.kroy.PowerUp;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
@@ -14,8 +15,8 @@ public class Range extends PowerUp {
     FireTruck truck;
 
 
-    public Range() {
-        super("heart");
+    public Range(Vector2 location) {
+        super("heart", location);
         timeInRange = 10;
         elapsedTime = 0;
         rangeIncrease = 3;

@@ -21,25 +21,19 @@ public abstract class PowerUp {
     private float elapsedTime;
     private TextureRegion currentFrame;
 
-    public ArrayList<PowerUp> currentPowerups;
-
     private float timeLeftOnScreen;
     private float timeOnScreen;
-
-    private ArrayList<Vector2> locations;
 
     boolean canBeRendered;
     boolean canBeDestroyed;
 
-    public PowerUp(String animationType){
+    public PowerUp(String animationType, Vector2 position){
         this.atlas = new TextureAtlas(Gdx.files.internal("sprites/powerups/powerup.atlas"));
         this.currentFrame = new TextureRegion();
         this.animation = new Animation<TextureRegion>(.032f, atlas.findRegions(animationType), Animation.PlayMode.LOOP);
         this.canBeRendered = true;
         this.canBeDestroyed = false;
-        this.locations = new ArrayList<>();
-        populateLocations();
-        this.position = generateRandomLocation();
+        this.position = position;
         this.timeOnScreen = 15;
         this.timeLeftOnScreen = timeOnScreen;
     }
@@ -78,38 +72,14 @@ public abstract class PowerUp {
         }
     }
 
-    public static ArrayList<PowerUp> createNewPowers(){
+    public static ArrayList<PowerUp> createNewPowers(Vector2 location){
         ArrayList<PowerUp> possiblePowerups = new ArrayList<PowerUp>();
-     //   possiblePowerups.add(new Heart());
-     //   possiblePowerups.add(new Shield());
-     //   possiblePowerups.add(new Water());
-     //   possiblePowerups.add(new Range());
-        possiblePowerups.add(new Freeze());
+        possiblePowerups.add(new Heart(location));
+        possiblePowerups.add(new Shield(location));
+        possiblePowerups.add(new Water(location));
+        possiblePowerups.add(new Range(location));
+        possiblePowerups.add(new Freeze(location));
         return possiblePowerups;
-    }
-
-    // need to work out how to stop them from spawning in the same location
-    private Vector2 generateRandomLocation() {
-        Random rand = new Random();
-        int index = rand.nextInt(locations.size());
-        return locations.get(index);
-    }
-
-    protected void populateLocations(){
-        locations.add(new Vector2(30,3));
-        locations.add(new Vector2(17,10));
-        locations.add(new Vector2(13,12));
-        locations.add(new Vector2(8,27));
-        locations.add(new Vector2(1,10));
-        locations.add(new Vector2(17,20));
-        locations.add(new Vector2(26,12));
-        locations.add(new Vector2(25,20));
-        locations.add(new Vector2(34,17));
-        locations.add(new Vector2(26,27));
-        locations.add(new Vector2(37,22));
-        locations.add(new Vector2(44,15));
-        locations.add(new Vector2(41,7));
-        locations.add(new Vector2(30,3));
     }
 
     public void dispose() { this.atlas.dispose(); }

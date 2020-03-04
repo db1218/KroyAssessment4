@@ -117,6 +117,7 @@ public class GameScreen implements Screen {
 
     private Timer powerupTimer;
     private ArrayList<PowerUp> powerUps;
+    private ArrayList<Vector2> powerUpLocations;
 
     private FileHandle file;
 
@@ -127,11 +128,11 @@ public class GameScreen implements Screen {
     }
 
     public GameScreen(Kroy game, SavedElement save) {
-        setup(game);
-
         // fire station (including fire trucks)
         station = save.getFireStation();
         station.setGameScreen(this);
+
+        setup(game);
 
         // game state
         gameState = save.getGameState();
@@ -144,6 +145,8 @@ public class GameScreen implements Screen {
 
         // patrols
         patrols = save.getPatrols();
+
+
     }
 
     /**
@@ -152,11 +155,11 @@ public class GameScreen implements Screen {
      * @param game LibGdx game
      */
     public GameScreen(Kroy game) {
-        setup(game);
-
         // Entity related stuff
         station = new FireStation(2, 7, 100);
         station.setGameScreen(this);
+
+        setup(game);
 
         spawn(FireTruckType.Emerald);
         spawn(FireTruckType.Amethyst);
@@ -182,6 +185,7 @@ public class GameScreen implements Screen {
         }
 
         difficultyControl = new DifficultyControl();
+
 
     }
 
@@ -236,12 +240,12 @@ public class GameScreen implements Screen {
         powerupTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
-                generatePowerUp();
+                canCreatePowerUp();
             }
         }, 1,1);
 
-
-        // for (com.mozarellabytes.kroy.PowerUp power : powerUps) power.update();
+        powerUpLocations = new ArrayList<>();
+        generatePowerUpLocations();
 
         // arrays to hold entities
         fortresses = new ArrayList<Fortress>();
@@ -681,22 +685,33 @@ public class GameScreen implements Screen {
         gui.updateAttackMode(truckAttack);
     }
 
-    private void generatePowerUp() {
-        if (powerUps.size() <= Constants.NUMBER_OF_POWERUPS){
-            ArrayList<PowerUp> possiblePowerUp = PowerUp.createNewPowers();
-            Random rand = new Random();
-            int index = rand.nextInt(possiblePowerUp.size());
-            PowerUp powerup = possiblePowerUp.get(index);
-            if (!checkIfPowerupInLocation(powerup)) {
-                powerup.update();
-                powerUps.add(powerup);
+    private void canCreatePowerUp() {
+        if (powerUps.size() < Constants.NUMBER_OF_POWERUPS) {
+            Vector2 powerupLocation = generateRandomLocation();
+            if (!checkIfPowerupInLocation(powerupLocation)) {
+                createPowerUp(powerupLocation);
             }
         }
     }
 
-    private boolean checkIfPowerupInLocation(PowerUp powerUp){
+    private Vector2 generateRandomLocation() {
+        Random rand = new Random();
+        int index = rand.nextInt(powerUpLocations.size());
+        return powerUpLocations.get(index);
+    }
+
+    private void createPowerUp(Vector2 location) {
+        ArrayList<PowerUp> possiblePowerUp = PowerUp.createNewPowers(location);
+        Random rand = new Random();
+        int index = rand.nextInt(possiblePowerUp.size());
+        PowerUp powerup = possiblePowerUp.get(index);
+        powerup.update();
+        powerUps.add(powerup);
+    }
+
+    private boolean checkIfPowerupInLocation(Vector2 newPowerUpLocation){
         for (PowerUp power : powerUps){
-            if (power.getPosition().equals(powerUp.getPosition())) return true;
+            if (power.getPosition().equals(newPowerUpLocation)) return true;
         }
         return false;
     }
@@ -777,5 +792,19 @@ public class GameScreen implements Screen {
         }
         return patrols;
     }
+
+    private void generatePowerUpLocations() {
+        ArrayList<Vector2> bayTiles = station.getBayTiles();
+        for (int width = 0; width < Constants.TILE_WIDTH; width++){
+            for (int height = 0 ; height < Constants.TILE_HEIGHT; height++){
+                Vector2 tile = new Vector2(width, height);
+                if (isRoad(width, height) && !bayTiles.contains(tile)){
+                    powerUpLocations.add(tile);
+                }
+            }
+        }
+    }
+
+
 
 }
