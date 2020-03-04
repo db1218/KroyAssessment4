@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.3.0" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="20" height="12" tilewidth="48" tileheight="48" infinite="0" nextlayerid="9" nextobjectid="1">
+ <tileset firstgid="1" name="coppacar_ts1" tilewidth="48" tileheight="48" tilecount="168" columns="8">
+  <image source="ccc_tileset.png" width="385" height="1008"/>
+  <tile id="62">
+   <animation>
+    <frame tileid="62" duration="300"/>
+    <frame tileid="54" duration="300"/>
+   </animation>
+  </tile>
+  <tile id="70">
+   <animation>
+    <frame tileid="70" duration="100"/>
+    <frame tileid="71" duration="100"/>
+   </animation>
+  </tile>
+  <tile id="142">
+   <animation>
+    <frame tileid="142" duration="100"/>
+    <frame tileid="143" duration="100"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="169" name="collision set" tilewidth="48" tileheight="48" tilecount="100" columns="10">
+  <image source="collision_objects.png" width="480" height="480"/>
+  <tile id="0">
+   <properties>
+    <property name="road" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="road" type="bool" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="269" source="extras.tsx"/>
+ <layer id="1" name="background" width="20" height="12">
+  <data encoding="base64" compression="zlib">
+   eAGVksGNAkEMBAdOhwQiApK5DWVDIQl+PCa0DYWuORcarfjwsNr22N3thVtr7feLOGf2NMWn3Uvej631azDzA6nJ7Vsfanb/Fo6Ozu2fo6GD9nOq1aavpzmnZx29wcFOfK3lY5NXLjDaa+LOPrPhePtOvVAHx64aj8yqIcLFO0jPWbDyxdwdavL5Tvyk1/Ekp3d5S3ka3pjVH/PM4u8nQU2uXzC8xFaexps6onr6k4NaTryUj8G1n0XfeW6s9+5/IPvc3uGoe7c1vVmbXE/yweN3UPOv9kB6oKE2tTkz4V5AOUC0+P54isYCzh73fW/Z9/2+csI7B7+3tR78D3zaceYFNBs1Dg==
+  </data>
+ </layer>
+ <layer id="3" name="structures" width="20" height="12">
+  <data encoding="base64" compression="zlib">
+   eAGNk71KQ0EQRm+nnRFTaGIRjU38ARNQULAwnaKCTyFoJahgoYigTewUS58lj+Y5ZgeX9Sp+cO7szOzMLrNJr/rWIC03sa734CSxhl0HFbE62yK/Cj0YwQsswzXcwDuUilhY89bMgn28yzG8whvY/w7u4QPU6cR8fSMW9paoNQtgn1L2f4LnMpF860Pexx7WLMFuoo8t5Zl1sjZkr/zuh/j7sAP23oAjUHndJPLzm888sgcs7DuELdiGXOc4F+B5oauqerjEyWceOW30/GtuzrvUFIHpMpj5vvt/9Jg2zWAbYB3zGc+neJgzFs5YK3PQBKWv/B2HfFPl23n/DoTq7tYmuRgbfrFD4hK9Y5tnlOoSWCmD+Pl/Lfq57RMlBCQ3
+  </data>
+ </layer>
+ <layer id="4" name="structures2" width="20" height="12">
+  <data encoding="base64" compression="zlib">
+   eAGVkjdLREEUhecPaGEqxEYxYCxctDEUKiyuIliaChPmwgBiABELC20MqJXa+Tf9jnsPDssWeuHbc+55s483dyallHqhD1T2XeU2jYdaSpgZmIUneIYHeIT/VPcfFherrClEtoyuQAd0wgIswhL0wClUq/mKcIR+FDZgE/phAFZhDdZBe74CV7MN2hDe3zpJPwX7cABDMAz59+3Q34LKs3vFv0GLwqw06zu4j0z/1Znk3+fnZ7HGohm0R/PiEPW5ZVFqo/HM/Pya7CRbpL34nrxneV3mZf2uL/wu7ME5XMAlfMAnjIFrO4xU85U603kq0/uO4Bh0f25CkZ/K79RWZPWoz0hREQah8h606mHUnE0VrSGrjVz7VHn+5S6lQpgJVKi8h3L3+9uIbYpWa1Sef7lLyXd0mqAE3tMh/htusy23
+  </data>
+ </layer>
+ <layer id="8" name="transparentStructures" width="20" height="12">
+  <data encoding="base64" compression="zlib">
+   eAFjYBgFoyEwGgJDNQQAA8AAAQ==
+  </data>
+ </layer>
+ <layer id="7" name="structures3" width="20" height="12">
+  <data encoding="base64" compression="zlib">
+   eAFjYBgFoyEwGgJDNQQAA8AAAQ==
+  </data>
+ </layer>
+ <layer id="6" name="collisions" width="20" height="12">
+  <data encoding="base64" compression="zlib">
+   eAGtjwEKgDAMA/3/U3ylBDmIIcVNLIx27aXZjmMvzgVczB8HKzwz51x3mJx5XzVn0sDDeU6NsznTXZGM96baNfiLVbQZDPkmnyy9tsN7zmUf78ZM3o1lL5qWYdC791vtc/Rf97W37fb8Dav19Af0F/eYR7k=
+  </data>
+ </layer>
+</map>

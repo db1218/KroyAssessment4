@@ -131,7 +131,7 @@ public class GameScreen implements Screen {
         station = save.getFireStation();
         station.setGameScreen(this);
 
-        setup(game, DifficultyLevel.Easy);
+        setup(game, DifficultyLevel.Medium);
 
         // game state
         gameState = save.getGameState();
@@ -195,7 +195,7 @@ public class GameScreen implements Screen {
         state = PlayState.PLAY;
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
+        camera.setToOrtho(false, level.getWidth(), level.getHeight());
 
         TiledMap map = level.getMap();
         mapRenderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.TILE_WxH);
@@ -244,7 +244,7 @@ public class GameScreen implements Screen {
         }, 1,1);
 
         powerUpLocations = new ArrayList<>();
-        generatePowerUpLocations();
+        generatePowerUpLocations(level);
 
         // arrays to hold entities
         fortresses = new ArrayList<Fortress>();
@@ -618,7 +618,8 @@ public class GameScreen implements Screen {
      *          <code>false</code> otherwise
      */
     public boolean isRoad(int x, int y) {
-        return ((TiledMapTileLayer) mapLayers.get("collisions")).getCell(x, y).getTile().getProperties().get("road").equals(true);
+        System.out.println(x + ", " +  y);
+        return ((TiledMapTileLayer) mapLayers.get("collisions")).getCell(x, y) != null;
     }
 
     /**
@@ -814,10 +815,10 @@ public class GameScreen implements Screen {
         return patrols;
     }
 
-    private void generatePowerUpLocations() {
+    private void generatePowerUpLocations(DifficultyLevel level) {
         ArrayList<Vector2> bayTiles = station.getBayTiles();
-        for (int width = 0; width < Constants.TILE_WIDTH; width++){
-            for (int height = 0 ; height < Constants.TILE_HEIGHT; height++){
+        for (int width = 0; width < level.getWidth(); width++){
+            for (int height = 0 ; height < level.getHeight(); height++){
                 Vector2 tile = new Vector2(width, height);
                 if (isRoad(width, height) && !bayTiles.contains(tile)){
                     powerUpLocations.add(tile);
