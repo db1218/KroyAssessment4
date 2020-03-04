@@ -77,8 +77,8 @@ public class Kroy extends Game {
 
 //		this.setScreen(new SplashScreen(this));
 //		this.setScreen(new GameScreen(this));
-		this.setScreen(new GameScreen(this, new SavedElement("save")));
-//		this.setScreen(new SaveScreen(this, null));
+//		this.setScreen(new GameScreen(this, new SavedElement("2020-03-04-01-01-00")));
+		this.setScreen(new SaveScreen(this, null));
 
 	}
 	//Kroy game, Screen previousScreen, FireTruck firetruck, Patrol patrol

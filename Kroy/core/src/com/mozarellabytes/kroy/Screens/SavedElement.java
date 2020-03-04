@@ -34,8 +34,8 @@ public class SavedElement {
     private DifficultyControl difficultyControl;
 
     public SavedElement(String timestamp) {
-        this.timestamp = timestamp;
         Json json = new Json();
+        this.timestamp = timestamp;
         file = Gdx.files.local("saves/" + timestamp + ".json");
         data = json.fromJson(OrderedMap.class, file.readString());
         OrderedMap<String, Object> entities = (OrderedMap<String, Object>) data.get("Entities");
@@ -74,12 +74,12 @@ public class SavedElement {
 
     }
 
-    public void getData() {
-
-    }
-
     public FireStation getFireStation() {
         return fireStation;
+    }
+
+    public ArrayList<FireTruck> getFireTrucks() {
+        return this.fireStation.getTrucks();
     }
 
     public ArrayList<Fortress> getFortresses() {
@@ -96,5 +96,9 @@ public class SavedElement {
 
     public ArrayList<Patrol> getPatrols() {
         return this.patrols;
+    }
+
+    public String getTimestamp() {
+        return this.timestamp;
     }
 }

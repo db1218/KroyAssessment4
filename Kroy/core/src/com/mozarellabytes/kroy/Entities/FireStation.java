@@ -275,6 +275,10 @@ public class FireStation {
         return desc;
     }
 
+    public boolean isAlive() {
+        return HP > 0;
+    }
+
     public void setGameScreen(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
         for (FireTruck truck : this.trucks)

@@ -20,7 +20,11 @@ import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.*;
 
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -184,8 +188,6 @@ public class GameScreen implements Screen {
     private void setup(Kroy game) {
         this.game = game;
         fpsCounter = new FPSLogger();
-
-        file = Gdx.files.local("saves/save.json");
 
         state = PlayState.PLAY;
 
@@ -739,6 +741,7 @@ public class GameScreen implements Screen {
      */
     public void saveGameState() {
         Json json = new Json(JsonWriter.OutputType.json);
+        String timestamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
 
         OrderedMap<String, Object> entitiesMap = new OrderedMap<>();
         entitiesMap.put("FireStation", this.station.getDescriptor());
@@ -747,9 +750,11 @@ public class GameScreen implements Screen {
         entitiesMap.put("Patrols", this.getPatrolsDescriptor());
 
         OrderedMap<String, Object> map = new OrderedMap<>();
+        map.put("Timestamp", timestamp);
         map.put("Entities", entitiesMap);
         map.put("Difficulty", difficultyControl);
         map.put("GameState", gameState);
+        file = Gdx.files.local("saves/" + timestamp + ".json");
         file.writeString(json.prettyPrint(map),false);
     }
 
