@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.mozarellabytes.kroy.Kroy;
+import com.mozarellabytes.kroy.Utilities.DifficultyLevel;
 import com.mozarellabytes.kroy.Utilities.DifficultyScreenInputHandler;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
@@ -218,7 +219,7 @@ public class DifficultyScreen implements Screen {
         SoundFX.sfx_menu.stop();
     }
 
-    public void toGameScreen() { game.setScreen(new GameScreen(game)); }
+    public void toGameScreen(DifficultyLevel level) { game.setScreen(new GameScreen(game, level)); }
 
 
     /** Changes the texture of the start button when it has been clicked on */

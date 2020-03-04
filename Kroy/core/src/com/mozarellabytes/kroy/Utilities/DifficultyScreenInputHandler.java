@@ -61,11 +61,11 @@ public class DifficultyScreenInputHandler implements InputProcessor {
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
         Vector3 position = difficultyScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
         if (difficultyScreen.getEasyButton().contains(position.x, position.y)) {
-           difficultyScreen.toGameScreen();
+           difficultyScreen.toGameScreen(DifficultyLevel.Easy);
         } else if (difficultyScreen.getMediumButton().contains(position.x, position.y)) {
-            difficultyScreen.toGameScreen();
+            difficultyScreen.toGameScreen(DifficultyLevel.Medium);
         } else if (difficultyScreen.getHardButton().contains(position.x, position.y)){
-            difficultyScreen.toGameScreen();
+            difficultyScreen.toGameScreen(DifficultyLevel.Medium);
         } else if (difficultyScreen.getSoundButton().contains(position.x, position.y)){
             difficultyScreen.changeSound();
         } else {

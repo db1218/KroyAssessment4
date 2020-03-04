@@ -131,7 +131,7 @@ public class GameScreen implements Screen {
         station = save.getFireStation();
         station.setGameScreen(this);
 
-        setup(game);
+        setup(game, DifficultyLevel.Easy);
 
         // game state
         gameState = save.getGameState();
@@ -153,12 +153,12 @@ public class GameScreen implements Screen {
      *
      * @param game LibGdx game
      */
-    public GameScreen(Kroy game) {
+    public GameScreen(Kroy game, DifficultyLevel level) {
         // Entity related stuff
         station = new FireStation(2, 7, 100);
         station.setGameScreen(this);
 
-        setup(game);
+        setup(game, level);
 
         spawn(FireTruckType.Emerald);
         spawn(FireTruckType.Amethyst);
@@ -188,7 +188,7 @@ public class GameScreen implements Screen {
 
     }
 
-    private void setup(Kroy game) {
+    private void setup(Kroy game, DifficultyLevel level) {
         this.game = game;
         fpsCounter = new FPSLogger();
 
@@ -197,7 +197,7 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
 
-        TiledMap map = new TmxMapLoader().load("maps/YorkMap.tmx");
+        TiledMap map = level.getMap();
         mapRenderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.TILE_WxH);
         mapRenderer.setView(camera);
 
