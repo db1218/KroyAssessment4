@@ -80,10 +80,11 @@ public abstract class PowerUp {
 
     public static ArrayList<PowerUp> createNewPowers(){
         ArrayList<PowerUp> possiblePowerups = new ArrayList<PowerUp>();
-        possiblePowerups.add(new Heart());
-        possiblePowerups.add(new Shield());
-        possiblePowerups.add(new Water());
-        possiblePowerups.add(new Range());
+     //   possiblePowerups.add(new Heart());
+     //   possiblePowerups.add(new Shield());
+     //   possiblePowerups.add(new Water());
+     //   possiblePowerups.add(new Range());
+        possiblePowerups.add(new Freeze());
         return possiblePowerups;
     }
 
@@ -93,18 +94,6 @@ public abstract class PowerUp {
         int index = rand.nextInt(locations.size());
         return locations.get(index);
     }
-
-    private boolean checkNotSameLocation(Vector2 vector2){
-        if(!(this.currentPowerups == null)) {
-            for (PowerUp power : this.currentPowerups) {
-                if (power.position == vector2) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
 
     protected void populateLocations(){
         locations.add(new Vector2(30,3));
@@ -123,20 +112,15 @@ public abstract class PowerUp {
         locations.add(new Vector2(30,3));
     }
 
-
     public void dispose() { this.atlas.dispose(); }
 
     public abstract void invokePower(FireTruck truck);
 
     public boolean getCanBeRendered() { return this.canBeRendered; }
 
-    public boolean getCanBeDestroyed(){
-        return this.canBeDestroyed;
-    }
+    public boolean getCanBeDestroyed(){ return this.canBeDestroyed; }
 
-    public void setPosition(Vector2 position){
-        this.position = position;
-    }
+    public void setPosition(Vector2 position){ this.position = position; }
 
     public Vector2 getPosition() { return this.position; }
 

@@ -736,6 +736,10 @@ public class GameScreen implements Screen {
         return this.selectedEntity;
     }
 
+    public void setFreezeCooldown(float time){
+        freezeCooldown = time;
+    }
+
     /**
      * Save the game to a JSON file which can then be resumed
      */
