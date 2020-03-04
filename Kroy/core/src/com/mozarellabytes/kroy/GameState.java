@@ -67,13 +67,17 @@ public class GameState {
     public void hasGameEnded(Kroy game) {
         if (fortressesDestroyed == 6) {
             endGame(true, game);
-        } else if (this.activeFireTrucks == 0) {
+        } else if (activeFireTrucks == 0) {
             endGame(false, game);
         }
     }
 
+    public boolean shouldGameEnd() {
+        return fortressesDestroyed == 6 || activeFireTrucks == 0 ;
+    }
+
     public boolean firstFortressDestroyed() {
-        return (fortressesDestroyed >= 1) && (!stationDestoyed);
+        return fortressesDestroyed == 1;
     }
 
     /** Triggers the appropriate game over screen depending

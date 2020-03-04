@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Patrol;
+import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Minigame.*;
 import com.mozarellabytes.kroy.Utilities.*;
@@ -24,6 +25,7 @@ public class DanceScreen implements Screen, BeatListener {
 
     /** Instance of our game that allows us the change screens */
     private final Kroy game;
+    private final GameState gameState;
 
     private DanceScreenInputHandler danceInputHandler;
 
@@ -56,8 +58,9 @@ public class DanceScreen implements Screen, BeatListener {
     private DanceResult lastResult = null;
 
 
-    public DanceScreen(Kroy game, Screen previousScreen, FireTruck firetruck, Patrol patrol) {
+    public DanceScreen(Kroy game, GameState gameState, Screen previousScreen, FireTruck firetruck, Patrol patrol) {
         this.game = game;
+        this.gameState = gameState;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
         this.previousScreen = previousScreen;
@@ -182,16 +185,27 @@ public class DanceScreen implements Screen, BeatListener {
     }
 
     private void checkIfOver() {
-        if (firefighter.getHealth() <= 0 || ETDancer.getHealth() <= 0) {
-            this.firetruck.setHP(firefighter.getHealth());
-            this.patrol.setHP(ETDancer.getHealth());
-            GUI gui = new GUI(game, (GameScreen) previousScreen);
-            Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) previousScreen, gui));
-            gui.idleInfoButton();
-            SoundFX.stopMusic();
-            if (SoundFX.music_enabled) SoundFX.playGameMusic();
-            this.game.setScreen(previousScreen);
+        if (firefighter.getHealth() <= 0) {
+            firetruck.setHP(firefighter.getHealth());
+            ((GameScreen) previousScreen).checkIfTruckDestroyed(firetruck);
+            if (gameState.shouldGameEnd()) {
+                gameState.hasGameEnded(game);
+            } else {
+                goToGameScreen();
+            }
+        } else if (ETDancer.getHealth() <= 0) {
+            patrol.setHP(ETDancer.getHealth());
+            goToGameScreen();
         }
+    }
+
+    private void goToGameScreen() {
+        GUI gui = new GUI(game, (GameScreen) previousScreen);
+        Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) previousScreen, gui));
+        gui.idleInfoButton();
+        SoundFX.stopMusic();
+        if (SoundFX.music_enabled) SoundFX.playGameMusic();
+        game.setScreen(previousScreen);
     }
 
     private void drawHealthBars() {

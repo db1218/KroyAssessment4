@@ -26,6 +26,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
+import java.util.zip.Deflater;
 
 /**
  * The Screen that our game is played in.
@@ -432,18 +433,12 @@ public class GameScreen implements Screen {
             for (Patrol patrol : this.patrols) {
                 Vector2 patrolPos = new Vector2(Math.round(patrol.position.x), Math.round(patrol.position.y));
                 if (patrolPos.equals(truck.getTilePosition())) {
-                    doDanceOff(truck, patrol);
+//                    doDanceOff(truck, patrol);
                 }
             }
 
             // check if truck is destroyed
-            if (truck.getHP() <= 0) {
-                gameState.removeFireTruck();
-                station.destroyTruck(truck);
-                if (truck.equals(this.selectedTruck)) {
-                    this.selectedTruck = null;
-                }
-            }
+            checkIfTruckDestroyed(truck);
         }
 
         if (station.getHP() <= 0) {
@@ -516,6 +511,16 @@ public class GameScreen implements Screen {
         gui.updateDifficultyTime(difficultyControl.getTimeSinceLastDifficultyIncrease());
         gui.updateDifficultyMultiplier(difficultyControl.getDifficultyMultiplier());
         gui.updateFreezeCooldown(freezeCooldown);
+    }
+
+    void checkIfTruckDestroyed(FireTruck truck) {
+        if (truck.getHP() <= 0) {
+            gameState.removeFireTruck();
+            station.destroyTruck(truck);
+            if (truck.equals(this.selectedTruck)) {
+                this.selectedTruck = null;
+            }
+        }
     }
 
     @Override
@@ -640,7 +645,7 @@ public class GameScreen implements Screen {
      */
     public void doDanceOff(FireTruck firetruck, Patrol et) {
         SoundFX.stopMusic();
-        game.setScreen(new DanceScreen(game, this, firetruck, et));
+        game.setScreen(new DanceScreen(game, gameState,this, firetruck, et));
     }
 
     /**
@@ -773,8 +778,26 @@ public class GameScreen implements Screen {
         map.put("Entities", entitiesMap);
         map.put("Difficulty", difficultyControl);
         map.put("GameState", gameState);
-        file = Gdx.files.local("saves/" + timestamp + ".json");
+
+
+
+        file = Gdx.files.local("saves/" + timestamp + "/data.json");
         file.writeString(json.prettyPrint(map),false);
+
+        takeScreenshot(timestamp);
+    }
+
+    private void takeScreenshot(String filename) {
+        byte[] pixels = ScreenUtils.getFrameBufferPixels(0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), true);
+
+        // this loop makes sure the whole screenshot is opaque and looks exactly like what the user is seeing
+        for(int i = 4; i < pixels.length; i += 4)
+            pixels[i - 1] = (byte) 255;
+
+        Pixmap pixmap = new Pixmap(Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), Pixmap.Format.RGBA8888);
+        BufferUtils.copy(pixels, 0, pixmap.getPixels(), pixels.length);
+        PixmapIO.writePNG(Gdx.files.local("saves/" + filename + "/screenshot.png"), pixmap);
+        pixmap.dispose();
     }
 
     private Desc.Fortress[] getFortressesDescriptor() {

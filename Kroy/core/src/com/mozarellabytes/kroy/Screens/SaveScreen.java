@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mozarellabytes.kroy.Kroy;
@@ -62,8 +63,6 @@ public class SaveScreen implements Screen {
 
         // create widget groups
         Table table = new Table(); // stores everything in
-//        List<String> savesTable = new List<>(new Skin(Gdx.files.internal("skin/uiskin.json"))); // shows the game
-//        savesTable.setItems("hello", "my", "name", "is", "hello", "my", "name", "is", "hello", "my", "name", "is", "hello", "my", "name", "is", "hello", "my", "name", "is", "hello", "my", "name", "is", "hello", "my", "name", "is", "hello", "my", "name", "is", "hello", "my", "name", "is", "hello", "my", "name", "is", "hello", "my", "name", "is", "hello", "my", "name", "is");
         VerticalGroup savesList = new VerticalGroup();
         ScrollPane savesScroll = new ScrollPane(savesList, new Skin(Gdx.files.internal("skin/uiskin.json"), new TextureAtlas("skin/uiskin.atlas"))); // shows the game saves
         Table selectedTable = new Table(); // displays the selected save for more information
@@ -71,8 +70,8 @@ public class SaveScreen implements Screen {
         HorizontalGroup footer = new HorizontalGroup();
 
         // create actors
-        Drawable closeImage = new TextureRegionDrawable(new Texture(Gdx.files.internal("ui/start_idle.png")));
-        Drawable playImage = new TextureRegionDrawable(new Texture(Gdx.files.internal("ui/controls_idle.png")));
+        Drawable closeImage = new TextureRegionDrawable(new Texture("ui/start_idle.png"));
+        Drawable playImage = new TextureRegionDrawable(new Texture("ui/controls_idle.png"));
         closeImage.setMinWidth(167.5f);
         closeImage.setMinHeight(57.5f);
         playImage.setMinWidth(167.5f);
@@ -84,10 +83,13 @@ public class SaveScreen implements Screen {
         titleLabel.setAlignment(Align.left);
 
         for(FileHandle file : Gdx.files.internal("saves/").list()) {
+
             SavedElement save = new SavedElement(file.nameWithoutExtension());
+            Image screenshot = new Image(new Texture("saves/" + save.getTimestamp() + "/screenshot.png"));
+            screenshot.setSize(200, 100);
             Table saveItemTable = new Table();
             saveItemTable.row().padBottom(10).minHeight(150);
-            saveItemTable.add(new ImageButton(closeImage)).colspan(1);
+            saveItemTable.add(screenshot);
 
             VerticalGroup list = new VerticalGroup();
             Label timestampLabel = new Label(save.getTimestamp(), new Label.LabelStyle(game.font33, Color.WHITE));
@@ -106,7 +108,7 @@ public class SaveScreen implements Screen {
 
             list.fill().space(5).padRight(20).padLeft(20);
 
-            saveItemTable.add(list).colspan(2);
+            saveItemTable.add(list);
             savesList.addActor(saveItemTable);
         }
 

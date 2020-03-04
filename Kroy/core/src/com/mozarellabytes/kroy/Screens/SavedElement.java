@@ -36,7 +36,7 @@ public class SavedElement {
     public SavedElement(String timestamp) {
         Json json = new Json();
         this.timestamp = timestamp;
-        file = Gdx.files.local("saves/" + timestamp + ".json");
+        file = Gdx.files.local("saves/" + timestamp + "/data.json");
         data = json.fromJson(OrderedMap.class, file.readString());
         OrderedMap<String, Object> entities = (OrderedMap<String, Object>) data.get("Entities");
 
