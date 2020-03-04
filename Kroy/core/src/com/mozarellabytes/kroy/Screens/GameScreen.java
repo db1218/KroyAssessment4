@@ -125,8 +125,6 @@ public class GameScreen implements Screen {
     public GameScreen(Kroy game, SavedElement save) {
         setup(game);
 
-        System.out.println("Hello");
-
         // fire station (including fire trucks)
         station = save.getFireStation();
         station.setGameScreen(this);
@@ -318,17 +316,10 @@ public class GameScreen implements Screen {
         }
 
         for (Patrol patrol : this.patrols) {
-            if(patrol.getType().equals(PatrolType.Boss)){
-                if(gameState.firstFortressDestroyed()){
-                    patrol.drawStats(shapeMapRenderer);
-                }
-            }
-            else {
-                patrol.drawStats(shapeMapRenderer);
-            }
+            patrol.drawStats(shapeMapRenderer);
         }
 
-        if(station.getHP()>0){
+        if (station.getHP() > 0) {
             station.drawStats(shapeMapRenderer);
         }
 
@@ -453,25 +444,24 @@ public class GameScreen implements Screen {
             if(!(gameState.hasStationDestoyed())){
                 gameState.setStationDestoyed();
                 deadEntities.add(station.getDestroyedStation());
-
             }
             patrols.remove(PatrolType.Boss);
         }
 
         for (int i=0;i<this.patrols.size();i++) {
             Patrol patrol = this.patrols.get(i);
-            patrol.updateSpray();
+            patrol.updateBossSpray();
             if (patrol.getType().equals(PatrolType.Boss)) {
-                if((patrol.getPosition().equals(PatrolType.Boss.getPoint4()))){
+                if ((patrol.getDoublePosition().equals(PatrolType.Boss.getPoints().get(2)))){
                     patrol.attack(station);
                 } else{
-                    patrol.move();
+                    patrol.move(0.01);
                 }
                 if(gameState.hasStationDestoyed()){
                     patrols.remove(patrol);
                 }
             } else {
-                patrol.move();
+                patrol.move(0.05);
             }
             if (patrol.getHP() <= 0) {
                 patrols.remove(patrol);

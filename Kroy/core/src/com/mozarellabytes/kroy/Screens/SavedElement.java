@@ -67,11 +67,8 @@ public class SavedElement {
         Array patrolArray = (Array) entities.get("Patrols");
         for (int i=0; i<patrolArray.size; i++) {
             Desc.Patrol desc = json.fromJson(Desc.Patrol.class, patrolArray.get(i).toString());
-            patrols.add(new Patrol(desc.type, desc.health, desc.x, desc.y, desc.targetX, desc.targetY));
+            patrols.add(new Patrol(desc.type, desc.health, desc.x, desc.y, desc.path));
         }
-
-        System.out.println("hi2");
-
 
         difficultyControl = (DifficultyControl) data.get("Difficulty");
 

@@ -1,6 +1,5 @@
 package com.mozarellabytes.kroy.Entities;
 
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -8,8 +7,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.Descriptors.Desc;
-import com.mozarellabytes.kroy.Screens.GameScreen;
-
 
 import java.util.ArrayList;
 
@@ -39,14 +36,6 @@ public class Patrol extends Sprite {
     public Vector2 position;
 
     /**
-     * Used to check if the patrol's image should be
-     * changed to match the direction it is facing
-     */
-    private Vector2 previousTile;
-
-    private Vector2 nextTile;
-
-    /**
      * List of particles that the patrol uses to attack
      * a Fortress
      */
@@ -62,7 +51,8 @@ public class Patrol extends Sprite {
         super(type.getTexture());
         this.type = type;
         this.HP = type.getMaxHP();
-        this.position = new Vector2(type.getPoint1().x + 1, type.getPoint1().y);
+        this.position = new Vector2(type.getPoints().get(0).x + 1, type.getPoints().get(0).y);
+        this.path = type.getPoints();
         setup();
     }
 
@@ -72,75 +62,37 @@ public class Patrol extends Sprite {
      *
      * @param type          used to have predefined attributes
      */
-    public Patrol(String type, float HP, float x, float y, float targetX, float targetY) {
+    public Patrol(String type, float HP, float x, float y, Queue<Vector2> path) {
         super(PatrolType.valueOf(type).getTexture());
         this.type = PatrolType.valueOf(type);
-        this.type.setTarget(new Vector2(targetX, targetY));
         this.HP = HP;
         this.position = new Vector2(x, y);
+        this.path = path;
         setup();
     }
 
     private void setup() {
-        this.path = new Queue<>();
-        this.spray = new ArrayList<Particle>();
-        this.nextTile = position;
-        this.previousTile = position;
-        definePath();
+        this.spray = new ArrayList<>();
     }
 
-    /**
-     * Called every tick and updates the paths to simulate the patrol moving along the
-     * path
-     */
-    public void definePath() {
-        addTileToPath(this.position, type.getPoint1());
-
-        boolean fullCycle = false;
-        int counter = 0;
-
-        System.out.println(position);
-
-        while (!fullCycle) {
-            if (this.type.getTarget().x>this.position.x) nextTile.x = this.position.x+1;
-            else if (this.type.getTarget().y>this.position.y) nextTile.y = this.position.y+1;
-            else if (this.type.getTarget().x<this.position.x) nextTile.x = this.position.x-1;
-            else if (this.type.getTarget().y<this.position.y) nextTile.y = this.position.y-1;
-            else {
-                if (this.position.equals(type.getPoint2())) type.setTarget(type.getPoint3());
-                else if (this.position.equals(type.getPoint3())) type.setTarget(type.getPoint4());
-                else if (this.position.equals(type.getPoint4())) type.setTarget(type.getPoint1());
-                else {
-                    type.setTarget(type.getPoint2());
-                    counter++;
-                    if (counter==2) fullCycle = true;
-                }
-            }
-            addTileToPath(this.position, previousTile);
+    public void move(double speed) {
+        Vector2 nextCorner = path.first();
+        if (nextCorner.x > Math.round(position.x * 100.0) / 100.0) {
+            position.x += speed;
+        } else if (nextCorner.x < Math.round(position.x * 100.0) / 100.0) {
+            position.x -= speed;
+        } else if (nextCorner.y > Math.round(position.y * 100.0) / 100.0) {
+            position.y += speed;
+        } else if (nextCorner.y < Math.round(position.y * 100.0) / 100.0) {
+            position.y -= speed;
+        } else if (nextCorner.x == Math.round(position.x * 100.0) / 100.0 && nextCorner.y == Math.round(position.y * 100.0) / 100.0) {
+            cycleQueue();
         }
     }
 
-    public void addTileToPath(Vector2 coordinate, Vector2 previous) {
-        int interpolation = (int) (90/type.getSpeed());
-        for (int i=1; i<interpolation; i++) {
-            this.path.addLast(new Vector2((((previous.x - coordinate.x)*-1)/interpolation)*i + previous.x, (((previous.y - coordinate.y)*-1)/interpolation)*i + previous.y));
-        }
-        previousTile = new Vector2(((int) coordinate.x), ((int) coordinate.y));
-        this.path.addLast(previousTile);
-    }
-
-    public void move() {
-        this.position = getFirstInQueue();
-        updateQueue();
-    }
-
-    private void updateQueue(){
-        this.path.addLast(getFirstInQueue());
-        this.path.removeFirst();
-    }
-
-    private Vector2 getFirstInQueue(){
-        return this.path.first();
+    private void cycleQueue(){
+        path.addLast(path.first());
+        path.removeFirst();
     }
 
     /**
@@ -150,10 +102,10 @@ public class Patrol extends Sprite {
     * @param station FireStation being attacked
     */
     public void attack(FireStation station) {
-        this.spray.add(new Particle(this.getPosition(), station.getPosition(), station));
+        this.spray.add(new Particle(this.getPosition(), station.getCentrePosition(), station));
     }
 
-    public void updateSpray() {
+    public void updateBossSpray() {
         if (this.spray != null) {
             for (int i=0; i < this.spray.size(); i++) {
                 Particle particle = this.spray.get(i);
@@ -222,14 +174,17 @@ public class Patrol extends Sprite {
         return this.position;
     }
 
+    public Vector2 getDoublePosition() {
+        return new Vector2((float) (Math.round(position.x * 100.0) / 100.0), (float) (Math.round(position.y * 100.0) / 100.0));
+    }
+
     public Desc.Patrol getSave() {
         Desc.Patrol desc = new Desc.Patrol();
         desc.type = this.type.name();
         desc.health = this.getHP();
         desc.x = (float) Math.floor(this.getPosition().x);
         desc.y = (float) Math.floor(this.getPosition().y);
-        desc.targetX = (float) Math.floor(this.type.getTarget().x);
-        desc.targetY = (float) Math.floor(this.type.getTarget().y);
+        desc.path = this.path;
         return desc;
     }
 

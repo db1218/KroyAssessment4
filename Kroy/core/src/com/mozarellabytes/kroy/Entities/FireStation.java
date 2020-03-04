@@ -255,6 +255,10 @@ public class FireStation {
         return new Vector2(this.x,this.y);
     }
 
+    public Vector2 getCentrePosition() {
+        return new Vector2(this.x+this.w/2f,this.y+this.h/2f);
+    }
+
     public Desc.FireTruck[] getFireTrucksDescriptor() {
         Desc.FireTruck[] fireTrucks = new Desc.FireTruck[this.getTrucks().size()];
         for (int i=0; i<fireTrucks.length; i++) {
@@ -267,7 +271,7 @@ public class FireStation {
         Desc.FireStation desc = new Desc.FireStation();
         desc.x = this.x;
         desc.y = this.y;
-        desc.health = y;
+        desc.health = this.HP;
         return desc;
     }
 
