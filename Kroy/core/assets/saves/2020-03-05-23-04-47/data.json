@@ -1,11 +1,11 @@
 {
 "Timestamp": {
 	"class": "java.lang.String",
-	"value": "2020-03-04-22-11-03"
+	"value": "2020-03-05-23-04-47"
 },
 "enTimestamp": {
 	"class": "java.lang.String",
-	"value": "04 Mar 2020 22:11:03"
+	"value": "05 Mar 2020 23:04:47"
 },
 "Entities": {
 	"class": "com.badlogic.gdx.utils.OrderedMap",
@@ -26,27 +26,19 @@
 		},
 		{
 			"type": "Amethyst",
-			"rotation": "down",
-			"x": 4,
-			"y": 7,
-			"health": 230,
-			"reserve": 280
-		},
-		{
-			"type": "Sapphire",
-			"rotation": "down",
-			"x": 5,
-			"y": 7,
-			"health": 120,
-			"reserve": 250
+			"rotation": "left",
+			"x": 10,
+			"y": 6,
+			"health": 81.5,
+			"reserve": 136.80037
 		},
 		{
 			"type": "Ruby",
-			"rotation": "down",
-			"x": 6,
-			"y": 7,
-			"health": 150,
-			"reserve": 100
+			"rotation": "left",
+			"x": 15,
+			"y": 1,
+			"health": 67.5,
+			"reserve": 92.87984
 		}
 	],
 	"Fortresses": [
@@ -61,12 +53,6 @@
 			"x": 30.5,
 			"y": 22.5,
 			"health": 200
-		},
-		{
-			"type": "Railway",
-			"x": 16.5,
-			"y": 3.5,
-			"health": 250
 		},
 		{
 			"type": "Clifford",
@@ -90,31 +76,31 @@
 	"Patrols": [
 		{
 			"type": "Blue",
-			"x": 8,
-			"y": 19,
+			"x": 18,
+			"y": 23,
 			"health": 150,
 			"path": [
 				{
 					"x": 18,
+					"y": 27
+				},
+				{
+					"x": 2,
+					"y": 27
+				},
+				{
+					"x": 2,
 					"y": 19
 				},
 				{
 					"x": 18,
-					"y": 27
-				},
-				{
-					"x": 2,
-					"y": 27
-				},
-				{
-					"x": 2,
 					"y": 19
 				}
 			]
 		},
 		{
 			"type": "Green",
-			"x": 31,
+			"x": 44,
 			"y": 2,
 			"health": 100,
 			"path": [
@@ -138,14 +124,10 @@
 		},
 		{
 			"type": "Peach",
-			"x": 9,
-			"y": 11,
+			"x": 21,
+			"y": 16,
 			"health": 100,
 			"path": [
-				{
-					"x": 9,
-					"y": 16
-				},
 				{
 					"x": 31,
 					"y": 21
@@ -157,23 +139,19 @@
 				{
 					"x": 2,
 					"y": 4
+				},
+				{
+					"x": 9,
+					"y": 16
 				}
 			]
 		},
 		{
 			"type": "Violet",
-			"x": 38,
-			"y": 22,
+			"x": 32,
+			"y": 18,
 			"health": 150,
 			"path": [
-				{
-					"x": 38,
-					"y": 28
-				},
-				{
-					"x": 28,
-					"y": 18
-				},
 				{
 					"x": 38,
 					"y": 8
@@ -181,12 +159,20 @@
 				{
 					"x": 48,
 					"y": 18
+				},
+				{
+					"x": 38,
+					"y": 28
+				},
+				{
+					"x": 28,
+					"y": 18
 				}
 			]
 		},
 		{
 			"type": "Yellow",
-			"x": 39,
+			"x": 38,
 			"y": 20,
 			"health": 150,
 			"path": [
@@ -207,16 +193,45 @@
 					"y": 21
 				}
 			]
+		},
+		{
+			"type": "Boss",
+			"x": 43,
+			"y": 11,
+			"health": 150,
+			"path": [
+				{
+					"x": 43,
+					"y": 11
+				},
+				{
+					"x": 6,
+					"y": 11
+				},
+				{
+					"x": 6,
+					"y": 10
+				},
+				{
+					"x": 44,
+					"y": 11
+				}
+			]
 		}
 	]
 },
 "Difficulty": {
 	"class": "com.mozarellabytes.kroy.Utilities.DifficultyControl",
 	"currentDifficulty": 1,
-	"currentTime": 54.651363
+	"currentTime": 18.122349
+},
+"Difficulty Level": {
+	"class": "com.mozarellabytes.kroy.Utilities.DifficultyLevel",
+	"value": "Hard"
 },
 "GameState": {
 	"class": "com.mozarellabytes.kroy.GameState",
-	"activeFireTrucks": 4
+	"activeFireTrucks": 3,
+	"fortressesDestroyed": 1
 }
 }

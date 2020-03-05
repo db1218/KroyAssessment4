@@ -41,7 +41,6 @@ public class SaveScreen implements Screen {
 
     // objects from other screen
     private final Kroy game;
-    private final MenuScreen menuScreen;
 
     private final Stage stage;
     private final Table selectedTable;
@@ -50,7 +49,6 @@ public class SaveScreen implements Screen {
 
     public SaveScreen(Kroy game, MenuScreen menuScreen) {
         this.game = game;
-        this.menuScreen = menuScreen;
 
         // camera and visual objects
         OrthographicCamera camera = new OrthographicCamera();
@@ -100,7 +98,7 @@ public class SaveScreen implements Screen {
             Label timestampLabel = new Label(save.getEnTimestamp(), new Label.LabelStyle(game.font33, Color.WHITE));
             Label fireTrucksAliveLabel = new Label(" - Fire Trucks alive: " + save.getFireTrucks().size(), new Label.LabelStyle(game.font25, Color.WHITE));
             Label fortressesRemainingLabel = new Label(" - Fortresses remaining: " + save.getFortresses().size(), new Label.LabelStyle(game.font25, Color.WHITE));
-            Label fireStationAlive = new Label(" - Fire Station: " + (save.getFireStation().isAlive() ? "yes" : "no"), new Label.LabelStyle(game.font25, Color.WHITE));
+            Label fireStationAlive = new Label(" - Fire Station: " + (save.getFireStation().isAlive() ? "alive" : "destroyed"), new Label.LabelStyle(game.font25, Color.WHITE));
 
             timestampLabel.setAlignment(Align.left);
             fireTrucksAliveLabel.setAlignment(Align.left);
@@ -112,7 +110,7 @@ public class SaveScreen implements Screen {
             list.addActor(fortressesRemainingLabel);
             list.addActor(fireStationAlive);
 
-            list.fill().space(5).expand();
+            list.fill().space(5).expand().padRight(15).padLeft(15);
 
             saveItemTable.setTouchable(Touchable.enabled);
             saveItemTable.addListener(new ClickListener() {
@@ -138,15 +136,16 @@ public class SaveScreen implements Screen {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (currentSaveSelected != null)
+                if (currentSaveSelected != null) {
+                    System.out.println(currentSaveSelected.getEnTimestamp());
                     game.setScreen(new GameScreen(game, currentSaveSelected));
+                }
             }
         });
 
         Label emptyLabel = new Label("Click on a save file then click Start to load it", new Label.LabelStyle(game.font25, Color.WHITE));
         emptyLabel.setAlignment(Align.center);
         selectedTable.add(emptyLabel).fill().expand();
-        selectedTable.setDebug(true);
 
         header.addActor(titleLabel);
         footer.addActor(closeButton);
@@ -160,8 +159,8 @@ public class SaveScreen implements Screen {
         table.setFillParent(true);
         table.add(header).colspan(2).expandX().pad(40).left();
         table.row();
-        table.add(savesScroll).colspan(1).padLeft(40);
-        table.add(selectedTable).colspan(1).padRight(40);
+        table.add(savesScroll).colspan(1).padLeft(40).expandY();
+        table.add(selectedTable).colspan(1).padRight(40).expandY();
         table.row();
         table.add(footer).colspan(2).expandX().pad(40).right();
 
@@ -188,11 +187,11 @@ public class SaveScreen implements Screen {
                 currentSaveSelected.listAliveFortresses(), new Label.LabelStyle(game.font25, Color.WHITE));
         fortressesLevel.setAlignment(Align.left);
 
-        savesList.fill();
+        savesList.fill().bottom().expand();
         savesList.addActor(difficultyLabel);
         savesList.addActor(fireTrucksLevel);
         savesList.addActor(fortressesLevel);
-        selectedTable.add(savesList);
+        selectedTable.add(savesList).expand().maxHeight(Gdx.graphics.getHeight()/3f);
     }
 
     /**
@@ -259,7 +258,4 @@ public class SaveScreen implements Screen {
         stage.dispose();
     }
 
-    public void startGame(SavedElement save) {
-        game.setScreen(new GameScreen(game, save));
-    }
 }
