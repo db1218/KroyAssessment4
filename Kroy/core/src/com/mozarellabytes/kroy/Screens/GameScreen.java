@@ -616,7 +616,6 @@ public class GameScreen implements Screen {
      *          <code>false</code> otherwise
      */
     public boolean isRoad(int x, int y) {
-        System.out.println(x + ", " +  y);
         return ((TiledMapTileLayer) mapLayers.get("collisions")).getCell(x, y) != null;
     }
 

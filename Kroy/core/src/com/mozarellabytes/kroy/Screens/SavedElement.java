@@ -108,4 +108,20 @@ public class SavedElement {
     public String getEnTimestamp() {
         return this.getEnTimestamp;
     }
+
+    public String listAliveFireTrucks() {
+        StringBuilder list = new StringBuilder();
+        for (FireTruck truck : fireStation.getTrucks()) {
+            list.append("\n  - ").append(truck.type.getName()).append(": (").append(truck.getHP()).append(", ").append(Math.round(truck.getReserve())).append(")");
+        }
+        return list.toString();
+    }
+
+    public String listAliveFortresses() {
+        StringBuilder list = new StringBuilder();
+        for (Fortress fortress : fortresses) {
+            list.append("\n  - ").append(fortress.getFortressType().getName()).append(": (").append(Math.round(fortress.getHP())).append(" / ").append(fortress.getFortressType().getMaxHP()).append(")");
+        }
+        return list.toString();
+    }
 }
