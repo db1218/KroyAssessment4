@@ -1,11 +1,11 @@
 {
 "Timestamp": {
 	"class": "java.lang.String",
-	"value": "2020-03-04-22-11-50"
+	"value": "2020-03-06-00-17-51"
 },
 "enTimestamp": {
 	"class": "java.lang.String",
-	"value": "04 Mar 2020 22:11:50"
+	"value": "06 Mar 2020 00:17:51"
 },
 "Entities": {
 	"class": "com.badlogic.gdx.utils.OrderedMap",
@@ -18,35 +18,27 @@
 	"FireTrucks": [
 		{
 			"type": "Emerald",
-			"rotation": "up",
-			"x": 5,
+			"rotation": "down",
+			"x": 3,
 			"y": 7,
 			"health": 100,
 			"reserve": 120
 		},
 		{
 			"type": "Amethyst",
-			"rotation": "down",
-			"x": 4,
-			"y": 7,
-			"health": 230,
-			"reserve": 280
-		},
-		{
-			"type": "Sapphire",
-			"rotation": "up",
-			"x": 12,
-			"y": 2,
-			"health": 120,
-			"reserve": 180.87842
+			"rotation": "left",
+			"x": 10,
+			"y": 6,
+			"health": 81.5,
+			"reserve": 136.80037
 		},
 		{
 			"type": "Ruby",
-			"rotation": "down",
-			"x": 6,
-			"y": 7,
-			"health": 150,
-			"reserve": 100
+			"rotation": "left",
+			"x": 15,
+			"y": 1,
+			"health": 67.5,
+			"reserve": 92.87984
 		}
 	],
 	"Fortresses": [
@@ -84,35 +76,39 @@
 	"Patrols": [
 		{
 			"type": "Blue",
-			"x": 2,
-			"y": 20,
+			"x": 16,
+			"y": 26,
 			"health": 150,
 			"path": [
 				{
 					"x": 2,
-					"y": 19
-				},
-				{
-					"x": 18,
-					"y": 19
-				},
-				{
-					"x": 18,
 					"y": 27
 				},
 				{
 					"x": 2,
+					"y": 19
+				},
+				{
+					"x": 18,
+					"y": 19
+				},
+				{
+					"x": 18,
 					"y": 27
 				}
 			]
 		},
 		{
 			"type": "Green",
-			"x": 39,
-			"y": 19,
+			"x": 46,
+			"y": 4,
 			"health": 100,
 			"path": [
 				{
+					"x": 47,
+					"y": 20
+				},
+				{
 					"x": 17,
 					"y": 20
 				},
@@ -123,19 +119,19 @@
 				{
 					"x": 47,
 					"y": 2
-				},
-				{
-					"x": 47,
-					"y": 20
 				}
 			]
 		},
 		{
 			"type": "Peach",
-			"x": 25,
-			"y": 12,
+			"x": 26,
+			"y": 16,
 			"health": 100,
 			"path": [
+				{
+					"x": 31,
+					"y": 21
+				},
 				{
 					"x": 26,
 					"y": 9
@@ -147,19 +143,19 @@
 				{
 					"x": 9,
 					"y": 16
-				},
-				{
-					"x": 31,
-					"y": 21
 				}
 			]
 		},
 		{
 			"type": "Violet",
-			"x": 48,
-			"y": 9,
+			"x": 37,
+			"y": 18,
 			"health": 150,
 			"path": [
+				{
+					"x": 38,
+					"y": 8
+				},
 				{
 					"x": 48,
 					"y": 18
@@ -171,40 +167,36 @@
 				{
 					"x": 28,
 					"y": 18
-				},
-				{
-					"x": 38,
-					"y": 8
 				}
 			]
 		},
 		{
 			"type": "Yellow",
-			"x": 34,
-			"y": 13,
+			"x": 32,
+			"y": 20,
 			"health": 150,
 			"path": [
 				{
-					"x": 46,
-					"y": 13
-				},
-				{
-					"x": 46,
-					"y": 21
-				},
-				{
 					"x": 27,
 					"y": 21
 				},
 				{
 					"x": 27,
 					"y": 13
+				},
+				{
+					"x": 46,
+					"y": 13
+				},
+				{
+					"x": 46,
+					"y": 21
 				}
 			]
 		},
 		{
 			"type": "Boss",
-			"x": 39,
+			"x": 41,
 			"y": 11,
 			"health": 150,
 			"path": [
@@ -231,11 +223,15 @@
 "Difficulty": {
 	"class": "com.mozarellabytes.kroy.Utilities.DifficultyControl",
 	"currentDifficulty": 1,
-	"currentTime": 8.90334
+	"currentTime": 16.347912
+},
+"Difficulty Level": {
+	"class": "com.mozarellabytes.kroy.Utilities.DifficultyLevel",
+	"value": "Hard"
 },
 "GameState": {
 	"class": "com.mozarellabytes.kroy.GameState",
-	"activeFireTrucks": 4,
+	"activeFireTrucks": 3,
 	"fortressesDestroyed": 1
 }
 }

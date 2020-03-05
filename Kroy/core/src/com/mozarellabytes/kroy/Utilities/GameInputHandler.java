@@ -173,15 +173,11 @@ public class GameInputHandler implements InputProcessor {
      * @param position2d The tile that was clicked
      */
     private void checkButtonClick(Vector2 position2d){
-        if (gui.getHomeButton().contains(position2d)) {
-            gui.clickedHomeButton();
-        } else if (gui.getPauseButton().contains(position2d)){
-            gui.clickedPauseButton();
-        } else if (gui.getSoundButton().contains(position2d)) {
-            gui.clickedSoundButton();
-        } else if (gui.getInfoButton().contains(position2d)) {
-            gui.clickedInfoButton();
-        }
+        if (gui.getHomeButton().contains(position2d)) gui.clickedHomeButton();
+        else if (gui.getPauseButton().contains(position2d)) gui.clickedPauseButton();
+        else if (gui.getSoundButton().contains(position2d)) gui.clickedSoundButton();
+        else if (gui.getInfoButton().contains(position2d)) gui.clickedInfoButton();
+        else if (gui.getSaveButton().contains(position2d)) gui.clickedSaveButton();
     }
 
     /** Checks if user clicked on a fortress, if it did this fortress
@@ -211,27 +207,17 @@ public class GameInputHandler implements InputProcessor {
     private void checkButtonUnclick(int screenX, int screenY){
         Vector2 screenCoords = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
 
-        if (gui.getHomeButton().contains(screenCoords)) {
-            gameScreen.toHomeScreen();
-        } else {
-            gui.idleHomeButton();
-        }
+        if (gui.getHomeButton().contains(screenCoords)) gameScreen.toHomeScreen();
+        if (gui.getSoundButton().contains(screenCoords)) gui.changeSound();
+        if (gui.getPauseButton().contains(screenCoords)) gameScreen.changeState(GameScreen.PlayState.PAUSE);
+        if (gui.getSaveButton().contains(screenCoords)) gameScreen.saveGameState();
+        if (gui.getInfoButton().contains(screenCoords)) gameScreen.toControlScreen();
 
-        if (gui.getSoundButton().contains(screenCoords)){
-            gui.changeSound();
-        } else {
-            gui.idleSoundButton();
-        }
-
-        if (gui.getPauseButton().contains(screenCoords)){
-            gameScreen.changeState(GameScreen.PlayState.PAUSE);
-        } else {
-            gui.idlePauseButton();
-        }
-
-        if (gui.getInfoButton().contains(screenCoords)){
-            gameScreen.toControlScreen();
-        }
+        gui.idleHomeButton();
+        gui.idleSoundButton();
+        gui.idlePauseButton();
         gui.idleInfoButton();
+        gui.idleSaveButton();
+
     }
 }

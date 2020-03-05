@@ -1,11 +1,11 @@
 {
 "Timestamp": {
 	"class": "java.lang.String",
-	"value": "2020-03-05-21-54-51"
+	"value": "2020-03-06-00-20-37"
 },
 "enTimestamp": {
 	"class": "java.lang.String",
-	"value": "05 Mar 2020 21:54:51"
+	"value": "06 Mar 2020 00:20:37"
 },
 "Entities": {
 	"class": "com.badlogic.gdx.utils.OrderedMap",
@@ -42,10 +42,10 @@
 		},
 		{
 			"type": "Ruby",
-			"rotation": "up",
-			"x": 13,
-			"y": 6,
-			"health": 133.5,
+			"rotation": "down",
+			"x": 6,
+			"y": 7,
+			"health": 150,
 			"reserve": 100
 		}
 	],
@@ -90,11 +90,15 @@
 	"Patrols": [
 		{
 			"type": "Blue",
-			"x": 4,
-			"y": 19,
+			"x": 2,
+			"y": 22,
 			"health": 150,
 			"path": [
 				{
+					"x": 2,
+					"y": 19
+				},
+				{
 					"x": 18,
 					"y": 19
 				},
@@ -105,16 +109,12 @@
 				{
 					"x": 2,
 					"y": 27
-				},
-				{
-					"x": 2,
-					"y": 19
 				}
 			]
 		},
 		{
 			"type": "Green",
-			"x": 27,
+			"x": 21,
 			"y": 2,
 			"health": 100,
 			"path": [
@@ -138,8 +138,8 @@
 		},
 		{
 			"type": "Peach",
-			"x": 9,
-			"y": 7,
+			"x": 6,
+			"y": 4,
 			"health": 100,
 			"path": [
 				{
@@ -162,7 +162,7 @@
 		},
 		{
 			"type": "Violet",
-			"x": 38,
+			"x": 43,
 			"y": 18,
 			"health": 150,
 			"path": [
@@ -186,11 +186,15 @@
 		},
 		{
 			"type": "Yellow",
-			"x": 43,
-			"y": 20,
+			"x": 46,
+			"y": 17,
 			"health": 150,
 			"path": [
 				{
+					"x": 46,
+					"y": 21
+				},
+				{
 					"x": 27,
 					"y": 21
 				},
@@ -201,10 +205,6 @@
 				{
 					"x": 46,
 					"y": 13
-				},
-				{
-					"x": 46,
-					"y": 21
 				}
 			]
 		}
@@ -213,11 +213,14 @@
 "Difficulty": {
 	"class": "com.mozarellabytes.kroy.Utilities.DifficultyControl",
 	"currentDifficulty": 1,
-	"currentTime": 56.021423
+	"currentTime": 58.190628
+},
+"Difficulty Level": {
+	"class": "com.mozarellabytes.kroy.Utilities.DifficultyLevel",
+	"value": "Easy"
 },
 "GameState": {
 	"class": "com.mozarellabytes.kroy.GameState",
-	"activeFireTrucks": 4,
-	"trucksInAttackRange": 1
+	"activeFireTrucks": 4
 }
 }

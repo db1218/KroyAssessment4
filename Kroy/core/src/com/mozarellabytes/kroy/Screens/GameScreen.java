@@ -102,6 +102,8 @@ public class GameScreen implements Screen {
     /** A class keeping track of the current difficulty and the time to the next change */
     private DifficultyControl difficultyControl;
 
+    private DifficultyLevel difficultyLevel;
+
     /** An arraylist of all the entities that have been destroyed */
     private ArrayList<DestroyedEntity> deadEntities;
 
@@ -131,7 +133,7 @@ public class GameScreen implements Screen {
         station = save.getFireStation();
         station.setGameScreen(this);
 
-        setup(game, DifficultyLevel.Medium);
+        setup(game, save.getDifficultyLevel());
 
         // game state
         gameState = save.getGameState();
@@ -183,7 +185,6 @@ public class GameScreen implements Screen {
 
         difficultyControl = new DifficultyControl();
 
-
     }
 
     private void setup(Kroy game, DifficultyLevel level) {
@@ -194,6 +195,8 @@ public class GameScreen implements Screen {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, level.getWidth(), level.getHeight());
+
+        difficultyLevel = level;
 
         TiledMap map = level.getMap();
         mapRenderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.TILE_WxH);
@@ -775,6 +778,7 @@ public class GameScreen implements Screen {
         map.put("enTimestamp", enTimestamp);
         map.put("Entities", entitiesMap);
         map.put("Difficulty", difficultyControl);
+        map.put("Difficulty Level", difficultyLevel);
         map.put("GameState", gameState);
 
         file = Gdx.files.local("saves/" + timestamp + "/data.json");
