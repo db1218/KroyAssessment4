@@ -9,7 +9,8 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 public enum DifficultyLevel {
 
     Easy(new TmxMapLoader().load("maps/Easy.tmx"), 20, 12),
-    Medium(new TmxMapLoader().load("maps/Medium.tmx"), 40, 24);
+    Medium(new TmxMapLoader().load("maps/Medium.tmx"), 40, 24),
+    Hard(new TmxMapLoader().load("maps/Hard.tmx"), 48, 29);
 
     TiledMap map;
     int width;

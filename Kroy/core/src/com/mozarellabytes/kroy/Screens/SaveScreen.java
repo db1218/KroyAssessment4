@@ -61,7 +61,7 @@ public class SaveScreen implements Screen {
 
         // create stage
         stage = new Stage(viewport, game.batch);
-        stage.setDebugAll(false);
+        stage.setDebugAll(true);
         Gdx.input.setInputProcessor(stage);
 
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"), new TextureAtlas("skin/uiskin.atlas"));
@@ -73,6 +73,7 @@ public class SaveScreen implements Screen {
         VerticalGroup savesList = new VerticalGroup();
         ScrollPane savesScroll = new ScrollPane(savesList, skin); // shows the game saves
         savesScroll.setScrollbarsVisible(true);
+        savesScroll.setScrollingDisabled(true, false);
         HorizontalGroup header = new HorizontalGroup();
         HorizontalGroup footer = new HorizontalGroup();
 
@@ -97,12 +98,13 @@ public class SaveScreen implements Screen {
 
             VerticalGroup list = new VerticalGroup();
             Label timestampLabel = new Label(save.getEnTimestamp(), new Label.LabelStyle(game.font33, Color.WHITE));
-            timestampLabel.setAlignment(Align.left);
             Label fireTrucksAliveLabel = new Label(" - Fire Trucks alive: " + save.getFireTrucks().size(), new Label.LabelStyle(game.font25, Color.WHITE));
-            fireTrucksAliveLabel.setAlignment(Align.left);
             Label fortressesRemainingLabel = new Label(" - Fortresses remaining: " + save.getFortresses().size(), new Label.LabelStyle(game.font25, Color.WHITE));
-            fortressesRemainingLabel.setAlignment(Align.left);
             Label fireStationAlive = new Label(" - Fire Station: " + (save.getFireStation().isAlive() ? "yes" : "no"), new Label.LabelStyle(game.font25, Color.WHITE));
+
+            timestampLabel.setAlignment(Align.left);
+            fireTrucksAliveLabel.setAlignment(Align.left);
+            fortressesRemainingLabel.setAlignment(Align.left);
             fireStationAlive.setAlignment(Align.left);
 
             list.addActor(timestampLabel);
@@ -110,7 +112,7 @@ public class SaveScreen implements Screen {
             list.addActor(fortressesRemainingLabel);
             list.addActor(fireStationAlive);
 
-            list.fill().space(5).pad(0, 50, 0, 50);
+            list.fill().space(5).expand();
 
             saveItemTable.setTouchable(Touchable.enabled);
             saveItemTable.addListener(new ClickListener() {
@@ -121,7 +123,7 @@ public class SaveScreen implements Screen {
                 }
             });
             saveItemTable.row().pad(5);
-            saveItemTable.add(screenshot).size(200, 100);
+            saveItemTable.add(screenshot).maxWidth(Gdx.graphics.getWidth()/7f).maxHeight(Gdx.graphics.getHeight()/7f);
             saveItemTable.add(list);
             savesList.addActor(saveItemTable);
         }
@@ -141,6 +143,11 @@ public class SaveScreen implements Screen {
             }
         });
 
+        Label emptyLabel = new Label("Click on a save file then click Start to load it", new Label.LabelStyle(game.font25, Color.WHITE));
+        emptyLabel.setAlignment(Align.center);
+        selectedTable.add(emptyLabel).fill().expand();
+        selectedTable.setDebug(true);
+
         header.addActor(titleLabel);
         footer.addActor(closeButton);
         footer.addActor(playButton);
@@ -151,12 +158,12 @@ public class SaveScreen implements Screen {
 
         // add header to table
         table.setFillParent(true);
-        table.add(header).colspan(3).expandX().pad(40).left();
-        table.row().expandY();
-        table.add(savesScroll).colspan(1).padLeft(40);
-        table.add(selectedTable).colspan(2).padRight(40);
+        table.add(header).colspan(2).expandX().pad(40).left();
         table.row();
-        table.add(footer).colspan(3).expandX().pad(40).right();
+        table.add(savesScroll).colspan(1).padLeft(40);
+        table.add(selectedTable).colspan(1).padRight(40);
+        table.row();
+        table.add(footer).colspan(2).expandX().pad(40).right();
 
         stage.addActor(table);
     }
@@ -168,13 +175,23 @@ public class SaveScreen implements Screen {
         selectedTable.add(screenshot).maxWidth(Gdx.graphics.getWidth()/3f).maxHeight(Gdx.graphics.getHeight()/3f).padBottom(20).row();
         VerticalGroup savesList = new VerticalGroup();
         savesList.space(10);
-        savesList.align(Align.left);
-        savesList.addActor(new Label("Difficulty Multiplier: " +
-                currentSaveSelected.getDifficultyControl().getDifficultyMultiplier(), new Label.LabelStyle(game.font25, Color.WHITE)));
-        savesList.addActor(new Label("Fire Trucks: (" + currentSaveSelected.getFireTrucks().size() + ")" +
-                currentSaveSelected.listAliveFireTrucks(), new Label.LabelStyle(game.font25, Color.WHITE)));
-        savesList.addActor(new Label("Fortresses: (" + currentSaveSelected.getFortresses().size() + ")" +
-                currentSaveSelected.listAliveFortresses(), new Label.LabelStyle(game.font25, Color.WHITE)));
+
+        Label difficultyLabel = new Label("Difficulty: " +
+                currentSaveSelected.getDifficultyControl().getDifficultyMultiplier() + "x", new Label.LabelStyle(game.font25, Color.WHITE));
+        difficultyLabel.setAlignment(Align.left);
+
+        Label fireTrucksLevel = new Label("Fire Trucks: (" + currentSaveSelected.getFireTrucks().size() + ")" +
+                currentSaveSelected.listAliveFireTrucks(), new Label.LabelStyle(game.font25, Color.WHITE));
+        fireTrucksLevel.setAlignment(Align.left);
+
+        Label fortressesLevel = new Label("Fortresses: (" + currentSaveSelected.getFortresses().size() + ")" +
+                currentSaveSelected.listAliveFortresses(), new Label.LabelStyle(game.font25, Color.WHITE));
+        fortressesLevel.setAlignment(Align.left);
+
+        savesList.fill();
+        savesList.addActor(difficultyLabel);
+        savesList.addActor(fireTrucksLevel);
+        savesList.addActor(fortressesLevel);
         selectedTable.add(savesList);
     }
 

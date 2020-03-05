@@ -112,7 +112,7 @@ public class SavedElement {
     public String listAliveFireTrucks() {
         StringBuilder list = new StringBuilder();
         for (FireTruck truck : fireStation.getTrucks()) {
-            list.append("\n  - ").append(truck.type.getName()).append(": (").append(truck.getHP()).append(", ").append(Math.round(truck.getReserve())).append(")");
+            list.append("\n  - ").append(truck.type.name());
         }
         return list.toString();
     }
@@ -120,7 +120,7 @@ public class SavedElement {
     public String listAliveFortresses() {
         StringBuilder list = new StringBuilder();
         for (Fortress fortress : fortresses) {
-            list.append("\n  - ").append(fortress.getFortressType().getName()).append(": (").append(Math.round(fortress.getHP())).append(" / ").append(fortress.getFortressType().getMaxHP()).append(")");
+            list.append("\n  - ").append(fortress.getFortressType().getName());
         }
         return list.toString();
     }

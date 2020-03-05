@@ -65,7 +65,7 @@ public class DifficultyScreenInputHandler implements InputProcessor {
         } else if (difficultyScreen.getMediumButton().contains(position.x, position.y)) {
             difficultyScreen.toGameScreen(DifficultyLevel.Medium);
         } else if (difficultyScreen.getHardButton().contains(position.x, position.y)){
-            difficultyScreen.toGameScreen(DifficultyLevel.Medium);
+            difficultyScreen.toGameScreen(DifficultyLevel.Hard);
         } else if (difficultyScreen.getSoundButton().contains(position.x, position.y)){
             difficultyScreen.changeSound();
         } else {
