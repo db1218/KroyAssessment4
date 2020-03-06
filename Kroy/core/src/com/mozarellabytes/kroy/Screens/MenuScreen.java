@@ -92,9 +92,9 @@ public class MenuScreen implements Screen {
         backgroundImage = new Texture(Gdx.files.internal("menuscreen_blank_2.png"), true);
         backgroundImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
-        startIdleTexture = new Texture(Gdx.files.internal("ui/start_idle.png"), true);
+        startIdleTexture = new Texture(Gdx.files.internal("ui/newgame_idle.png"), true);
         startIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        startClickedTexture = new Texture(Gdx.files.internal("ui/start_clicked.png"), true);
+        startClickedTexture = new Texture(Gdx.files.internal("ui/newgame_clicked.png"), true);
         startClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         savesIdleTexture = new Texture(Gdx.files.internal("ui/load_idle.png"), true);
