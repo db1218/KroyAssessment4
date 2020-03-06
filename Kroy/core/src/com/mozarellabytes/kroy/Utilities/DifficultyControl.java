@@ -1,6 +1,5 @@
 package com.mozarellabytes.kroy.Utilities;
 
-import java.text.DecimalFormat;
 
 public class DifficultyControl {
     /** The value of the current difficulty level */
@@ -17,15 +16,18 @@ public class DifficultyControl {
      */
     public DifficultyControl(int currentDifficulty, float currentTime) {
         this.currentDifficulty = currentDifficulty;
-        difficultyChangeInterval = 60f;
+        this.difficultyChangeInterval = 60f;
         this.currentTime = currentTime;
     }
 
-    public DifficultyControl() {
-        this.currentDifficulty = 0;
-        difficultyChangeInterval = 60f;
+    public DifficultyControl(DifficultyLevel level) {
+        this.currentDifficulty = level.getStartDifficultyLevel();
+        this.difficultyChangeInterval = level.getDifficultyChangeInterval();
         this.currentTime = 0;
     }
+
+    // not sure why we need this but the save screen doesn't work without it...
+    public DifficultyControl() {}
 
 
     /** Updates the amount of time to a change in difficulty

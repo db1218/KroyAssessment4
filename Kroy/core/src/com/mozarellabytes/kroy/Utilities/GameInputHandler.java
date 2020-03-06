@@ -89,7 +89,7 @@ public class GameInputHandler implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);
         if (gameScreen.isNotPaused()) {
-            if (gameScreen.isRoad((int) clickCoordinates.x, (int) clickCoordinates.y)) {
+         //   if (gameScreen.isRoad((int) clickCoordinates.x, (int) clickCoordinates.y)) {
                 if (gameScreen.checkClick(clickCoordinates)) {
                     gameScreen.selectedTruck.resetPath();
                     gameScreen.selectedTruck.addTileToPathSegment(clickCoordinates);
@@ -100,7 +100,7 @@ public class GameInputHandler implements InputProcessor {
             } else {
                 checkFortressClick(clickCoordinates);
             }
-        }
+       // }
         checkButtonClick(new Vector2(screenX, Gdx.graphics.getHeight() - screenY));
         return true;
     }

@@ -122,6 +122,8 @@ public class GameScreen implements Screen {
 
     private FileHandle file;
 
+    private DifficultyLevel level;
+
     /** Play when the game is being played
      * Pause when the pause button is clicked */
     public enum PlayState {
@@ -155,7 +157,8 @@ public class GameScreen implements Screen {
      */
     public GameScreen(Kroy game, DifficultyLevel level) {
         // Entity related stuff
-        station = new FireStation(2, 7, 100);
+     //   station = new FireStation(2, 7, 100);
+        station = new FireStation (27,19, 100);
         station.setGameScreen(this);
 
         setup(game, level);
@@ -165,12 +168,12 @@ public class GameScreen implements Screen {
         spawn(FireTruckType.Sapphire);
         spawn(FireTruckType.Ruby);
 
-        fortresses.add(new Fortress(12, 23.5f, FortressType.Revs));
-        fortresses.add(new Fortress(30.5f, 22.5f, FortressType.Walmgate));
-        fortresses.add(new Fortress(16.5f, 3.5f, FortressType.Railway));
-        fortresses.add(new Fortress(32f, 1.5f, FortressType.Clifford));
-        fortresses.add(new Fortress(41.95f, 23.5f, FortressType.Museum));
-        fortresses.add(new Fortress(44f, 11f, FortressType.CentralHall));
+        fortresses.add(new Fortress(level.getRevsLocation().x, level.getRevsLocation().y, FortressType.Revs));
+//        fortresses.add(new Fortress(level.getWalmgateLocation().x, level.getWalmgateLocation().y, FortressType.Walmgate));
+//        fortresses.add(new Fortress(level.getRailwayLocation().x, level.getRailwayLocation().y, FortressType.Railway));
+//        fortresses.add(new Fortress(level.getCliffordLocation().x, level.getCliffordLocation().y, FortressType.Clifford));
+//        fortresses.add(new Fortress(level.getMuseumLocation().x, level.getMuseumLocation().y, FortressType.Museum));
+//        fortresses.add(new Fortress(level.getCentralHallLocation().x, level.getCentralHallLocation().y, FortressType.CentralHall));
 
         patrols.add(new Patrol(PatrolType.Blue));
         patrols.add(new Patrol(PatrolType.Green));
@@ -183,18 +186,19 @@ public class GameScreen implements Screen {
             truck.setOrigin(Constants.TILE_WxH / 2, Constants.TILE_WxH / 2);
         }
 
-        difficultyControl = new DifficultyControl();
+        difficultyControl = new DifficultyControl(level);
 
     }
 
     private void setup(Kroy game, DifficultyLevel level) {
         this.game = game;
+        this.level = level;
         fpsCounter = new FPSLogger();
 
         state = PlayState.PLAY;
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, level.getWidth(), level.getHeight());
+        camera.setToOrtho(false, level.getMapWidth(), level.getMapHeight());
 
         difficultyLevel = level;
 
@@ -242,7 +246,7 @@ public class GameScreen implements Screen {
             public void run() {
                 canCreatePowerUp();
             }
-        }, 1,1);
+        }, level.getTimeTillPowerup(),level.getTimeTillPowerup());
 
         powerUpLocations = new ArrayList<>();
         generatePowerUpLocations(level);
@@ -374,7 +378,7 @@ public class GameScreen implements Screen {
 
                 // exit this mode
                 if (freezeCooldown < 0) {
-                    freezeCooldown = Constants.FREEZE_TIME;
+                    freezeCooldown = level.getTimeTillNextFreeze();
                     state = PlayState.PLAY;
                 }
         }
@@ -388,7 +392,7 @@ public class GameScreen implements Screen {
      */
     private void update(float delta) {
         gameState.hasGameEnded(game);
-        gameState.firstFortressDestroyed();
+       // gameState.firstFortressDestroyed(); Do we need this??
         camShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
 
         freezeCooldown -= delta;
@@ -437,7 +441,6 @@ public class GameScreen implements Screen {
                 }
             }
 
-            // check if truck is destroyed
             checkIfTruckDestroyed(truck);
         }
 
@@ -483,7 +486,7 @@ public class GameScreen implements Screen {
             // check if fortress is destroyed
             if (fortress.getHP() <= 0) {
                 gameState.addFortress();
-                if (gameState.firstFortressDestroyed())
+                if (gameState.numDestroyedFortresses() == level.getFortressesDestroyedBeforeBoss())
                     patrols.add(new Patrol(PatrolType.Boss));
                 deadEntities.add(fortress.createDestroyedFortress());
                 float x = fortress.getPosition().x;
@@ -654,7 +657,9 @@ public class GameScreen implements Screen {
      */
     private void spawn(FireTruckType type) {
         if (SoundFX.music_enabled) SoundFX.sfx_truck_spawn.play();
-        station.spawn(new FireTruck(this, new Vector2(3 + station.getTrucks().size(),7), type));
+        FireTruck truck = new FireTruck(this, new Vector2(3 + station.getTrucks().size(),7), type);
+        truck.setAP(truck.type.getAP() + level.getAdditionalAP());
+        station.spawn(truck);
         gameState.addFireTruck();
     }
 
@@ -672,10 +677,10 @@ public class GameScreen implements Screen {
                 if (state.equals(PlayState.FREEZE)) {
                     state = PlayState.PLAY;
                     station.recalculateTruckPaths();
-                    freezeCooldown = 10;
+                    freezeCooldown = level.getTimeTillNextFreeze();
                 } else if (freezeCooldown < 0) {
                     state = PlayState.FREEZE;
-                    freezeCooldown = 10;
+                    freezeCooldown = Constants.FREEZE_TIME;
                 }
                 break;
         }
@@ -819,8 +824,8 @@ public class GameScreen implements Screen {
 
     private void generatePowerUpLocations(DifficultyLevel level) {
         ArrayList<Vector2> bayTiles = station.getBayTiles();
-        for (int width = 0; width < level.getWidth(); width++){
-            for (int height = 0 ; height < level.getHeight(); height++){
+        for (int width = 0; width < level.getMapWidth(); width++){
+            for (int height = 0 ; height < level.getMapHeight(); height++){
                 Vector2 tile = new Vector2(width, height);
                 if (isRoad(width, height) && !bayTiles.contains(tile)){
                     powerUpLocations.add(tile);

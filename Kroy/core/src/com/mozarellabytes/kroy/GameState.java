@@ -80,6 +80,8 @@ public class GameState {
         return fortressesDestroyed == 1;
     }
 
+    public int numDestroyedFortresses() { return  fortressesDestroyed; }
+
     /** Triggers the appropriate game over screen depending
      * on if the user has won or lost
      * @param playerWon <code> true </code> if player has won
