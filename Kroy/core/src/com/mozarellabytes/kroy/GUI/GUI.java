@@ -124,9 +124,9 @@ public class GUI {
         pauseButtonClicked = new Texture(Gdx.files.internal("ui/pause_clicked.png"), true);
         pauseButtonClicked.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
-        saveButtonIdle = new Texture(Gdx.files.internal("ui/info_idle.png"), true);
+        saveButtonIdle = new Texture(Gdx.files.internal("ui/save_idle.png"), true);
         saveButtonIdle.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        saveButtonClicked = new Texture(Gdx.files.internal("ui/info_clicked.png"), true);
+        saveButtonClicked = new Texture(Gdx.files.internal("ui/save_clicked.png"), true);
         saveButtonClicked.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         infoButtonIdle = new Texture(Gdx.files.internal("ui/info_idle.png"), true);

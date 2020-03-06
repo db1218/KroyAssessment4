@@ -87,19 +87,19 @@ public class DifficultyScreen implements Screen {
         backgroundImage = new Texture(Gdx.files.internal("menuscreen_blank_2.png"), true);
         backgroundImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
-        easyIdleTexture = new Texture(Gdx.files.internal("ui/controls_idle.png"), true);
+        easyIdleTexture = new Texture(Gdx.files.internal("ui/easy_idle.png"), true);
         easyIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        easyClickedTexture = new Texture(Gdx.files.internal("ui/controls_clicked.png"), true);
+        easyClickedTexture = new Texture(Gdx.files.internal("ui/easy_clicked.png"), true);
         easyClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
-        mediumIdleTexture = new Texture(Gdx.files.internal("ui/controls_idle.png"), true);
+        mediumIdleTexture = new Texture(Gdx.files.internal("ui/medium_idle_2.png"), true);
         mediumIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        mediumClickedTexture = new Texture(Gdx.files.internal("ui/controls_clicked.png"), true);
+        mediumClickedTexture = new Texture(Gdx.files.internal("ui/medium_clicked_2.png"), true);
         mediumClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
-        hardIdleTexture = new Texture(Gdx.files.internal("ui/controls_idle.png"), true);
+        hardIdleTexture = new Texture(Gdx.files.internal("ui/hard_idle.png"), true);
         hardIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        hardClickedTexture = new Texture(Gdx.files.internal("ui/controls_clicked.png"), true);
+        hardClickedTexture = new Texture(Gdx.files.internal("ui/hard_clicked.png"), true);
         hardClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         soundOnIdleTexture = new Texture(Gdx.files.internal("ui/sound_on_idle.png"), true);

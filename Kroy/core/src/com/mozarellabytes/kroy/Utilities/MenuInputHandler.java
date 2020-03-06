@@ -45,9 +45,7 @@ public class MenuInputHandler implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        if (keycode == Input.Keys.A) {
-            SoundFX.sfx_truck_attack.stop();
-        }
+        if (keycode == Input.Keys.A) SoundFX.sfx_truck_attack.stop();
         return true;
     }
 
@@ -68,15 +66,10 @@ public class MenuInputHandler implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
         Vector3 position = menu.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
-        if (menu.getStartButton().contains(position.x, position.y)) {
-            menu.clickedStartButton();
-        } else if (menu.getControlsButton().contains(position.x, position.y)) {
-            menu.clickedControlsButton();
-        } else if (menu.getSavesButton().contains(position.x, position.y)) {
-            menu.clickedSavesButton();
-        } else if (menu.getSoundButton().contains(position.x, position.y)) {
-            menu.clickedSoundButton();
-        }
+        if (menu.getStartButton().contains(position.x, position.y)) menu.clickedStartButton();
+        else if (menu.getControlsButton().contains(position.x, position.y)) menu.clickedControlsButton();
+        else if (menu.getSavesButton().contains(position.x, position.y)) menu.clickedSavesButton();
+        else if (menu.getSoundButton().contains(position.x, position.y)) menu.clickedSoundButton();
         return true;
     }
 
@@ -92,19 +85,14 @@ public class MenuInputHandler implements InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
         Vector3 position = menu.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
-        if (menu.getStartButton().contains(position.x, position.y)) {
-            menu.toDifficultyScreen();
-        } else if (menu.getControlsButton().contains(position.x, position.y)) {
-            menu.toControlScreen();
-        } else if (menu.getSoundButton().contains(position.x, position.y)){
-            menu.changeSound();
-        } else if (menu.getSavesButton().contains(position.x, position.y)){
-            menu.toSavesScreen();
-        } else {
-            menu.idleStartButton();
-            menu.idleControlsButton();
-            menu.idleSoundButton();
-        }
+        if (menu.getStartButton().contains(position.x, position.y)) menu.toDifficultyScreen();
+        else if (menu.getControlsButton().contains(position.x, position.y)) menu.toControlScreen();
+        else if (menu.getSoundButton().contains(position.x, position.y)) menu.changeSound();
+        else if (menu.getSavesButton().contains(position.x, position.y)) menu.toSavesScreen();
+        menu.idleStartButton();
+        menu.idleControlsButton();
+        menu.idleSoundButton();
+        menu.idleSavesButton();
         return true;
     }
 

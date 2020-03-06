@@ -90,8 +90,8 @@ public class SaveScreen implements Screen {
         HorizontalGroup footer = new HorizontalGroup();
 
         // create actors
-        Drawable deleteImage = new TextureRegionDrawable(new Texture("ui/controls_idle.png"));
-        Drawable closeImage = new TextureRegionDrawable(new Texture("ui/controls_idle.png"));
+        Drawable deleteImage = new TextureRegionDrawable(new Texture("ui/delete_idle.png"));
+        Drawable closeImage = new TextureRegionDrawable(new Texture("ui/return_idle.png"));
         Drawable playImage = new TextureRegionDrawable(new Texture("ui/start_idle.png"));
         deleteImage.setMinWidth(167.5f);
         deleteImage.setMinHeight(57.5f);
