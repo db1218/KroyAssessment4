@@ -14,6 +14,7 @@ import com.mozarellabytes.kroy.Entities.Fortress;
 import com.mozarellabytes.kroy.Entities.Patrol;
 import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Utilities.DifficultyControl;
+import com.mozarellabytes.kroy.Utilities.DifficultyLevel;
 
 import java.util.ArrayList;
 
@@ -33,6 +34,7 @@ public class SavedElement {
     private ArrayList<Patrol> patrols;
     private GameState gameState;
     private DifficultyControl difficultyControl;
+    private DifficultyLevel difficultyLevel;
 
     public SavedElement(String timestamp) {
         Json json = new Json();
@@ -75,6 +77,8 @@ public class SavedElement {
 
         difficultyControl = (DifficultyControl) data.get("Difficulty");
 
+        difficultyLevel = (DifficultyLevel) data.get("Difficulty Level");
+
     }
 
     public FireStation getFireStation() {
@@ -107,5 +111,25 @@ public class SavedElement {
 
     public String getEnTimestamp() {
         return this.getEnTimestamp;
+    }
+
+    public String listAliveFireTrucks() {
+        StringBuilder list = new StringBuilder();
+        for (FireTruck truck : fireStation.getTrucks()) {
+            list.append("\n  - ").append(truck.type.name());
+        }
+        return list.toString();
+    }
+
+    public String listAliveFortresses() {
+        StringBuilder list = new StringBuilder();
+        for (Fortress fortress : fortresses) {
+            list.append("\n  - ").append(fortress.getFortressType().getName());
+        }
+        return list.toString();
+    }
+
+    public DifficultyLevel getDifficultyLevel() {
+        return this.difficultyLevel;
     }
 }

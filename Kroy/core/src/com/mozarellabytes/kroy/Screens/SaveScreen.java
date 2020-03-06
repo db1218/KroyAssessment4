@@ -11,8 +11,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -20,10 +22,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mozarellabytes.kroy.GUI.ClickableGroup;
 import com.mozarellabytes.kroy.Kroy;
 
 import java.text.SimpleDateFormat;
@@ -37,112 +41,34 @@ public class SaveScreen implements Screen {
 
     // objects from other screen
     private final Kroy game;
+
     private final MenuScreen menuScreen;
 
-    // camera and visual objects
-    private final OrthographicCamera camera;
-    private final Viewport viewport;
-    private final ShapeRenderer shapeRenderer;
     private final Stage stage;
+    private Table selectedTable;
 
-    // actors
-    private final Label titleLabel;
-    private final ImageButton closeButton;
-    private final ImageButton playButton;
+    private SavedElement currentSaveSelected;
 
     public SaveScreen(Kroy game, MenuScreen menuScreen) {
         this.game = game;
         this.menuScreen = menuScreen;
 
-        shapeRenderer = new ShapeRenderer();
-
-        camera = new OrthographicCamera();
+        // camera and visual objects
+        OrthographicCamera camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        viewport = new ScreenViewport(camera);
+        Viewport viewport = new ScreenViewport(camera);
         viewport.apply();
 
         // create stage
         stage = new Stage(viewport, game.batch);
-//        stage.setDebugAll(true);
         Gdx.input.setInputProcessor(stage);
+    }
 
-        // create widget groups
-        Table table = new Table(); // stores everything in
-        VerticalGroup savesList = new VerticalGroup();
-        ScrollPane savesScroll = new ScrollPane(savesList, new Skin(Gdx.files.internal("skin/uiskin.json"), new TextureAtlas("skin/uiskin.atlas"))); // shows the game saves
-        savesScroll.setScrollbarsVisible(true);
-        HorizontalGroup header = new HorizontalGroup();
-        HorizontalGroup footer = new HorizontalGroup();
-
-        // create actors
-        Drawable closeImage = new TextureRegionDrawable(new Texture("ui/start_idle.png"));
-        Drawable playImage = new TextureRegionDrawable(new Texture("ui/controls_idle.png"));
-        closeImage.setMinWidth(167.5f);
-        closeImage.setMinHeight(57.5f);
-        playImage.setMinWidth(167.5f);
-        playImage.setMinHeight(57.5f);
-        closeButton = new ImageButton(closeImage);
-        playButton = new ImageButton(playImage);
-
-        titleLabel = new Label("Game Saves", new Label.LabelStyle(game.font60, Color.WHITE));
-        titleLabel.setAlignment(Align.left);
-
-        for(FileHandle file : Gdx.files.internal("saves/").list()) {
-            SavedElement save = new SavedElement(file.nameWithoutExtension());
-            Image screenshot = new Image(new Texture("saves/" + save.getTimestamp() + "/screenshot.png"));
-            Table saveItemTable = new Table();
-            saveItemTable.row().padBottom(10).minHeight(150);
-            saveItemTable.add(screenshot).size(Gdx.graphics.getWidth()/4f, Gdx.graphics.getHeight()/4f);
-
-            VerticalGroup list = new VerticalGroup();
-            Label timestampLabel = new Label(save.getEnTimestamp(), new Label.LabelStyle(game.font26, Color.WHITE));
-            timestampLabel.setName("timestamp");
-            timestampLabel.setAlignment(Align.right);
-            Label fireTrucksAliveLabel = new Label("Fire Trucks alive: " + save.getFireTrucks().size(), new Label.LabelStyle(game.font19, Color.WHITE));
-            fireTrucksAliveLabel.setAlignment(Align.right);
-            Label fortressesRemainingLabel = new Label("Fortresses remaining: " + save.getFortresses().size(), new Label.LabelStyle(game.font19, Color.WHITE));
-            fortressesRemainingLabel.setAlignment(Align.right);
-            Label fireStationAlive = new Label("Fire Station: " + (save.getFireStation().isAlive() ? "yes" : "no"), new Label.LabelStyle(game.font19, Color.WHITE));
-            fireStationAlive.setAlignment(Align.right);
-
-            list.addActor(timestampLabel);
-            list.addActor(fireTrucksAliveLabel);
-            list.addActor(fortressesRemainingLabel);
-            list.addActor(fireStationAlive);
-
-            list.fill().space(5).padRight(20).padLeft(20);
-
-            saveItemTable.add(list);
-            savesList.addActor(saveItemTable);
-            saveItemTable.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    super.clicked(event, x, y);
-                    startGame(save);
-                }
-
-            });
-        }
-
-        header.addActor(titleLabel);
-        footer.addActor(closeButton);
-        footer.addActor(playButton);
-
-        header.expand();
-        footer.expand();
-        footer.space(20);
-
-        // add header to table
-        table.setFillParent(true);
-        table.add(header).expandX().pad(40).left();
-        table.row().expand();
-        table.add(savesScroll).padLeft(40).padRight(40).expandY();
-        table.row();
-        table.add(footer).expandX().pad(40).right();
-
-
-        stage.addActor(table);
+    private void deleteSave() {
+        Gdx.files.local("saves/" + currentSaveSelected.getTimestamp() + "/").deleteDirectory();
+        stage.clear();
+        show();
     }
 
     /**
@@ -150,7 +76,150 @@ public class SaveScreen implements Screen {
      */
     @Override
     public void show() {
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"), new TextureAtlas("skin/uiskin.atlas"));
 
+        // create widget groups
+        Table table = new Table(); // stores everything in
+        selectedTable = new Table();
+
+        VerticalGroup savesList = new VerticalGroup();
+        ScrollPane savesScroll = new ScrollPane(savesList, skin); // shows the game saves
+        savesScroll.setScrollbarsVisible(true);
+        savesScroll.setScrollingDisabled(true, false);
+        HorizontalGroup header = new HorizontalGroup();
+        HorizontalGroup footer = new HorizontalGroup();
+
+        // create actors
+        Drawable deleteImage = new TextureRegionDrawable(new Texture("ui/controls_idle.png"));
+        Drawable closeImage = new TextureRegionDrawable(new Texture("ui/controls_idle.png"));
+        Drawable playImage = new TextureRegionDrawable(new Texture("ui/start_idle.png"));
+        deleteImage.setMinWidth(167.5f);
+        deleteImage.setMinHeight(57.5f);
+        closeImage.setMinWidth(167.5f);
+        closeImage.setMinHeight(57.5f);
+        playImage.setMinWidth(167.5f);
+        playImage.setMinHeight(57.5f);
+        ImageButton deleteButton = new ImageButton(deleteImage);
+        ImageButton closeButton = new ImageButton(closeImage);
+        ImageButton playButton = new ImageButton(playImage);
+
+        // actors
+        Label titleLabel = new Label("Game Saves", new Label.LabelStyle(game.font60, Color.WHITE));
+        titleLabel.setAlignment(Align.left);
+
+        for (FileHandle file : Gdx.files.internal("saves/").list()) {
+            SavedElement save = new SavedElement(file.nameWithoutExtension());
+            Image screenshot = new Image(new Texture("saves/" + save.getTimestamp() + "/screenshot.png"));
+            ClickableGroup saveItemTable = new ClickableGroup();
+
+            VerticalGroup list = new VerticalGroup();
+            Label timestampLabel = new Label(save.getEnTimestamp(), new Label.LabelStyle(game.font33, Color.WHITE));
+            Label fireTrucksAliveLabel = new Label(" - Fire Trucks alive: " + save.getFireTrucks().size(), new Label.LabelStyle(game.font25, Color.WHITE));
+            Label fortressesRemainingLabel = new Label(" - Fortresses remaining: " + save.getFortresses().size(), new Label.LabelStyle(game.font25, Color.WHITE));
+            Label fireStationAlive = new Label(" - Fire Station: " + (save.getFireStation().isAlive() ? "alive" : "destroyed"), new Label.LabelStyle(game.font25, Color.WHITE));
+
+            timestampLabel.setAlignment(Align.left);
+            fireTrucksAliveLabel.setAlignment(Align.left);
+            fortressesRemainingLabel.setAlignment(Align.left);
+            fireStationAlive.setAlignment(Align.left);
+
+            list.addActor(timestampLabel);
+            list.addActor(fireTrucksAliveLabel);
+            list.addActor(fortressesRemainingLabel);
+            list.addActor(fireStationAlive);
+
+            list.fill().space(5).expand().padRight(15).padLeft(15);
+
+            saveItemTable.setTouchable(Touchable.enabled);
+            saveItemTable.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    currentSaveSelected = save;
+                    updateCurrentlySelected();
+                }
+            });
+            saveItemTable.row().pad(5);
+            saveItemTable.add(screenshot).maxWidth(Gdx.graphics.getWidth()/7f).maxHeight(Gdx.graphics.getHeight()/7f);
+            saveItemTable.add(list);
+            savesList.addActor(saveItemTable);
+        }
+
+        deleteButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (currentSaveSelected != null) deleteSave();
+            }
+        });
+
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(menuScreen);
+            }
+        });
+
+        playButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (currentSaveSelected != null) game.setScreen(new GameScreen(game, currentSaveSelected));
+            }
+        });
+
+        selectedTable.add(new Label("Click on a save file then click Start to load it", new Label.LabelStyle(game.font25, Color.WHITE))).fill().expand();
+
+        header.addActor(titleLabel);
+        footer.addActor(closeButton);
+
+        header.expand();
+        footer.expand();
+        footer.space(20);
+
+        // add header to table
+        table.setFillParent(true);
+        table.add(header).colspan(2).expandX().pad(40).left();
+        table.row().expandY();
+
+        // displays message if no saves are found
+        if (Gdx.files.internal("saves/").list().length == 0) {
+            table.add(new Label("No saves found... click the save icon in game to save a game", new Label.LabelStyle(game.font25, Color.WHITE)));
+        } else {
+            table.add(savesScroll).colspan(1).padLeft(40);
+            table.add(selectedTable).colspan(1).padRight(40);
+            footer.addActor(deleteButton);
+            footer.addActor(playButton);
+        }
+
+        table.row();
+        table.add(footer).colspan(2).expandX().pad(40).right();
+
+        stage.addActor(table);
+    }
+
+    private void updateCurrentlySelected() {
+        Image screenshot = new Image(new Texture("saves/" + currentSaveSelected.getTimestamp() + "/screenshot.png"));
+        selectedTable.clearChildren();
+        selectedTable.add(new Label(currentSaveSelected.getEnTimestamp(), new Label.LabelStyle(game.font60, Color.WHITE))).padBottom(20).row();
+        selectedTable.add(screenshot).maxWidth(Gdx.graphics.getWidth()/3f).maxHeight(Gdx.graphics.getHeight()/3f).padBottom(20).row();
+        VerticalGroup savesList = new VerticalGroup();
+        savesList.space(10);
+
+        Label difficultyLabel = new Label("Difficulty: " +
+                currentSaveSelected.getDifficultyControl().getDifficultyMultiplier() + "x", new Label.LabelStyle(game.font25, Color.WHITE));
+        difficultyLabel.setAlignment(Align.left);
+
+        Label fireTrucksLevel = new Label("Fire Trucks: (" + currentSaveSelected.getFireTrucks().size() + ")" +
+                currentSaveSelected.listAliveFireTrucks(), new Label.LabelStyle(game.font25, Color.WHITE));
+        fireTrucksLevel.setAlignment(Align.left);
+
+        Label fortressesLevel = new Label("Fortresses: (" + currentSaveSelected.getFortresses().size() + ")" +
+                currentSaveSelected.listAliveFortresses(), new Label.LabelStyle(game.font25, Color.WHITE));
+        fortressesLevel.setAlignment(Align.left);
+
+        savesList.fill().bottom().expand();
+        savesList.addActor(difficultyLabel);
+        savesList.addActor(fireTrucksLevel);
+        savesList.addActor(fortressesLevel);
+        selectedTable.add(savesList).expand().maxHeight(Gdx.graphics.getHeight()/3f);
     }
 
     /**
@@ -209,7 +278,4 @@ public class SaveScreen implements Screen {
         stage.dispose();
     }
 
-    public void startGame(SavedElement save) {
-        game.setScreen(new GameScreen(game, save));
-    }
 }

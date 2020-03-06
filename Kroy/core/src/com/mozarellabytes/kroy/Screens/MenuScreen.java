@@ -116,8 +116,6 @@ public class MenuScreen implements Screen {
         soundOffClickedTexture = new Texture(Gdx.files.internal("ui/sound_off_clicked.png"), true);
         soundOffClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
-        MenuInputHandler ih = new MenuInputHandler(this);
-
         if (SoundFX.music_enabled) {
             SoundFX.sfx_menu.setLooping(true);
             SoundFX.sfx_menu.play();
@@ -154,13 +152,11 @@ public class MenuScreen implements Screen {
         soundButton.x = camera.viewportWidth - soundButton.getWidth() - 5;
         soundButton.y = camera.viewportHeight - soundButton.getHeight() - 5;
 
-        Gdx.input.setInputProcessor(ih);
-
     }
 
     @Override
     public void show() {
-
+        Gdx.input.setInputProcessor(new MenuInputHandler(this));
     }
 
     /** Renders the menu screen consisting of the background and the start, controls and sound buttons.

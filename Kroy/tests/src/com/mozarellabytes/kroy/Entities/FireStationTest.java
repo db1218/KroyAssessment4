@@ -3,6 +3,7 @@ package com.mozarellabytes.kroy.Entities;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.GdxTestRunner;
 import com.mozarellabytes.kroy.Screens.GameScreen;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,9 +24,15 @@ public class FireStationTest {
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
+    private FireStation station;
+
+    @Before
+    public void setUp() {
+        station = new FireStation(10, 10, 100);
+    }
+
     @Test
     public void repairPassTest() {
-        FireStation station = new FireStation(10, 10);
         station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.Ruby));
         station.getTruck(0).fortressDamage(50);
         float HPBeforeRepair = station.getTruck(0).getHP();
@@ -36,7 +43,6 @@ public class FireStationTest {
 
     @Test
     public void repairIncorrectPositionTest() {
-        FireStation station = new FireStation(10, 10);
         station.spawn(new FireTruck(gameScreenMock, new Vector2(20, 10), FireTruckType.Ruby));
         station.getTruck(0).fortressDamage(50);
         float HPBeforeRepair = station.getTruck(0).getHP();
@@ -47,7 +53,6 @@ public class FireStationTest {
 
     @Test
     public void repairAlreadyFullyRepairedTest() {
-        FireStation station = new FireStation(10, 10);
         station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.Ruby));
         float HPBeforeRepair = station.getTruck(0).getHP();
         station.restoreTrucks();
@@ -57,7 +62,6 @@ public class FireStationTest {
 
     @Test
     public void refillPassTest() {
-        FireStation station = new FireStation(10, 10);
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
         station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.Ruby));
         station.getTruck(0).attack(fortress);
@@ -69,7 +73,6 @@ public class FireStationTest {
 
     @Test
     public void refillIncorrectPositionTest() {
-        FireStation station = new FireStation(10, 10);
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
         station.spawn(new FireTruck(gameScreenMock, new Vector2(20, 10), FireTruckType.Ruby));
         station.getTruck(0).attack(fortress);
@@ -81,7 +84,6 @@ public class FireStationTest {
 
     @Test
     public void refillAlreadyFullTest() {
-        FireStation station = new FireStation(10, 10);
         station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.Ruby));
         float HPBeforeRefill = station.getTruck(0).getReserve();
         station.restoreTrucks();
@@ -98,7 +100,6 @@ public class FireStationTest {
         FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(11, 11), FireTruckType.Ruby);
         FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(11, 13), FireTruckType.Sapphire);
 
-        FireStation station = new FireStation(0,0);
         station.spawn(fireTruck1);
         station.spawn(fireTruck2);
 
@@ -124,7 +125,6 @@ public class FireStationTest {
         FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(11, 11), FireTruckType.Ruby);
         FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(11, 14), FireTruckType.Sapphire);
 
-        FireStation station = new FireStation(0,0);
         station.spawn(fireTruck1);
         station.spawn(fireTruck2);
 

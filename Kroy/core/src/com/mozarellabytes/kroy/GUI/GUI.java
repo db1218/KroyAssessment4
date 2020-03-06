@@ -18,8 +18,6 @@ import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.ArrayList;
 
-//import javax.jnlp.FileContents;
-
 /**
  * This Class is responsible for displaying the majority of the GUI that the
  * user can see and interact with that are apart from the main function of
@@ -56,6 +54,15 @@ public class GUI {
     private final Texture pauseButtonClicked;
     /** Texture of the pauseButton that is rendered to the screen */
     private Texture currentPauseTexture;
+
+    /** Rectangle containing the saveButton's coordinates, height and width */
+    private final Rectangle saveButton;
+    /** Texture of the saveButton when it is not being clicked on */
+    private final Texture saveButtonIdle;
+    /** Texture of the saveButton when it's being clicked */
+    private final Texture saveButtonClicked;
+    /** Texture of the saveButton that is rendered to the screen */
+    private Texture currentSaveTexture;
 
     /** Rectangle containing the infoButton's coordinates, height and width */
     private final Rectangle infoButton;
@@ -117,6 +124,11 @@ public class GUI {
         pauseButtonClicked = new Texture(Gdx.files.internal("ui/pause_clicked.png"), true);
         pauseButtonClicked.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
+        saveButtonIdle = new Texture(Gdx.files.internal("ui/info_idle.png"), true);
+        saveButtonIdle.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        saveButtonClicked = new Texture(Gdx.files.internal("ui/info_clicked.png"), true);
+        saveButtonClicked.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+
         infoButtonIdle = new Texture(Gdx.files.internal("ui/info_idle.png"), true);
         infoButtonIdle.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
         infoButtonClicked = new Texture(Gdx.files.internal("ui/info_clicked.png"), true);
@@ -133,6 +145,7 @@ public class GUI {
 
         currentHomeTexture = homeButtonIdle;
         currentPauseTexture = pauseButtonIdle;
+        currentPauseTexture = saveButtonIdle;
         currentInfoTexture = infoButtonIdle;
 
         if (SoundFX.music_enabled) {
@@ -145,6 +158,7 @@ public class GUI {
         soundButton = new Rectangle(Gdx.graphics.getWidth() - 70, Gdx.graphics.getHeight() - 33, 30, 30);
         pauseButton = new Rectangle(Gdx.graphics.getWidth() - 107, Gdx.graphics.getHeight() - 33, 30, 30);
         infoButton = new Rectangle(Gdx.graphics.getWidth() - 144, Gdx.graphics.getHeight() - 33, 30, 30);
+        saveButton = new Rectangle(Gdx.graphics.getWidth() - 181, Gdx.graphics.getHeight() - 33, 30, 30);
 
         pauseCamera = new OrthographicCamera();
         pauseCamera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
@@ -300,6 +314,7 @@ public class GUI {
         batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
         batch.draw(currentHomeTexture, homeButton.x, homeButton.y, homeButton.width, homeButton.height);
         batch.draw(currentPauseTexture, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
+        batch.draw(currentSaveTexture, saveButton.x, saveButton.y, saveButton.width, saveButton.height);
         batch.draw(currentInfoTexture, infoButton.x, infoButton.y, infoButton.width, infoButton.height);
         batch.end();
     }
@@ -330,50 +345,42 @@ public class GUI {
     /** Sets the homeButton texture to homeButtonClicked while the homeButton
      * is being clicked on */
     public void clickedHomeButton() {
-        if (SoundFX.music_enabled){
-            SoundFX.sfx_button_clicked.play();
-        }
+        if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
         currentHomeTexture = homeButtonClicked;
     }
 
     /** Sets the infoButton texture to "Idle" if the previous was "Clicked",
      * else it sets it to "Clicked" */
     public void clickedInfoButton() {
-        if (SoundFX.music_enabled) {
-            SoundFX.sfx_button_clicked.play();
-        }
-        if (currentInfoTexture == infoButtonIdle) {
-            currentInfoTexture = infoButtonClicked;
-        } else {
-            currentInfoTexture = infoButtonIdle;
-        }
+        if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
+        if (currentInfoTexture == infoButtonIdle) currentInfoTexture = infoButtonClicked;
+        else currentInfoTexture = infoButtonIdle;
     }
 
     /** Sets the soundButton texture to either soundOffClickedTexture or
      * soundOnClickedTexture while the soundButton is being clicked on */
     public void clickedSoundButton() {
-        if (SoundFX.music_enabled){
-            currentSoundTexture = soundOffClickedTexture;
-        } else {
-            currentSoundTexture = soundOnClickedTexture;
-        }
+        if (SoundFX.music_enabled) currentSoundTexture = soundOffClickedTexture;
+        else currentSoundTexture = soundOnClickedTexture;
     }
 
     /** Sets the pauseButton texture that is rendered to the screen and pauses
      * and unpauses the game */
     public void clickedPauseButton() {
-
         if (gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
             currentPauseTexture = pauseButtonClicked;
-            if (SoundFX.music_enabled) {
-                SoundFX.sfx_pause.play();
-            }
+            if (SoundFX.music_enabled) SoundFX.sfx_pause.play();
         } else {
             currentPauseTexture = pauseButtonIdle;
-            if (SoundFX.music_enabled) {
-                SoundFX.sfx_unpause.play();
-            }
+            if (SoundFX.music_enabled) SoundFX.sfx_unpause.play();
         }
+    }
+
+    /** Sets the saveButton texture that is rendered to the screen and saves the game */
+    public void clickedSaveButton() {
+        if (SoundFX.music_enabled) SoundFX.sfx_pause.play();
+        if (currentSaveTexture == saveButtonIdle) currentSaveTexture = saveButtonClicked;
+        else currentSaveTexture = saveButtonIdle;
     }
 
     /** Sets the homeButton texture that is rendered to the screen */
@@ -386,17 +393,19 @@ public class GUI {
         currentPauseTexture = pauseButtonIdle;
     }
 
+    /** Sets the saveButton texture that is rendered to the screen */
+    public void idleSaveButton() {
+        currentSaveTexture = saveButtonIdle;
+    }
+
     public void idleInfoButton() {
         currentInfoTexture = infoButtonIdle;
     }
 
     /** Sets the soundButton texture that is rendered to the screen */
     public void idleSoundButton() {
-        if (SoundFX.music_enabled){
-            currentSoundTexture = soundOffIdleTexture;
-        } else {
-            currentSoundTexture = soundOnIdleTexture;
-        }
+        if (SoundFX.music_enabled) currentSoundTexture = soundOffIdleTexture;
+        else currentSoundTexture = soundOnIdleTexture;
     }
 
     /** Toggles the sound, called if 'S' key or the sound button
@@ -419,6 +428,7 @@ public class GUI {
         idleInfoButton();
         idlePauseButton();
         idleSoundButton();
+        idleSaveButton();
     }
 
     /**
@@ -450,7 +460,7 @@ public class GUI {
      */
     public void updateFreezeCooldown(float cooldown) {
         Element element = elements.get(3);
-        if (cooldown > 0) element.setText(String.format("Pause Cooldown: %.1f", cooldown));
+        if (cooldown > 0) element.setText(String.format("Freeze Cooldown: %.1f", cooldown));
         else element.setText("Freeze available [SPACE]");
         this.elements.set(3, element);
     }
@@ -470,6 +480,8 @@ public class GUI {
     public Rectangle getHomeButton() { return this.homeButton; }
 
     public Rectangle getSoundButton() { return this.soundButton; }
+
+    public Rectangle getSaveButton() { return this.saveButton; }
 
     public Rectangle getPauseButton() { return this.pauseButton; }
 
