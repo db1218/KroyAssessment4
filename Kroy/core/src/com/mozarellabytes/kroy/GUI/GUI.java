@@ -460,7 +460,7 @@ public class GUI {
      */
     public void updateFreezeCooldown(float cooldown) {
         Element element = elements.get(3);
-        if (cooldown > 0) element.setText(String.format("Pause Cooldown: %.1f", cooldown));
+        if (cooldown > 0) element.setText(String.format("Freeze Cooldown: %.1f", cooldown));
         else element.setText("Freeze available [SPACE]");
         this.elements.set(3, element);
     }

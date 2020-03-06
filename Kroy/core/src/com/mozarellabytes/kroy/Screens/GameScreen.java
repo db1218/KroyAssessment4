@@ -370,6 +370,7 @@ public class GameScreen implements Screen {
                 shapeMapRenderer.end();
 
                 gui.renderFreezeScreenText(freezeCooldown);
+                freezeCooldown -= delta;
 
                 // exit this mode
                 if (freezeCooldown < 0) {
