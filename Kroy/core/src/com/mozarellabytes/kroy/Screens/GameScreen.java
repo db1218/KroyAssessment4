@@ -378,8 +378,7 @@ public class GameScreen implements Screen {
 
                 // exit this mode
                 if (freezeCooldown < 0) {
-                    freezeCooldown = level.getTimeTillNextFreeze();
-                    state = PlayState.PLAY;
+                    changeState(PlayState.FREEZE);
                 }
         }
         gui.renderButtons();
