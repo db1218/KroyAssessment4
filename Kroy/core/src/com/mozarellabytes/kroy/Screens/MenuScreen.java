@@ -22,18 +22,18 @@ public class MenuScreen implements Screen {
     private final Texture backgroundImage;
 
     /** Rectangle containing the position of the play button */
-    private final Rectangle startButton;
+    private final Rectangle newGameButton;
 
     /** Texture of the start button when it has not been clicked */
-    private final Texture startIdleTexture;
+    private final Texture newGameIdleTexture;
 
     /** Texture of the start button when has been clicked */
-    private final Texture startClickedTexture;
+    private final Texture newGameClickedTexture;
 
     /** Contains the current state of the start button:
      * startIdleTexture if the start button is not being pressed,
      * startClickedTexture if the start button has been pressed */
-    private Texture currentStartTexture;
+    private Texture newGameStartTexture;
 
     /** Rectangle containing the position of the saves button */
     private final Rectangle savesButton;
@@ -92,10 +92,10 @@ public class MenuScreen implements Screen {
         backgroundImage = new Texture(Gdx.files.internal("menuscreen_blank_2.png"), true);
         backgroundImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
-        startIdleTexture = new Texture(Gdx.files.internal("ui/newgame_idle.png"), true);
-        startIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        startClickedTexture = new Texture(Gdx.files.internal("ui/newgame_clicked.png"), true);
-        startClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        newGameIdleTexture = new Texture(Gdx.files.internal("ui/newgame_idle.png"), true);
+        newGameIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        newGameClickedTexture = new Texture(Gdx.files.internal("ui/newgame_clicked.png"), true);
+        newGameClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         savesIdleTexture = new Texture(Gdx.files.internal("ui/load_idle.png"), true);
         savesIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
@@ -124,15 +124,15 @@ public class MenuScreen implements Screen {
             currentSoundTexture = soundOnIdleTexture;
         }
 
-        currentStartTexture = startIdleTexture;
+        newGameStartTexture = newGameIdleTexture;
         currentSavesTexture = savesIdleTexture;
         currentControlsTexture = controlsIdleTexture;
 
-        startButton = new Rectangle();
-        startButton.width = (float) (currentStartTexture.getWidth()*0.75);
-        startButton.height = (float) (currentStartTexture.getHeight()*0.75);
-        startButton.x = (int) (camera.viewportWidth/2 - startButton.width/2);
-        startButton.y = (int) ((camera.viewportHeight/2 - startButton.height/2) * 0.8);
+        newGameButton = new Rectangle();
+        newGameButton.width = (float) (newGameStartTexture.getWidth()*0.75);
+        newGameButton.height = (float) (newGameStartTexture.getHeight()*0.75);
+        newGameButton.x = (int) (camera.viewportWidth/2 - newGameButton.width/2);
+        newGameButton.y = (int) ((camera.viewportHeight/2 - newGameButton.height/2) * 0.8);
 
         savesButton = new Rectangle();
         savesButton.width = (float) (currentSavesTexture.getWidth()*0.75);
@@ -174,7 +174,7 @@ public class MenuScreen implements Screen {
 
         game.batch.begin();
         game.batch.draw(backgroundImage, 0, 0, camera.viewportWidth, camera.viewportHeight);
-        game.batch.draw(currentStartTexture, startButton.x, startButton.y, startButton.width, startButton.height);
+        game.batch.draw(newGameStartTexture, newGameButton.x, newGameButton.y, newGameButton.width, newGameButton.height);
         game.batch.draw(currentSavesTexture, savesButton.x, savesButton.y, savesButton.width, savesButton.height);
         game.batch.draw(currentControlsTexture, controlsButton.x, controlsButton.y, controlsButton.width, controlsButton.height);
         game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
@@ -206,9 +206,9 @@ public class MenuScreen implements Screen {
     @Override
     public void dispose() {
         backgroundImage.dispose();
-        currentStartTexture.dispose();
-        startClickedTexture.dispose();
-        startIdleTexture.dispose();
+        newGameStartTexture.dispose();
+        newGameClickedTexture.dispose();
+        newGameIdleTexture.dispose();
         currentControlsTexture.dispose();
         controlsClickedTexture.dispose();
         controlsIdleTexture.dispose();
@@ -227,11 +227,11 @@ public class MenuScreen implements Screen {
     }
 
     /** Changes the texture of the start button when it has been clicked on */
-    public void clickedStartButton() {
+    public void clickedNewGameButton() {
         if (SoundFX.music_enabled){
             SoundFX.sfx_button_clicked.play();
         }
-        currentStartTexture = startClickedTexture;
+        newGameStartTexture = newGameClickedTexture;
     }
 
     /** Changes the texture of the controls button when it has been clicked on */
@@ -273,8 +273,8 @@ public class MenuScreen implements Screen {
     }
 
     /** The texture of the start button when it has not been clicked on */
-    public void idleStartButton() {
-        currentStartTexture = startIdleTexture;
+    public void idleNewGameButton() {
+        newGameStartTexture = newGameIdleTexture;
     }
 
     /** The texture of the control button when it has not been clicked on */
@@ -306,7 +306,7 @@ public class MenuScreen implements Screen {
         game.setScreen(new SaveScreen(game, this));
     }
 
-    public Rectangle getStartButton() { return startButton; }
+    public Rectangle getNewGameButton() { return newGameButton; }
 
     public Rectangle getControlsButton() { return controlsButton; }
 

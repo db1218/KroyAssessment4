@@ -3,6 +3,8 @@ package com.mozarellabytes.kroy.Utilities;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
+import com.mozarellabytes.kroy.Entities.FireTruck;
+import com.mozarellabytes.kroy.Entities.FireTruckType;
 
 public enum DifficultyLevel {
 
@@ -15,13 +17,16 @@ public enum DifficultyLevel {
    //    new Vector2(32f,1.5f), new Vector2(41.95f, 23.5f), new Vector2(44f,11f)
 
     Easy(new TmxMapLoader().load("maps/Easy.tmx"), 20, 12, new Vector2(10,3),
-            0, 80f, 4,4, 6f,0.1f),
+            0, 80f, 4,4, 6f,0.1f,
+            FireTruckType.RubyEasy, FireTruckType.SapphireEasy, FireTruckType.AmethystEasy, FireTruckType.EmeraldEasy),
 
     Medium(new TmxMapLoader().load("maps/Medium.tmx"), 40, 24, new Vector2(13.5f,3.5f),
-            1, 60f, 10,2, 10f,0.05f),
+            1, 60f, 10,2, 10f,0.05f,
+            FireTruckType.RubyMedium, FireTruckType.SapphireMedium, FireTruckType.AmethystMedium, FireTruckType.EmeraldMedium),
 
     Hard(new TmxMapLoader().load("maps/Hard.tmx"), 48, 29, new Vector2(12,23.5f),
-            3, 50f, 20,1,15f,0);
+            3, 50f, 20,1,15f,0,
+            FireTruckType.RubyHard, FireTruckType.SapphireHard, FireTruckType.AmethystHard, FireTruckType.EmeraldHard);
 
 
     TiledMap map;
@@ -42,9 +47,15 @@ public enum DifficultyLevel {
     float timeTillNextFreeze;
     float additionalAP;
 
+    FireTruckType ruby;
+    FireTruckType sapphire;
+    FireTruckType amethyst;
+    FireTruckType emerald;
+
     DifficultyLevel(TiledMap map, int mapWidth, int mapHeight, Vector2 revsLocation, int startDifficultyLevel,
                     float difficultyChangeInterval, int timeTillPowerup, int fortressesDestroyedBeforeBoss,
-                    float timeTillNextFreeze, float additionalAP) {
+                    float timeTillNextFreeze, float additionalAP, FireTruckType ruby, FireTruckType sapphire,
+                    FireTruckType amethyst, FireTruckType emerald) {
         this.map = map;
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
@@ -60,6 +71,11 @@ public enum DifficultyLevel {
         this.fortressesDestroyedBeforeBoss = fortressesDestroyedBeforeBoss;
         this.timeTillNextFreeze = timeTillNextFreeze;
         this.additionalAP = additionalAP;
+
+        this.ruby = ruby;
+        this.sapphire = sapphire;
+        this.amethyst = amethyst;
+        this.emerald = emerald;
 
     }
 
@@ -92,5 +108,13 @@ public enum DifficultyLevel {
     public float getTimeTillNextFreeze() { return this.timeTillNextFreeze;}
 
     public float getAdditionalAP() { return this.additionalAP; }
+
+    public FireTruckType getRuby() { return this.ruby; }
+
+    public FireTruckType getSapphire() { return this.sapphire; }
+
+    public FireTruckType getAmethyst() { return this.amethyst; }
+
+    public FireTruckType getEmerald() { return this.emerald; }
 
 }

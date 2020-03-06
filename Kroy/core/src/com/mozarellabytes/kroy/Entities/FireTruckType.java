@@ -17,10 +17,22 @@ public enum FireTruckType {
     /** The preset values for the different truck types includes the type's:
      * maximum reserve, speed, trailColour, name, attack range, attack points
      */
-    Ruby(100, 4.2f, Color.RED, "Ruby Truck", 5, 0.08f, 150, "red"),
-    Sapphire(250, 2, Color.CYAN, "Sapphire Truck", 6, 0.16f, 120, "blue"),
-    Amethyst(280, 1.4f, Color.PURPLE, "Amethyst Truck", 6.5f, 0.2f, 230, "purple"),
-    Emerald(120, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.3f, 100, "green");
+    RubyEasy(120, 4.2f, Color.RED, "Ruby Truck", 5.5f, 0.11f, 160,"red"),
+    SapphireEasy(250, 2.3f, Color.CYAN, "Sapphire Truck", 6.5f, 0.2f, 140, "blue"),
+    AmethystEasy(280, 1.7f, Color.PURPLE, "Amethyst Truck", 6.7f, 0.22f, 230,"purple"),
+    EmeraldEasy(140, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.35f, 120, "green"),
+
+    RubyMedium(110, 4.2f, Color.RED, "Ruby Truck", 5.5f, 0.1f, 150, "red"),
+    SapphireMedium(250, 2.2f, Color.CYAN, "Sapphire Truck", 6.2f, 0.16f, 130, "blue"),
+    AmethystMedium(280, 1.6f, Color.PURPLE, "Amethyst Truck", 6.5f, 0.2f, 230, "purple"),
+    EmeraldMedium(130, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.3f, 110, "green"),
+
+
+    RubyHard(100, 4.2f, Color.RED, "Ruby Truck", 5, 0.08f, 140, "red"),
+    SapphireHard(250, 2, Color.CYAN, "Sapphire Truck", 6, 0.16f, 120, "blue"),
+    AmethystHard(280, 1.4f, Color.PURPLE, "Amethyst Truck", 6.5f, 0.2f, 230, "purple"),
+    EmeraldHard(120, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.3f, 100, "green");
+
 
     /** The maximum amount of water this type of truck can have,
      * also the value of the truck's reserve when it is spawned */

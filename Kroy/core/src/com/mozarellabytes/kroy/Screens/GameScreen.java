@@ -163,10 +163,10 @@ public class GameScreen implements Screen {
 
         setup(game, level);
 
-        spawn(FireTruckType.Emerald);
-        spawn(FireTruckType.Amethyst);
-        spawn(FireTruckType.Sapphire);
-        spawn(FireTruckType.Ruby);
+        spawn(level.getRuby());
+        spawn(level.getSapphire());
+        spawn(level.getAmethyst());
+        spawn(level.getEmerald());
 
         fortresses.add(new Fortress(level.getRevsLocation().x, level.getRevsLocation().y, FortressType.Revs));
 //        fortresses.add(new Fortress(level.getWalmgateLocation().x, level.getWalmgateLocation().y, FortressType.Walmgate));
@@ -656,9 +656,7 @@ public class GameScreen implements Screen {
      */
     private void spawn(FireTruckType type) {
         if (SoundFX.music_enabled) SoundFX.sfx_truck_spawn.play();
-        FireTruck truck = new FireTruck(this, new Vector2(3 + station.getTrucks().size(),7), type);
-        truck.setAP(truck.type.getAP() + level.getAdditionalAP());
-        station.spawn(truck);
+        station.spawn(new FireTruck(this, new Vector2(3 + station.getTrucks().size(),7), type));
         gameState.addFireTruck();
     }
 

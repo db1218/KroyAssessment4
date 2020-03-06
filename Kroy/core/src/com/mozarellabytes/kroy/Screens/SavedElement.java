@@ -116,7 +116,7 @@ public class SavedElement {
     public String listAliveFireTrucks() {
         StringBuilder list = new StringBuilder();
         for (FireTruck truck : fireStation.getTrucks()) {
-            list.append("\n  - ").append(truck.type.name());
+            list.append("\n  - ").append(truck.type.getName());
         }
         return list.toString();
     }

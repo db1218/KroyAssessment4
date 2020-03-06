@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.DifficultyLevel;
 import com.mozarellabytes.kroy.Utilities.DifficultyScreenInputHandler;
@@ -57,6 +58,14 @@ public class DifficultyScreen implements Screen {
 
     private Texture currentHardTexture;
 
+    private final Rectangle returnButton;
+
+    private final Texture returnIdleTexture;
+
+    private final Texture returnClickedTexture;
+
+    private Texture currentReturnTexture;
+
     /** Rectangle containing the position of the sound button */
     private final Rectangle soundButton;
 
@@ -73,6 +82,7 @@ public class DifficultyScreen implements Screen {
     private final Texture soundOffClickedTexture;
 
     private Texture currentSoundTexture;
+
 
     /** Constructs the MenuScreen
      *
@@ -102,6 +112,11 @@ public class DifficultyScreen implements Screen {
         hardClickedTexture = new Texture(Gdx.files.internal("ui/hard_clicked.png"), true);
         hardClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
+        returnIdleTexture = new Texture(Gdx.files.internal("ui/return_idle.png"), true);
+        returnIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        returnClickedTexture = new Texture(Gdx.files.internal("ui/return_clicked.png"), true);
+        returnClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+
         soundOnIdleTexture = new Texture(Gdx.files.internal("ui/sound_on_idle.png"), true);
         soundOnIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
         soundOffIdleTexture = new Texture(Gdx.files.internal("ui/sound_off_idle.png"), true);
@@ -125,6 +140,7 @@ public class DifficultyScreen implements Screen {
         currentEasyTexture = easyIdleTexture;
         currentMediumTexture = mediumIdleTexture;
         currentHardTexture = hardIdleTexture;
+        currentReturnTexture = returnIdleTexture;
 
         easyButton = new Rectangle();
         easyButton.width = (float) (currentEasyTexture.getWidth()*0.75);
@@ -143,6 +159,12 @@ public class DifficultyScreen implements Screen {
         hardButton.height = (float) (currentHardTexture.getHeight()*0.75);
         hardButton.x = (int) ((camera.viewportWidth/4) * 3 - hardButton.width/2);
         hardButton.y = (int) ((camera.viewportHeight/2 - hardButton.height/2) * 0.7);
+
+        returnButton = new Rectangle();
+        returnButton.width = (float) (currentReturnTexture.getWidth()*0.75);
+        returnButton.height = (float) (currentReturnTexture.getHeight()*0.75);
+        returnButton.x = (int) (camera.viewportWidth/2 - returnButton.width/2);
+        returnButton.y = (int) ((camera.viewportHeight/5 - returnButton.height/2));
 
         soundButton = new Rectangle();
         soundButton.width = 50;
@@ -174,6 +196,7 @@ public class DifficultyScreen implements Screen {
         game.batch.draw(currentEasyTexture, easyButton.x, easyButton.y, easyButton.width, easyButton.height);
         game.batch.draw(currentMediumTexture, mediumButton.x, mediumButton.y, mediumButton.width, mediumButton.height);
         game.batch.draw(currentHardTexture, hardButton.x, hardButton.y, hardButton.width, hardButton.height);
+        game.batch.draw(currentReturnTexture, returnButton.x, returnButton.y, returnButton.width, returnButton.height);
         game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
         game.batch.end();
 
@@ -224,20 +247,15 @@ public class DifficultyScreen implements Screen {
 
     /** Changes the texture of the start button when it has been clicked on */
     public void clickedEasyButton() {
-        if (SoundFX.music_enabled){
-            SoundFX.sfx_button_clicked.play();
-        }
+        if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
         currentEasyTexture = easyClickedTexture;
     }
 
     public void idleEasyButton() { currentEasyTexture = easyIdleTexture; }
 
-
     /** Changes the texture of the start button when it has been clicked on */
     public void clickedMediumButton() {
-        if (SoundFX.music_enabled){
-            SoundFX.sfx_button_clicked.play();
-        }
+        if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
         currentMediumTexture = mediumClickedTexture;
     }
 
@@ -248,9 +266,7 @@ public class DifficultyScreen implements Screen {
 
     /** Changes the texture of the start button when it has been clicked on */
     public void clickedHardButton() {
-        if (SoundFX.music_enabled){
-            SoundFX.sfx_button_clicked.play();
-        }
+        if (SoundFX.music_enabled)  SoundFX.sfx_button_clicked.play();
         currentHardTexture = hardClickedTexture;
     }
 
@@ -258,14 +274,10 @@ public class DifficultyScreen implements Screen {
         currentHardTexture = hardIdleTexture;
     }
 
-
     /** Changes the texture of the sound button when it has been clicked on */
     public void clickedSoundButton() {
-        if (SoundFX.music_enabled){
-            currentSoundTexture = soundOffClickedTexture;
-        } else {
-            currentSoundTexture = soundOnClickedTexture;
-        }
+        Texture soundTexture = SoundFX.music_enabled? soundOffClickedTexture : soundOnClickedTexture;
+        currentSoundTexture = soundTexture;
     }
 
     /** Turns the sound on and off and changes the sound icon accordingly,
@@ -283,11 +295,8 @@ public class DifficultyScreen implements Screen {
 
     /** The texture of the sound button when it has not been clicked on */
     public void idleSoundButton() {
-        if (SoundFX.music_enabled){
-            currentSoundTexture = soundOffIdleTexture;
-        } else {
-            currentSoundTexture = soundOnIdleTexture;
-        }
+        Texture soundTexture = SoundFX.music_enabled? soundOffClickedTexture : soundOnClickedTexture;
+        currentSoundTexture = soundTexture;
     }
 
 
