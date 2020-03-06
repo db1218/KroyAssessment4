@@ -51,7 +51,6 @@ public class SaveScreen implements Screen {
 
     public SaveScreen(Kroy game, MenuScreen menuScreen) {
         this.game = game;
-        this.menuScreen = menuScreen;
 
         // camera and visual objects
         OrthographicCamera camera = new OrthographicCamera();
@@ -215,6 +214,33 @@ public class SaveScreen implements Screen {
         table.add(footer).colspan(2).expandX().pad(40).right();
 
         stage.addActor(table);
+    }
+
+    private void updateCurrentlySelected() {
+        Image screenshot = new Image(new Texture("saves/" + currentSaveSelected.getTimestamp() + "/screenshot.png"));
+        selectedTable.clearChildren();
+        selectedTable.add(new Label(currentSaveSelected.getEnTimestamp(), new Label.LabelStyle(game.font60, Color.WHITE))).padBottom(20).row();
+        selectedTable.add(screenshot).maxWidth(Gdx.graphics.getWidth()/3f).maxHeight(Gdx.graphics.getHeight()/3f).padBottom(20).row();
+        VerticalGroup savesList = new VerticalGroup();
+        savesList.space(10);
+
+        Label difficultyLabel = new Label("Difficulty: " +
+                currentSaveSelected.getDifficultyControl().getDifficultyMultiplier() + "x", new Label.LabelStyle(game.font25, Color.WHITE));
+        difficultyLabel.setAlignment(Align.left);
+
+        Label fireTrucksLevel = new Label("Fire Trucks: (" + currentSaveSelected.getFireTrucks().size() + ")" +
+                currentSaveSelected.listAliveFireTrucks(), new Label.LabelStyle(game.font25, Color.WHITE));
+        fireTrucksLevel.setAlignment(Align.left);
+
+        Label fortressesLevel = new Label("Fortresses: (" + currentSaveSelected.getFortresses().size() + ")" +
+                currentSaveSelected.listAliveFortresses(), new Label.LabelStyle(game.font25, Color.WHITE));
+        fortressesLevel.setAlignment(Align.left);
+
+        savesList.fill().bottom().expand();
+        savesList.addActor(difficultyLabel);
+        savesList.addActor(fireTrucksLevel);
+        savesList.addActor(fortressesLevel);
+        selectedTable.add(savesList).expand().maxHeight(Gdx.graphics.getHeight()/3f);
     }
 
     /**
