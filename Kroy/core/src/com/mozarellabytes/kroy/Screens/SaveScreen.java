@@ -51,6 +51,7 @@ public class SaveScreen implements Screen {
 
     public SaveScreen(Kroy game, MenuScreen menuScreen) {
         this.game = game;
+        this.menuScreen = menuScreen;
 
         // camera and visual objects
         OrthographicCamera camera = new OrthographicCamera();
@@ -68,33 +69,6 @@ public class SaveScreen implements Screen {
         Gdx.files.local("saves/" + currentSaveSelected.getTimestamp() + "/").deleteDirectory();
         stage.clear();
         show();
-    }
-
-    private void updateCurrentlySelected() {
-        Image screenshot = new Image(new Texture("saves/" + currentSaveSelected.getTimestamp() + "/screenshot.png"));
-        selectedTable.clearChildren();
-        selectedTable.add(new Label(currentSaveSelected.getEnTimestamp(), new Label.LabelStyle(game.font60, Color.WHITE))).padBottom(20).row();
-        selectedTable.add(screenshot).maxWidth(Gdx.graphics.getWidth()/3f).maxHeight(Gdx.graphics.getHeight()/3f).padBottom(20).row();
-        VerticalGroup savesList = new VerticalGroup();
-        savesList.space(10);
-
-        Label difficultyLabel = new Label("Difficulty: " +
-                currentSaveSelected.getDifficultyControl().getDifficultyMultiplier() + "x", new Label.LabelStyle(game.font25, Color.WHITE));
-        difficultyLabel.setAlignment(Align.left);
-
-        Label fireTrucksLevel = new Label("Fire Trucks: (" + currentSaveSelected.getFireTrucks().size() + ")" +
-                currentSaveSelected.listAliveFireTrucks(), new Label.LabelStyle(game.font25, Color.WHITE));
-        fireTrucksLevel.setAlignment(Align.left);
-
-        Label fortressesLevel = new Label("Fortresses: (" + currentSaveSelected.getFortresses().size() + ")" +
-                currentSaveSelected.listAliveFortresses(), new Label.LabelStyle(game.font25, Color.WHITE));
-        fortressesLevel.setAlignment(Align.left);
-
-        savesList.fill().bottom().expand();
-        savesList.addActor(difficultyLabel);
-        savesList.addActor(fireTrucksLevel);
-        savesList.addActor(fortressesLevel);
-        selectedTable.add(savesList).expand().maxHeight(Gdx.graphics.getHeight()/3f);
     }
 
     /**
@@ -191,14 +165,10 @@ public class SaveScreen implements Screen {
             }
         });
 
-        Label emptyLabel = new Label("Click on a save file then click Start to load it", new Label.LabelStyle(game.font25, Color.WHITE));
-        emptyLabel.setAlignment(Align.center);
-        selectedTable.add(emptyLabel).fill().expand();
+        selectedTable.add(new Label("Click on a save file then click Start to load it", new Label.LabelStyle(game.font25, Color.WHITE))).fill().expand();
 
         header.addActor(titleLabel);
-        footer.addActor(deleteButton);
         footer.addActor(closeButton);
-        footer.addActor(playButton);
 
         header.expand();
         footer.expand();
@@ -207,9 +177,18 @@ public class SaveScreen implements Screen {
         // add header to table
         table.setFillParent(true);
         table.add(header).colspan(2).expandX().pad(40).left();
-        table.row();
-        table.add(savesScroll).colspan(1).padLeft(40).expandY();
-        table.add(selectedTable).colspan(1).padRight(40).expandY();
+        table.row().expandY();
+
+        // displays message if no saves are found
+        if (Gdx.files.internal("saves/").list().length == 0) {
+            table.add(new Label("No saves found... click the save icon in game to save a game", new Label.LabelStyle(game.font25, Color.WHITE)));
+        } else {
+            table.add(savesScroll).colspan(1).padLeft(40);
+            table.add(selectedTable).colspan(1).padRight(40);
+            footer.addActor(deleteButton);
+            footer.addActor(playButton);
+        }
+
         table.row();
         table.add(footer).colspan(2).expandX().pad(40).right();
 
