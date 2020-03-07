@@ -85,7 +85,6 @@ public class DanceScreen implements Screen, BeatListener {
         this.comboHintLocation = new Vector2(camera.viewportWidth/4, (3*camera.viewportHeight)/5);
 
         this.danceInputHandler = new DanceScreenInputHandler(this);
-        Gdx.app.log("in dance screen", "yas");
     }
 
     /**
@@ -134,7 +133,7 @@ public class DanceScreen implements Screen, BeatListener {
         this.game.batch.draw(targetBoxTexture, arrowsOrigin.x, arrowsOrigin.y, ARROW_SIZE, ARROW_SIZE);
 
         if (danceMan.getCombo() > 2) {
-            this.game.font50.draw(game.batch, "Press [SPACE] to use combo!", comboHintLocation.x, (comboHintLocation.y + danceMan.getBeatProximity()* camera.viewportHeight/32), camera.viewportWidth, 1, false);
+         //   this.game.font50.draw(game.batch, "Press [SPACE] to use combo!", comboHintLocation.x, (comboHintLocation.y + danceMan.getBeatProximity()* camera.viewportHeight/32), camera.viewportWidth, 1, false);
         }
 
         if (lastResult != null) {
@@ -244,18 +243,14 @@ public class DanceScreen implements Screen, BeatListener {
 
     @Override
     public void offBeat() {
-        if (firefighter.getTimeInState() > danceMan.getPhase()/2) {
-            this.firefighter.setState(DanceMove.WAIT);
-        }
+        if (firefighter.getTimeInState() > danceMan.getPhase()/2) this.firefighter.setState(DanceMove.WAIT);
         this.ETDancer.updateJive();
     }
 
     @Override
     public void moveResult(DanceResult result) {
         if (result.equals(DanceResult.WRONG)){
-            if (!this.firetruck.inShield()) {
-                this.firefighter.damage(20);
-            }
+            if (!this.firetruck.inShield()) this.firefighter.damage(20);
             this.ETDancer.startJive();
         }
     }

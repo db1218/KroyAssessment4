@@ -1,5 +1,7 @@
 package com.mozarellabytes.kroy.Minigame;
 
+import com.badlogic.gdx.Gdx;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,7 +83,10 @@ public class DanceManager {
      * and lim x-> 1 is directly on the next beat.
      * @return the phase through the next beat
      * */
+    /** the returned value is 2* the time */
     public float getPhase() {
+      //  Gdx.app.log("time", String.valueOf(time));
+      //  Gdx.app.log("result", String.valueOf(time / period));
         return time / period;
     }
 
@@ -90,6 +95,7 @@ public class DanceManager {
      * @return float distance to nearest beat
      */
     public float getBeatProximity() {
+       // Gdx.app.log("beat proximity", String.valueOf(2 * Math.abs(getPhase()-.5f)));
         return 2 * Math.abs(getPhase()-.5f);
     }
 
@@ -119,15 +125,15 @@ public class DanceManager {
 
             doneThisBeat = true;
 
-            if (proximity > .95f) {
+            if (proximity > .91f) {
                 goodMove();
                 result = DanceResult.GREAT;
             }
-            else if (proximity > .9f) {
+            else if (proximity > .86f) {
                 goodMove();
                 result = DanceResult.GOOD;
             }
-            else if (proximity > .8) {
+            else if (proximity > .75f) {
                 goodMove();
                 result = DanceResult.OKAY;
             }
