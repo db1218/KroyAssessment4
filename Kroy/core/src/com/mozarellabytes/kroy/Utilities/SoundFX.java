@@ -87,6 +87,7 @@ public class SoundFX {
     public static void toggleMusic(Screen screen) {
         music_enabled = !music_enabled;
         decideMusic(screen);
+    }
     /** Plays danceoff music */
     public static void playDanceoffMusic() {
         sfx_danceoff.setLooping(true);
