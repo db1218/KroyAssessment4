@@ -2,11 +2,11 @@ package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.DifficultyLevel;
 import com.mozarellabytes.kroy.Utilities.DifficultyScreenInputHandler;
@@ -129,13 +129,7 @@ public class DifficultyScreen implements Screen {
         // need a new input handler?
         DifficultyScreenInputHandler ih = new DifficultyScreenInputHandler(this);
 
-        if (SoundFX.music_enabled) {
-            SoundFX.sfx_menu.setLooping(true);
-            SoundFX.sfx_menu.play();
-            currentSoundTexture = soundOffIdleTexture;
-        } else {
-            currentSoundTexture = soundOnIdleTexture;
-        }
+        currentSoundTexture = (SoundFX.music_enabled) ? soundOffIdleTexture : soundOnIdleTexture;
 
         currentEasyTexture = easyIdleTexture;
         currentMediumTexture = mediumIdleTexture;
@@ -179,7 +173,7 @@ public class DifficultyScreen implements Screen {
 
     @Override
     public void show() {
-
+        SoundFX.decideMusic(this);
     }
 
     @Override
@@ -266,7 +260,7 @@ public class DifficultyScreen implements Screen {
 
     /** Changes the texture of the start button when it has been clicked on */
     public void clickedHardButton() {
-        if (SoundFX.music_enabled)  SoundFX.sfx_button_clicked.play();
+        if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
         currentHardTexture = hardClickedTexture;
     }
 
@@ -276,27 +270,21 @@ public class DifficultyScreen implements Screen {
 
     /** Changes the texture of the sound button when it has been clicked on */
     public void clickedSoundButton() {
-        Texture soundTexture = SoundFX.music_enabled? soundOffClickedTexture : soundOnClickedTexture;
-        currentSoundTexture = soundTexture;
+        currentSoundTexture = SoundFX.music_enabled ? soundOffClickedTexture : soundOnClickedTexture;
     }
 
     /** Turns the sound on and off and changes the sound icon accordingly,
      * turns the sound off in the sound was on and turns the sound on if the
      * sound was off */
     public void changeSound() {
-        if (SoundFX.music_enabled){
-            currentSoundTexture = soundOnIdleTexture;
-            SoundFX.stopMusic();
-        } else {
-            currentSoundTexture = soundOffIdleTexture;
-            SoundFX.playMenuMusic();
-        }
+        if (SoundFX.music_enabled) currentSoundTexture = soundOnIdleTexture;
+        else currentSoundTexture = soundOffIdleTexture;
+        SoundFX.toggleMusic(this);
     }
 
     /** The texture of the sound button when it has not been clicked on */
     public void idleSoundButton() {
-        Texture soundTexture = SoundFX.music_enabled? soundOffClickedTexture : soundOnClickedTexture;
-        currentSoundTexture = soundTexture;
+        currentSoundTexture = SoundFX.music_enabled ? soundOffClickedTexture : soundOnClickedTexture;
     }
 
 

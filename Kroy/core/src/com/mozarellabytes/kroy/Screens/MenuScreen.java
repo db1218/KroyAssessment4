@@ -157,6 +157,7 @@ public class MenuScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(new MenuInputHandler(this));
+        SoundFX.decideMusic(this);
     }
 
     /** Renders the menu screen consisting of the background and the start, controls and sound buttons.
@@ -217,7 +218,6 @@ public class MenuScreen implements Screen {
         soundOnClickedTexture.dispose();
         soundOffIdleTexture.dispose();
         soundOffClickedTexture.dispose();
-        SoundFX.sfx_menu.stop();
     }
 
     /** Changes the screen from menu screen to game screen */
@@ -263,13 +263,9 @@ public class MenuScreen implements Screen {
      * turns the sound off in the sound was on and turns the sound on if the
      * sound was off */
     public void changeSound() {
-        if (SoundFX.music_enabled){
-            currentSoundTexture = soundOnIdleTexture;
-            SoundFX.stopMusic();
-        } else {
-            currentSoundTexture = soundOffIdleTexture;
-            SoundFX.playMenuMusic();
-        }
+        if (SoundFX.music_enabled) currentSoundTexture = soundOnIdleTexture;
+        else currentSoundTexture = soundOffIdleTexture;
+        SoundFX.toggleMusic(this);
     }
 
     /** The texture of the start button when it has not been clicked on */

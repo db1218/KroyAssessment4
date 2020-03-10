@@ -1,8 +1,13 @@
 package com.mozarellabytes.kroy.Utilities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.mozarellabytes.kroy.Screens.DanceScreen;
+import com.mozarellabytes.kroy.Screens.DifficultyScreen;
+import com.mozarellabytes.kroy.Screens.GameScreen;
+import com.mozarellabytes.kroy.Screens.MenuScreen;
 
 /**
  * Sound Effects Manager for all in-game audio, accessed via static context.
@@ -19,6 +24,8 @@ public class SoundFX {
 
     public static final Music sfx_menu = Gdx.audio.newMusic(Gdx.files.internal("sounds/menu.mp3"));
     public static final Music sfx_soundtrack = Gdx.audio.newMusic(Gdx.files.internal("sounds/soundtrack.mp3"));
+    public static final Music sfx_danceoff = Gdx.audio.newMusic(Gdx.files.internal("sounds/dance_off2.wav"));
+//    public static final Music sfx_danceoff = Gdx.audio.newMusic(Gdx.files.internal("sounds/dance_off.mp3"));
 
     public static final Sound sfx_truck_attack = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/truck_attack.wav"));
     public static final Sound sfx_truck_damage = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/truck_damage.wav"));
@@ -29,7 +36,6 @@ public class SoundFX {
     public static final Sound sfx_unpause = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/unpause.wav"));
     public static final Sound sfx_horn = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/horn.mp3"));
     public static final Sound sfx_button_clicked = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/button_clicked.wav"));
-    public static final Sound sfx_danceoff = Gdx.audio.newSound(Gdx.files.internal("sounds/dance_off.mp3"));
 
 
     /** Plays attacking sound for FireTrucks only if it isn't already playing */
@@ -48,29 +54,38 @@ public class SoundFX {
             isPlaying = false;
         }
     }
-    /** Plays game music */
-    public static void playGameMusic() {
-        sfx_soundtrack.play();
-        music_enabled = true;
+
+    public static void decideMusic(Screen screen) {
+        if (music_enabled) {
+            if (screen instanceof GameScreen) {
+                sfx_danceoff.stop();
+                sfx_menu.stop();
+                sfx_soundtrack.play();
+                sfx_soundtrack.setVolume(0.5f);
+                sfx_soundtrack.setLooping(true);
+            } else if (screen instanceof MenuScreen || screen instanceof DifficultyScreen) {
+                sfx_danceoff.stop();
+                sfx_soundtrack.pause();
+                sfx_menu.play();
+                sfx_menu.setVolume(0.5f);
+                sfx_menu.setLooping(true);
+            } else if (screen instanceof DanceScreen) {
+                sfx_soundtrack.pause();
+                sfx_menu.stop();
+                sfx_danceoff.play();
+                sfx_danceoff.setVolume(0.5f);
+                sfx_danceoff.setLooping(true);
+            }
+        } else {
+            sfx_danceoff.setVolume(0);
+            sfx_menu.setVolume(0);
+            sfx_soundtrack.setVolume(0);
+        }
     }
 
-    /** Plays menu music */
-    public static void playMenuMusic() {
-        sfx_menu.play();
-        music_enabled = true;
-    }
-
-    /** Plays danceoff music */
-    public static void playDanceoffMusic() {
-        sfx_danceoff.loop(4f);
-    }
-
-    /** Stops both menu music and game music */
-    public static void stopMusic() {
-        sfx_soundtrack.stop();
-        sfx_menu.stop();
-        sfx_danceoff.stop();
-        music_enabled = false;
+    public static void toggleMusic(Screen screen) {
+        music_enabled = !music_enabled;
+        decideMusic(screen);
     }
 
 }

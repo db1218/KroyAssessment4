@@ -67,7 +67,6 @@ public class DanceScreen implements Screen, BeatListener {
 
         this.danceMan = new DanceManager(120f);
         this.danceMan.subscribeToBeat(this);
-        SoundFX.playDanceoffMusic();
 
         this.patrol = patrol;
         this.firetruck = firetruck;
@@ -93,8 +92,7 @@ public class DanceScreen implements Screen, BeatListener {
      * @param delta The time in seconds since the last render
      */
     @Override
-    public void render(float delta)
-    {
+    public void render(float delta) {
 
         this.danceMan.update(delta);
 
@@ -149,6 +147,8 @@ public class DanceScreen implements Screen, BeatListener {
 
     @Override
     public void show() {
+        SoundFX.stopTruckAttack();
+        SoundFX.decideMusic(this);
         if (!hasShownTutorial && !((GameScreen)previousScreen).gameState.hasDanceTutorialShown()) {
             this.hasShownTutorial = true;
             ((GameScreen)previousScreen).gameState.setDanceTutorialShown();
@@ -202,8 +202,6 @@ public class DanceScreen implements Screen, BeatListener {
         GUI gui = new GUI(game, (GameScreen) previousScreen);
         Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) previousScreen, gui));
         gui.idleInfoButton();
-        SoundFX.stopMusic();
-        if (SoundFX.music_enabled) SoundFX.playGameMusic();
         game.setScreen(previousScreen);
     }
 

@@ -44,15 +44,15 @@ public class DifficultyScreenInputHandler implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
         Vector3 position = difficultyScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
-        if (difficultyScreen.getEasyButton().contains(position.x, position.y)) {
+        if (difficultyScreen.getEasyButton().contains(position.x, position.y))
             difficultyScreen.clickedEasyButton();
-        } else if (difficultyScreen.getMediumButton().contains(position.x, position.y)) {
+        else if (difficultyScreen.getMediumButton().contains(position.x, position.y))
             difficultyScreen.clickedMediumButton();
-        } else if (difficultyScreen.getHardButton().contains(position.x, position.y)){
+        else if (difficultyScreen.getHardButton().contains(position.x, position.y))
             difficultyScreen.clickedHardButton();
-        } else if (difficultyScreen.getSoundButton().contains(position.x, position.y)) {
+        else if (difficultyScreen.getSoundButton().contains(position.x, position.y))
             difficultyScreen.clickedSoundButton();
-        }
+
         return true;
     }
 
@@ -60,20 +60,21 @@ public class DifficultyScreenInputHandler implements InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
         Vector3 position = difficultyScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
-        if (difficultyScreen.getEasyButton().contains(position.x, position.y)) {
-           difficultyScreen.toGameScreen(DifficultyLevel.Easy);
-        } else if (difficultyScreen.getMediumButton().contains(position.x, position.y)) {
+
+        difficultyScreen.idleEasyButton();
+        difficultyScreen.idleMediumButton();
+        difficultyScreen.idleHardButton();
+        difficultyScreen.idleSoundButton();
+
+        if (difficultyScreen.getEasyButton().contains(position.x, position.y))
+            difficultyScreen.toGameScreen(DifficultyLevel.Easy);
+        else if (difficultyScreen.getMediumButton().contains(position.x, position.y))
             difficultyScreen.toGameScreen(DifficultyLevel.Medium);
-        } else if (difficultyScreen.getHardButton().contains(position.x, position.y)){
+        else if (difficultyScreen.getHardButton().contains(position.x, position.y))
             difficultyScreen.toGameScreen(DifficultyLevel.Hard);
-        } else if (difficultyScreen.getSoundButton().contains(position.x, position.y)){
+        else if (difficultyScreen.getSoundButton().contains(position.x, position.y))
             difficultyScreen.changeSound();
-        } else {
-            difficultyScreen.idleEasyButton();
-            difficultyScreen.idleMediumButton();
-            difficultyScreen.idleHardButton();
-            difficultyScreen.idleSoundButton();
-        }
+
         return true;
     }
 

@@ -13,7 +13,6 @@ import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Fortress;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Screens.GameScreen;
-import com.mozarellabytes.kroy.Utilities.Constants;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.ArrayList;
@@ -411,13 +410,9 @@ public class GUI {
     /** Toggles the sound, called if 'S' key or the sound button
      * is pressed */
     public void changeSound() {
-        if (SoundFX.music_enabled){
-            currentSoundTexture = soundOnIdleTexture;
-            SoundFX.stopMusic();
-        } else {
-            currentSoundTexture = soundOffIdleTexture;
-            SoundFX.playGameMusic();
-        }
+        if (SoundFX.music_enabled) currentSoundTexture = soundOnIdleTexture;
+        else currentSoundTexture = soundOffIdleTexture;
+        SoundFX.toggleMusic(gameScreen);
     }
 
     /**

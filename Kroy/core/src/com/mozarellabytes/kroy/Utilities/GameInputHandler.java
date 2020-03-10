@@ -207,17 +207,17 @@ public class GameInputHandler implements InputProcessor {
     private void checkButtonUnclick(int screenX, int screenY){
         Vector2 screenCoords = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
 
-        if (gui.getHomeButton().contains(screenCoords)) gameScreen.toHomeScreen();
-        if (gui.getSoundButton().contains(screenCoords)) gui.changeSound();
-        if (gui.getPauseButton().contains(screenCoords)) gameScreen.changeState(GameScreen.PlayState.PAUSE);
-        if (gui.getSaveButton().contains(screenCoords)) gameScreen.saveGameState();
-        if (gui.getInfoButton().contains(screenCoords)) gameScreen.toControlScreen();
-
         gui.idleHomeButton();
         gui.idleSoundButton();
         gui.idlePauseButton();
         gui.idleInfoButton();
         gui.idleSaveButton();
+
+        if (gui.getHomeButton().contains(screenCoords)) gameScreen.toHomeScreen();
+        if (gui.getSoundButton().contains(screenCoords)) gui.changeSound();
+        if (gui.getPauseButton().contains(screenCoords)) gameScreen.changeState(GameScreen.PlayState.PAUSE);
+        if (gui.getSaveButton().contains(screenCoords)) gameScreen.saveGameState();
+        if (gui.getInfoButton().contains(screenCoords)) gameScreen.toControlScreen();
 
     }
 }

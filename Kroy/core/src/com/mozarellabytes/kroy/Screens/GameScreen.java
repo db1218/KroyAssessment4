@@ -24,7 +24,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
-import java.util.zip.Deflater;
 
 /**
  * The Screen that our game is played in.
@@ -233,11 +232,6 @@ public class GameScreen implements Screen {
         truckAttack = false;
         gui.updateAttackMode(false);
 
-        if (SoundFX.music_enabled) {
-            SoundFX.sfx_soundtrack.setVolume(.5f);
-            SoundFX.sfx_soundtrack.play();
-        }
-
         powerUps = new ArrayList<PowerUp>();
 
         powerupTimer = new Timer();
@@ -260,6 +254,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        SoundFX.decideMusic(this);
         gui.resetButtons();
     }
 
@@ -401,6 +396,7 @@ public class GameScreen implements Screen {
 
         gameState.setTrucksInAttackRange(0);
 
+
         ArrayList<PowerUp> powerUpsToRemove = new ArrayList<PowerUp>();
 
         for (PowerUp power : powerUps) {
@@ -500,7 +496,7 @@ public class GameScreen implements Screen {
 
         }
 
-        if (gameState.getTrucksInAttackRange() > 0 && SoundFX.music_enabled){
+        if (gameState.getTrucksInAttackRange() > 0 && SoundFX.music_enabled && truckAttack){
             SoundFX.playTruckAttack();
         } else {
             SoundFX.stopTruckAttack();
@@ -550,7 +546,6 @@ public class GameScreen implements Screen {
         mapRenderer.dispose();
         shapeMapRenderer.dispose();
         mapBatch.dispose();
-        SoundFX.sfx_soundtrack.stop();
     }
 
     /**
@@ -637,7 +632,6 @@ public class GameScreen implements Screen {
      * button is clicked */
     public void toHomeScreen() {
         game.setScreen(new MenuScreen(game));
-        SoundFX.sfx_soundtrack.dispose();
     }
 
     /**
@@ -646,7 +640,7 @@ public class GameScreen implements Screen {
      * @param et
      */
     public void doDanceOff(FireTruck firetruck, Patrol et) {
-        SoundFX.stopMusic();
+        SoundFX.stopTruckAttack();
         game.setScreen(new DanceScreen(game, gameState,this, firetruck, et));
     }
 
@@ -688,7 +682,6 @@ public class GameScreen implements Screen {
      */
     public void toggleTruckAttack() {
         truckAttack = !truckAttack;
-        if (truckAttack && SoundFX.music_enabled && this.gameState.getTrucksInAttackRange() > 0) SoundFX.playTruckAttack();
         gui.updateAttackMode(truckAttack);
     }
 
