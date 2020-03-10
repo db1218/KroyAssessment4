@@ -54,6 +54,7 @@ public class DanceScreen implements Screen, BeatListener {
 
     private final int ARROW_DISPLACEMENT = 128;
     private final int ARROW_SIZE = 96;
+    private int kickNum = 0;
 
     private DanceResult lastResult = null;
 
@@ -65,7 +66,7 @@ public class DanceScreen implements Screen, BeatListener {
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
         this.previousScreen = previousScreen;
 
-        this.danceMan = new DanceManager(120f);
+        this.danceMan = new DanceManager(140f);
         this.danceMan.subscribeToBeat(this);
 
         this.patrol = patrol;
@@ -256,6 +257,16 @@ public class DanceScreen implements Screen, BeatListener {
     public void setLastMove(DanceMove move){
         this.lastResult = this.danceMan.takeMove(move);
         this.firefighter.setState(move);
+        this.kickNum++;
+        //kickIt();
+    }
+
+    public void kickIt() {
+        if (kickNum%2 == 0) {
+            SoundFX.sfx_kick.play();
+        } else {
+            SoundFX.sfx_snare.play();
+        }
     }
 
     public void useCombo(){

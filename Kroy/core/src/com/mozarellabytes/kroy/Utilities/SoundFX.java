@@ -24,8 +24,7 @@ public class SoundFX {
 
     public static final Music sfx_menu = Gdx.audio.newMusic(Gdx.files.internal("sounds/menu.mp3"));
     public static final Music sfx_soundtrack = Gdx.audio.newMusic(Gdx.files.internal("sounds/soundtrack.mp3"));
-    public static final Music sfx_danceoff = Gdx.audio.newMusic(Gdx.files.internal("sounds/dance_off2.wav"));
-//    public static final Music sfx_danceoff = Gdx.audio.newMusic(Gdx.files.internal("sounds/dance_off.mp3"));
+    public static final Music sfx_danceoff = Gdx.audio.newMusic(Gdx.files.internal("sounds/140bpm.mp3"));
 
     public static final Sound sfx_truck_attack = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/truck_attack.wav"));
     public static final Sound sfx_truck_damage = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/truck_damage.wav"));
@@ -36,6 +35,8 @@ public class SoundFX {
     public static final Sound sfx_unpause = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/unpause.wav"));
     public static final Sound sfx_horn = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/horn.mp3"));
     public static final Sound sfx_button_clicked = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/button_clicked.wav"));
+    public static final Sound sfx_kick = Gdx.audio.newSound(Gdx.files.internal("sounds/kick.wav"));
+    public static final Sound sfx_snare = Gdx.audio.newSound(Gdx.files.internal("sounds/snare.wav"));
 
 
     /** Plays attacking sound for FireTrucks only if it isn't already playing */
@@ -86,6 +87,10 @@ public class SoundFX {
     public static void toggleMusic(Screen screen) {
         music_enabled = !music_enabled;
         decideMusic(screen);
+    /** Plays danceoff music */
+    public static void playDanceoffMusic() {
+        sfx_danceoff.setLooping(true);
+        sfx_danceoff.play();
     }
 
 }
