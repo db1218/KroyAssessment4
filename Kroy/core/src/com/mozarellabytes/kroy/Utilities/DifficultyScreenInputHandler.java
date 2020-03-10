@@ -50,6 +50,8 @@ public class DifficultyScreenInputHandler implements InputProcessor {
             difficultyScreen.clickedMediumButton();
         else if (difficultyScreen.getHardButton().contains(position.x, position.y))
             difficultyScreen.clickedHardButton();
+        else if (difficultyScreen.getReturnButton().contains(position.x, position.y))
+            difficultyScreen.clickedReturnButton();
         else if (difficultyScreen.getSoundButton().contains(position.x, position.y))
             difficultyScreen.clickedSoundButton();
 
@@ -64,6 +66,7 @@ public class DifficultyScreenInputHandler implements InputProcessor {
         difficultyScreen.idleEasyButton();
         difficultyScreen.idleMediumButton();
         difficultyScreen.idleHardButton();
+        difficultyScreen.idleReturnButton();
         difficultyScreen.idleSoundButton();
 
         if (difficultyScreen.getEasyButton().contains(position.x, position.y))
@@ -72,6 +75,8 @@ public class DifficultyScreenInputHandler implements InputProcessor {
             difficultyScreen.toGameScreen(DifficultyLevel.Medium);
         else if (difficultyScreen.getHardButton().contains(position.x, position.y))
             difficultyScreen.toGameScreen(DifficultyLevel.Hard);
+        else if (difficultyScreen.getReturnButton().contains(position.x, position.y))
+            difficultyScreen.toMenu();
         else if (difficultyScreen.getSoundButton().contains(position.x, position.y))
             difficultyScreen.changeSound();
 

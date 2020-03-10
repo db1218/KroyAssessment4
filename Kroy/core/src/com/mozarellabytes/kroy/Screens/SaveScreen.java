@@ -10,28 +10,19 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.BufferUtils;
-import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mozarellabytes.kroy.GUI.ClickableGroup;
 import com.mozarellabytes.kroy.Kroy;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 /**
  * Screen to find all information about a Save and select
@@ -48,6 +39,10 @@ public class SaveScreen implements Screen {
     private Table selectedTable;
 
     private SavedElement currentSaveSelected;
+
+    private ImageButton.ImageButtonStyle closeButtonStyle;
+    private ImageButton.ImageButtonStyle deleteButtonStyle;
+    private ImageButton.ImageButtonStyle playButtonStyle;
 
     public SaveScreen(Kroy game, MenuScreen menuScreen) {
         this.game = game;
@@ -90,18 +85,21 @@ public class SaveScreen implements Screen {
         HorizontalGroup footer = new HorizontalGroup();
 
         // create actors
-        Drawable deleteImage = new TextureRegionDrawable(new Texture("ui/delete_idle.png"));
-        Drawable closeImage = new TextureRegionDrawable(new Texture("ui/return_idle.png"));
-        Drawable playImage = new TextureRegionDrawable(new Texture("ui/start_idle.png"));
-        deleteImage.setMinWidth(167.5f);
-        deleteImage.setMinHeight(57.5f);
-        closeImage.setMinWidth(167.5f);
-        closeImage.setMinHeight(57.5f);
-        playImage.setMinWidth(167.5f);
-        playImage.setMinHeight(57.5f);
-        ImageButton deleteButton = new ImageButton(deleteImage);
-        ImageButton closeButton = new ImageButton(closeImage);
-        ImageButton playButton = new ImageButton(playImage);
+        Drawable currentDeleteImage = new TextureRegionDrawable(new Texture("ui/delete_idle.png"));
+        Drawable currentCloseImage = new TextureRegionDrawable(new Texture("ui/return_idle.png"));
+        Drawable currentPlayImage = new TextureRegionDrawable(new Texture("ui/start_idle.png"));
+        currentDeleteImage.setMinWidth(167.5f);
+        currentDeleteImage.setMinHeight(57.5f);
+        currentCloseImage.setMinWidth(167.5f);
+        currentCloseImage.setMinHeight(57.5f);
+        currentPlayImage.setMinWidth(167.5f);
+        currentPlayImage.setMinHeight(57.5f);
+
+        createButtonStyles();
+
+        ImageButton deleteButton = new ImageButton(deleteButtonStyle);
+        ImageButton closeButton = new ImageButton(closeButtonStyle);
+        ImageButton playButton = new ImageButton(playButtonStyle);
 
         // actors
         Label titleLabel = new Label("Game Saves", new Label.LabelStyle(game.font60, Color.WHITE));
@@ -147,13 +145,17 @@ public class SaveScreen implements Screen {
         deleteButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (currentSaveSelected != null) deleteSave();
+                if (currentSaveSelected != null) {
+                    if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
+                    deleteSave();
+                }
             }
         });
 
         closeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
                 game.setScreen(menuScreen);
             }
         });
@@ -161,7 +163,10 @@ public class SaveScreen implements Screen {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (currentSaveSelected != null) game.setScreen(new GameScreen(game, currentSaveSelected));
+                if (currentSaveSelected != null) {
+                    if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
+                    game.setScreen(new GameScreen(game, currentSaveSelected));
+                }
             }
         });
 
@@ -193,6 +198,20 @@ public class SaveScreen implements Screen {
         table.add(footer).colspan(2).expandX().pad(40).right();
 
         stage.addActor(table);
+    }
+
+    private void createButtonStyles() {
+        closeButtonStyle = new ImageButton.ImageButtonStyle();
+        closeButtonStyle.up = new TextureRegionDrawable(new Texture("ui/return_idle.png"));
+        closeButtonStyle.down = new TextureRegionDrawable(new Texture("ui/return_clicked.png"));
+
+        deleteButtonStyle = new ImageButton.ImageButtonStyle();
+        deleteButtonStyle.up = new TextureRegionDrawable(new Texture("ui/delete_idle.png"));
+        deleteButtonStyle.down = new TextureRegionDrawable(new Texture("ui/delete_clicked.png"));
+
+        playButtonStyle = new ImageButton.ImageButtonStyle();
+        playButtonStyle.up = new TextureRegionDrawable(new Texture("ui/start_idle.png"));
+        playButtonStyle.down = new TextureRegionDrawable(new Texture("ui/start_clicked.png"));
     }
 
     private void updateCurrentlySelected() {

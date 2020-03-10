@@ -112,9 +112,9 @@ public class DifficultyScreen implements Screen {
         hardClickedTexture = new Texture(Gdx.files.internal("ui/hard_clicked.png"), true);
         hardClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
-        returnIdleTexture = new Texture(Gdx.files.internal("ui/return_idle.png"), true);
+        returnIdleTexture = new Texture(Gdx.files.internal("ui/return_idle_big.png"), true);
         returnIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        returnClickedTexture = new Texture(Gdx.files.internal("ui/return_clicked.png"), true);
+        returnClickedTexture = new Texture(Gdx.files.internal("ui/return_clicked_big.png"), true);
         returnClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         soundOnIdleTexture = new Texture(Gdx.files.internal("ui/sound_on_idle.png"), true);
@@ -169,7 +169,6 @@ public class DifficultyScreen implements Screen {
         Gdx.input.setInputProcessor(ih);
 
     }
-
 
     @Override
     public void show() {
@@ -236,8 +235,18 @@ public class DifficultyScreen implements Screen {
         SoundFX.sfx_menu.stop();
     }
 
+    /**
+     * Start new game
+     * @param level specified difficulty level
+     */
     public void toGameScreen(DifficultyLevel level) { game.setScreen(new GameScreen(game, level)); }
 
+    /**
+     * Go back to menu screen
+     */
+    public void toMenu() {
+        game.setScreen(new MenuScreen(game));
+    }
 
     /** Changes the texture of the start button when it has been clicked on */
     public void clickedEasyButton() {
@@ -257,7 +266,6 @@ public class DifficultyScreen implements Screen {
         currentMediumTexture = mediumIdleTexture;
     }
 
-
     /** Changes the texture of the start button when it has been clicked on */
     public void clickedHardButton() {
         if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
@@ -268,8 +276,19 @@ public class DifficultyScreen implements Screen {
         currentHardTexture = hardIdleTexture;
     }
 
+    /** Changes the texture of the return button when it has been clicked on */
+    public void clickedReturnButton() {
+        if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
+        currentReturnTexture = returnClickedTexture;
+    }
+
+    public void idleReturnButton() {
+        currentReturnTexture = returnIdleTexture;
+    }
+
     /** Changes the texture of the sound button when it has been clicked on */
     public void clickedSoundButton() {
+        if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
         currentSoundTexture = SoundFX.music_enabled ? soundOffClickedTexture : soundOnClickedTexture;
     }
 
@@ -294,6 +313,7 @@ public class DifficultyScreen implements Screen {
 
     public Rectangle getHardButton() { return hardButton; }
 
-    public Rectangle getSoundButton() {return soundButton; }
+    public Rectangle getReturnButton() { return returnButton; }
 
+    public Rectangle getSoundButton() {return soundButton; }
 }

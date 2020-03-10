@@ -77,11 +77,10 @@ public class FireStation {
      * Creates a fire truck of type specified from FireTruckType. It signals to
      * the game state that a truck has been created and add the truck to the
      * arraylist this.truck so the game screen can iterate through all active trucks
-     * @param truck truck to add to the arrayList of active trucks
      *
+     * @param truck         truck to add to the arrayList of active trucks
      */
     public void spawn(FireTruck truck) {
-        if (SoundFX.music_enabled) SoundFX.sfx_truck_spawn.play();
         this.trucks.add(truck);
     }
 

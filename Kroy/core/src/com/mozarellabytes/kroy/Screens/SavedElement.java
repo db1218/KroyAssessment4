@@ -22,11 +22,6 @@ public class SavedElement {
 
     private String timestamp;
     private String getEnTimestamp;
-    private Texture screenshot;
-    private Label title;
-    private Label progressStats;
-    private OrderedMap<String, Object> data;
-    private FileHandle file;
 
     // objects
     private FireStation fireStation;
@@ -39,8 +34,8 @@ public class SavedElement {
     public SavedElement(String timestamp) {
         Json json = new Json();
         this.timestamp = timestamp;
-        file = Gdx.files.local("saves/" + timestamp + "/data.json");
-        data = json.fromJson(OrderedMap.class, file.readString());
+        FileHandle file = Gdx.files.local("saves/" + timestamp + "/data.json");
+        OrderedMap<String, Object> data = json.fromJson(OrderedMap.class, file.readString());
         OrderedMap<String, Object> entities = (OrderedMap<String, Object>) data.get("Entities");
 
         this.getEnTimestamp = (String) data.get("enTimestamp");
