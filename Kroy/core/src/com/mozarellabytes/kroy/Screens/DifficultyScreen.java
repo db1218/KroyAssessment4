@@ -2,7 +2,6 @@ package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -196,7 +195,6 @@ public class DifficultyScreen implements Screen {
         game.batch.draw(currentReturnTexture, returnButton.x, returnButton.y, returnButton.width, returnButton.height);
         game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
         game.batch.end();
-
     }
 
     @Override
@@ -236,7 +234,6 @@ public class DifficultyScreen implements Screen {
         soundOnClickedTexture.dispose();
         soundOffIdleTexture.dispose();
         soundOffClickedTexture.dispose();
-        SoundFX.sfx_menu.stop();
     }
 
     /**

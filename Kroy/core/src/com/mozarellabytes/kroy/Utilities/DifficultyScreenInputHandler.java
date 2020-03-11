@@ -9,7 +9,7 @@ import com.mozarellabytes.kroy.Screens.DifficultyScreen;
 
 public class DifficultyScreenInputHandler implements InputProcessor {
 
-    DifficultyScreen difficultyScreen;
+    final DifficultyScreen difficultyScreen;
 
     public DifficultyScreenInputHandler(DifficultyScreen difficultyScreen) {
         this.difficultyScreen = difficultyScreen;

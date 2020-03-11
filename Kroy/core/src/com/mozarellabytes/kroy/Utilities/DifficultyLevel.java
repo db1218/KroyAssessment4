@@ -28,28 +28,28 @@ public enum DifficultyLevel {
             FireTruckType.RubyHard, FireTruckType.SapphireHard, FireTruckType.AmethystHard, FireTruckType.EmeraldHard);
 
 
-    TiledMap map;
-    int mapWidth;
-    int mapHeight;
+    final TiledMap map;
+    final int mapWidth;
+    final int mapHeight;
 
-    Vector2 revsLocation;
+    final Vector2 revsLocation;
     Vector2 walmgateLocation;
     Vector2 railwayLocation;
     Vector2 cliffordLocation;
     Vector2 museumLocation;
     Vector2 centralHallLocation;
 
-    int startDifficultyLevel;
-    float difficultyChangeInterval;
-    int timeTillPowerup;
-    int fortressesDestroyedBeforeBoss;
-    float timeTillNextFreeze;
+    final int startDifficultyLevel;
+    final float difficultyChangeInterval;
+    final int timeTillPowerup;
+    final int fortressesDestroyedBeforeBoss;
+    final float timeTillNextFreeze;
     float additionalAP;
 
-    FireTruckType ruby;
-    FireTruckType sapphire;
-    FireTruckType amethyst;
-    FireTruckType emerald;
+    final FireTruckType ruby;
+    final FireTruckType sapphire;
+    final FireTruckType amethyst;
+    final FireTruckType emerald;
 
     DifficultyLevel(TiledMap map, int mapWidth, int mapHeight, Vector2 revsLocation, int startDifficultyLevel,
                     float difficultyChangeInterval, int timeTillPowerup, int fortressesDestroyedBeforeBoss,

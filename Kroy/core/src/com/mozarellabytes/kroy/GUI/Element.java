@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Element {
 
-    private Rectangle background;
+    private final Rectangle background;
     private String text;
 
     public Element(float h) {

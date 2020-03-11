@@ -49,7 +49,7 @@ public enum PatrolType {
     /**
      * Points the patrol will cycle through
      */
-    private Queue<Vector2> points;
+    private final Queue<Vector2> points;
 
     /**
      * Constructs the PatrolType

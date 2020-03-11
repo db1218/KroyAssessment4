@@ -22,7 +22,7 @@ public class Particle {
 
     private Color[] colours;
 
-    private Object target;
+    private final Object target;
 
     /** The end position of the water particle (the fortress the truck
      * is attacking)

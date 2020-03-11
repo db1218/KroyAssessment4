@@ -31,7 +31,9 @@ public class GUI {
     private final Kroy game;
 
     /** Coordinates and dimensions of the stats box */
-    private final int selectedX, selectedY, selectedH, selectedW;
+    private final int selectedX;
+    private final int selectedY;
+    private final int selectedH;
 
     /** The screen where the buttons are rendered */
     private final GameScreen gameScreen;
@@ -89,10 +91,10 @@ public class GUI {
     /** Texture of the soundButton that is rendered to the screen */
     private Texture currentSoundTexture;
 
-    private ArrayList<Element> elements;
-    private float padding;
-    private Batch batch;
-    private ShapeRenderer shapeRenderer;
+    private final ArrayList<Element> elements;
+    private final float padding;
+    private final Batch batch;
+    private final ShapeRenderer shapeRenderer;
 
     /** Camera to set the projection for the screen */
     private final OrthographicCamera pauseCamera;
@@ -107,7 +109,7 @@ public class GUI {
         this.game = game;
         this.gameScreen = gameScreen;
         this.selectedH = 250;
-        this.selectedW = 250;
+        int selectedW = 250;
         this.selectedX = 5;
         this.selectedY = Gdx.graphics.getHeight() - 5 - this.selectedH;
 

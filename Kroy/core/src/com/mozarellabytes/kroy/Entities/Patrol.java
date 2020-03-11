@@ -19,25 +19,25 @@ import java.util.ArrayList;
 public class Patrol extends Sprite {
 
     /** Defines set of pre-defined attributes */
-    public PatrolType type;
+    public final PatrolType type;
 
     /**
      * path the patrol follows; the fewer item in
      * the path the slower the patrol will go
      */
-    private Queue<Vector2> path;
+    private final Queue<Vector2> path;
 
     /** Health points */
     private float HP;
 
     /** Position of patrol in tiles */
-    public Vector2 position;
+    public final Vector2 position;
 
     /**
      * List of particles that the patrol uses to attack
      * a Fortress
      */
-    private ArrayList<Particle> spray;
+    private final ArrayList<Particle> spray;
 
     /**
      * Constructs a Patrol from save at a position and of a certain type

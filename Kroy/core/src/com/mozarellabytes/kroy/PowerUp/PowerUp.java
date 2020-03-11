@@ -11,18 +11,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public abstract class PowerUp {
 
-    private Animation<TextureRegion> animation;
-    private TextureAtlas atlas;
+    private final Animation<TextureRegion> animation;
+    private final TextureAtlas atlas;
     private Vector2 position;
     private float elapsedTime;
     private TextureRegion currentFrame;
 
     private float timeLeftOnScreen;
-    private float timeOnScreen;
+    private final float timeOnScreen;
 
     boolean canBeRendered;
     boolean canBeDestroyed;
@@ -30,7 +29,7 @@ public abstract class PowerUp {
     public PowerUp(String animationType, Vector2 position){
         this.atlas = new TextureAtlas(Gdx.files.internal("sprites/powerups/powerup.atlas"));
         this.currentFrame = new TextureRegion();
-        this.animation = new Animation<TextureRegion>(.032f, atlas.findRegions(animationType), Animation.PlayMode.LOOP);
+        this.animation = new Animation<>(.032f, atlas.findRegions(animationType), Animation.PlayMode.LOOP);
         this.canBeRendered = true;
         this.canBeDestroyed = false;
         this.position = position;
@@ -73,7 +72,7 @@ public abstract class PowerUp {
     }
 
     public static ArrayList<PowerUp> createNewPowers(Vector2 location){
-        ArrayList<PowerUp> possiblePowerups = new ArrayList<PowerUp>();
+        ArrayList<PowerUp> possiblePowerups = new ArrayList<>();
         possiblePowerups.add(new Heart(location));
         possiblePowerups.add(new Shield(location));
         possiblePowerups.add(new Water(location));

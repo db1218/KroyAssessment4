@@ -1,6 +1,5 @@
 package com.mozarellabytes.kroy.Screens;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -207,7 +206,6 @@ public class SaveScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
     }
 
     @Override

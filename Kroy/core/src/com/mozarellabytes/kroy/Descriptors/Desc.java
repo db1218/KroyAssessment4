@@ -3,8 +3,6 @@ package com.mozarellabytes.kroy.Descriptors;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
 
-import java.util.ArrayList;
-
 public class Desc {
     public static class FireTruck {
         public String type, rotation;

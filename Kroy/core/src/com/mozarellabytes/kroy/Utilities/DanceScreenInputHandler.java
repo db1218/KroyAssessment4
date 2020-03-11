@@ -8,7 +8,7 @@ import com.mozarellabytes.kroy.Screens.DanceScreen;
 
 public class DanceScreenInputHandler implements InputProcessor {
 
-    DanceScreen danceScreen;
+    final DanceScreen danceScreen;
 
     public DanceScreenInputHandler(DanceScreen danceScreen){
         this.danceScreen = danceScreen;

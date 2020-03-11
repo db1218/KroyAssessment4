@@ -3,8 +3,6 @@ package com.mozarellabytes.kroy.Minigame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
-import java.util.ArrayList;
-
 /**
  * Possible moves that can be taken by dancers
  */

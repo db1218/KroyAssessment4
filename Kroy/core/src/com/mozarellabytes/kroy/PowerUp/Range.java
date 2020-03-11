@@ -3,15 +3,12 @@ package com.mozarellabytes.kroy.PowerUp;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
-import com.mozarellabytes.kroy.Screens.GameScreen;
-
-import java.util.ArrayList;
 
 public class Range extends PowerUp {
 
-    float timeInRange;
+    final float timeInRange;
     float elapsedTime;
-    int rangeIncrease;
+    final int rangeIncrease;
     FireTruck truck;
 
 

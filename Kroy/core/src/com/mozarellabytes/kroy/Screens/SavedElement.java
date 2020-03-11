@@ -2,8 +2,6 @@ package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.OrderedMap;
@@ -20,16 +18,16 @@ import java.util.ArrayList;
 
 public class SavedElement {
 
-    private String timestamp;
-    private String getEnTimestamp;
+    private final String timestamp;
+    private final String getEnTimestamp;
 
     // objects
-    private FireStation fireStation;
-    private ArrayList<Fortress> fortresses;
-    private ArrayList<Patrol> patrols;
-    private GameState gameState;
-    private DifficultyControl difficultyControl;
-    private DifficultyLevel difficultyLevel;
+    private final FireStation fireStation;
+    private final ArrayList<Fortress> fortresses;
+    private final ArrayList<Patrol> patrols;
+    private final GameState gameState;
+    private final DifficultyControl difficultyControl;
+    private final DifficultyLevel difficultyLevel;
 
     public SavedElement(String timestamp) {
         Json json = new Json();

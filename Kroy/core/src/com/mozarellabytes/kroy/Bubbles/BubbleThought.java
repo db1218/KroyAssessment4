@@ -9,14 +9,14 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class BubbleThought {
     private Vector2 position;
-    private TextureAtlas atlas;
-    private Animation<TextureRegion> animation;
+    private final TextureAtlas atlas;
+    private final Animation<TextureRegion> animation;
     private float elapsedTime;
 
     public BubbleThought(Vector2 position, String animationType) {
         this.atlas = new TextureAtlas(Gdx.files.internal("sprites/vfx/bubbles.atlas"));
         this.position = position;
-        this.animation = new Animation<TextureRegion>(.032f, atlas.findRegions(animationType), Animation.PlayMode.LOOP);
+        this.animation = new Animation<>(.032f, atlas.findRegions(animationType), Animation.PlayMode.LOOP);
     }
 
     public void update(Batch batch) {
@@ -35,6 +35,5 @@ public abstract class BubbleThought {
 
     public void dispose(){
         this.atlas.dispose();
-        this.dispose();
     }
 }

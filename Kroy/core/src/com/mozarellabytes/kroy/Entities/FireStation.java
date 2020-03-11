@@ -34,15 +34,15 @@ public class FireStation {
     private final int w, h;
 
     /** A tile inside the station where a truck can be repaired and refilled */
-    private ArrayList<Vector2> bayTiles;
+    private final ArrayList<Vector2> bayTiles;
 
     /** The sprite image for the station */
-    private Texture texture;
-    private Texture deadTexture;
+    private final Texture texture;
+    private final Texture deadTexture;
 
     /** List of active fire trucks
      * @link FireTruck */
-    private ArrayList<FireTruck> trucks;
+    private final ArrayList<FireTruck> trucks;
 
     /**
      * Health of the fortress

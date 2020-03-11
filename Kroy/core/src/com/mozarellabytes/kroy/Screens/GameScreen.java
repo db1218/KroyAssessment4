@@ -90,7 +90,7 @@ public class GameScreen implements Screen {
     private ArrayList<VFX> vfx;
 
     /** Where the FireEngines' spawn, refill and repair */
-    private FireStation station;
+    private final FireStation station;
 
     /** The FireTruck that the user is currently drawing a path for */
     public FireTruck selectedTruck;
@@ -100,7 +100,7 @@ public class GameScreen implements Screen {
     private Object selectedEntity;
 
     /** A class keeping track of the current difficulty and the time to the next change */
-    private DifficultyControl difficultyControl;
+    private final DifficultyControl difficultyControl;
 
     private DifficultyLevel difficultyLevel;
 
@@ -116,15 +116,10 @@ public class GameScreen implements Screen {
 
     private boolean truckAttack;
 
-    private Timer powerupTimer;
     private ArrayList<PowerUp> powerUps;
     private ArrayList<Vector2> powerUpLocations;
 
-    private FileHandle file;
-
     private DifficultyLevel level;
-
-    private GameInputHandler gameInputHandler;
 
     /** Play when the game is being played
      * Pause when the pause button is clicked */
@@ -238,15 +233,15 @@ public class GameScreen implements Screen {
 
         mapBatch = mapRenderer.getBatch();
 
-        vfx = new ArrayList<VFX>();
+        vfx = new ArrayList<>();
 
         freezeCooldown = 0f;
         truckAttack = false;
         gui.updateAttackMode(false);
 
-        powerUps = new ArrayList<PowerUp>();
+        powerUps = new ArrayList<>();
 
-        powerupTimer = new Timer();
+        Timer powerupTimer = new Timer();
         powerupTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
@@ -258,11 +253,11 @@ public class GameScreen implements Screen {
         generatePowerUpLocations(level);
 
         // arrays to hold entities
-        fortresses = new ArrayList<Fortress>();
-        patrols = new ArrayList<Patrol>();
+        fortresses = new ArrayList<>();
+        patrols = new ArrayList<>();
         deadEntities = new ArrayList<>(7);
 
-        gameInputHandler = new GameInputHandler(this, gui);
+        GameInputHandler gameInputHandler = new GameInputHandler(this, gui);
 
     }
 
@@ -410,7 +405,7 @@ public class GameScreen implements Screen {
         gameState.setTrucksInAttackRange(0);
 
 
-        ArrayList<PowerUp> powerUpsToRemove = new ArrayList<PowerUp>();
+        ArrayList<PowerUp> powerUpsToRemove = new ArrayList<>();
 
         for (PowerUp power : powerUps) {
             power.update();
@@ -775,7 +770,7 @@ public class GameScreen implements Screen {
         map.put("Difficulty Level", difficultyLevel);
         map.put("GameState", gameState);
 
-        file = Gdx.files.local("saves/" + timestamp + "/data.json");
+        FileHandle file = Gdx.files.local("saves/" + timestamp + "/data.json");
         file.writeString(json.prettyPrint(map),false);
 
         takeScreenshot(timestamp);

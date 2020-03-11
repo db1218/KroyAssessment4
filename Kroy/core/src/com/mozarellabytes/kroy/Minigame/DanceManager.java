@@ -9,7 +9,7 @@ import java.util.List;
 public class DanceManager {
 
     /** The time in seconds between beats */
-    private float beatDuration;
+    private final float beatDuration;
 
     /** The time since the last beat in seconds */
     private float timeSinceBeat;
@@ -24,15 +24,15 @@ public class DanceManager {
     private boolean missedLastTurn = false;
 
     /** List of classes to notify about the beat */
-    private List<BeatListener> beatListeners;
+    private final List<BeatListener> beatListeners;
 
-    private List<DanceMove> notDanceMoves;
+    private final List<DanceMove> notDanceMoves;
 
     /** The number of successive correct moves the player has performed */
     private int combo = 0;
 
     /** Technical class for deciding upcoming moves */
-    private DanceChoreographer choreographer;
+    private final DanceChoreographer choreographer;
 
     /**
      * Constructor for Dance Manager with a given bpm
@@ -187,7 +187,7 @@ public class DanceManager {
      */
     public boolean hasMissedLastBeat() {
         return missedLastTurn;
-    };
+    }
 
     /**
      * Called if the player makes an incorrect move

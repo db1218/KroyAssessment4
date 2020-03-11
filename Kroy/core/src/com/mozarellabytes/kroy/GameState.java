@@ -13,8 +13,6 @@ public class GameState {
     /** Number of fire trucks there are on screen */
     private int activeFireTrucks;
 
-    private int activePatrols;
-
     private boolean hasShownDanceTutorial;
 
     /** The number of fortresses the player has destroyed */
@@ -29,7 +27,7 @@ public class GameState {
     public GameState() {
         this.activeFireTrucks = 0;
         this.fortressesDestroyed = 0;
-        this.activePatrols = 0;
+        int activePatrols = 0;
         this.stationDestoyed = false;
         this.hasShownDanceTutorial = false;
     }

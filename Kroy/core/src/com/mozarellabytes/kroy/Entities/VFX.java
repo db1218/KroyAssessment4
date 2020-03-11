@@ -23,12 +23,12 @@ public class VFX {
     private void setType(int type) {
         if (type == 0) {
             this.atlas = new TextureAtlas(Gdx.files.internal("sprites/vfx/explosion1.atlas"));
-            this.animation = new Animation<TextureRegion>(.032f, atlas.findRegions("rexp"), Animation.PlayMode.NORMAL);
+            this.animation = new Animation<>(.032f, atlas.findRegions("rexp"), Animation.PlayMode.NORMAL);
             this.width = 4;
             this.height = 4;
         } else if (type == 1) {
             this.atlas = new TextureAtlas(Gdx.files.internal("sprites/vfx/fireball.atlas"));
-            this.animation = new Animation<TextureRegion>(.032f, atlas.findRegions("fireball"), Animation.PlayMode.NORMAL);
+            this.animation = new Animation<>(.032f, atlas.findRegions("fireball"), Animation.PlayMode.NORMAL);
             this.width = 4;
             this.height = 4;
         }

@@ -4,11 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 
-import java.util.ArrayList;
-
 public class Shield extends PowerUp {
 
-    float timeInShield;
+    final float timeInShield;
     float elapsedTime;
     FireTruck truck;
 

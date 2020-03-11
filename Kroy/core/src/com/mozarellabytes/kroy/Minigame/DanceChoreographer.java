@@ -10,13 +10,13 @@ public class DanceChoreographer {
     private static final int MOVE_LIST_LENGTH = 10;
 
     /** Queue to store upcoming moves */
-    private List<DanceMove> moveList;
+    private final List<DanceMove> moveList;
 
     /** Random agent for move selection */
-    private Random random;
+    private final Random random;
 
     public DanceChoreographer() {
-        this.moveList = new ArrayList<DanceMove>();
+        this.moveList = new ArrayList<>();
         this.random = new Random();
 
         for (int i = 0; i < MOVE_LIST_LENGTH; i++) {
@@ -27,13 +27,12 @@ public class DanceChoreographer {
 
     /**
      * Consumes and returns the danceMove at the head of the queue
-     * @return the next dance move
      */
-    public DanceMove nextMove() {
+    public void nextMove() {
         int rand = this.random.nextInt(DanceMove.values().length);
         DanceMove randomMove = DanceMove.values()[rand];
         this.moveList.add(randomMove);
-        return this.moveList.remove(0);
+        this.moveList.remove(0);
     }
 
     /**

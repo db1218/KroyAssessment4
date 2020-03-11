@@ -14,7 +14,7 @@ public class Dancer {
     private DanceMove state;
     private float timeInState;
 
-    private int stepsInJive;
+    private final int stepsInJive;
 
     /** Whether the dancer is doing a preset dance */
     private boolean jiving;
@@ -22,7 +22,7 @@ public class Dancer {
     /** How far through the jive the dancer is */
     private int jiveStep;
 
-    private ArrayList<DanceMove> jiveRoutine;
+    private final ArrayList<DanceMove> jiveRoutine;
 
     /**
      * Constructor for Dancer
@@ -98,7 +98,7 @@ public class Dancer {
     private void jive(){
         this.jiveStep++;
         int stepIndex = this.jiveStep % 3;
-        DanceMove move = (DanceMove)jiveRoutine.get(stepIndex);
+        DanceMove move = jiveRoutine.get(stepIndex);
         this.setState(move);
     }
 

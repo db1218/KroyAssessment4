@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.mozarellabytes.kroy.GUI.GUI;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.*;
 
@@ -51,9 +50,6 @@ public class ControlsScreen implements Screen {
     /** The HP of the fortress, helps animate the fortress */
     private int HP;
 
-    /** Counter to reset the fortresses health bar */
-    private int count;
-
     /** The name of the screen that called the control screen,
      * used to determine the background image */
     private final String screen;
@@ -69,7 +65,6 @@ public class ControlsScreen implements Screen {
     private final Screen parent;
 
     private float time = 0;
-    private final float timeCap = .5f;
     private boolean inSecondPhase = false;
 
 
@@ -89,12 +84,16 @@ public class ControlsScreen implements Screen {
         screenHeight = camera.viewportHeight;
 
         Gdx.input.setInputProcessor(new ControlScreenInputHandler(this));
-        if (screen.equals("menu")) {
-            backgroundImage = new Texture(Gdx.files.internal("menuscreen_blank_2.png"), true);
-        } else if (screen.equals("game")) {
-            backgroundImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
-        } else if (screen.equals("dance")) {
-            backgroundImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
+        switch (screen) {
+            case "menu":
+                backgroundImage = new Texture(Gdx.files.internal("menuscreen_blank_2.png"), true);
+                break;
+            case "game":
+                backgroundImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
+                break;
+            case "dance":
+                backgroundImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
+                break;
         }
 
         backgroundImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
@@ -112,7 +111,8 @@ public class ControlsScreen implements Screen {
 
 
         HP = 200;
-        count = 0;
+        /** Counter to reset the fortresses health bar */
+        int count = 0;
 
         exitButton = new Rectangle();
         exitButton.x = (int)camera.viewportWidth - 105;
@@ -141,6 +141,7 @@ public class ControlsScreen implements Screen {
         drawBackgroundImage();
         drawFilledBackgroundBox();
 
+        float timeCap = .5f;
         if (time < timeCap) {
             time += delta;
         } else {
@@ -198,7 +199,7 @@ public class ControlsScreen implements Screen {
             game.font25.draw(game.batch, "USE your combo do damage the ET by pressing [SPACE]", screenWidth / 7.692f,screenHeight * 0.60f);
             game.font25.draw(game.batch, "The crazier the combo the bigger the damage!", screenWidth / 7.692f,screenHeight * 0.56f);
             game.font25.draw(game.batch, "But if you make the wrong move, feel the burn as the ET gets a turn.", screenWidth / 7.692f,screenHeight * 0.52f);
-            game.batch.draw(arrow, (screenWidth / 4f) * 3f, (screenHeight / 5f) * 3f + ((inSecondPhase ? 1 : 0) - DanceScreen.phaseLerp((time/timeCap)%1f)) * screenWidth/32, screenWidth/32, screenWidth/32);
+            game.batch.draw(arrow, (screenWidth / 4f) * 3f, (screenHeight / 5f) * 3f + ((inSecondPhase ? 1 : 0) - DanceScreen.phaseLerp((time/ timeCap)%1f)) * screenWidth/32, screenWidth/32, screenWidth/32);
             game.batch.draw(arrowBox, (screenWidth / 4f) * 3f, (screenHeight / 5f) * 3f, screenWidth/32, screenWidth/32);
         }
 

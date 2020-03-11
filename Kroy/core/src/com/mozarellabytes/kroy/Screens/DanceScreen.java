@@ -2,7 +2,6 @@ package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -15,9 +14,6 @@ import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Minigame.*;
 import com.mozarellabytes.kroy.Utilities.*;
-import com.mozarellabytes.kroy.GUI.GUI;
-
-import java.util.ArrayList;
 
 /**
  * The screen for the minigame that triggers when a firetruck meets an ET patrol
@@ -29,7 +25,7 @@ public class DanceScreen implements Screen, BeatListener {
     private final Kroy game;
     private final GameState gameState;
 
-    private DanceScreenInputHandler danceInputHandler;
+    private final DanceScreenInputHandler danceInputHandler;
 
     /** Camera to set the projection for the screen */
     private final OrthographicCamera camera;
@@ -37,15 +33,15 @@ public class DanceScreen implements Screen, BeatListener {
     /** Object for handling those funky beats */
     private final DanceManager danceMan;
 
-    private Screen previousScreen;
+    private final Screen previousScreen;
     private boolean hasShownTutorial = false;
 
     private final Texture targetBoxTexture;
 
-    private FireTruck firetruck;
-    private Patrol patrol;
-    private Dancer firefighter;
-    private Dancer ETDancer;
+    private final FireTruck firetruck;
+    private final Patrol patrol;
+    private final Dancer firefighter;
+    private final Dancer ETDancer;
 
     private final Vector2 arrowsOrigin;
     private final Vector2 resultLocation;
@@ -54,9 +50,7 @@ public class DanceScreen implements Screen, BeatListener {
     private final Vector2 etLocation;
     private final Vector2 comboHintLocation;
 
-    private final int ARROW_DISPLACEMENT = 128;
     private final int ARROW_SIZE = 96;
-    private int kickNum = 0;
 
     private DanceResult lastResult = null;
 
@@ -87,7 +81,7 @@ public class DanceScreen implements Screen, BeatListener {
         this.targetBoxTexture = new Texture(Gdx.files.internal("sprites/dance/targetBox.png"), true);
         this.targetBoxTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
-        this.arrowsOrigin = new Vector2(camera.viewportWidth/2-ARROW_SIZE/2, camera.viewportHeight/3);
+        this.arrowsOrigin = new Vector2(camera.viewportWidth/2-ARROW_SIZE/2f, camera.viewportHeight/3);
         this.resultLocation = new Vector2(0, camera.viewportHeight/4);
         this.comboLocation = new Vector2(0, camera.viewportHeight/7);
         this.firefighterLocation = new Vector2(camera.viewportWidth/4-256, camera.viewportHeight/5);
@@ -135,6 +129,7 @@ public class DanceScreen implements Screen, BeatListener {
         int i = 0;
         for (DanceMove move : danceMan.getMoveList()) {
             if (move.getArrowTexture() != null){
+                int ARROW_DISPLACEMENT = 128;
                 this.game.batch.draw(move.getArrowTexture(), arrowsOrigin.x, arrowsOrigin.y + i * ARROW_DISPLACEMENT - phaseLerp(danceMan.getPhase()) * ARROW_DISPLACEMENT, ARROW_SIZE, ARROW_SIZE);
             }
             i++;
@@ -239,8 +234,8 @@ public class DanceScreen implements Screen, BeatListener {
         int width = 500;
         int height = 50;
         float offset = height * .2f;
-        this.game.shapeRenderer.rect(x-width/2, y, width, height, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
-        this.game.shapeRenderer.rect(x-width/2 + offset, y + offset, (width - 2*offset) * percentage, height - 2*offset, Color.RED, Color.RED, Color.RED, Color.RED);
+        this.game.shapeRenderer.rect(x-width/2f, y, width, height, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
+        this.game.shapeRenderer.rect(x-width/2f + offset, y + offset, (width - 2*offset) * percentage, height - 2*offset, Color.RED, Color.RED, Color.RED, Color.RED);
     }
 
     /**
@@ -307,7 +302,8 @@ public class DanceScreen implements Screen, BeatListener {
      * Play sound effect
      */
     public void kickIt() {
-        if (kickNum%2 == 0) {
+        int kickNum = 0;
+        if (kickNum %2 == 0) {
             SoundFX.sfx_kick.play();
         } else {
             SoundFX.sfx_snare.play();

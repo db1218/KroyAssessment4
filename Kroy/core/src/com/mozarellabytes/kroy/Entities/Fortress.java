@@ -66,7 +66,7 @@ public class Fortress {
      * is being made, or loaded from a save state
      */
     public void setup() {
-        this.bombs = new ArrayList<Bomb>();
+        this.bombs = new ArrayList<>();
         this.area = new Rectangle(this.position.x - (float) this.fortressType.getW()/2, this.position.y - (float) this.fortressType.getH()/2,
                 this.fortressType.getW(), this.fortressType.getH());
     }
