@@ -103,6 +103,7 @@ public class GUI {
      * @param gameScreen    Screen where these methods will be rendered
      */
     public GUI(Kroy game, GameScreen gameScreen) {
+        Gdx.app.log("new GIO", "r");
         this.game = game;
         this.gameScreen = gameScreen;
         this.selectedH = 250;
