@@ -255,6 +255,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         SoundFX.decideMusic(this);
+        Gdx.input.setInputProcessor(new GameInputHandler(this, gui));
         gui.resetButtons();
     }
 
@@ -821,6 +822,8 @@ public class GameScreen implements Screen {
             }
         }
     }
+
+    public GUI getGui() { return this.gui; }
 
 
 
