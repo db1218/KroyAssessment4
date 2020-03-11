@@ -7,20 +7,18 @@ import java.util.List;
 
 public class DanceManager {
 
-    /** The tempo of the music in Beats Per Minute */
-    private float tempo;
-
     /** The time in seconds between beats */
-    private float period;
+    private float beatDuration;
 
     /** The time since the last beat in seconds */
-    private float time;
+    private float timeSinceBeat;
 
     /** The time since the last half-beat in seconds */
-    private float halfTime;
+    private float halfBeat;
 
     /** Whether an input has already been given this beat */
     private boolean doneThisBeat;
+
     /** Whether the player missed the last move */
     private boolean missedLastTurn = false;
 
@@ -35,14 +33,12 @@ public class DanceManager {
     /** Technical class for deciding upcoming moves */
     private DanceChoreographer choreographer;
 
-    public DanceManager(float tempo) {
+    public DanceManager(float beatsPerMinute) {
 
-        // Setup tempo
-        this.tempo = tempo;
-        this.period = 60/tempo;
-        // System.out.println("Period: " + this.period);
-        this.time = 0;
-        this.halfTime = -period/2;
+        // All measurements are in seconds
+        this.beatDuration = 60/beatsPerMinute;
+        this.timeSinceBeat = 0;
+        this.halfBeat = -beatDuration/2;
 
         // Setup dance queue
         this.choreographer = new DanceChoreographer();
@@ -55,21 +51,21 @@ public class DanceManager {
 
     /** Called once a frame to update the dance manager*/
     public void update(float delta) {
-        this.time += delta;
-        this.halfTime += delta;
+        this.timeSinceBeat += delta;
+        this.halfBeat += delta;
 
-        if (this.time >= this.period) onBeat();
-        if (this.halfTime >= this.period) offBeat();
+        if (this.timeSinceBeat >= this.beatDuration) onBeat();
+        if (this.halfBeat >= this.beatDuration) offBeat();
     }
 
     private void onBeat() {
         this.choreographer.nextMove();
-        this.time = 0f;
+        this.timeSinceBeat = 0f;
         notifyOnBeat();
     }
 
     private void offBeat() {
-        this.halfTime = 0f;
+        this.halfBeat = 0f;
         if (!doneThisBeat && !notDanceMoves.contains(getNearestMove()) ){
             killCombo();
             missedLastTurn = true;
@@ -83,11 +79,8 @@ public class DanceManager {
      * and lim x-> 1 is directly on the next beat.
      * @return the phase through the next beat
      * */
-    /** the returned value is 2* the time */
     public float getPhase() {
-      //  Gdx.app.log("time", String.valueOf(time));
-      //  Gdx.app.log("result", String.valueOf(time / period));
-        return time / period;
+        return 2 * timeSinceBeat;
     }
 
     /**
@@ -95,7 +88,6 @@ public class DanceManager {
      * @return float distance to nearest beat
      */
     public float getBeatProximity() {
-       // Gdx.app.log("beat proximity", String.valueOf(2 * Math.abs(getPhase()-.5f)));
         return 2 * Math.abs(getPhase()-.5f);
     }
 
@@ -118,30 +110,30 @@ public class DanceManager {
         // This is the first attempted move this beat
         if (!doneThisBeat)
         {
-            float proximity = getBeatProximity();
+            float proximityToBeat = getBeatProximity();
             float phase = getPhase();
 
             DanceResult result;
 
             doneThisBeat = true;
 
-            if (proximity > .91f) {
+            if (proximityToBeat > .91f) {
                 goodMove();
                 result = DanceResult.GREAT;
             }
-            else if (proximity > .86f) {
+            else if (proximityToBeat > .86f) {
                 goodMove();
                 result = DanceResult.GOOD;
             }
-            else if (proximity > .75f) {
+            else if (proximityToBeat > .75f) {
                 goodMove();
                 result = DanceResult.OKAY;
             }
-            else if (proximity > .5 && phase > .5f) {
+            else if (proximityToBeat > .5 && phase > .5f) {
                 killCombo();
                 result = DanceResult.EARLY;
             }
-            else if (proximity > .5 && phase < .5f) {
+            else if (proximityToBeat > .5 && phase < .5f) {
                 killCombo();
                 result = DanceResult.LATE;
             }
@@ -252,4 +244,5 @@ public class DanceManager {
             listener.moveResult(result);
         }
     }
+
 }
