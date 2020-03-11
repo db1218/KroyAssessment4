@@ -124,7 +124,6 @@ public class ControlsScreen implements Screen {
 
     @Override
     public void show() {
-        SoundFX.stopTruckAttack();
     }
 
     /** Renders the control screen including explaining how to move

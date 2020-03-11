@@ -143,12 +143,10 @@ public class DanceScreen implements Screen, BeatListener {
         this.game.batch.end();
 
         drawHealthBars();
-
     }
 
     @Override
     public void show() {
-        SoundFX.stopTruckAttack();
         SoundFX.decideMusic(this);
         if (!hasShownTutorial && !((GameScreen)previousScreen).gameState.hasDanceTutorialShown()) {
             this.hasShownTutorial = true;

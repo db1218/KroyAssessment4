@@ -260,8 +260,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-//        fpsCounter.log();
-
         camera.update();
 
         mapRenderer.setView(camera);
@@ -640,7 +638,7 @@ public class GameScreen implements Screen {
      * @param et
      */
     public void doDanceOff(FireTruck firetruck, Patrol et) {
-        SoundFX.stopTruckAttack();
+        truckAttack = false;
         game.setScreen(new DanceScreen(game, gameState,this, firetruck, et));
     }
 
