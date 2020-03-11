@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-public class Combo {
+public abstract class Combo {
 
         private Animation<TextureRegion> animation;
         private TextureAtlas atlas;
@@ -22,19 +22,12 @@ public class Combo {
             this.position = position;
         }
 
-        public void update() {
-            updateAnimation();
-        }
 
-        private void updateAnimation(){
-            // Accumulate amount of time that has passed
+        public void update(Batch batch) {
             elapsedTime += Gdx.graphics.getDeltaTime();
-            // Get current frame of animation for the current stateTime
-            currentFrame = animation.getKeyFrame(elapsedTime, true);
-        }
 
-        public void render(Batch mapBatch) {
-            mapBatch.draw(currentFrame, position.x, position.y, 1, 1);
+            TextureRegion currentFrame = animation.getKeyFrame(elapsedTime, false);
+            batch.draw(currentFrame, position.x, position.y, 1, 1);
         }
 
         public void dispose() { this.atlas.dispose(); }
