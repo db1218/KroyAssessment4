@@ -246,21 +246,7 @@ public class ControlsScreen implements Screen {
 
     /** Changes the screen back to the screen that called the
      * control screen */
-    public void changeScreen() {
-        if (this.screen.equals("game")) {
-            GUI gui = new GUI(game, (GameScreen) parent);
-            Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) parent, gui));
-            gui.idleInfoButton();
-            this.game.setScreen(parent);
-        } else if (this.screen.equals("menu")){
-            Gdx.input.setInputProcessor(new MenuInputHandler((MenuScreen)parent));
-            this.game.setScreen(parent);
-        } else if (this.screen.equals("dance")) {
-            Gdx.input.setInputProcessor(new DanceScreenInputHandler((DanceScreen)parent));
-            this.game.setScreen(parent);
-
-        }
-    }
+    public void changeScreen() { this.game.setScreen(parent); }
 
     /** Draws the image being shown behind the controls panel */
     private void drawBackgroundImage(){

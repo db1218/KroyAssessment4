@@ -1,5 +1,6 @@
 package com.mozarellabytes.kroy.Entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -51,7 +52,9 @@ public class Patrol extends Sprite {
         super(type.getTexture());
         this.type = type;
         this.HP = type.getMaxHP();
-        this.position = new Vector2(type.getPoints().get(0).x + 1, type.getPoints().get(0).y);
+        this.position = new Vector2(type.getPoints().get(0).x, type.getPoints().get(0).y);
+        Gdx.app.log("Patrol type", String.valueOf(this.type));
+        Gdx.app.log("Patrol pos", String.valueOf(this.position));
         this.path = type.getPoints();
         setup();
     }
