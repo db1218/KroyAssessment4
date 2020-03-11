@@ -53,8 +53,6 @@ public class Patrol extends Sprite {
         this.type = type;
         this.HP = type.getMaxHP();
         this.position = new Vector2(type.getPoints().get(0).x, type.getPoints().get(0).y);
-        Gdx.app.log("Patrol type", String.valueOf(this.type));
-        Gdx.app.log("Patrol pos", String.valueOf(this.position));
         this.path = type.getPoints();
         setup();
     }
@@ -189,6 +187,10 @@ public class Patrol extends Sprite {
         desc.y = (float) Math.floor(this.getPosition().y);
         desc.path = this.path;
         return desc;
+    }
+
+    public Queue getPath() {
+        return this.path;
     }
 
 }

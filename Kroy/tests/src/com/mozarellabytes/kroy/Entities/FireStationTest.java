@@ -33,7 +33,7 @@ public class FireStationTest {
 
     @Test
     public void repairPassTest() {
-        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.Ruby));
+        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.RubyHard));
         station.getTruck(0).fortressDamage(50);
         float HPBeforeRepair = station.getTruck(0).getHP();
         station.restoreTrucks();
@@ -43,7 +43,7 @@ public class FireStationTest {
 
     @Test
     public void repairIncorrectPositionTest() {
-        station.spawn(new FireTruck(gameScreenMock, new Vector2(20, 10), FireTruckType.Ruby));
+        station.spawn(new FireTruck(gameScreenMock, new Vector2(20, 10), FireTruckType.RubyHard));
         station.getTruck(0).fortressDamage(50);
         float HPBeforeRepair = station.getTruck(0).getHP();
         station.restoreTrucks();
@@ -53,7 +53,7 @@ public class FireStationTest {
 
     @Test
     public void repairAlreadyFullyRepairedTest() {
-        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.Ruby));
+        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.RubyHard));
         float HPBeforeRepair = station.getTruck(0).getHP();
         station.restoreTrucks();
         float HPAfterRepair = station.getTruck(0).getHP();
@@ -63,7 +63,7 @@ public class FireStationTest {
     @Test
     public void refillPassTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
-        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.Ruby));
+        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.RubyHard));
         station.getTruck(0).attack(fortress);
         float HPBeforeRefill = station.getTruck(0).getReserve();
         station.restoreTrucks();
@@ -74,7 +74,7 @@ public class FireStationTest {
     @Test
     public void refillIncorrectPositionTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
-        station.spawn(new FireTruck(gameScreenMock, new Vector2(20, 10), FireTruckType.Ruby));
+        station.spawn(new FireTruck(gameScreenMock, new Vector2(20, 10), FireTruckType.RubyHard));
         station.getTruck(0).attack(fortress);
         float HPBeforeRefill = station.getTruck(0).getReserve();
         station.restoreTrucks();
@@ -84,7 +84,7 @@ public class FireStationTest {
 
     @Test
     public void refillAlreadyFullTest() {
-        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.Ruby));
+        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.RubyHard));
         float HPBeforeRefill = station.getTruck(0).getReserve();
         station.restoreTrucks();
         float HPAfterRefill = station.getTruck(0).getReserve();
@@ -97,8 +97,8 @@ public class FireStationTest {
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,12);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,13);
 
-        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(11, 11), FireTruckType.Ruby);
-        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(11, 13), FireTruckType.Sapphire);
+        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(11, 11), FireTruckType.RubyHard);
+        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(11, 13), FireTruckType.SapphireHard);
 
         station.spawn(fireTruck1);
         station.spawn(fireTruck2);
@@ -122,8 +122,8 @@ public class FireStationTest {
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,13);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,14);
 
-        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(11, 11), FireTruckType.Ruby);
-        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(11, 14), FireTruckType.Sapphire);
+        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(11, 11), FireTruckType.RubyHard);
+        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(11, 14), FireTruckType.SapphireHard);
 
         station.spawn(fireTruck1);
         station.spawn(fireTruck2);
