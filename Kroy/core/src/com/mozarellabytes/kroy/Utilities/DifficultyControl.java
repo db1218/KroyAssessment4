@@ -11,22 +11,18 @@ public class DifficultyControl {
     /** The amount of time that has passed since the last increment of difficulty */
     private float currentTime;
 
-
-    /** The constructor for DifficultyControl
+    /**
+     * DifficultyControl constructor which sets the level
+     *
+     * @param level level of difficulty
      */
-    public DifficultyControl(int currentDifficulty, float currentTime) {
-        this.currentDifficulty = currentDifficulty;
-        this.difficultyChangeInterval = 60f;
-        this.currentTime = currentTime;
-    }
-
     public DifficultyControl(DifficultyLevel level) {
         this.currentDifficulty = level.getStartDifficultyLevel();
         this.difficultyChangeInterval = level.getDifficultyChangeInterval();
         this.currentTime = 0;
     }
 
-    // not sure why we need this but the save screen doesn't work without it...
+//     not sure why we need this but the save screen doesn't work without it...
     public DifficultyControl() {}
 
 

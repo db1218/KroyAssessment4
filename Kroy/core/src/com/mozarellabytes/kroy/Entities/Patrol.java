@@ -58,7 +58,11 @@ public class Patrol extends Sprite {
      * Constructs a Patrol from save at a position and of a certain type
      * which have been passed in
      *
-     * @param type          used to have predefined attributes
+     * @param type  used to have predefined attributes
+     * @param HP    initial health of patrol
+     * @param x     initial x position of patrol
+     * @param y     initial y position of patrol
+     * @param path  route the patrol will follow
      */
     public Patrol(String type, float HP, float x, float y, Queue<Vector2> path) {
         super(PatrolType.valueOf(type).getTexture());

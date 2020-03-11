@@ -53,8 +53,9 @@ public class FireStation {
      * Constructs the Firestation with at a given position with locations
      * for the repair and refill tiles and the spawn tiles.
      *
-     * @param x  x coordinate of Station in tiles (lower left point)
-     * @param y  y coordinate of Station in tiles (lower left point)
+     * @param x     x coordinate of Station in tiles (lower left point)
+     * @param y     y coordinate of Station in tiles (lower left point)
+     * @param HP    starting health of the fire station
      */
     public FireStation(float x, float y, float HP) {
         this.x = x;
@@ -62,21 +63,11 @@ public class FireStation {
         this.w = 6;
         this.h = 3;
         this.HP = HP;
-        setup(gameScreen);
-    }
-
-    /**
-     * Common objects between each constructor
-     *
-     * @param gameScreen    sets game screen
-     */
-    private void setup(GameScreen gameScreen) {
-        this.gameScreen = gameScreen;
-        bayTiles = new ArrayList<>();
+        this.bayTiles = new ArrayList<>();
         for (int i=0; i<4; i++) bayTiles.add(new Vector2(x + i + 1, y));
         this.texture = new Texture(Gdx.files.internal("sprites/station/extended_station.png"));
         this.deadTexture = new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_dead.png")); // change me pls
-        this.trucks = new ArrayList<FireTruck>();
+        this.trucks = new ArrayList<>();
     }
 
     /**
@@ -295,7 +286,7 @@ public class FireStation {
 
     /**
      * if the fire station is alive
-     * @return  <code>true</code> if hp > 0
+     * @return  <code>true</code> if hp is greater than 0
      *          <code>false</code> otherwise
      */
     public boolean isAlive() {

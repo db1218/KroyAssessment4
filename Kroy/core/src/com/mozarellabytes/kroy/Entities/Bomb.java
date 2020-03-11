@@ -38,11 +38,12 @@ public class Bomb extends Sprite {
      * Constructs a bomb with the given source and target
      *
      * @param fortress  Fortress that the bomb came from
-     * @param target    FireTruck being targeted
-     * @param isRandom  <code>true</code> bomb heads towards
-     *                  the target
-     *                  <code>false</code> chance that
-     *                  bomb doesnt head towards target
+     * @param target                FireTruck being targeted
+     * @param isRandom              <code>true</code> bomb heads towards
+     *                              the target
+     *                              <code>false</code> chance that
+     *                              bomb doesnt head towards target
+     * @param difficultyMultiplier  how much damage is multiplied by the difficulty level
      */
     public Bomb(Fortress fortress, FireTruck target, boolean isRandom, float difficultyMultiplier) {
         this.target = target;

@@ -84,9 +84,10 @@ public class Fortress {
 
     /**
      * Generates bombs to attack the FireTruck with
-     * @param target        FireTruck being attacked
-     * @param randomTarget  whether the bomb hits every time or
-     *                      there is a chance it misses
+     * @param target                FireTruck being attacked
+     * @param randomTarget          whether the bomb hits every time or
+     *                              there is a chance it misses
+     * @param difficultyMultiplier  damage multiplier the bomb deals
      */
     public void attack(FireTruck target, boolean randomTarget, float difficultyMultiplier) {
         if (target.getTimeOfLastAttack() + fortressType.getDelay() < System.currentTimeMillis()) {

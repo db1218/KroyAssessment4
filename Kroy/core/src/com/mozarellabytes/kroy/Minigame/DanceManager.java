@@ -55,7 +55,11 @@ public class DanceManager {
         this.notDanceMoves.add(DanceMove.NONE);
     }
 
-    /** Called once a frame to update the dance manager*/
+    /**
+     * Called once a frame to update the dance manager
+     *
+     * @param delta time since last frame
+     */
     public void update(float delta) {
         this.timeSinceBeat += delta;
         this.halfBeat += delta;
@@ -88,11 +92,10 @@ public class DanceManager {
 
     /**
      * Returns the phase difference of the beat at the current time where 0 is directly on the beat
-     * and lim x-> 1 is directly on the next beat.
+     * and lim x = 1 is directly on the next beat.
      * @return the phase through the next beat
      * */
     public float getPhase() {
-        //return 2 * timeSinceBeat;
         return timeSinceBeat/beatDuration;
     }
 

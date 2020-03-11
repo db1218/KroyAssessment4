@@ -294,7 +294,7 @@ public class DanceScreen implements Screen, BeatListener {
 
     /**
      * Updates the move
-     * @param move
+     * @param move  the move the player took
      */
     public void setLastMove(DanceMove move){
         this.lastResult = this.danceMan.takeMove(move);

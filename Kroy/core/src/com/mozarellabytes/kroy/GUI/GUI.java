@@ -331,7 +331,12 @@ public class GUI {
         batch.end();
     }
 
-    /** Renders the text to the screen when the game is paused */
+    /**
+     * Renders the "Game Frozen text" with the time remaining
+     * of the freeze displayed too
+     *
+     * @param freezeCooldown    time of freeze remaining
+     */
     public void renderFreezeScreenText(float freezeCooldown) {
         GlyphLayout layout = new GlyphLayout();
         layout.setText(game.font26, String.format("Game Frozen! \n You have %.1f seconds to draw your truck paths \n Or press space when you're ready to go", freezeCooldown));

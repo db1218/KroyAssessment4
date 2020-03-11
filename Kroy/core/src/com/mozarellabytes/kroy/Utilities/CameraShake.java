@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * Allows for Camera Shaking by calling this update() method every frame in the game screen
- * and checking if shakeDuration is > 0, in which case the camera will "shake" for this duration.
+ * and checking if shakeDuration is greater than 0, in which case the camera will "shake" for this duration.
  */
 public class CameraShake {
 
@@ -79,7 +79,7 @@ public class CameraShake {
     }
 
     /**
-     * Called in-game whenever a Camera Shake happens. Since duration > 0, the update()
+     * Called in-game whenever a Camera Shake happens. Since duration greater than 0, the update()
      * method begins shaking the camera
      *
      * @param seconds Duration of the Camera Shake

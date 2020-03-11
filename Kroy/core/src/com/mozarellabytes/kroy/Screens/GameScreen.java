@@ -161,7 +161,8 @@ public class GameScreen implements Screen {
     /**
      * Constructor which has the game passed in
      *
-     * @param game LibGdx game
+     * @param game  LibGdx game
+     * @param level difficulty of the game
      */
     public GameScreen(Kroy game, DifficultyLevel level) {
         // Entity related stuff
@@ -644,8 +645,8 @@ public class GameScreen implements Screen {
 
     /**
      * Starts a dance-off between the given firetruck and the given ET
-     * @param firetruck
-     * @param et
+     * @param firetruck firetruck to be converted into fireman
+     * @param et        patrol to be used in the dance game
      */
     public void doDanceOff(FireTruck firetruck, Patrol et) {
         truckAttack = false;
@@ -665,6 +666,8 @@ public class GameScreen implements Screen {
     /**
      * Toggles between PLAY, PAUSE and FREEZE state when the Pause button is clicked
      * or when the SPACE bar is clicked
+     *
+     * @param action    the new state of the game
      */
     public void changeState(PlayState action) {
         switch (action) {

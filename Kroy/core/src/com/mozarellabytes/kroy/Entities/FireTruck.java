@@ -120,11 +120,12 @@ public class FireTruck extends Sprite {
 
     /**
      * Construct a FireTruck from a saved state
-     * @param x
-     * @param y
-     * @param typeString
-     * @param HP
-     * @param reserve
+     * @param x             starting x position of fire truck
+     * @param y             starting y position of fire truck
+     * @param typeString    type of fire truck
+     * @param HP            starting hp of fire truck
+     * @param reserve       starting reserve of fire truck
+     * @param rotation      direction fire truck was facing
      */
     public FireTruck(float x, float y, String typeString, float HP, float reserve, String rotation) {
         super(FireTruckType.valueOf(typeString).getLookDown());
@@ -742,6 +743,8 @@ public class FireTruck extends Sprite {
     /**
      * Gets rounded truck position
      * Used for patrol collision
+     *
+     * @return Rounded position vector
      */
     public Vector2 getTilePosition() {
         return new Vector2(Math.round(this.position.x), Math.round(this.position.y));
