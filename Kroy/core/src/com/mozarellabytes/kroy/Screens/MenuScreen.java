@@ -16,6 +16,7 @@ public class MenuScreen implements Screen {
 
     /** The game */
     private final Kroy game;
+    private MenuInputHandler inputHandler;
     public final OrthographicCamera camera;
 
     /** The menu screen image - see ui/menuscreen_blank_2 */
@@ -85,6 +86,7 @@ public class MenuScreen implements Screen {
      */
     public MenuScreen(final Kroy game) {
         this.game = game;
+        inputHandler = new MenuInputHandler(this);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
@@ -156,7 +158,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(new MenuInputHandler(this));
+        Gdx.input.setInputProcessor(inputHandler);
         SoundFX.decideMusic(this);
     }
 

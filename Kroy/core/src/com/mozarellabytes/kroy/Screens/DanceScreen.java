@@ -170,7 +170,7 @@ public class DanceScreen implements Screen, BeatListener {
             ((GameScreen)previousScreen).gameState.setDanceTutorialShown();
             this.game.setScreen(new ControlsScreen(game, this, "dance"));
         } else {
-            Gdx.input.setInputProcessor(new DanceScreenInputHandler(this));
+            Gdx.input.setInputProcessor(danceInputHandler);
         }
     }
 
