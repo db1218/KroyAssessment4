@@ -60,7 +60,15 @@ public class DanceScreen implements Screen, BeatListener {
 
     private DanceResult lastResult = null;
 
-
+    /**
+     * Constructor for Dance Screen
+     *
+     * @param game              instance of Game
+     * @param gameState         state of the game to know if the game should end after minigame ends
+     * @param previousScreen    allows to return to the game screen
+     * @param firetruck         the firetruck from the game (fire man in minigame)
+     * @param patrol            the patrol from the game
+     */
     public DanceScreen(Kroy game, GameState gameState, Screen previousScreen, FireTruck firetruck, Patrol patrol) {
         this.game = game;
         this.gameState = gameState;
@@ -186,6 +194,9 @@ public class DanceScreen implements Screen, BeatListener {
 
     }
 
+    /**
+     * Checks if the minigame should end, called every frame
+     */
     private void checkIfOver() {
         if (firefighter.getHealth() <= 0) {
             firetruck.setHP(firefighter.getHealth());
@@ -201,10 +212,16 @@ public class DanceScreen implements Screen, BeatListener {
         }
     }
 
+    /**
+     * Go back to Game screen
+     */
     private void goToGameScreen() {
         game.setScreen(previousScreen);
     }
 
+    /**
+     * Draw the health bars of the patrol and fire man
+     */
     private void drawHealthBars() {
         this.game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         this.game.shapeRenderer.setProjectionMatrix(camera.combined);
@@ -226,25 +243,47 @@ public class DanceScreen implements Screen, BeatListener {
         this.game.shapeRenderer.rect(x-width/2 + offset, y + offset, (width - 2*offset) * percentage, height - 2*offset, Color.RED, Color.RED, Color.RED, Color.RED);
     }
 
-
+    /**
+     * Function for determining how much the arrow should move
+     * down the screen
+     *
+     * @param phase factor in determining how much it should phase
+     * @return      distance the arrow should move
+     */
     public static float phaseLerp(float phase) {
         return (float) Math.pow(2, 10f * (phase-1));
     }
 
+    /**
+     * Scales the damage dealt to patrol
+     *
+     * @param combo scaling factor
+     * @return      amount of damage done
+     */
     public static float scaleDamage(float combo) {
         return (float) (20 * (Math.pow(1.2, combo)-1f));
     }
 
+    /**
+     * Displays the dance sequence for on beat
+     */
     public void onBeat() {
         this.ETDancer.updateJive();
     }
 
+    /**
+     * Displays the dance sequence for off beat
+     */
     @Override
     public void offBeat() {
         if (firefighter.getTimeInState() > danceMan.getPhase()/2) this.firefighter.setState(DanceMove.WAIT);
         this.ETDancer.updateJive();
     }
 
+    /**
+     * Moves the result
+     * @param result    how "on time" the player was
+     */
     @Override
     public void moveResult(DanceResult result) {
         if (result.equals(DanceResult.WRONG)){
@@ -253,6 +292,10 @@ public class DanceScreen implements Screen, BeatListener {
         }
     }
 
+    /**
+     * Updates the move
+     * @param move
+     */
     public void setLastMove(DanceMove move){
         this.lastResult = this.danceMan.takeMove(move);
         this.firefighter.setState(move);
@@ -260,6 +303,9 @@ public class DanceScreen implements Screen, BeatListener {
         //kickIt();
     }
 
+    /**
+     * Play sound effect
+     */
     public void kickIt() {
         if (kickNum%2 == 0) {
             SoundFX.sfx_kick.play();
@@ -268,6 +314,9 @@ public class DanceScreen implements Screen, BeatListener {
         }
     }
 
+    /**
+     * When space is clicked, combo is used
+     */
     public void useCombo(){
         int combo = danceMan.getCombo();
         this.ETDancer.damage((int)scaleDamage(combo));

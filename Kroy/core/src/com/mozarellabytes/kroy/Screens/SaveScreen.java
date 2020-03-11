@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -30,16 +29,18 @@ import com.mozarellabytes.kroy.Utilities.SoundFX;
  */
 public class SaveScreen implements Screen {
 
-    // objects from other screen
+    // objects from other screens
     private final Kroy game;
-
     private final MenuScreen menuScreen;
 
+    // stage elements
     private final Stage stage;
     private Table selectedTable;
 
+    // selected save element
     private SavedElement currentSaveSelected;
 
+    // button styles
     private ImageButton.ImageButtonStyle closeButtonStyle;
     private ImageButton.ImageButtonStyle deleteButtonStyle;
     private ImageButton.ImageButtonStyle playButtonStyle;
@@ -48,8 +49,8 @@ public class SaveScreen implements Screen {
      * Constructor for save screen which is created when the
      * user clicks on "load" on the main menu
      *
-     * @param game
-     * @param menuScreen
+     * @param game          game object
+     * @param menuScreen    menu to return to
      */
     public SaveScreen(Kroy game, MenuScreen menuScreen) {
         this.game = game;
@@ -65,12 +66,6 @@ public class SaveScreen implements Screen {
         // create stage
         stage = new Stage(viewport, game.batch);
         Gdx.input.setInputProcessor(stage);
-    }
-
-    private void deleteSave() {
-        Gdx.files.local("saves/" + currentSaveSelected.getTimestamp() + "/").deleteDirectory();
-        stage.clear();
-        show();
     }
 
     /**
@@ -197,56 +192,6 @@ public class SaveScreen implements Screen {
     }
 
     /**
-     * Create the styles for the buttons to allow them to change state when
-     * you click them
-     */
-    private void createButtonStyles() {
-        closeButtonStyle = new ImageButton.ImageButtonStyle();
-        closeButtonStyle.up = new TextureRegionDrawable(new Texture("ui/return_idle.png"));
-        closeButtonStyle.down = new TextureRegionDrawable(new Texture("ui/return_clicked.png"));
-
-        deleteButtonStyle = new ImageButton.ImageButtonStyle();
-        deleteButtonStyle.up = new TextureRegionDrawable(new Texture("ui/delete_idle.png"));
-        deleteButtonStyle.down = new TextureRegionDrawable(new Texture("ui/delete_clicked.png"));
-
-        playButtonStyle = new ImageButton.ImageButtonStyle();
-        playButtonStyle.up = new TextureRegionDrawable(new Texture("ui/start_idle.png"));
-        playButtonStyle.down = new TextureRegionDrawable(new Texture("ui/start_clicked.png"));
-    }
-
-    /**
-     * When a save is clicked, it updates the right hand side of the screen
-     * to display the details of the save file, including the difficulty, fire
-     * trucks alive and fortresses alive
-     */
-    private void updateCurrentlySelected() {
-        Image screenshot = new Image(new Texture("saves/" + currentSaveSelected.getTimestamp() + "/screenshot.png"));
-        selectedTable.clearChildren();
-        selectedTable.add(new Label(currentSaveSelected.getEnTimestamp(), new Label.LabelStyle(game.font60, Color.WHITE))).padBottom(20).row();
-        selectedTable.add(screenshot).maxWidth(Gdx.graphics.getWidth()/3f).maxHeight(Gdx.graphics.getHeight()/3f).padBottom(20).row();
-        VerticalGroup savesList = new VerticalGroup();
-        savesList.space(10);
-
-        Label difficultyLabel = new Label("Difficulty: " +
-                currentSaveSelected.getDifficultyControl().getDifficultyMultiplier() + "x", new Label.LabelStyle(game.font25, Color.WHITE));
-        difficultyLabel.setAlignment(Align.left);
-
-        Label fireTrucksLevel = new Label("Fire Trucks: (" + currentSaveSelected.getFireTrucks().size() + ")" +
-                currentSaveSelected.listAliveFireTrucks(), new Label.LabelStyle(game.font25, Color.WHITE));
-        fireTrucksLevel.setAlignment(Align.left);
-
-        Label fortressesLevel = new Label("Fortresses: (" + currentSaveSelected.getFortresses().size() + ")" +
-                currentSaveSelected.listAliveFortresses(), new Label.LabelStyle(game.font25, Color.WHITE));
-        fortressesLevel.setAlignment(Align.left);
-
-        savesList.fill().bottom().expand();
-        savesList.addActor(difficultyLabel);
-        savesList.addActor(fireTrucksLevel);
-        savesList.addActor(fortressesLevel);
-        selectedTable.add(savesList).expand().maxHeight(Gdx.graphics.getHeight()/3f);
-    }
-
-    /**
      * Called when the screen should render itself.
      *
      * @param delta The time in seconds since the last render.
@@ -300,6 +245,65 @@ public class SaveScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    /**
+     * Delete the currently selected save file
+     */
+    private void deleteSave() {
+        Gdx.files.local("saves/" + currentSaveSelected.getTimestamp() + "/").deleteDirectory();
+        stage.clear();
+        show();
+    }
+
+    /**
+     * Create the styles for the buttons to allow them to change state when
+     * you click them
+     */
+    private void createButtonStyles() {
+        closeButtonStyle = new ImageButton.ImageButtonStyle();
+        closeButtonStyle.up = new TextureRegionDrawable(new Texture("ui/return_idle.png"));
+        closeButtonStyle.down = new TextureRegionDrawable(new Texture("ui/return_clicked.png"));
+
+        deleteButtonStyle = new ImageButton.ImageButtonStyle();
+        deleteButtonStyle.up = new TextureRegionDrawable(new Texture("ui/delete_idle.png"));
+        deleteButtonStyle.down = new TextureRegionDrawable(new Texture("ui/delete_clicked.png"));
+
+        playButtonStyle = new ImageButton.ImageButtonStyle();
+        playButtonStyle.up = new TextureRegionDrawable(new Texture("ui/start_idle.png"));
+        playButtonStyle.down = new TextureRegionDrawable(new Texture("ui/start_clicked.png"));
+    }
+
+    /**
+     * When a save is clicked, it updates the right hand side of the screen
+     * to display the details of the save file, including the difficulty, fire
+     * trucks alive and fortresses alive
+     */
+    private void updateCurrentlySelected() {
+        Image screenshot = new Image(new Texture("saves/" + currentSaveSelected.getTimestamp() + "/screenshot.png"));
+        selectedTable.clearChildren();
+        selectedTable.add(new Label(currentSaveSelected.getEnTimestamp(), new Label.LabelStyle(game.font60, Color.WHITE))).padBottom(20).row();
+        selectedTable.add(screenshot).maxWidth(Gdx.graphics.getWidth()/3f).maxHeight(Gdx.graphics.getHeight()/3f).padBottom(20).row();
+        VerticalGroup savesList = new VerticalGroup();
+        savesList.space(10);
+
+        Label difficultyLabel = new Label("Difficulty: " +
+                currentSaveSelected.getDifficultyControl().getDifficultyMultiplier() + "x", new Label.LabelStyle(game.font25, Color.WHITE));
+        difficultyLabel.setAlignment(Align.left);
+
+        Label fireTrucksLevel = new Label("Fire Trucks: (" + currentSaveSelected.getFireTrucks().size() + ")" +
+                currentSaveSelected.listAliveFireTrucks(), new Label.LabelStyle(game.font25, Color.WHITE));
+        fireTrucksLevel.setAlignment(Align.left);
+
+        Label fortressesLevel = new Label("Fortresses: (" + currentSaveSelected.getFortresses().size() + ")" +
+                currentSaveSelected.listAliveFortresses(), new Label.LabelStyle(game.font25, Color.WHITE));
+        fortressesLevel.setAlignment(Align.left);
+
+        savesList.fill().bottom().expand();
+        savesList.addActor(difficultyLabel);
+        savesList.addActor(fireTrucksLevel);
+        savesList.addActor(fortressesLevel);
+        selectedTable.add(savesList).expand().maxHeight(Gdx.graphics.getHeight()/3f);
     }
 
 }

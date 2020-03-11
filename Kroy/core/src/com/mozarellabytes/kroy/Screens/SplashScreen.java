@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.GL20;
 
 public class SplashScreen implements Screen {
 
-
     private final Kroy game;
 
     /** The image displayed as the splash screen */

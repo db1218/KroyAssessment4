@@ -11,6 +11,10 @@ import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.ArrayList;
 
+/**
+ * Fortresses can attack fire trucks when within range
+ * and can regenerate health over time
+ */
 public class Fortress {
 
     /*** Fortress health, destroyed on zero */
@@ -43,6 +47,13 @@ public class Fortress {
         setup();
     }
 
+    /**
+     * Constructs a Fortress from a save file
+     * @param x             x location of fortress
+     * @param y             y location of fortress
+     * @param typeString    type of fortress as a string
+     * @param HP            hp of fortresss
+     */
     public Fortress(float x, float y, String typeString, float HP) {
         this.position = new Vector2(x, y);
         this.fortressType = FortressType.valueOf(typeString);
@@ -50,6 +61,10 @@ public class Fortress {
         setup();
     }
 
+    /**
+     * Initialise common objects independent on if a new Fortress
+     * is being made, or loaded from a save state
+     */
     public void setup() {
         this.bombs = new ArrayList<Bomb>();
         this.area = new Rectangle(this.position.x - (float) this.fortressType.getW()/2, this.position.y - (float) this.fortressType.getH()/2,

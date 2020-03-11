@@ -1,6 +1,5 @@
 package com.mozarellabytes.kroy.Entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -11,14 +10,12 @@ import com.mozarellabytes.kroy.Descriptors.Desc;
 
 import java.util.ArrayList;
 
-
 /**
  * Patrol is an entity that the player controls. It navigates the map
  * going through points defined in the the patrolType
  *
  *
  */
-
 public class Patrol extends Sprite {
 
     /** Defines set of pre-defined attributes */
@@ -54,7 +51,7 @@ public class Patrol extends Sprite {
         this.HP = type.getMaxHP();
         this.position = new Vector2(type.getPoints().get(0).x, type.getPoints().get(0).y);
         this.path = type.getPoints();
-        setup();
+        this.spray = new ArrayList<>();
     }
 
     /**
@@ -69,13 +66,15 @@ public class Patrol extends Sprite {
         this.HP = HP;
         this.position = new Vector2(x, y);
         this.path = path;
-        setup();
-    }
-
-    private void setup() {
         this.spray = new ArrayList<>();
     }
 
+    /**
+     * Moves the patrol. It checks it's position relative to the next corner
+     * of its rectangular route that it follows
+     *
+     * @param speed units moved each move
+     */
     public void move(double speed) {
         Vector2 nextCorner = path.first();
         if (nextCorner.x > Math.round(position.x * 100.0) / 100.0) {
@@ -91,6 +90,9 @@ public class Patrol extends Sprite {
         }
     }
 
+    /**
+     * Moves first to last and removes first in queue
+     */
     private void cycleQueue(){
         path.addLast(path.first());
         path.removeFirst();
@@ -106,6 +108,9 @@ public class Patrol extends Sprite {
         this.spray.add(new Particle(this.getPosition(), station.getCentrePosition(), station));
     }
 
+    /**
+     * Updates the spray of the Boss patrol
+     */
     public void updateBossSpray() {
         if (this.spray != null) {
             for (int i=0; i < this.spray.size(); i++) {
@@ -117,10 +122,6 @@ public class Patrol extends Sprite {
                 }
             }
         }
-    }
-
-    private ArrayList<Particle> getSpray() {
-        return this.spray;
     }
 
     /**
@@ -161,6 +162,34 @@ public class Patrol extends Sprite {
         station.damage(0.15f);
     }
 
+    /**
+     * Get vector, but x and y are rounded to doubles instead of floats
+     * @return  new Vector
+     */
+    public Vector2 getDoublePosition() {
+        return new Vector2((float) (Math.round(position.x * 100.0) / 100.0), (float) (Math.round(position.y * 100.0) / 100.0));
+    }
+
+    /**
+     * Generates the description of the patrol to
+     * be stored in the save file
+     *
+     * @return  description of patrol
+     */
+    public Desc.Patrol getDescriptor() {
+        Desc.Patrol desc = new Desc.Patrol();
+        desc.type = this.type.name();
+        desc.health = this.getHP();
+        desc.x = (float) Math.floor(this.getPosition().x);
+        desc.y = (float) Math.floor(this.getPosition().y);
+        desc.path = this.path;
+        return desc;
+    }
+
+    private ArrayList<Particle> getSpray() {
+        return this.spray;
+    }
+
     public float getHP() {
         return this.HP;
     }
@@ -175,21 +204,7 @@ public class Patrol extends Sprite {
         return this.position;
     }
 
-    public Vector2 getDoublePosition() {
-        return new Vector2((float) (Math.round(position.x * 100.0) / 100.0), (float) (Math.round(position.y * 100.0) / 100.0));
-    }
-
-    public Desc.Patrol getSave() {
-        Desc.Patrol desc = new Desc.Patrol();
-        desc.type = this.type.name();
-        desc.health = this.getHP();
-        desc.x = (float) Math.floor(this.getPosition().x);
-        desc.y = (float) Math.floor(this.getPosition().y);
-        desc.path = this.path;
-        return desc;
-    }
-
-    public Queue getPath() {
+    public Queue<Vector2> getPath() {
         return this.path;
     }
 

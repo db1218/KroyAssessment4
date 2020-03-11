@@ -12,6 +12,11 @@ import com.mozarellabytes.kroy.Utilities.DifficultyLevel;
 import com.mozarellabytes.kroy.Utilities.DifficultyScreenInputHandler;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
+/**
+ * This screen displays the user with 3 difficulties of
+ * our game to choose from, Easy, Medium and Hard. The user
+ * can also navigate back the the main menu screen
+ */
 public class DifficultyScreen implements Screen {
 
     /** The game */
@@ -82,7 +87,6 @@ public class DifficultyScreen implements Screen {
     private final Texture soundOffClickedTexture;
 
     private Texture currentSoundTexture;
-
 
     /** Constructs the MenuScreen
      *
@@ -254,6 +258,9 @@ public class DifficultyScreen implements Screen {
         currentEasyTexture = easyClickedTexture;
     }
 
+    /**
+     * Set the easy button to idle state
+     */
     public void idleEasyButton() { currentEasyTexture = easyIdleTexture; }
 
     /** Changes the texture of the start button when it has been clicked on */
@@ -262,6 +269,9 @@ public class DifficultyScreen implements Screen {
         currentMediumTexture = mediumClickedTexture;
     }
 
+    /**
+     * Set the medium button to idle state
+     */
     public void idleMediumButton() {
         currentMediumTexture = mediumIdleTexture;
     }
@@ -272,6 +282,9 @@ public class DifficultyScreen implements Screen {
         currentHardTexture = hardClickedTexture;
     }
 
+    /**
+     * Set the hard button to idle state
+     */
     public void idleHardButton() {
         currentHardTexture = hardIdleTexture;
     }
@@ -282,6 +295,9 @@ public class DifficultyScreen implements Screen {
         currentReturnTexture = returnClickedTexture;
     }
 
+    /**
+     * Set the return button to idle state
+     */
     public void idleReturnButton() {
         currentReturnTexture = returnIdleTexture;
     }
@@ -305,7 +321,6 @@ public class DifficultyScreen implements Screen {
     public void idleSoundButton() {
         currentSoundTexture = SoundFX.music_enabled ? soundOffClickedTexture : soundOnClickedTexture;
     }
-
 
     public Rectangle getEasyButton() { return easyButton; }
 

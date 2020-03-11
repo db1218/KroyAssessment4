@@ -13,16 +13,17 @@ import com.mozarellabytes.kroy.Descriptors.Desc;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
-
 /**
  * FireStation is a class created when it is called from GameScreen.
  * This class contains the location and sprite of the FireStation.
  * The FireStation spawns, repairs and refills the firetrucks and
  * ensures that trucks do not collide
  */
-
 public class FireStation {
 
+    /**
+     * Game screen
+     */
     private GameScreen gameScreen;
 
     /**
@@ -64,6 +65,11 @@ public class FireStation {
         setup(gameScreen);
     }
 
+    /**
+     * Common objects between each constructor
+     *
+     * @param gameScreen    sets game screen
+     */
     private void setup(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
         bayTiles = new ArrayList<>();
@@ -238,9 +244,69 @@ public class FireStation {
         return new DestroyedEntity(this.deadTexture, this.x, this.y, 5, 3);
     }
 
+    /**
+     * Gets the middle of the fire station
+     * @return  Centred vector
+     */
+    public Vector2 getCentrePosition() {
+        return new Vector2(this.x+this.w/2f,this.y+this.h/2f);
+    }
+
+    /**
+     * Generates the description of the fire trucks
+     * to be stored in the save file
+     *
+     * @return  description of the fire trucks
+     */
+    public Desc.FireTruck[] getFireTrucksDescriptor() {
+        Desc.FireTruck[] fireTrucks = new Desc.FireTruck[this.getTrucks().size()];
+        for (int i=0; i<fireTrucks.length; i++) {
+            fireTrucks[i] = this.getTruck(i).getDescriptor();
+        }
+        return fireTrucks;
+    }
+
+    /**
+     * Generates the description of the fire station to
+     * be stored in the save file
+     *
+     * @return  description of fire station
+     */
+    public Desc.FireStation getDescriptor() {
+        Desc.FireStation desc = new Desc.FireStation();
+        desc.x = this.x;
+        desc.y = this.y;
+        desc.health = this.HP;
+        return desc;
+    }
+
+    /**
+     * Set game screen object when loaded from a save
+     * file as dont want to generate screen in
+     * {@link com.mozarellabytes.kroy.Screens.SavedElement}
+     *
+     * @param gameScreen    gameScreen to set
+     */
+    public void setGameScreen(GameScreen gameScreen) {
+        this.gameScreen = gameScreen;
+        for (FireTruck truck : this.trucks)
+            truck.setGameScreen(gameScreen);
+    }
+
+    /**
+     * if the fire station is alive
+     * @return  <code>true</code> if hp > 0
+     *          <code>false</code> otherwise
+     */
+    public boolean isAlive() {
+        return HP > 0;
+    }
+
     public float getHP() {
         return this.HP;
     }
+
+    public ArrayList<Vector2> getBayTiles() { return this.bayTiles; }
 
     public ArrayList<FireTruck> getTrucks() {
         return this.trucks;
@@ -254,35 +320,5 @@ public class FireStation {
         return new Vector2(this.x,this.y);
     }
 
-    public Vector2 getCentrePosition() {
-        return new Vector2(this.x+this.w/2f,this.y+this.h/2f);
-    }
 
-    public Desc.FireTruck[] getFireTrucksDescriptor() {
-        Desc.FireTruck[] fireTrucks = new Desc.FireTruck[this.getTrucks().size()];
-        for (int i=0; i<fireTrucks.length; i++) {
-            fireTrucks[i] = this.getTruck(i).getSave();
-        }
-        return fireTrucks;
-    }
-
-    public Desc.FireStation getDescriptor() {
-        Desc.FireStation desc = new Desc.FireStation();
-        desc.x = this.x;
-        desc.y = this.y;
-        desc.health = this.HP;
-        return desc;
-    }
-
-    public boolean isAlive() {
-        return HP > 0;
-    }
-
-    public void setGameScreen(GameScreen gameScreen) {
-        this.gameScreen = gameScreen;
-        for (FireTruck truck : this.trucks)
-            truck.setGameScreen(gameScreen);
-    }
-
-    public ArrayList<Vector2> getBayTiles() { return this.bayTiles; }
 }

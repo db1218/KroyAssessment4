@@ -4,8 +4,11 @@ import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 
-/** Class for entities that are taking part in the dance-off */
+/**
+ * Class for entities that are taking part in the dance-off
+ */
 public class Dancer {
+    
     /** The amount of health the dancer has left*/
     private int health;
     private DanceMove state;
@@ -19,19 +22,26 @@ public class Dancer {
     /** How far through the jive the dancer is */
     private int jiveStep;
 
-    private ArrayList jiveRoutine;
+    private ArrayList<DanceMove> jiveRoutine;
 
+    /**
+     * Constructor for Dancer
+     * @param maxHealth health dancer starts with (from fire truck)
+     */
     public Dancer(int maxHealth) {
         this.health = maxHealth;
         this.state = DanceMove.NONE;
         this.timeInState = 0f;
         this.jiving = false;
-        this.jiveRoutine = new ArrayList();
+        this.jiveRoutine = new ArrayList<>();
         this.stepsInJive = 8;
 
         createRoutine();
     }
 
+    /**
+     * Creates the jive routing, left then right
+     */
     private void createRoutine() {
         this.jiveRoutine.add(DanceMove.LEFT);
         this.jiveRoutine.add(DanceMove.NONE);
@@ -67,7 +77,6 @@ public class Dancer {
         this.timeInState += delta;
     }
 
-
     /**
      * Sets the dancer to perform an automatic celebratory dance
      */
@@ -83,6 +92,9 @@ public class Dancer {
         if (this.jiveStep >= this.stepsInJive) stopJiving();
     }
 
+    /**
+     * Fireman dance
+     */
     private void jive(){
         this.jiveStep++;
         int stepIndex = this.jiveStep % 3;
@@ -90,12 +102,20 @@ public class Dancer {
         this.setState(move);
     }
 
+    /**
+     * Finish fireman dance
+     */
     private void stopJiving() {
         this.jiving = false;
         this.jiveStep = 0;
         this.state = DanceMove.NONE;
     }
 
+    /**
+     * Get texture of entity
+     * @param entity    entity to get texture for
+     * @return          the texture
+     */
     public Texture getTexture(String entity) {
         Texture ETTexture = this.state.getETTexture();
         Texture firefighterTexture = this.state.getFirefighterTexture();
@@ -108,21 +128,12 @@ public class Dancer {
      */
     public float getTimeInState() { return this.timeInState; }
 
-    /**
-     * Gets the current state of the dancer
-     * @return a Dancemove
-     */
     public DanceMove getState() {
         return this.state;
     }
 
-    /**
-     * Returns the current health of the dancer
-     * */
     public int getHealth() {
         return this.health;
     }
-
-
 
 }

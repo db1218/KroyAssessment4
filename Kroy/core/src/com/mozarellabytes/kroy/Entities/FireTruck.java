@@ -139,7 +139,9 @@ public class FireTruck extends Sprite {
     /**
      * Initialise common objects independent on if a new FireTruck
      * is being made, or loaded from a save state
-     * @param gameScreen
+     *
+     * @param gameScreen    Game screen
+     * @param rotation      the direction the fire truck is looking in
      */
     private void setup(GameScreen gameScreen, String rotation) {
         this.gameScreen = gameScreen;
@@ -188,6 +190,12 @@ public class FireTruck extends Sprite {
         }
     }
 
+    /**
+     * If path segment can be added to the route
+     *
+     * @return  <code>true</code> if segment can be added
+     *          <code>false</code> otherwise
+     */
     public boolean canPathSegmentBeAddedToRoute() {
         if (!this.pathSegment.first().equals(this.pathSegment.last())) {
             return true;
@@ -196,29 +204,31 @@ public class FireTruck extends Sprite {
         return false;
     }
 
+    /**
+     * Add the segment to a list of segments when the
+     * player's mouse click is lifted
+     */
     public void addPathSegmentToRoute() {
         this.pathSegments.addLast(cloneQueue(this.pathSegment));
         this.pathSegment.clear();
     }
 
+    /**
+     * Clones the queue to add to the list of segments
+     *
+     * @param oldQueue  queue to clone
+     * @return          new cloned queue
+     */
     private Queue<Vector2> cloneQueue(Queue<Vector2> oldQueue) {
         Queue<Vector2> newQueue = new Queue<>();
         for (Vector2 vector : oldQueue) newQueue.addLast(vector);
         return newQueue;
     }
 
-    private Queue<Queue<Vector2>> clone2DQueue(Queue<Queue<Vector2>> oldQueue) {
-        Queue<Queue<Vector2>> newQueue = new Queue<>();
-        for (Queue<Vector2> queue : oldQueue) {
-            Queue<Vector2> newSubQueue = new Queue<>();
-            for (Vector2 vector2 : queue) {
-                newSubQueue.addLast(vector2);
-            }
-            newQueue.addLast(newSubQueue);
-        }
-        return newQueue;
-    }
-
+    /**
+     * Clear queue apart from the first element
+     * @param first element to keep
+     */
     private void clearQueueSetFirst(Vector2 first) {
         this.pathSegment.clear();
         this.pathSegment.addLast(first);
@@ -233,7 +243,7 @@ public class FireTruck extends Sprite {
         this.HP += HP;
     }
 
-    /** Updates the bubble sprite based on the truck's stats
+    /* Updates the bubble sprite based on the truck's stats
     public void updateBubble(Batch batch) {
         if (!hasBubble) {
             if (this.getReserve() < this.type.getMaxReserve() / 2f) {
@@ -278,11 +288,20 @@ public class FireTruck extends Sprite {
         }
     }
 
+    /**
+     * Show to generated path found by path finding to path segment
+     * @param coordinate    destination coordinate
+     */
     private void addSuggestedPathSegment(Vector2 coordinate) {
         clearQueueSetFirst(this.pathSegment.first());
         for (Vector2 position : findPath(coordinate, this.pathSegment.first())) this.pathSegment.addLast(position);
     }
 
+    /**
+     * Generates the path for when the truck starts to move
+     * to simulate the truck moving smoothly, from the last
+     * path segment
+     */
     public void generatePathFromLastSegments() {
         if (!pathSegments.isEmpty()) {
             for (int i=1; i<pathSegments.last().size; i++) {
@@ -292,6 +311,11 @@ public class FireTruck extends Sprite {
         moving = true;
     }
 
+    /**
+     * Generates the path for when the truck starts to move
+     * to simulate the truck moving smoothly, from ALL the
+     * path segments
+     */
     public void generatePathFromAllSegments() {
         if (!pathSegments.isEmpty()) {
             this.path.clear();
@@ -426,9 +450,7 @@ public class FireTruck extends Sprite {
     /**
      * Reverses an array
      *
-     * @param a    The shortest path array, so it goes from start to finish rather then finish to start in order
-     *
-     * @return A reversed array
+     * @param a The shortest path array, so it goes from start to finish rather then finish to start in order
      */
     private void reverse(Vector2[] a) {
         Collections.reverse(Arrays.asList(a));
@@ -494,6 +516,9 @@ public class FireTruck extends Sprite {
         this.pathSegment.clear();
     }
 
+    /**
+     * When the truck collides with another truck
+     */
     public void collided() {
         this.inCollision = true;
         this.path.clear();
@@ -621,94 +646,6 @@ public class FireTruck extends Sprite {
     }
 
     /**
-     * Draws the FireTruck sprite
-     *
-     * @param mapBatch  Batch that the truck is being
-     *                  drawn to (map dependant)
-     */
-    public void drawSprite(Batch mapBatch) {
-        mapBatch.draw(this, this.position.x, this.position.y, 1, 1);
-    }
-
-    /**
-     * Helper method that returns where the truck is visually to the player. This is used when
-     * checking the range when attacking the Fortress and getting attacked by the Fortress
-     *
-     * @return a vector where the truck is visually
-     */
-    public Vector2 getVisualPosition() {
-        return new Vector2(this.position.x + 0.5f, this.position.y + 0.5f);
-    }
-
-    /**
-     * Sets time of last attack to unix timestamp provided
-     * @param timestamp  timestamp set as time of last attack
-     */
-    public void setTimeOfLastAttack(long timestamp) {
-        this.timeOfLastAttack = timestamp;
-    }
-
-    public void setMoving(boolean t) {
-        this.moving = t;
-    }
-
-    public long getTimeOfLastAttack() {
-        return timeOfLastAttack;
-    }
-
-    public float getHP() {
-        return this.HP;
-    }
-
-    public void setHP(int hp) { this.HP = hp; }
-
-    public float getReserve() {
-        return this.reserve;
-    }
-
-    public FireTruckType getType() {
-        return this.type;
-    }
-
-    public void setCollision() {
-        this.inCollision = true;
-    }
-
-    public Vector2 getPosition() {
-        return this.position;
-    }
-
-    public void setPosition(Vector2 newPosition) {
-        this.position = newPosition;
-    }
-
-    /**
-     * Gets rounded truck position
-     * Used for patrol collision
-     */
-    public Vector2 getTilePosition() {
-        return new Vector2(Math.round(this.position.x), Math.round(this.position.y));
-    }
-
-    public Queue<Vector2> getPathSegment() {
-        return this.pathSegment;
-    }
-
-    public Queue<Vector2> getPath() {
-        return this.path;
-    }
-
-    private ArrayList<Particle> getSpray() {
-        return this.spray;
-    }
-
-    public boolean getMoving() {
-        return this.moving;
-    }
-
-    public  float getRange() { return this.range; }
-
-    /**
      * "Undo" a segment from the queue of segments that make up the
      * path that the truck follows. This can only happen when the game
      * is frozen and makes sure the truck ends up in a tile
@@ -758,11 +695,22 @@ public class FireTruck extends Sprite {
         }
     }
 
-    public void clearPathSegmentsStack() {
-        pathSegmentsStack.clear();
+    /**
+     * Draws the FireTruck sprite
+     *
+     * @param mapBatch  Batch that the truck is being
+     *                  drawn to (map dependant)
+     */
+    public void drawSprite(Batch mapBatch) {
+        mapBatch.draw(this, this.position.x, this.position.y, 1, 1);
     }
 
-    public Desc.FireTruck getSave() {
+    /**
+     * Generates the description of Firetruck which are
+     * the values saved in the save file
+     * @return  the description of FireTruck
+     */
+    public Desc.FireTruck getDescriptor() {
         Desc.FireTruck desc = new Desc.FireTruck();
         desc.type = this.type.name();
         desc.health = this.getHP();
@@ -773,6 +721,80 @@ public class FireTruck extends Sprite {
         return desc;
     }
 
+    /**
+     * Helper method that returns where the truck is visually to the player. This is used when
+     * checking the range when attacking the Fortress and getting attacked by the Fortress
+     *
+     * @return a vector where the truck is visually
+     */
+    public Vector2 getVisualPosition() {
+        return new Vector2(this.position.x + 0.5f, this.position.y + 0.5f);
+    }
+
+    /**
+     * Sets time of last attack to unix timestamp provided
+     * @param timestamp  timestamp set as time of last attack
+     */
+    public void setTimeOfLastAttack(long timestamp) {
+        this.timeOfLastAttack = timestamp;
+    }
+
+    /**
+     * Gets rounded truck position
+     * Used for patrol collision
+     */
+    public Vector2 getTilePosition() {
+        return new Vector2(Math.round(this.position.x), Math.round(this.position.y));
+    }
+
+    public void setMoving(boolean t) {
+        this.moving = t;
+    }
+
+    public long getTimeOfLastAttack() {
+        return timeOfLastAttack;
+    }
+
+    public float getHP() {
+        return this.HP;
+    }
+
+    public void setHP(int hp) { this.HP = hp; }
+
+    public float getReserve() {
+        return this.reserve;
+    }
+
+    public FireTruckType getType() {
+        return this.type;
+    }
+
+    public Vector2 getPosition() {
+        return this.position;
+    }
+
+    public void setPosition(Vector2 newPosition) {
+        this.position = newPosition;
+    }
+
+    public Queue<Vector2> getPath() {
+        return this.path;
+    }
+
+    private ArrayList<Particle> getSpray() {
+        return this.spray;
+    }
+
+    public boolean getMoving() {
+        return this.moving;
+    }
+
+    public  float getRange() { return this.range; }
+
+    public void clearPathSegmentsStack() {
+        pathSegmentsStack.clear();
+    }
+
     public boolean inShield() {
         return this.inShield;
     }
@@ -781,15 +803,9 @@ public class FireTruck extends Sprite {
         this.inShield = b;
     }
 
-    public void setAP(float AP){ this.AP = AP; }
-
     public float getAP() { return this.AP; }
 
     public void setRange(float range) { this.range = range;}
-
-    public void setLook(String rotation) {
-
-    }
 
     public void makeFreezeAvailable() { gameScreen.setFreezeCooldown(0); }
 

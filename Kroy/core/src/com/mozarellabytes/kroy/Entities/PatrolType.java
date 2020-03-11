@@ -18,12 +18,12 @@ public enum PatrolType {
      * The preset values for the different patrol types includes the type's:
      * texture, speed, name, name, attack range, attack points
      */
-    Green(new Texture(Gdx.files.internal("sprites/Patrol/greenPatrol.png")),"Green Patrol", 0.16f, 100, new Vector2(18, 2), new Vector2(48, 2), new Vector2(48, 20), new Vector2(18, 20)),
-    Blue(new Texture(Gdx.files.internal("sprites/Patrol/bluePatrol.png")),"Blue Patrol", 0.08f, 150, new Vector2(3, 27), new Vector2(3, 19), new Vector2(19,19), new Vector2(19, 27)),
-    Peach(new Texture(Gdx.files.internal("sprites/Patrol/peachPatrol.png")),"Peach Patrol",  0.16f, 100, new Vector2(3, 4), new Vector2(10, 16), new Vector2(32, 21), new Vector2(27, 9)),
-    Violet(new Texture(Gdx.files.internal("sprites/Patrol/violetPatrol.png")),"Violet Patrol",  0.08f, 150, new Vector2(49, 18), new Vector2(39, 28), new Vector2(29, 18), new Vector2(39, 8)),
-    Yellow(new Texture(Gdx.files.internal("sprites/Patrol/yellowPatrol.png")),"Yellow Patrol", 0.08f, 150, new Vector2(47, 13), new Vector2(47, 21), new Vector2(28, 21), new Vector2(28, 13)),
-    Boss(new Texture(Gdx.files.internal("sprites/Patrol/PatrolBoss.png")),"Boss Patrol",  0.04f, 150, new Vector2(45, 11), new Vector2(44, 11), new Vector2(7, 11), new Vector2(7, 10));
+    Green(new Texture(Gdx.files.internal("sprites/Patrol/greenPatrol.png")),"Green Patrol", 0.16f, 1000, new Vector2(18, 2), new Vector2(48, 2), new Vector2(48, 20), new Vector2(18, 20)),
+    Blue(new Texture(Gdx.files.internal("sprites/Patrol/bluePatrol.png")),"Blue Patrol", 0.08f, 1500, new Vector2(3, 27), new Vector2(3, 19), new Vector2(19,19), new Vector2(19, 27)),
+    Peach(new Texture(Gdx.files.internal("sprites/Patrol/peachPatrol.png")),"Peach Patrol",  0.16f, 1000, new Vector2(3, 4), new Vector2(10, 16), new Vector2(32, 21), new Vector2(27, 9)),
+    Violet(new Texture(Gdx.files.internal("sprites/Patrol/violetPatrol.png")),"Violet Patrol",  0.08f, 1500, new Vector2(49, 18), new Vector2(39, 28), new Vector2(29, 18), new Vector2(39, 8)),
+    Yellow(new Texture(Gdx.files.internal("sprites/Patrol/yellowPatrol.png")),"Yellow Patrol", 0.08f, 1500, new Vector2(47, 13), new Vector2(47, 21), new Vector2(28, 21), new Vector2(28, 13)),
+    Boss(new Texture(Gdx.files.internal("sprites/Patrol/PatrolBoss.png")),"Boss Patrol",  0.04f, 1500, new Vector2(45, 11), new Vector2(44, 11), new Vector2(7, 11), new Vector2(7, 10));
 
     /**
      * Texture for this type of patrol

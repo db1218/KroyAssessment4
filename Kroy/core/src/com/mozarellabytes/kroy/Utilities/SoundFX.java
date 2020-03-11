@@ -13,14 +13,13 @@ import com.mozarellabytes.kroy.Screens.MenuScreen;
  * Sound Effects Manager for all in-game audio, accessed via static context.
  * All Music and SoundFX can be enabled/disabled with the StopMusic/PlayMusic.
  */
-
 public class SoundFX {
 
     /** Used only for the truck attacking sound. True if it is playing, false if it isn't */
     public static boolean isPlaying = false;
 
     /** All sounds can be played when this is true, else no sound will play */
-    public static boolean music_enabled = false;
+    public static boolean music_enabled = true;
 
     public static final Music sfx_menu = Gdx.audio.newMusic(Gdx.files.internal("sounds/menu.mp3"));
     public static final Music sfx_soundtrack = Gdx.audio.newMusic(Gdx.files.internal("sounds/soundtrack.mp3"));
@@ -39,7 +38,6 @@ public class SoundFX {
     public static final Sound sfx_snare = Gdx.audio.newSound(Gdx.files.internal("sounds/snare.wav"));
     public static final Sound sfx_combo = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/combo.wav"));
 
-
     /** Plays attacking sound for FireTrucks only if it isn't already playing */
     public static void playTruckAttack() {
         if (!isPlaying) {
@@ -57,6 +55,13 @@ public class SoundFX {
         }
     }
 
+    /**
+     * Manages which song to play depending on which screen
+     * the user is currently viewing. It plays the music for
+     * that song, and mutes/pauses other music.
+     *
+     * @param screen    that the player just entered
+     */
     public static void decideMusic(Screen screen) {
         if (music_enabled) {
             if (screen instanceof GameScreen) {
@@ -85,10 +90,17 @@ public class SoundFX {
         }
     }
 
+    /**
+     * Turn toggle the music when the player hits the mute button,
+     * and play the play the music for that screen
+     *
+     * @param screen    that the player just entered
+     */
     public static void toggleMusic(Screen screen) {
         music_enabled = !music_enabled;
         decideMusic(screen);
     }
+
     /** Plays danceoff music */
     public static void playDanceoffMusic() {
         sfx_danceoff.setLooping(true);

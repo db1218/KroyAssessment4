@@ -14,7 +14,6 @@ import java.awt.*;
 
 /** This screen shows the games controls including dragging the
  * fire truck to move it and pressing 'A' to attack the fortresses */
-
 public class ControlsScreen implements Screen {
 
     private final Kroy game;
@@ -243,7 +242,6 @@ public class ControlsScreen implements Screen {
         truckLeft.dispose();
     }
 
-
     /** Changes the screen back to the screen that called the
      * control screen */
     public void changeScreen() { this.game.setScreen(parent); }
@@ -291,13 +289,14 @@ public class ControlsScreen implements Screen {
          */
     }
 
-    /* This draws the 'A' above the fire truck - Removed*/
+    /**
+     * This draws the 'A' above the fire truck - Removed
+     */
     private void drawFireTruckAttacking(){
         game.batch.begin();
         game.font33.draw(game.batch, "A", screenWidth / 1.205f, screenHeight /2.81f);
         game.batch.end();
     }
-
 
     /** Renders the exit button */
     private void renderExitButton(){

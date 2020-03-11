@@ -132,6 +132,12 @@ public class GameScreen implements Screen {
         PLAY, PAUSE, FREEZE
     }
 
+    /**
+     * Constructor which generates the game from
+     * a save file
+     * @param game  LibGDX game
+     * @param save  save file to generate game from
+     */
     public GameScreen(Kroy game, SavedElement save) {
         // fire station (including fire trucks)
         station = save.getFireStation();
@@ -187,6 +193,13 @@ public class GameScreen implements Screen {
 
     }
 
+    /**
+     * Initialise common objects independent on if a new Game
+     * is being made, or loaded from a save state
+     *
+     * @param game  LibGDX game
+     * @param level difficulty of game
+     */
     private void setup(Kroy game, DifficultyLevel level) {
         this.game = game;
         this.level = level;
@@ -510,16 +523,6 @@ public class GameScreen implements Screen {
         gui.updateFreezeCooldown(freezeCooldown);
     }
 
-    void checkIfTruckDestroyed(FireTruck truck) {
-        if (truck.getHP() <= 0) {
-            gameState.removeFireTruck();
-            station.destroyTruck(truck);
-            if (truck.equals(this.selectedTruck)) {
-                this.selectedTruck = null;
-            }
-        }
-    }
-
     @Override
     public void resize(int width, int height) {
 
@@ -568,8 +571,14 @@ public class GameScreen implements Screen {
         return false;
     }
 
-    public boolean isNotPaused() {
-        return state != PlayState.PAUSE;
+    void checkIfTruckDestroyed(FireTruck truck) {
+        if (truck.getHP() <= 0) {
+            gameState.removeFireTruck();
+            station.destroyTruck(truck);
+            if (truck.equals(this.selectedTruck)) {
+                this.selectedTruck = null;
+            }
+        }
     }
 
     /**
@@ -684,6 +693,9 @@ public class GameScreen implements Screen {
         gui.updateAttackMode(truckAttack);
     }
 
+    /**
+     * Checks if a new power up can spawn
+     */
     private void canCreatePowerUp() {
         if (powerUps.size() < Constants.NUMBER_OF_POWERUPS) {
             Vector2 powerupLocation = generateRandomLocation();
@@ -693,12 +705,20 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * Generates a random power up location
+     *
+     * @return  location
+     */
     private Vector2 generateRandomLocation() {
-        Random rand = new Random();
-        int index = rand.nextInt(powerUpLocations.size());
-        return powerUpLocations.get(index);
+        return powerUpLocations.get(new Random().nextInt(powerUpLocations.size()));
     }
 
+    /**
+     * Create random power up
+     *
+     * @param location  to spawn power up
+     */
     private void createPowerUp(Vector2 location) {
         ArrayList<PowerUp> possiblePowerUp = PowerUp.createNewPowers(location);
         Random rand = new Random();
@@ -708,8 +728,16 @@ public class GameScreen implements Screen {
         powerUps.add(powerup);
     }
 
-    private boolean checkIfPowerupInLocation(Vector2 newPowerUpLocation){
-        for (PowerUp power : powerUps){
+    /**
+     * Checks if a powerup is already in a location that a new
+     * powerup is trying to spawn at
+     *
+     * @param newPowerUpLocation    attempted location to spawn at
+     * @return  <code>true</code>   tile is occupied
+     *          <code>false</code>  tile is not occupied
+     */
+    private boolean checkIfPowerupInLocation(Vector2 newPowerUpLocation) {
+        for (PowerUp power : powerUps) {
             if (power.getPosition().equals(newPowerUpLocation)) return true;
         }
         return false;
@@ -720,6 +748,100 @@ public class GameScreen implements Screen {
      */
     public void shortenActiveSegment() {
         selectedTruck.pathSegment.removeLast();
+    }
+
+    /**
+     * Save the game to a JSON file which can then be resumed
+     */
+    public void saveGameState() {
+        Json json = new Json(JsonWriter.OutputType.json);
+        String timestamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
+        String enTimestamp = new SimpleDateFormat("dd MMM YYYY HH:mm:ss").format(new Date());
+
+        OrderedMap<String, Object> entitiesMap = new OrderedMap<>();
+        entitiesMap.put("FireStation", this.station.getDescriptor());
+        entitiesMap.put("FireTrucks", station.getFireTrucksDescriptor());
+        entitiesMap.put("Fortresses", this.getFortressesDescriptor());
+        entitiesMap.put("Patrols", this.getPatrolsDescriptor());
+
+        OrderedMap<String, Object> map = new OrderedMap<>();
+        map.put("Timestamp", timestamp);
+        map.put("enTimestamp", enTimestamp);
+        map.put("Entities", entitiesMap);
+        map.put("Difficulty", difficultyControl);
+        map.put("Difficulty Level", difficultyLevel);
+        map.put("GameState", gameState);
+
+        file = Gdx.files.local("saves/" + timestamp + "/data.json");
+        file.writeString(json.prettyPrint(map),false);
+
+        takeScreenshot(timestamp);
+    }
+
+    /**
+     * Take screenshot of the screen, what the user can see
+     * when the save button is clicked for the save screen
+     * @param filename  to save to
+     */
+    private void takeScreenshot(String filename) {
+        byte[] pixels = ScreenUtils.getFrameBufferPixels(0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), true);
+
+        // this loop makes sure the whole screenshot is opaque and looks exactly like what the user is seeing
+        for(int i = 4; i < pixels.length; i += 4)
+            pixels[i - 1] = (byte) 255;
+
+        Pixmap pixmap = new Pixmap(Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), Pixmap.Format.RGBA8888);
+        BufferUtils.copy(pixels, 0, pixmap.getPixels(), pixels.length);
+        PixmapIO.writePNG(Gdx.files.local("saves/" + filename + "/screenshot.png"), pixmap);
+        pixmap.dispose();
+    }
+
+    /**
+     * Get the list of fortress descriptor to be saved
+     * @return  fortress descriptors
+     */
+    private Desc.Fortress[] getFortressesDescriptor() {
+        Desc.Fortress[] fortresses = new Desc.Fortress[this.fortresses.size()];
+        for (int i=0; i<fortresses.length; i++) {
+            fortresses[i] = this.fortresses.get(i).getSave();
+        }
+        return fortresses;
+    }
+
+    /**
+     * Get the list of patrol descriptors to be saved
+     * @return  patrol descriptors
+     */
+    private Desc.Patrol[] getPatrolsDescriptor() {
+        Desc.Patrol[] patrols = new Desc.Patrol[this.patrols.size()];
+        for (int i=0; i<patrols.length; i++) {
+            patrols[i] = this.patrols.get(i).getDescriptor();
+        }
+        return patrols;
+    }
+
+    /**
+     * Populate powerUpLocations with all the tiles that
+     * are roads therefore a power up can spawn there
+     *
+     * @param level used to determine the tile map dimensions
+     *              which depends on the map and therefore
+     *              difficulty level current being played
+     */
+    private void generatePowerUpLocations(DifficultyLevel level) {
+        ArrayList<Vector2> bayTiles = station.getBayTiles();
+        for (int width = 0; width < level.getMapWidth(); width++){
+            for (int height = 0 ; height < level.getMapHeight(); height++){
+                Vector2 tile = new Vector2(width, height);
+                if (isRoad(width, height) && !bayTiles.contains(tile)){
+                    powerUpLocations.add(tile);
+                }
+            }
+        }
+    }
+
+    public boolean isNotPaused() {
+        return state != PlayState.PAUSE;
     }
 
     public boolean isTruckAttackEnabled() {
@@ -753,78 +875,5 @@ public class GameScreen implements Screen {
     public void setFreezeCooldown(float time){
         freezeCooldown = time;
     }
-
-    /**
-     * Save the game to a JSON file which can then be resumed
-     */
-    public void saveGameState() {
-        Json json = new Json(JsonWriter.OutputType.json);
-        String timestamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
-        String enTimestamp = new SimpleDateFormat("dd MMM YYYY HH:mm:ss").format(new Date());
-
-        OrderedMap<String, Object> entitiesMap = new OrderedMap<>();
-        entitiesMap.put("FireStation", this.station.getDescriptor());
-        entitiesMap.put("FireTrucks", station.getFireTrucksDescriptor());
-        entitiesMap.put("Fortresses", this.getFortressesDescriptor());
-        entitiesMap.put("Patrols", this.getPatrolsDescriptor());
-
-        OrderedMap<String, Object> map = new OrderedMap<>();
-        map.put("Timestamp", timestamp);
-        map.put("enTimestamp", enTimestamp);
-        map.put("Entities", entitiesMap);
-        map.put("Difficulty", difficultyControl);
-        map.put("Difficulty Level", difficultyLevel);
-        map.put("GameState", gameState);
-
-        file = Gdx.files.local("saves/" + timestamp + "/data.json");
-        file.writeString(json.prettyPrint(map),false);
-
-        takeScreenshot(timestamp);
-    }
-
-    private void takeScreenshot(String filename) {
-        byte[] pixels = ScreenUtils.getFrameBufferPixels(0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), true);
-
-        // this loop makes sure the whole screenshot is opaque and looks exactly like what the user is seeing
-        for(int i = 4; i < pixels.length; i += 4)
-            pixels[i - 1] = (byte) 255;
-
-        Pixmap pixmap = new Pixmap(Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), Pixmap.Format.RGBA8888);
-        BufferUtils.copy(pixels, 0, pixmap.getPixels(), pixels.length);
-        PixmapIO.writePNG(Gdx.files.local("saves/" + filename + "/screenshot.png"), pixmap);
-        pixmap.dispose();
-    }
-
-    private Desc.Fortress[] getFortressesDescriptor() {
-        Desc.Fortress[] fortresses = new Desc.Fortress[this.fortresses.size()];
-        for (int i=0; i<fortresses.length; i++) {
-            fortresses[i] = this.fortresses.get(i).getSave();
-        }
-        return fortresses;
-    }
-
-    private Desc.Patrol[] getPatrolsDescriptor() {
-        Desc.Patrol[] patrols = new Desc.Patrol[this.patrols.size()];
-        for (int i=0; i<patrols.length; i++) {
-            patrols[i] = this.patrols.get(i).getSave();
-        }
-        return patrols;
-    }
-
-    private void generatePowerUpLocations(DifficultyLevel level) {
-        ArrayList<Vector2> bayTiles = station.getBayTiles();
-        for (int width = 0; width < level.getMapWidth(); width++){
-            for (int height = 0 ; height < level.getMapHeight(); height++){
-                Vector2 tile = new Vector2(width, height);
-                if (isRoad(width, height) && !bayTiles.contains(tile)){
-                    powerUpLocations.add(tile);
-                }
-            }
-        }
-    }
-
-    public GUI getGui() { return this.gui; }
-
-
 
 }

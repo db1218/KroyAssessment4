@@ -1,10 +1,11 @@
 package com.mozarellabytes.kroy.Minigame;
 
-import com.badlogic.gdx.Gdx;
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DanceManager controls all aspects of the minigame
+ */
 public class DanceManager {
 
     /** The time in seconds between beats */
@@ -33,6 +34,11 @@ public class DanceManager {
     /** Technical class for deciding upcoming moves */
     private DanceChoreographer choreographer;
 
+    /**
+     * Constructor for Dance Manager with a given bpm
+     *
+     * @param beatsPerMinute    bpm to match the song
+     */
     public DanceManager(float beatsPerMinute) {
 
         // All measurements are in seconds
@@ -58,12 +64,18 @@ public class DanceManager {
         if (this.halfBeat >= this.beatDuration) offBeat();
     }
 
+    /**
+     * When the player gets the timing correct
+     */
     private void onBeat() {
         this.choreographer.nextMove();
         this.timeSinceBeat = 0f;
         notifyOnBeat();
     }
 
+    /**
+     * When the player gets the timing incorrect
+     */
     private void offBeat() {
         this.halfBeat = 0f;
         if (!doneThisBeat && !notDanceMoves.contains(getNearestMove()) ){
@@ -109,8 +121,7 @@ public class DanceManager {
         }
 
         // This is the first attempted move this beat
-        if (!doneThisBeat)
-        {
+        if (!doneThisBeat) {
             float proximityToBeat = getBeatProximity();
             float phase = getPhase();
 
@@ -121,33 +132,26 @@ public class DanceManager {
             if (proximityToBeat > .91f) {
                 goodMove();
                 result = DanceResult.GREAT;
-            }
-            else if (proximityToBeat > .86f) {
+            } else if (proximityToBeat > .86f) {
                 goodMove();
                 result = DanceResult.GOOD;
-            }
-            else if (proximityToBeat > .75f) {
+            } else if (proximityToBeat > .75f) {
                 goodMove();
                 result = DanceResult.OKAY;
-            }
-            else if (proximityToBeat > .5 && phase > .5f) {
+            } else if (proximityToBeat > .5 && phase > .5f) {
                 killCombo();
                 result = DanceResult.EARLY;
-            }
-            else if (proximityToBeat > .5 && phase < .5f) {
+            } else if (proximityToBeat > .5 && phase < .5f) {
                 killCombo();
                 result = DanceResult.LATE;
-            }
-            else {
+            } else {
                 wrongMove();
                 result = DanceResult.WRONG;
             }
             notifyResult(result);
             return result;
-        }
-        // Player attempted two moves this beat, punish them :)
-        else
-        {
+        } else {
+            // Player attempted two moves this beat, punish them :)
             doneThisBeat = true;
             wrongMove();
             notifyResult(DanceResult.WRONG);
@@ -212,7 +216,7 @@ public class DanceManager {
 
     /**
      * Register an object to be notified when the beat drops
-     * @param listener
+     * @param listener  beat listener
      */
     public void subscribeToBeat(BeatListener listener) {
         beatListeners.add(listener);
@@ -238,7 +242,7 @@ public class DanceManager {
 
     /**
      * Notify subscribed beat listeners of the result of the DanceResult recent move
-     * @param result
+     * @param result    result of move
      */
     public void notifyResult(DanceResult result) {
         for (BeatListener listener : beatListeners) {
