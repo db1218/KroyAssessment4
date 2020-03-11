@@ -35,6 +35,7 @@ public class GameScreen implements Screen {
 
     /** Instance of our game that allows us the change screens */
     private Kroy game;
+    private GameInputHandler inputHandler;
 
     /** Renders our tiled map */
     private OrthogonalTiledMapRenderer mapRenderer;
@@ -212,6 +213,8 @@ public class GameScreen implements Screen {
 
         gui = new GUI(game, this);
 
+        inputHandler = new GameInputHandler(this, gui);
+
         gameState = new GameState();
         camShake = new CameraShake();
 
@@ -257,7 +260,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         SoundFX.decideMusic(this);
-        Gdx.input.setInputProcessor(new GameInputHandler(this, gui));
+        Gdx.input.setInputProcessor(inputHandler);
         gui.resetButtons();
     }
 
