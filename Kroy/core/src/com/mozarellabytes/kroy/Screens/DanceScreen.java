@@ -198,9 +198,6 @@ public class DanceScreen implements Screen, BeatListener {
     }
 
     private void goToGameScreen() {
-        GUI gui = new GUI(game, (GameScreen) previousScreen);
-        Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) previousScreen, gui));
-        gui.idleInfoButton();
         game.setScreen(previousScreen);
     }
 

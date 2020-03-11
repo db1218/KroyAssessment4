@@ -123,6 +123,8 @@ public class GameScreen implements Screen {
 
     private DifficultyLevel level;
 
+    private GameInputHandler gameInputHandler;
+
     /** Play when the game is being played
      * Pause when the pause button is clicked */
     public enum PlayState {
@@ -210,8 +212,6 @@ public class GameScreen implements Screen {
 
         gui = new GUI(game, this);
 
-        Gdx.input.setInputProcessor(new GameInputHandler(this, gui));
-
         gameState = new GameState();
         camShake = new CameraShake();
 
@@ -249,6 +249,8 @@ public class GameScreen implements Screen {
         fortresses = new ArrayList<Fortress>();
         patrols = new ArrayList<Patrol>();
         deadEntities = new ArrayList<>(7);
+
+        gameInputHandler = new GameInputHandler(this, gui);
 
     }
 
@@ -542,9 +544,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        mapBatch.dispose();
         mapRenderer.dispose();
         shapeMapRenderer.dispose();
-        mapBatch.dispose();
     }
 
     /**
