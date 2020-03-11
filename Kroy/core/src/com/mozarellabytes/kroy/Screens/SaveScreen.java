@@ -44,6 +44,13 @@ public class SaveScreen implements Screen {
     private ImageButton.ImageButtonStyle deleteButtonStyle;
     private ImageButton.ImageButtonStyle playButtonStyle;
 
+    /**
+     * Constructor for save screen which is created when the
+     * user clicks on "load" on the main menu
+     *
+     * @param game
+     * @param menuScreen
+     */
     public SaveScreen(Kroy game, MenuScreen menuScreen) {
         this.game = game;
         this.menuScreen = menuScreen;
@@ -83,17 +90,6 @@ public class SaveScreen implements Screen {
         savesScroll.setScrollingDisabled(true, false);
         HorizontalGroup header = new HorizontalGroup();
         HorizontalGroup footer = new HorizontalGroup();
-
-        // create actors
-        Drawable currentDeleteImage = new TextureRegionDrawable(new Texture("ui/delete_idle.png"));
-        Drawable currentCloseImage = new TextureRegionDrawable(new Texture("ui/return_idle.png"));
-        Drawable currentPlayImage = new TextureRegionDrawable(new Texture("ui/start_idle.png"));
-        currentDeleteImage.setMinWidth(167.5f);
-        currentDeleteImage.setMinHeight(57.5f);
-        currentCloseImage.setMinWidth(167.5f);
-        currentCloseImage.setMinHeight(57.5f);
-        currentPlayImage.setMinWidth(167.5f);
-        currentPlayImage.setMinHeight(57.5f);
 
         createButtonStyles();
 
@@ -200,6 +196,10 @@ public class SaveScreen implements Screen {
         stage.addActor(table);
     }
 
+    /**
+     * Create the styles for the buttons to allow them to change state when
+     * you click them
+     */
     private void createButtonStyles() {
         closeButtonStyle = new ImageButton.ImageButtonStyle();
         closeButtonStyle.up = new TextureRegionDrawable(new Texture("ui/return_idle.png"));
@@ -214,6 +214,11 @@ public class SaveScreen implements Screen {
         playButtonStyle.down = new TextureRegionDrawable(new Texture("ui/start_clicked.png"));
     }
 
+    /**
+     * When a save is clicked, it updates the right hand side of the screen
+     * to display the details of the save file, including the difficulty, fire
+     * trucks alive and fortresses alive
+     */
     private void updateCurrentlySelected() {
         Image screenshot = new Image(new Texture("saves/" + currentSaveSelected.getTimestamp() + "/screenshot.png"));
         selectedTable.clearChildren();
