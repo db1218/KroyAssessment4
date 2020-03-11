@@ -58,9 +58,6 @@ public class DanceScreen implements Screen, BeatListener {
     private final int ARROW_SIZE = 96;
     private int kickNum = 0;
 
-    public ArrayList<Combo> combos;
-    public Vector2 test;
-
     private DanceResult lastResult = null;
 
 
@@ -89,11 +86,8 @@ public class DanceScreen implements Screen, BeatListener {
         this.etLocation = new Vector2((3*camera.viewportWidth)/4-256, camera.viewportHeight/5);
         this.comboHintLocation = new Vector2(camera.viewportWidth/4, (3*camera.viewportHeight)/5);
 
-        this.combos = new ArrayList<>();
-
         this.danceInputHandler = new DanceScreenInputHandler(this);
 
-        test = new Vector2((3*camera.viewportWidth)/4-256, camera.viewportHeight/5);
     }
 
     /**
@@ -114,7 +108,6 @@ public class DanceScreen implements Screen, BeatListener {
         if (this.danceMan.hasMissedLastBeat()) {
             if (this.firefighter.getTimeInState() > this.danceMan.getPhase()/4) {
                 this.lastResult = DanceResult.MISSED;
-                this.combos.add(new Great(test));
             }
         }
 
@@ -150,12 +143,6 @@ public class DanceScreen implements Screen, BeatListener {
         }
 
         this.game.font60.draw(game.batch, danceMan.getCombo() + "x", comboLocation.x, comboLocation.y, camera.viewportWidth, 1, false);
-
-        if (!combos.isEmpty()) {
-            for (Combo c : combos) {
-                c.update(game.batch);
-            }
-        }
 
         this.game.batch.end();
 
@@ -269,7 +256,6 @@ public class DanceScreen implements Screen, BeatListener {
     public void setLastMove(DanceMove move){
         this.lastResult = this.danceMan.takeMove(move);
         this.firefighter.setState(move);
-        this.combos.add(new Great(test));
         //this.kickNum++;
         //kickIt();
     }

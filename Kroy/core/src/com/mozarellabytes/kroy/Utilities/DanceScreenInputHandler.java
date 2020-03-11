@@ -3,10 +3,7 @@ package com.mozarellabytes.kroy.Utilities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Vector2;
-import com.mozarellabytes.kroy.Minigame.Combo;
 import com.mozarellabytes.kroy.Minigame.DanceMove;
-import com.mozarellabytes.kroy.Minigame.Great;
 import com.mozarellabytes.kroy.Screens.DanceScreen;
 
 public class DanceScreenInputHandler implements InputProcessor {
