@@ -80,7 +80,8 @@ public class DanceManager {
      * @return the phase through the next beat
      * */
     public float getPhase() {
-        return 2 * timeSinceBeat;
+        //return 2 * timeSinceBeat;
+        return timeSinceBeat/beatDuration;
     }
 
     /**
