@@ -183,11 +183,6 @@ public class GameScreen implements Screen {
         patrols.add(new Patrol(PatrolType.Violet));
         patrols.add(new Patrol(PatrolType.Yellow));
 
-        // sets the origin point to which all of the polygon's local vertices are relative to.
-        for (FireTruck truck : station.getTrucks()) {
-            truck.setOrigin(Constants.TILE_WxH / 2, Constants.TILE_WxH / 2);
-        }
-
         difficultyControl = new DifficultyControl(level);
 
     }
