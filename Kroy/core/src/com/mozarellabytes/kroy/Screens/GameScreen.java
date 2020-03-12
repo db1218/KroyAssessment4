@@ -1,5 +1,6 @@
 package com.mozarellabytes.kroy.Screens;
 
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.*;
 import com.mozarellabytes.kroy.PowerUp.PowerUp;
 import com.badlogic.gdx.Gdx;
@@ -460,6 +461,8 @@ public class GameScreen implements Screen {
                 gameState.setStationDestoyed();
                 if (SoundFX.music_enabled) SoundFX.sfx_fortress_destroyed.play();
                 deadEntities.add(station.getDestroyedStation());
+                clearSelectedEntity(bossPatrol);
+                clearSelectedEntity(station);
                 bossPatrol = null;
             }
         }
@@ -501,6 +504,7 @@ public class GameScreen implements Screen {
                 this.vfx.add(new VFX(0, new Vector2(x-3.5f, y-3)));
                 this.vfx.add(new VFX(0, new Vector2(x-3f, y-2f)));
                 this.vfx.add(new VFX(0, new Vector2(x-2f, y-2.5f)));
+                clearSelectedEntity(fortress);
                 this.fortresses.remove(fortress);
                 if (SoundFX.music_enabled) SoundFX.sfx_fortress_destroyed.play();
             }
@@ -570,14 +574,30 @@ public class GameScreen implements Screen {
         return false;
     }
 
+    /**
+     * Check if a fire truck has been destroyed
+     *
+     * @param truck fire truck to check
+     */
     void checkIfTruckDestroyed(FireTruck truck) {
         if (truck.getHP() <= 0) {
             gameState.removeFireTruck();
+            clearSelectedEntity(truck);
             station.destroyTruck(truck);
             if (truck.equals(this.selectedTruck)) {
                 this.selectedTruck = null;
             }
         }
+    }
+
+    /**
+     * Resets the selected entity, called when the entity dies
+     * and only clears to selected entity if it has just died
+     *
+     * @param entity    to check if selected, if so clear
+     */
+    private void clearSelectedEntity(Object entity) {
+        selectedEntity = (selectedEntity == entity) ? null : selectedEntity;
     }
 
     /**
@@ -878,8 +898,12 @@ public class GameScreen implements Screen {
         return this.selectedEntity;
     }
 
-    public void setFreezeCooldown(float time){
+    public void setFreezeCooldown(float time) {
         freezeCooldown = time;
+    }
+
+    public BossPatrol getBossPatrol() {
+        return this.bossPatrol;
     }
 
 }

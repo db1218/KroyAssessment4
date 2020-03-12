@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.mozarellabytes.kroy.Entities.FireStation;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Fortress;
 import com.mozarellabytes.kroy.Entities.Patrol;
@@ -179,6 +180,9 @@ public class GUI {
         GUIElements.add(new GUIElement(30));
     }
 
+    /**
+     * Render the elements to the screen
+     */
     public void renderElements() {
         Gdx.gl20.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -191,6 +195,9 @@ public class GUI {
         batch.end();
     }
 
+    /**
+     * Render an entity to the screen
+     */
     private void renderEntity() {
         Object entity = gameScreen.getSelectedEntity();
         if (entity != null) {
@@ -215,12 +222,22 @@ public class GUI {
                 batch.begin();
                 renderSelectedEntityText(patrol);
                 batch.end();
+            } else if (entity instanceof FireStation) {
+                FireStation station = (FireStation) entity;
+                renderSelectedEntityBars(station);
+                shapeRenderer.end();
+                batch.begin();
+                renderSelectedEntityText(station);
+                batch.end();
             }
         } else {
             shapeRenderer.end();
         }
     }
 
+    /**
+     * Render element backgrounds to the screen
+     */
     private void renderBackgrounds() {
         shapeRenderer.setColor(0, 0, 0, 0.5f);
         float previousY = Gdx.graphics.getHeight();
@@ -230,6 +247,9 @@ public class GUI {
         }
     }
 
+    /**
+     * Render element text to the screen
+     */
     private void renderText() {
         float previousY = Gdx.graphics.getHeight();
         for (GUIElement GUIElement : this.GUIElements) {
@@ -248,6 +268,17 @@ public class GUI {
     private void renderSelectedEntityBars(FireTruck truck) {
         renderSelectedEntityBar(truck.getHP(), truck.getType().getMaxHP(), Color.RED, Color.FIREBRICK, 1);
         renderSelectedEntityBar(truck.getReserve(), truck.getType().getMaxReserve(), Color.CYAN, Color.BLUE, 2);
+    }
+
+    /**
+     * Calls the methods which render the attributes and
+     * health bar of a station in the stats area
+     *
+     * @param station   the FireStation that owns the stats
+     *                  that are being displayed
+     */
+    private void renderSelectedEntityBars(FireStation station) {
+        renderSelectedEntityBar(station.getHP(), station.getMaxHP(), Color.RED, Color.FIREBRICK, 1);
     }
 
     /**
@@ -289,6 +320,19 @@ public class GUI {
         game.font19.draw(batch, String.format("%.1f", truck.getRange()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLineHeight*7);
         game.font19.draw(batch, "AP: ", this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLineHeight*8);
         game.font19.draw(batch, String.format("%.2f", truck.getAP()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLineHeight*9);
+    }
+
+    /**
+     * Renders the attributes in a vertical layout
+     * of the FireStation
+     *
+     * @param station   the FireStation that owns the stats
+     *                  that are being displayed
+     */
+    private void renderSelectedEntityText(FireStation station) {
+        renderEntityName("Fire Station");
+        game.font19.draw(batch, "HP: ", this.selectedX + 15, this.selectedY + this.selectedH - 50);
+        game.font19.draw(batch, String.format("%.1f", station.getHP()) + " / " + String.format("%.1f", station.getMaxHP()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLineHeight);
     }
 
     /**

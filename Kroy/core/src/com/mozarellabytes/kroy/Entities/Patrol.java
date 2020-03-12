@@ -171,7 +171,7 @@ public class Patrol extends Sprite {
      *
      * @return  rounded vector
      */
-    private Vector2 getRoundedPosition() {
+    public Vector2 getRoundedPosition() {
         return new Vector2(Math.round(position.x), Math.round(position.y));
     }
 

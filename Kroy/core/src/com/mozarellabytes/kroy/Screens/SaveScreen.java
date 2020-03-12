@@ -288,7 +288,7 @@ public class SaveScreen implements Screen {
                 new Label.LabelStyle(game.font25, Color.WHITE));
         patrolsLabel.setAlignment(Align.left);
 
-        Label bossPatrolLabel = new Label("Boss Patrol: " + (currentSaveSelected.getBossPatrol() == null ? "active" : "inactive"),
+        Label bossPatrolLabel = new Label("Boss Patrol: " + (currentSaveSelected.getBossPatrol() == null ? "inactive" : "active"),
                 new Label.LabelStyle(game.font25, Color.WHITE));
         bossPatrolLabel.setAlignment(Align.left);
 
@@ -297,6 +297,7 @@ public class SaveScreen implements Screen {
         savesList.addActor(fireTrucksLabel);
         savesList.addActor(fortressesLabel);
         savesList.addActor(patrolsLabel);
+        savesList.addActor(bossPatrolLabel);
         selectedTable.add(savesList).expand().maxHeight(Gdx.graphics.getHeight()/3f);
     }
 

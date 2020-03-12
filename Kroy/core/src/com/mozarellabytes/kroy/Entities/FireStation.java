@@ -5,8 +5,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import com.mozarellabytes.kroy.Descriptors.Desc;
@@ -48,6 +50,7 @@ public class FireStation {
      * Health of the fortress
      */
     private float HP;
+    private float maxHP;
 
     /**
      * Constructs the Firestation with at a given position with locations
@@ -63,6 +66,7 @@ public class FireStation {
         this.w = 6;
         this.h = 3;
         this.HP = HP;
+        this.maxHP = 100;
         this.bayTiles = new ArrayList<>();
         for (int i=0; i<4; i++) bayTiles.add(new Vector2(x + i + 1, y));
         this.texture = new Texture(Gdx.files.internal("sprites/station/extended_station.png"));
@@ -89,7 +93,7 @@ public class FireStation {
     public void drawStats(ShapeRenderer shapeMapRenderer) {
         shapeMapRenderer.rect(this.getPosition().x + 2.76f, this.getPosition().y + 2.9f, 0.55f, 1.2f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
         shapeMapRenderer.rect(this.getPosition().x + 2.86f, this.getPosition().y + 3f, 0.34f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-        shapeMapRenderer.rect(this.getPosition().x + 2.86f, this.getPosition().y + 3f, 0.34f, this.getHP() / 100 * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
+        shapeMapRenderer.rect(this.getPosition().x + 2.86f, this.getPosition().y + 3f, 0.34f, this.getHP() / this.getMaxHP() * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
     }
 
     /**
@@ -311,5 +315,11 @@ public class FireStation {
         return new Vector2(this.x,this.y);
     }
 
+    public Rectangle getArea() {
+        return new Rectangle(x, y, w, h);
+    }
 
+    public float getMaxHP() {
+        return this.maxHP;
+    }
 }

@@ -103,13 +103,17 @@ public class GameInputHandler implements InputProcessor {
             if (gameScreen.checkClick(clickCoordinates)) {
                 gameScreen.selectedTruck.resetPath();
                 gameScreen.selectedTruck.addTileToPathSegment(clickCoordinates);
-            } else if (!gameScreen.checkTrailClick(clickCoordinates) && !checkFortressClick(clickCoordinates) && !checkPatrolClick(clickCoordinates)) {
+            } else if (!gameScreen.checkTrailClick(clickCoordinates) &&
+                    !checkFortressClick(clickCoordinates) &&
+                    !checkPatrolClick(clickCoordinates) &&
+                    !checkFireStationClick(clickCoordinates)) {
                 gameScreen.selectedTruck = null;
                 gameScreen.setSelectedEntity(null);
             }
         } else {
             checkFortressClick(clickCoordinates);
             checkPatrolClick(clickCoordinates);
+            checkFireStationClick(clickCoordinates);
         }
         checkButtonClick(new Vector2(screenX, Gdx.graphics.getHeight() - screenY));
         return true;
@@ -210,6 +214,22 @@ public class GameInputHandler implements InputProcessor {
         return false;
     }
 
+    /** Checks if user clicked on the fire station, if it did it
+     * becomes the selected entity meaning its stats will be rendered
+     * in the top left hand corner
+     *
+     * @param position2d the tile that was clicked
+     * @return <code> true </code> If the fire station has been clicked on
+     *         <code> false </code> Otherwise
+     */
+    private boolean checkFireStationClick(Vector2 position2d) {
+        if (gameScreen.getStation().getArea().contains(position2d)) {
+            gameScreen.setSelectedEntity(gameScreen.getStation());
+            return true;
+        }
+        return false;
+    }
+
     /** Checks if user clicked on a patrol, if it did this patrol
      * becomes the selected entity meaning its stats will be rendered
      * in the top left hand corner
@@ -219,6 +239,10 @@ public class GameInputHandler implements InputProcessor {
      *         <code> false </code> Otherwise
      */
     private boolean checkPatrolClick(Vector2 position2d) {
+        if (gameScreen.getBossPatrol() != null && gameScreen.getBossPatrol().getRoundedPosition().dst(position2d) < 1) {
+            gameScreen.setSelectedEntity(gameScreen.getBossPatrol());
+            return true;
+        }
         for (Patrol patrol : gameScreen.getPatrols()) {
             if (patrol.getPosition().dst(position2d) < 1) {
                 gameScreen.setSelectedEntity(patrol);
