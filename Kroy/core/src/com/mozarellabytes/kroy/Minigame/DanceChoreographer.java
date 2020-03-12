@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Class to manege the moves (arrows) that the user
+ * must copy on-beat to get right
+ */
 public class DanceChoreographer {
 
     /** The number of moves to queue up */
@@ -15,15 +19,16 @@ public class DanceChoreographer {
     /** Random agent for move selection */
     private final Random random;
 
+    /**
+     * Constructor for DanceChoreographer
+     */
     public DanceChoreographer() {
         this.moveList = new ArrayList<>();
         this.random = new Random();
 
-        for (int i = 0; i < MOVE_LIST_LENGTH; i++) {
+        for (int i = 0; i < MOVE_LIST_LENGTH; i++)
             this.moveList.add(DanceMove.NONE);
-        }
     }
-
 
     /**
      * Consumes and returns the danceMove at the head of the queue

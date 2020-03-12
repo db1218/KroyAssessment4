@@ -12,7 +12,6 @@ import com.mozarellabytes.kroy.Utilities.GameOverInputHandler;
 /** This screen is shown after the game has ended.
  * It tells the player if they have won or lost.
  */
-
 public class GameOverScreen implements Screen {
 
     /** The game - to be able to use the fonts from game */
@@ -46,11 +45,9 @@ public class GameOverScreen implements Screen {
         Gdx.input.setInputProcessor(new GameOverInputHandler(game));
 
         layout = new GlyphLayout();
-        if (won) {
-            this.text = "We did it! Good job little guy.";
-        } else {
-            this.text = "Mission Failed. We'll get 'em next time.";
-        }
+        if (won) this.text = "We did it! Good job little guy.";
+        else this.text = "Mission Failed. We'll get 'em next time.";
+
         this.text = this.text + "\n" + "   Click to return to the main menu...";
         layout.setText(game.font26, this.text);
     }

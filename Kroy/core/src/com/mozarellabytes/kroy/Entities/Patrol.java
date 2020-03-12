@@ -15,9 +15,7 @@ import java.util.Random;
 
 /**
  * Patrol is an entity that the player controls. It navigates the map
- * going through points defined in the the patrolType
- *
- *
+ * going through points defined in the the patrolType *
  */
 public class Patrol extends Sprite {
 

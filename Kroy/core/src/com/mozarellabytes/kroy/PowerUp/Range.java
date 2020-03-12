@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 
+/**
+ * Range extends the range of the fire truck's attack
+ */
 public class Range extends PowerUp {
 
     final float timeInRange;
@@ -11,7 +14,11 @@ public class Range extends PowerUp {
     final int rangeIncrease;
     FireTruck truck;
 
-
+    /**
+     * Constructor for Range
+     *
+     * @param location  where power up is
+     */
     public Range(Vector2 location) {
         super("heart", location);
         timeInRange = 10;
@@ -34,10 +41,12 @@ public class Range extends PowerUp {
             canBeRendered = false;
             elapsedTime += Gdx.graphics.getRawDeltaTime();
             checkIfFinishedRange();
-            Gdx.app.log("time", "time");
         }
     }
 
+    /**
+     * Restores the previous range (default from type)
+     */
     private void checkIfFinishedRange() {
         if (elapsedTime >= timeInRange){
             truck.setRange(truck.type.getRange());

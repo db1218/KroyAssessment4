@@ -248,16 +248,15 @@ public class MenuScreen implements Screen {
 
     /** Changes the texture of the sound button when it has been clicked on */
     public void clickedSoundButton() {
-        if (SoundFX.music_enabled) currentSoundTexture = soundOffClickedTexture;
-        else currentSoundTexture = soundOnClickedTexture;
+        if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
+        currentSoundTexture = SoundFX.music_enabled ? soundOffClickedTexture : soundOnClickedTexture;
     }
 
     /** Turns the sound on and off and changes the sound icon accordingly,
      * turns the sound off in the sound was on and turns the sound on if the
      * sound was off */
     public void changeSound() {
-        if (SoundFX.music_enabled) currentSoundTexture = soundOnIdleTexture;
-        else currentSoundTexture = soundOffIdleTexture;
+        currentSoundTexture = SoundFX.music_enabled ? soundOnIdleTexture : soundOffIdleTexture;
         SoundFX.toggleMusic(this);
     }
 
@@ -278,8 +277,7 @@ public class MenuScreen implements Screen {
 
     /** The texture of the sound button when it has not been clicked on */
     public void idleSoundButton() {
-        if (SoundFX.music_enabled) currentSoundTexture = soundOffIdleTexture;
-        else currentSoundTexture = soundOnIdleTexture;
+        currentSoundTexture = SoundFX.music_enabled ? soundOffIdleTexture : soundOnIdleTexture;
     }
 
     /** Changes the screen from the menu screen to the control screen */

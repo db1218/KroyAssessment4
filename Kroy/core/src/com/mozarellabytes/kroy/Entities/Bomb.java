@@ -107,7 +107,6 @@ public class Bomb extends Sprite {
         this.target.fortressDamage(this.damage);
     }
 
-
     /**
      * Determines and returns the position where the bomb will 'land.'
      * This is either the truck's current position or a tile near to the truck;

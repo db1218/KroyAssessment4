@@ -309,14 +309,13 @@ public class DifficultyScreen implements Screen {
      * turns the sound off in the sound was on and turns the sound on if the
      * sound was off */
     public void changeSound() {
-        if (SoundFX.music_enabled) currentSoundTexture = soundOnIdleTexture;
-        else currentSoundTexture = soundOffIdleTexture;
+        currentSoundTexture = SoundFX.music_enabled ? soundOnIdleTexture : soundOffIdleTexture;
         SoundFX.toggleMusic(this);
     }
 
     /** The texture of the sound button when it has not been clicked on */
     public void idleSoundButton() {
-        currentSoundTexture = SoundFX.music_enabled ? soundOffClickedTexture : soundOnClickedTexture;
+        currentSoundTexture = SoundFX.music_enabled ? soundOffIdleTexture : soundOnIdleTexture;
     }
 
     public Rectangle getEasyButton() { return easyButton; }
