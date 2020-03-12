@@ -5,6 +5,11 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruckType;
 
+/**
+ * The actual level which defines many different variables within
+ * the game which change depending on the difficulty to change
+ * the easy or hard the game is to play
+ */
 public enum DifficultyLevel {
 
   // These are place holders for when we have the new map
@@ -17,15 +22,15 @@ public enum DifficultyLevel {
 
     Easy(new TmxMapLoader().load("maps/Easy.tmx"), 20, 12, new Vector2(10,3),
             0, 80f, 4,4, 6f,
-            FireTruckType.RubyEasy, FireTruckType.SapphireEasy, FireTruckType.AmethystEasy, FireTruckType.EmeraldEasy),
+            FireTruckType.RubyEasy, FireTruckType.SapphireEasy, FireTruckType.AmethystEasy, FireTruckType.EmeraldEasy, 2),
 
     Medium(new TmxMapLoader().load("maps/Medium.tmx"), 40, 24, new Vector2(13.5f,3.5f),
             1, 60f, 10,2, 10f,
-            FireTruckType.RubyMedium, FireTruckType.SapphireMedium, FireTruckType.AmethystMedium, FireTruckType.EmeraldMedium),
+            FireTruckType.RubyMedium, FireTruckType.SapphireMedium, FireTruckType.AmethystMedium, FireTruckType.EmeraldMedium, 4),
 
     Hard(new TmxMapLoader().load("maps/Hard.tmx"), 48, 29, new Vector2(12,23.5f),
             3, 50f, 20,1,15f,
-            FireTruckType.RubyHard, FireTruckType.SapphireHard, FireTruckType.AmethystHard, FireTruckType.EmeraldHard);
+            FireTruckType.RubyHard, FireTruckType.SapphireHard, FireTruckType.AmethystHard, FireTruckType.EmeraldHard, 7);
 
 
     final TiledMap map;
@@ -45,16 +50,35 @@ public enum DifficultyLevel {
     final int fortressesDestroyedBeforeBoss;
     final float timeTillNextFreeze;
     float additionalAP;
+    final int numPatrols;
 
     final FireTruckType ruby;
     final FireTruckType sapphire;
     final FireTruckType amethyst;
     final FireTruckType emerald;
 
+    /**
+     * Constructor for Difficulty Level
+     *
+     * @param map                           the tiled map for this level
+     * @param mapWidth                      the width of this map
+     * @param mapHeight                     the height of this map
+     * @param revsLocation                  the location of the revolution fortress
+     * @param startDifficultyLevel          the starting difficulty multiplier
+     * @param difficultyChangeInterval      how often the difficulty increase
+     * @param timeTillPowerup               how often power ups spawn
+     * @param fortressesDestroyedBeforeBoss how many fortresses destroyed before boss spawns
+     * @param timeTillNextFreeze            freeze cool down
+     * @param ruby                          the ruby fire truck type
+     * @param sapphire                      the sapphire fire truck type
+     * @param amethyst                      the amethyst fire truck type
+     * @param emerald                       the emerald fire truck type
+     * @param numPatrols                    number of patrols roaming the map
+     */
     DifficultyLevel(TiledMap map, int mapWidth, int mapHeight, Vector2 revsLocation, int startDifficultyLevel,
                     float difficultyChangeInterval, int timeTillPowerup, int fortressesDestroyedBeforeBoss,
                     float timeTillNextFreeze, FireTruckType ruby, FireTruckType sapphire,
-                    FireTruckType amethyst, FireTruckType emerald) {
+                    FireTruckType amethyst, FireTruckType emerald, int numPatrols) {
         this.map = map;
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
@@ -69,12 +93,12 @@ public enum DifficultyLevel {
         this.timeTillPowerup = timeTillPowerup;
         this.fortressesDestroyedBeforeBoss = fortressesDestroyedBeforeBoss;
         this.timeTillNextFreeze = timeTillNextFreeze;
+        this.numPatrols = numPatrols;
 
         this.ruby = ruby;
         this.sapphire = sapphire;
         this.amethyst = amethyst;
         this.emerald = emerald;
-
     }
 
     public TiledMap getMap() { return this.map; }
@@ -104,6 +128,10 @@ public enum DifficultyLevel {
     public int getFortressesDestroyedBeforeBoss() {return this.fortressesDestroyedBeforeBoss; }
 
     public float getTimeTillNextFreeze() { return this.timeTillNextFreeze;}
+
+    public int getNumPatrols() {
+        return this.numPatrols;
+    }
 
     public FireTruckType getRuby() { return this.ruby; }
 

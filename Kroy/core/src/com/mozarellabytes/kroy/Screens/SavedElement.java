@@ -65,7 +65,7 @@ public class SavedElement {
         Array patrolArray = (Array) entities.get("Patrols");
         for (int i=0; i<patrolArray.size; i++) {
             Desc.Patrol desc = json.fromJson(Desc.Patrol.class, patrolArray.get(i).toString());
-            patrols.add(new Patrol(desc.type, desc.health, desc.x, desc.y, desc.path));
+            patrols.add(new Patrol(desc.type, desc.health, desc.x, desc.y, desc.path, desc.name));
         }
 
         difficultyControl = (DifficultyControl) data.get("Difficulty");
@@ -117,7 +117,7 @@ public class SavedElement {
     public String listAliveFortresses() {
         StringBuilder list = new StringBuilder();
         for (Fortress fortress : fortresses) {
-            list.append("\n  - ").append(fortress.getFortressType().getName());
+            list.append("\n  - ").append(fortress.getType().getName());
         }
         return list.toString();
     }

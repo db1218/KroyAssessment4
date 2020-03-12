@@ -7,8 +7,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Screens.MenuScreen;
 
+/**
+ * Manages inputs for the main menu, checks when
+ * the buttons on the menu, including New game, Load
+ * save, or Controls. It also checks when the player
+ * clicks the sound toggle button
+ */
 public class MenuInputHandler implements InputProcessor {
 
+    /**
+     * Screen this class manages
+     */
     private final MenuScreen menu;
 
     /** Constructs the MenuInputHandler

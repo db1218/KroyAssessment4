@@ -8,6 +8,8 @@ import com.mozarellabytes.kroy.Screens.ControlsScreen;
 
 /**
  * This class controls the input for the Control screen
+ * Basically only checks when the player clicks the X button
+ * or presses C or ESC to close the screen
  * */
 public class ControlScreenInputHandler implements InputProcessor {
 

@@ -7,10 +7,22 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Screens.DifficultyScreen;
 
+/**
+ * Manages the inputs for the difficulty screen, such as button presses
+ * for selecting a difficulty and returning to the main menu
+ */
 public class DifficultyScreenInputHandler implements InputProcessor {
 
+    /**
+     * Screen managing inputs for
+     */
     final DifficultyScreen difficultyScreen;
 
+    /**
+     * Constructor for handler
+     *
+     * @param difficultyScreen  screen managing inputs for
+     */
     public DifficultyScreenInputHandler(DifficultyScreen difficultyScreen) {
         this.difficultyScreen = difficultyScreen;
     }

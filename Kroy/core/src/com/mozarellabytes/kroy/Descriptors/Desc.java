@@ -20,7 +20,7 @@ public class Desc {
     }
 
     public static class Patrol {
-        public String type;
+        public String type, name;
         public float x, y, health;
         public Queue<Vector2> path;
     }

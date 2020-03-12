@@ -104,16 +104,19 @@ public class SaveScreen implements Screen {
             Label timestampLabel = new Label(save.getEnTimestamp(), new Label.LabelStyle(game.font33, Color.WHITE));
             Label fireTrucksAliveLabel = new Label(" - Fire Trucks alive: " + save.getFireTrucks().size(), new Label.LabelStyle(game.font25, Color.WHITE));
             Label fortressesRemainingLabel = new Label(" - Fortresses remaining: " + save.getFortresses().size(), new Label.LabelStyle(game.font25, Color.WHITE));
+            Label patrolsAliveLabel = new Label(" - Patrols remaining: " + save.getPatrols().size(), new Label.LabelStyle(game.font25, Color.WHITE));
             Label fireStationAlive = new Label(" - Fire Station: " + (save.getFireStation().isAlive() ? "alive" : "destroyed"), new Label.LabelStyle(game.font25, Color.WHITE));
 
             timestampLabel.setAlignment(Align.left);
             fireTrucksAliveLabel.setAlignment(Align.left);
             fortressesRemainingLabel.setAlignment(Align.left);
+            patrolsAliveLabel.setAlignment(Align.left);
             fireStationAlive.setAlignment(Align.left);
 
             list.addActor(timestampLabel);
             list.addActor(fireTrucksAliveLabel);
             list.addActor(fortressesRemainingLabel);
+            list.addActor(patrolsAliveLabel);
             list.addActor(fireStationAlive);
 
             list.fill().space(5).expand().padRight(15).padLeft(15);
@@ -272,18 +275,23 @@ public class SaveScreen implements Screen {
                 currentSaveSelected.getDifficultyControl().getDifficultyMultiplier() + "x", new Label.LabelStyle(game.font25, Color.WHITE));
         difficultyLabel.setAlignment(Align.left);
 
-        Label fireTrucksLevel = new Label("Fire Trucks: (" + currentSaveSelected.getFireTrucks().size() + ")" +
+        Label fireTrucksLabel = new Label("Fire Trucks: (" + currentSaveSelected.getFireTrucks().size() + ")" +
                 currentSaveSelected.listAliveFireTrucks(), new Label.LabelStyle(game.font25, Color.WHITE));
-        fireTrucksLevel.setAlignment(Align.left);
+        fireTrucksLabel.setAlignment(Align.left);
 
-        Label fortressesLevel = new Label("Fortresses: (" + currentSaveSelected.getFortresses().size() + ")" +
+        Label fortressesLabel = new Label("Fortresses: (" + currentSaveSelected.getFortresses().size() + ")" +
                 currentSaveSelected.listAliveFortresses(), new Label.LabelStyle(game.font25, Color.WHITE));
-        fortressesLevel.setAlignment(Align.left);
+        fortressesLabel.setAlignment(Align.left);
+
+        Label patrolsLabel = new Label("Patrols: (" + currentSaveSelected.getPatrols().size() + ")",
+                new Label.LabelStyle(game.font25, Color.WHITE));
+        patrolsLabel.setAlignment(Align.left);
 
         savesList.fill().bottom().expand();
         savesList.addActor(difficultyLabel);
-        savesList.addActor(fireTrucksLevel);
-        savesList.addActor(fortressesLevel);
+        savesList.addActor(fireTrucksLabel);
+        savesList.addActor(fortressesLabel);
+        savesList.addActor(patrolsLabel);
         selectedTable.add(savesList).expand().maxHeight(Gdx.graphics.getHeight()/3f);
     }
 

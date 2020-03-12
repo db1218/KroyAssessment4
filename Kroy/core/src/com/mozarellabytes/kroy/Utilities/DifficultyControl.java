@@ -1,6 +1,9 @@
 package com.mozarellabytes.kroy.Utilities;
 
-
+/**
+ * Manages the difference difficulty levels within the game:
+ * Easy, Medium and Hard.
+ */
 public class DifficultyControl {
     /** The value of the current difficulty level */
     private int currentDifficulty;
@@ -26,7 +29,8 @@ public class DifficultyControl {
     public DifficultyControl() {}
 
 
-    /** Updates the amount of time to a change in difficulty
+    /**
+     * Updates the amount of time to a change in difficulty
      *
      * @param TimeDelta The amount of time since the last time update
      */
@@ -35,7 +39,8 @@ public class DifficultyControl {
         changeDifficulty();
     }
 
-    /** Gives the difficulty information as String that can be displayed by the GUI
+    /**
+     * Gives the difficulty information as String that can be displayed by the GUI
      *
      * @return A String containing the current difficulty and time to the next difficulty increment
      */
@@ -43,7 +48,8 @@ public class DifficultyControl {
         return this.currentTime;
     }
 
-    /** Checks if enough time has passed for the difficulty to increment
+    /**
+     * Checks if enough time has passed for the difficulty to increment
      * Increases difficulty by 1 if needed
      */
     private void changeDifficulty(){
@@ -53,7 +59,8 @@ public class DifficultyControl {
         }
     }
 
-    /** Returns the current difficulty level as a multiplier to be used
+    /**
+     * Returns the current difficulty level as a multiplier to be used
      *
      * @return A float equal to one tenth of the current difficulty level
      */

@@ -7,8 +7,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.Descriptors.Desc;
+import com.mozarellabytes.kroy.Utilities.Constants;
 
+import java.lang.invoke.VolatileCallSite;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Patrol is an entity that the player controls. It navigates the map
@@ -25,7 +28,7 @@ public class Patrol extends Sprite {
      * path the patrol follows; the fewer item in
      * the path the slower the patrol will go
      */
-    private final Queue<Vector2> path;
+    private Queue<Vector2> path;
 
     /** Health points */
     private float HP;
@@ -39,18 +42,46 @@ public class Patrol extends Sprite {
      */
     private final ArrayList<Particle> spray;
 
+    private Vector2 shootingPosition;
+
     /**
-     * Constructs a Patrol from save at a position and of a certain type
-     * which have been passed in
-     *
-     * @param type          used to have predefined attributes
+     * Unique name of the patrol
      */
-    public Patrol(PatrolType type) {
+    private final String name;
+
+    /**
+     * Constructs a new Patrol
+     *
+     * @param type  used to have predefined attributes
+     * @param mapW  width of the map
+     * @param mapH  height of the map
+     * @param name  name of the patrol
+     */
+    public Patrol(PatrolType type, int mapW, int mapH, String name) {
         super(type.getTexture());
         this.type = type;
+        this.name = name;
         this.HP = type.getMaxHP();
-        this.position = new Vector2(type.getPoints().get(0).x, type.getPoints().get(0).y);
-        this.path = type.getPoints();
+        this.path = generatePath(mapW, mapH);
+        this.position = new Vector2(path.get(0).x, path.get(0).y);
+        this.spray = new ArrayList<>();
+    }
+
+    /**
+     * Constructs a new special Boss Patrol
+     *
+     * @param type      used to have predefined attributes
+     * @param source    where the boss starts
+     * @param target    where the boss is heading towards
+     */
+    public Patrol(PatrolType type, Vector2 source, Vector2 target) {
+        super(type.getTexture());
+        this.type = type;
+        this.name = "Boss";
+        this.HP = type.getMaxHP();
+        this.shootingPosition = new Vector2();
+        this.path = generateBossPath(source, target);
+        this.position = new Vector2(path.get(0).x, path.get(0).y);
         this.spray = new ArrayList<>();
     }
 
@@ -64,10 +95,11 @@ public class Patrol extends Sprite {
      * @param y     initial y position of patrol
      * @param path  route the patrol will follow
      */
-    public Patrol(String type, float HP, float x, float y, Queue<Vector2> path) {
+    public Patrol(String type, float HP, float x, float y, Queue<Vector2> path, String name) {
         super(PatrolType.valueOf(type).getTexture());
         this.type = PatrolType.valueOf(type);
         this.HP = HP;
+        this.name = name;
         this.position = new Vector2(x, y);
         this.path = path;
         this.spray = new ArrayList<>();
@@ -109,7 +141,7 @@ public class Patrol extends Sprite {
     * @param station FireStation being attacked
     */
     public void attack(FireStation station) {
-        this.spray.add(new Particle(this.getPosition(), station.getCentrePosition(), station));
+        this.spray.add(new Particle(this.getSprayHole(), station.getCentrePosition(), station));
     }
 
     /**
@@ -167,11 +199,67 @@ public class Patrol extends Sprite {
     }
 
     /**
+     * Generates the random path the patrol will navigate
+     * @param mapW  map width
+     * @param mapH  map height
+     * @return      path
+     */
+    private Queue<Vector2> generatePath(int mapW, int mapH) {
+        path = new Queue<>();
+        for (int i=0; i<4; i++) {
+            int x = new Random().nextInt(mapW);
+            int y = new Random().nextInt(mapH);
+            path.addLast(new Vector2(x, y));
+        }
+        return path;
+    }
+
+    /**
+     * Generates a special path for the boss
+     * @param source    where the boss starts
+     * @param target    where the boss is heading towards
+     * @return          path the boss will take
+     */
+    private Queue<Vector2> generateBossPath(Vector2 source, Vector2 target) {
+        shootingPosition = new Vector2();
+        if (source.x > target.x) shootingPosition.x = Math.round(target.x) + 2;
+        else shootingPosition.x = Math.round(target.x) - 2;
+
+        if (source.y > target.y) shootingPosition.y = Math.round(target.y) + 2;
+        else shootingPosition.y = Math.round(target.y) - 2;
+
+        path = new Queue<>();
+        path.addLast(new Vector2(Math.round(source.x), Math.round(source.y)));
+        path.addLast(shootingPosition);
+        return path;
+    }
+
+    /**
+     * Gets the position where the spray should appear like it
+     * is coming out of the patrol. Need to divide by tile width
+     * as width is in pixels not tiles
+     *
+     * @return  where spray comes out
+     */
+    private Vector2 getSprayHole() {
+        return new Vector2(this.getDoublePosition().x + this.getWidth()/(Constants.TILE_WxH * 2f), this.getDoublePosition().y);
+    }
+
+    /**
      * Get vector, but x and y are rounded to doubles instead of floats
      * @return  new Vector
      */
     public Vector2 getDoublePosition() {
         return new Vector2((float) (Math.round(position.x * 100.0) / 100.0), (float) (Math.round(position.y * 100.0) / 100.0));
+    }
+
+    /**
+     * Whether the shooting pos and current pos are equal
+     * @return  <code>true</code> patrol is at shooting pos
+     *          <code>false</code> otherwise
+     */
+    public boolean inShootingPosition() {
+        return getDoublePosition().equals(shootingPosition);
     }
 
     /**
@@ -183,6 +271,7 @@ public class Patrol extends Sprite {
     public Desc.Patrol getDescriptor() {
         Desc.Patrol desc = new Desc.Patrol();
         desc.type = this.type.name();
+        desc.name = this.name;
         desc.health = this.getHP();
         desc.x = (float) Math.floor(this.getPosition().x);
         desc.y = (float) Math.floor(this.getPosition().y);
@@ -212,4 +301,7 @@ public class Patrol extends Sprite {
         return this.path;
     }
 
+    public String getName() {
+        return this.name;
+    }
 }

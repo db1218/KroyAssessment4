@@ -6,9 +6,20 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Entities.Fortress;
+import com.mozarellabytes.kroy.Entities.Patrol;
 import com.mozarellabytes.kroy.GUI.GUI;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
+/**
+ * Manages inputs for GameScreen. Controls many aspects such as:
+ * - Clicking buttons in top left
+ * - Clicking on entities
+ * - Drawing truck path
+ * - Toggling auto attack
+ * - Key binds for buttons
+ * - Freezing game
+ * - Undo/Redo segments of truck path
+ */
 public class GameInputHandler implements InputProcessor {
 
     /** The game screen that this input handler controls */
@@ -89,18 +100,17 @@ public class GameInputHandler implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);
         if (gameScreen.isNotPaused()) {
-         //   if (gameScreen.isRoad((int) clickCoordinates.x, (int) clickCoordinates.y)) {
-                if (gameScreen.checkClick(clickCoordinates)) {
-                    gameScreen.selectedTruck.resetPath();
-                    gameScreen.selectedTruck.addTileToPathSegment(clickCoordinates);
-                } else if (!gameScreen.checkTrailClick(clickCoordinates) && !checkFortressClick(clickCoordinates)) {
-                    gameScreen.selectedTruck = null;
-                    gameScreen.setSelectedEntity(null);
-                }
-            } else {
-                checkFortressClick(clickCoordinates);
+            if (gameScreen.checkClick(clickCoordinates)) {
+                gameScreen.selectedTruck.resetPath();
+                gameScreen.selectedTruck.addTileToPathSegment(clickCoordinates);
+            } else if (!gameScreen.checkTrailClick(clickCoordinates) && !checkFortressClick(clickCoordinates) && !checkPatrolClick(clickCoordinates)) {
+                gameScreen.selectedTruck = null;
+                gameScreen.setSelectedEntity(null);
             }
-       // }
+        } else {
+            checkFortressClick(clickCoordinates);
+            checkPatrolClick(clickCoordinates);
+        }
         checkButtonClick(new Vector2(screenX, Gdx.graphics.getHeight() - screenY));
         return true;
     }
@@ -182,7 +192,8 @@ public class GameInputHandler implements InputProcessor {
 
     /** Checks if user clicked on a fortress, if it did this fortress
      * becomes the selected entity meaning its stats will be rendered
-     * in the top right hand corner
+     * in the top left hand corner
+     *
      * @param position2d the tile that was clicked
      * @return <code> true </code> If a fortress has been clicked on
      *         <code> false </code> Otherwise
@@ -191,6 +202,26 @@ public class GameInputHandler implements InputProcessor {
         for (Fortress fortress : gameScreen.getFortresses()) {
             if (fortress.getArea().contains(position2d)) {
                 gameScreen.setSelectedEntity(fortress);
+                return true;
+            }
+        }
+        gameScreen.selectedTruck = null;
+        gameScreen.setSelectedEntity(null);
+        return false;
+    }
+
+    /** Checks if user clicked on a patrol, if it did this patrol
+     * becomes the selected entity meaning its stats will be rendered
+     * in the top left hand corner
+     *
+     * @param position2d the tile that was clicked
+     * @return <code> true </code> If a fortress has been clicked on
+     *         <code> false </code> Otherwise
+     */
+    private boolean checkPatrolClick(Vector2 position2d) {
+        for (Patrol patrol : gameScreen.getPatrols()) {
+            if (patrol.getPosition().dst(position2d) < 1) {
+                gameScreen.setSelectedEntity(patrol);
                 return true;
             }
         }

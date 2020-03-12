@@ -148,7 +148,7 @@ public class Fortress {
      * @param mapBatch  the renderer in line with the map
      */
     public void draw(Batch mapBatch) {
-        mapBatch.draw(this.getFortressType().getTexture(this.getHP()), this.getArea().x, this.getArea().y, this.getArea().width, this.getArea().height);
+        mapBatch.draw(this.getType().getTexture(this.getHP()), this.getArea().x, this.getArea().y, this.getArea().width, this.getArea().height);
     }
 
     /**
@@ -157,7 +157,7 @@ public class Fortress {
      * @return DestroyedEntity with Area and destroyed texture from this fortress.
      */
     public DestroyedEntity createDestroyedFortress(){
-        return new DestroyedEntity(this.getFortressType().getTexture(0), this.area);
+        return new DestroyedEntity(this.getType().getTexture(0), this.area);
     }
 
     public Vector2 getPosition() {
@@ -176,7 +176,7 @@ public class Fortress {
         return this.area;
     }
 
-    public FortressType getFortressType() {
+    public FortressType getType() {
         return this.fortressType;
     }
 

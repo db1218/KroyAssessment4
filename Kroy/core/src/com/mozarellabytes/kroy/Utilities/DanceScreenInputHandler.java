@@ -6,10 +6,20 @@ import com.badlogic.gdx.InputProcessor;
 import com.mozarellabytes.kroy.Minigame.DanceMove;
 import com.mozarellabytes.kroy.Screens.DanceScreen;
 
+/**
+ * Handles inputs for DanceScreen
+ */
 public class DanceScreenInputHandler implements InputProcessor {
 
+    /**
+     * Dance screen this class controls inputs for
+     */
     final DanceScreen danceScreen;
 
+    /**
+     * Dance screen constructor
+     * @param danceScreen   screen this class controls
+     */
     public DanceScreenInputHandler(DanceScreen danceScreen){
         this.danceScreen = danceScreen;
     }
