@@ -63,22 +63,15 @@ public class GameState {
      * @param game LibGDX game
      */
     public void hasGameEnded(Kroy game) {
-        if (fortressesDestroyed == 6) {
-            endGame(true, game);
-        } else if (activeFireTrucks == 0) {
-            endGame(false, game);
-        }
+        if (fortressesDestroyed == 6) endGame(true, game);
+        else if (activeFireTrucks == 0) endGame(false, game);
     }
 
     public boolean shouldGameEnd() {
         return fortressesDestroyed == 6 || activeFireTrucks == 0 ;
     }
 
-    public boolean firstFortressDestroyed() {
-        return fortressesDestroyed == 1;
-    }
-
-    public int numDestroyedFortresses() { return  fortressesDestroyed; }
+    public int getNumDestroyedFortresses() { return fortressesDestroyed; }
 
     /** Triggers the appropriate game over screen depending
      * on if the user has won or lost
@@ -87,11 +80,8 @@ public class GameState {
      * @param game LibGDX game
      */
     private void endGame(Boolean playerWon, Kroy game) {
-        if (playerWon) {
-            game.setScreen(new GameOverScreen(game, true));
-        } else {
-            game.setScreen(new GameOverScreen(game, false));
-        }
+        if (playerWon) game.setScreen(new GameOverScreen(game, true));
+        else game.setScreen(new GameOverScreen(game, false));
     }
 
     public void setTrucksInAttackRange(int number){

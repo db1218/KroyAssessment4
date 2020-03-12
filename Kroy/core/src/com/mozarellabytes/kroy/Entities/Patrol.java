@@ -22,32 +22,24 @@ import java.util.Random;
 public class Patrol extends Sprite {
 
     /** Defines set of pre-defined attributes */
-    public final PatrolType type;
+    protected PatrolType type;
 
     /**
      * path the patrol follows; the fewer item in
      * the path the slower the patrol will go
      */
-    private Queue<Vector2> path;
+    protected Queue<Vector2> path;
 
     /** Health points */
-    private float HP;
+    protected float HP;
 
     /** Position of patrol in tiles */
-    public final Vector2 position;
-
-    /**
-     * List of particles that the patrol uses to attack
-     * a Fortress
-     */
-    private final ArrayList<Particle> spray;
-
-    private Vector2 shootingPosition;
+    protected Vector2 position;
 
     /**
      * Unique name of the patrol
      */
-    private final String name;
+    protected String name;
 
     /**
      * Constructs a new Patrol
@@ -64,25 +56,6 @@ public class Patrol extends Sprite {
         this.HP = type.getMaxHP();
         this.path = generatePath(mapW, mapH);
         this.position = new Vector2(path.get(0).x, path.get(0).y);
-        this.spray = new ArrayList<>();
-    }
-
-    /**
-     * Constructs a new special Boss Patrol
-     *
-     * @param type      used to have predefined attributes
-     * @param source    where the boss starts
-     * @param target    where the boss is heading towards
-     */
-    public Patrol(PatrolType type, Vector2 source, Vector2 target) {
-        super(type.getTexture());
-        this.type = type;
-        this.name = "Boss";
-        this.HP = type.getMaxHP();
-        this.shootingPosition = new Vector2();
-        this.path = generateBossPath(source, target);
-        this.position = new Vector2(path.get(0).x, path.get(0).y);
-        this.spray = new ArrayList<>();
     }
 
     /**
@@ -102,7 +75,18 @@ public class Patrol extends Sprite {
         this.name = name;
         this.position = new Vector2(x, y);
         this.path = path;
-        this.spray = new ArrayList<>();
+    }
+
+    /**
+     * Constructs a basic Patrol with just the type
+     * (used by {@link BossPatrol}
+     *
+     * @param type      used to have predefined attributes
+     */
+    public Patrol(PatrolType type) {
+        super(type.getTexture());
+        this.type = type;
+        this.HP = type.getMaxHP();
     }
 
     /**
@@ -135,32 +119,6 @@ public class Patrol extends Sprite {
     }
 
     /**
-    * Deals damage to Firestation by generating a BlasterParticle and adding
-    * it to the spray
-    *
-    * @param station FireStation being attacked
-    */
-    public void attack(FireStation station) {
-        this.spray.add(new Particle(this.getSprayHole(), station.getCentrePosition(), station));
-    }
-
-    /**
-     * Updates the spray of the Boss patrol
-     */
-    public void updateBossSpray() {
-        if (this.spray != null) {
-            for (int i=0; i < this.spray.size(); i++) {
-                Particle particle = this.spray.get(i);
-                particle.updatePosition();
-                if (particle.isHit()) {
-                    this.damage(particle);
-                    this.removeParticle(particle);
-                }
-            }
-        }
-    }
-
-    /**
     * Draws the mini health indicators relative to the patrol
     *
     * @param shapeMapRenderer  Renderer that the stats are being drawn to (map  dependant)
@@ -169,9 +127,6 @@ public class Patrol extends Sprite {
         shapeMapRenderer.rect(this.getPosition().x + 0.2f, this.getPosition().y + 1.3f, 0.4f, 0.8f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
         shapeMapRenderer.rect(this.getPosition().x + 0.3f, this.getPosition().y + 1.4f, 0.2f, 0.6f, Color.OLIVE, Color.OLIVE, Color.OLIVE, Color.OLIVE);
         shapeMapRenderer.rect(this.getPosition().x + 0.3f, this.getPosition().y + 1.4f, 0.2f, this.getHP() / this.type.getMaxHP() * 0.6f, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN);
-        for (Particle particle : this.getSpray()) {
-            shapeMapRenderer.rect(particle.getPosition().x, particle.getPosition().y, particle.getSize(), particle.getSize(), particle.getColour(), particle.getColour(), particle.getColour(), particle.getColour());
-        }
     }
 
     /**
@@ -184,20 +139,6 @@ public class Patrol extends Sprite {
         mapBatch.draw(this, this.position.x, this.position.y, 1, 1);
     }
 
-    private void removeParticle(Particle particle) {
-        this.spray.remove(particle);
-    }
-
-    /**
-     * Damages the Station depending on the patrol's AP
-     *
-     * @param particle  the particle which damages the station
-     */
-    private void damage(Particle particle) {
-        FireStation station = (FireStation) particle.getTarget();
-        station.damage(0.15f);
-    }
-
     /**
      * Generates the random path the patrol will navigate
      * @param mapW  map width
@@ -207,59 +148,40 @@ public class Patrol extends Sprite {
     private Queue<Vector2> generatePath(int mapW, int mapH) {
         path = new Queue<>();
         for (int i=0; i<4; i++) {
-            int x = new Random().nextInt(mapW);
-            int y = new Random().nextInt(mapH);
-            path.addLast(new Vector2(x, y));
+            final int X = new Random().nextInt(mapW);
+            final int Y = new Random().nextInt(mapH);
+            path.addLast(new Vector2(X, Y));
         }
         return path;
     }
 
     /**
-     * Generates a special path for the boss
-     * @param source    where the boss starts
-     * @param target    where the boss is heading towards
-     * @return          path the boss will take
+     * Checks whether the patrol has collided with a truck
+     * @param truck     truck to check
+     * @param station   check if truck is on bay tile
+     * @return          <code>true</code>   patrol collides with truck
+     *                  <code>false</code>  otherwise
      */
-    private Queue<Vector2> generateBossPath(Vector2 source, Vector2 target) {
-        shootingPosition = new Vector2();
-        if (source.x > target.x) shootingPosition.x = Math.round(target.x) + 2;
-        else shootingPosition.x = Math.round(target.x) - 2;
-
-        if (source.y > target.y) shootingPosition.y = Math.round(target.y) + 2;
-        else shootingPosition.y = Math.round(target.y) - 2;
-
-        path = new Queue<>();
-        path.addLast(new Vector2(Math.round(source.x), Math.round(source.y)));
-        path.addLast(shootingPosition);
-        return path;
+    public boolean collidesWithTruck(FireTruck truck, FireStation station) {
+        return (getRoundedPosition().equals(truck.getTilePosition()) && (!truck.isOnBayTile(station) || !station.isAlive()));
     }
 
     /**
-     * Gets the position where the spray should appear like it
-     * is coming out of the patrol. Need to divide by tile width
-     * as width is in pixels not tiles
+     * Get position vector, but x and y are rounded to nearest integer
      *
-     * @return  where spray comes out
+     * @return  rounded vector
      */
-    private Vector2 getSprayHole() {
-        return new Vector2(this.getDoublePosition().x + this.getWidth()/(Constants.TILE_WxH * 2f), this.getDoublePosition().y);
+    private Vector2 getRoundedPosition() {
+        return new Vector2(Math.round(position.x), Math.round(position.y));
     }
 
     /**
      * Get vector, but x and y are rounded to doubles instead of floats
+     *
      * @return  new Vector
      */
     public Vector2 getDoublePosition() {
         return new Vector2((float) (Math.round(position.x * 100.0) / 100.0), (float) (Math.round(position.y * 100.0) / 100.0));
-    }
-
-    /**
-     * Whether the shooting pos and current pos are equal
-     * @return  <code>true</code> patrol is at shooting pos
-     *          <code>false</code> otherwise
-     */
-    public boolean inShootingPosition() {
-        return getDoublePosition().equals(shootingPosition);
     }
 
     /**
@@ -277,10 +199,6 @@ public class Patrol extends Sprite {
         desc.y = (float) Math.floor(this.getPosition().y);
         desc.path = this.path;
         return desc;
-    }
-
-    private ArrayList<Particle> getSpray() {
-        return this.spray;
     }
 
     public float getHP() {
@@ -304,4 +222,5 @@ public class Patrol extends Sprite {
     public String getName() {
         return this.name;
     }
+
 }

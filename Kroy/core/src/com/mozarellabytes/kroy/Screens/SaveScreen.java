@@ -125,6 +125,7 @@ public class SaveScreen implements Screen {
             saveItemTable.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
                     currentSaveSelected = save;
                     updateCurrentlySelected();
                 }
@@ -286,6 +287,10 @@ public class SaveScreen implements Screen {
         Label patrolsLabel = new Label("Patrols: (" + currentSaveSelected.getPatrols().size() + ")",
                 new Label.LabelStyle(game.font25, Color.WHITE));
         patrolsLabel.setAlignment(Align.left);
+
+        Label bossPatrolLabel = new Label("Boss Patrol: " + (currentSaveSelected.getBossPatrol() == null ? "active" : "inactive"),
+                new Label.LabelStyle(game.font25, Color.WHITE));
+        bossPatrolLabel.setAlignment(Align.left);
 
         savesList.fill().bottom().expand();
         savesList.addActor(difficultyLabel);

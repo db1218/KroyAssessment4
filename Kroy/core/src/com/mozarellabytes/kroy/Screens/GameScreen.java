@@ -85,6 +85,7 @@ public class GameScreen implements Screen {
      * List of patrols current active around the map
      */
     private ArrayList<Patrol> patrols;
+    private BossPatrol bossPatrol;
 
     /** List of VFX */
     private ArrayList<VFX> vfx;
@@ -151,6 +152,7 @@ public class GameScreen implements Screen {
 
         // patrols
         patrols = save.getPatrols();
+        bossPatrol = save.getBossPatrol();
     }
 
     /**
@@ -272,9 +274,6 @@ public class GameScreen implements Screen {
         fortresses = new ArrayList<>();
         patrols = new ArrayList<>();
         deadEntities = new ArrayList<>(7);
-
-        GameInputHandler gameInputHandler = new GameInputHandler(this, gui);
-
     }
 
     @Override
@@ -325,44 +324,35 @@ public class GameScreen implements Screen {
         mapRenderer.render(structureLayersIndices);
 
         mapBatch.begin();
-        for (Patrol patrol : this.patrols) {
-            patrol.drawSprite(mapBatch);
-        }
 
-        for (VFX vfx : this.vfx) {
-            vfx.update(mapBatch);
-        }
+        for (Patrol patrol : this.patrols) patrol.drawSprite(mapBatch);
+
+        if (bossPatrol != null) bossPatrol.drawSprite(mapBatch);
+
+        for (VFX vfx : this.vfx) vfx.update(mapBatch);
+
         mapBatch.end();
 
         shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        for (PowerUp power : powerUps){
-            power.drawStats(shapeMapRenderer);
-        }
+        for (PowerUp power : powerUps) power.drawStats(shapeMapRenderer);
 
-        for (FireTruck truck : station.getTrucks()) {
-            truck.drawStats(shapeMapRenderer);
-        }
+        for (FireTruck truck : station.getTrucks()) truck.drawStats(shapeMapRenderer);
 
-        for (Patrol patrol : this.patrols) {
-            patrol.drawStats(shapeMapRenderer);
-        }
+        for (Patrol patrol : this.patrols) patrol.drawStats(shapeMapRenderer);
 
-        if (station.getHP() > 0) {
-            station.drawStats(shapeMapRenderer);
-        }
+        if (bossPatrol != null) bossPatrol.drawSpray(shapeMapRenderer);
+
+        if (station.getHP() > 0) station.drawStats(shapeMapRenderer);
 
         for (Fortress fortress : fortresses) {
             fortress.drawStats(shapeMapRenderer);
-            for (Bomb bomb : fortress.getBombs()) {
-                bomb.drawBomb(shapeMapRenderer);
-            }
+            for (Bomb bomb : fortress.getBombs()) bomb.drawBomb(shapeMapRenderer);
         }
 
         shapeMapRenderer.end();
 
         gui.renderElements();
-
 
         switch (state) {
             case PLAY:
@@ -410,7 +400,7 @@ public class GameScreen implements Screen {
      */
     private void update(float delta) {
         gameState.hasGameEnded(game);
-       // gameState.firstFortressDestroyed(); Do we need this??
+
         camShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
 
         freezeCooldown -= delta;
@@ -419,7 +409,6 @@ public class GameScreen implements Screen {
         station.checkForCollisions();
 
         gameState.setTrucksInAttackRange(0);
-
 
         ArrayList<PowerUp> powerUpsToRemove = new ArrayList<>();
 
@@ -437,7 +426,7 @@ public class GameScreen implements Screen {
             truck.updateSpray();
 
             // checks power up collision with fire truck
-            for (PowerUp power : powerUps){
+            for (PowerUp power : powerUps) {
                 if (power.getPosition().equals(truck.getPosition()))
                     power.invokePower(truck);
             }
@@ -455,12 +444,13 @@ public class GameScreen implements Screen {
             }
 
             // checks patrol collision with fire trucks
-            for (Patrol patrol : this.patrols) {
-                Vector2 patrolPos = new Vector2(Math.round(patrol.position.x), Math.round(patrol.position.y));
-                if (patrolPos.equals(truck.getTilePosition()) && !station.getBayTiles().contains(patrolPos)) {
+            for (Patrol patrol : this.patrols)
+                if (patrol.collidesWithTruck(truck, station))
                     doDanceOff(truck, patrol);
-                }
-            }
+
+            if (bossPatrol != null)
+                if (bossPatrol.collidesWithTruck(truck, station))
+                    doDanceOff(truck, bossPatrol);
 
             checkIfTruckDestroyed(truck);
         }
@@ -470,30 +460,24 @@ public class GameScreen implements Screen {
                 gameState.setStationDestoyed();
                 if (SoundFX.music_enabled) SoundFX.sfx_fortress_destroyed.play();
                 deadEntities.add(station.getDestroyedStation());
+                bossPatrol = null;
             }
-            patrols.remove(PatrolType.Boss);
+        }
+
+        if (bossPatrol != null) {
+            bossPatrol.updateBossSpray();
+            if ((bossPatrol.inShootingPosition())) bossPatrol.attack(station);
+            else bossPatrol.move(0.01);
+        } else {
+            if (!gameState.hasStationDestoyed() && gameState.getNumDestroyedFortresses() == level.getFortressesDestroyedBeforeBoss())
+                bossPatrol = new BossPatrol(PatrolType.Boss, fortresses.get(0).getPosition(), station.getCentrePosition());
         }
 
         for (int i=0;i<this.patrols.size();i++) {
             Patrol patrol = this.patrols.get(i);
-            patrol.updateBossSpray();
-            if (patrol.getType().equals(PatrolType.Boss)) {
-                if ((patrol.inShootingPosition())) {
-                    patrol.attack(station);
-                } else {
-                    patrol.move(0.01);
-                }
-                if (gameState.hasStationDestoyed()){
-                    patrols.remove(patrol);
-                }
-            } else {
-                patrol.move(0.05);
-            }
+            patrol.move(0.05);
             if (patrol.getHP() <= 0) {
                 patrols.remove(patrol);
-                if((patrol.getType().equals(PatrolType.Boss))&&(!gameState.hasStationDestoyed())){
-                    patrols.add(new Patrol(PatrolType.Boss, fortresses.get(0).getPosition(), station.getCentrePosition()));
-                }
             }
         }
 
@@ -508,8 +492,8 @@ public class GameScreen implements Screen {
             // check if fortress is destroyed
             if (fortress.getHP() <= 0) {
                 gameState.addFortress();
-                if (gameState.numDestroyedFortresses() == level.getFortressesDestroyedBeforeBoss())
-                    patrols.add(new Patrol(PatrolType.Boss, fortress.getPosition(), station.getCentrePosition()));
+                if (gameState.getNumDestroyedFortresses() == level.getFortressesDestroyedBeforeBoss())
+                    bossPatrol = new BossPatrol(PatrolType.Boss, fortresses.get(0).getPosition(), station.getCentrePosition());
                 deadEntities.add(fortress.createDestroyedFortress());
                 float x = fortress.getPosition().x;
                 float y = fortress.getPosition().y;
@@ -780,6 +764,7 @@ public class GameScreen implements Screen {
         entitiesMap.put("FireTrucks", station.getFireTrucksDescriptor());
         entitiesMap.put("Fortresses", this.getFortressesDescriptor());
         entitiesMap.put("Patrols", this.getPatrolsDescriptor());
+        if (bossPatrol != null) entitiesMap.put("Boss Patrol", bossPatrol.getDescriptor());
 
         OrderedMap<String, Object> map = new OrderedMap<>();
         map.put("Timestamp", timestamp);

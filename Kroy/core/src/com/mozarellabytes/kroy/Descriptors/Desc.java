@@ -24,5 +24,11 @@ public class Desc {
         public float x, y, health;
         public Queue<Vector2> path;
     }
+
+    public static class BossPatrol {
+        public String type, name;
+        public float x, y, health;
+        public Queue<Vector2> path;
+    }
 }
 

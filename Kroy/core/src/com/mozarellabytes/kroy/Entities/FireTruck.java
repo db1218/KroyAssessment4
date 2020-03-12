@@ -741,6 +741,17 @@ public class FireTruck extends Sprite {
     }
 
     /**
+     * Checks whether the fire truck is on a bay tile
+     * of the fire station
+     * @param station   contains bay tiles
+     * @return          <code>true</code>   if truck is on a bay tile
+     *                  <code>false</code>  otherwise
+     */
+    public boolean isOnBayTile(FireStation station) {
+        return station.getBayTiles().contains(this.getTilePosition());
+    }
+
+    /**
      * Gets rounded truck position
      * Used for patrol collision
      *

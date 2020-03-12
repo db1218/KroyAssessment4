@@ -202,7 +202,7 @@ public class DanceScreen implements Screen, BeatListener {
                 goToGameScreen();
             }
         } else if (ETDancer.getHealth() <= 0) {
-            patrol.setHP(ETDancer.getHealth());
+            patrol.setHP(Math.max(ETDancer.getHealth(), 0));
             goToGameScreen();
         }
     }
@@ -221,7 +221,7 @@ public class DanceScreen implements Screen, BeatListener {
         this.game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         this.game.shapeRenderer.setProjectionMatrix(camera.combined);
         drawHealthbar(camera.viewportWidth/4, camera.viewportHeight/5, firefighter.getHealth()/firetruck.type.getMaxHP());
-        drawHealthbar((camera.viewportWidth * 3)/4, camera.viewportHeight/5, ETDancer.getHealth()/patrol.type.getMaxHP());
+        drawHealthbar((camera.viewportWidth * 3)/4, camera.viewportHeight/5, ETDancer.getHealth()/patrol.getType().getMaxHP());
         this.game.shapeRenderer.end();
     }
 

@@ -6,10 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mozarellabytes.kroy.Descriptors.Desc;
-import com.mozarellabytes.kroy.Entities.FireStation;
-import com.mozarellabytes.kroy.Entities.FireTruck;
-import com.mozarellabytes.kroy.Entities.Fortress;
-import com.mozarellabytes.kroy.Entities.Patrol;
+import com.mozarellabytes.kroy.Entities.*;
 import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Utilities.DifficultyControl;
 import com.mozarellabytes.kroy.Utilities.DifficultyLevel;
@@ -25,6 +22,7 @@ public class SavedElement {
     private final FireStation fireStation;
     private final ArrayList<Fortress> fortresses;
     private final ArrayList<Patrol> patrols;
+    private final BossPatrol bossPatrol;
     private final GameState gameState;
     private final DifficultyControl difficultyControl;
     private final DifficultyLevel difficultyLevel;
@@ -68,6 +66,10 @@ public class SavedElement {
             patrols.add(new Patrol(desc.type, desc.health, desc.x, desc.y, desc.path, desc.name));
         }
 
+        Desc.Patrol bossDesc = (Desc.Patrol) entities.get("Boss Patrol");
+        if (bossDesc == null) bossPatrol = null;
+        else bossPatrol = new BossPatrol(bossDesc.type, bossDesc.health, bossDesc.x, bossDesc.y, bossDesc.path, bossDesc.name);
+
         difficultyControl = (DifficultyControl) data.get("Difficulty");
 
         difficultyLevel = (DifficultyLevel) data.get("Difficulty Level");
@@ -96,6 +98,10 @@ public class SavedElement {
 
     public ArrayList<Patrol> getPatrols() {
         return this.patrols;
+    }
+
+    public BossPatrol getBossPatrol() {
+        return this.bossPatrol;
     }
 
     public String getTimestamp() {
