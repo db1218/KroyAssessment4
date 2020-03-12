@@ -1,6 +1,5 @@
 package com.mozarellabytes.kroy.Screens;
 
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.*;
 import com.mozarellabytes.kroy.PowerUp.PowerUp;
 import com.badlogic.gdx.Gdx;

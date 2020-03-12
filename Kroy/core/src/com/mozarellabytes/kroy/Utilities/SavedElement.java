@@ -1,4 +1,4 @@
-package com.mozarellabytes.kroy.Screens;
+package com.mozarellabytes.kroy.Utilities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -13,12 +13,17 @@ import com.mozarellabytes.kroy.Utilities.DifficultyLevel;
 
 import java.util.ArrayList;
 
+/**
+ * SavedElement contains all the information needed to save
+ * and load the state of a game to and from a file
+ */
 public class SavedElement {
 
+    // time stamps
     private final String timestamp;
     private final String getEnTimestamp;
 
-    // objects
+    // objects to save
     private final FireStation fireStation;
     private final ArrayList<Fortress> fortresses;
     private final ArrayList<Patrol> patrols;
@@ -27,6 +32,10 @@ public class SavedElement {
     private final DifficultyControl difficultyControl;
     private final DifficultyLevel difficultyLevel;
 
+    /**
+     * Constructor for creating a SavedElement
+     * @param timestamp when save occurred
+     */
     public SavedElement(String timestamp) {
         Json json = new Json();
         this.timestamp = timestamp;
@@ -76,6 +85,32 @@ public class SavedElement {
 
     }
 
+    /**
+     * Gets a list of trucks as a string
+     *
+     * @return  list
+     */
+    public String listAliveFireTrucks() {
+        StringBuilder list = new StringBuilder();
+        for (FireTruck truck : fireStation.getTrucks()) {
+            list.append("\n  - ").append(truck.type.getName());
+        }
+        return list.toString();
+    }
+
+    /**
+     * Gets a list of fortresses as a string
+     *
+     * @return  list
+     */
+    public String listAliveFortresses() {
+        StringBuilder list = new StringBuilder();
+        for (Fortress fortress : fortresses) {
+            list.append("\n  - ").append(fortress.getType().getName());
+        }
+        return list.toString();
+    }
+
     public FireStation getFireStation() {
         return fireStation;
     }
@@ -110,22 +145,6 @@ public class SavedElement {
 
     public String getEnTimestamp() {
         return this.getEnTimestamp;
-    }
-
-    public String listAliveFireTrucks() {
-        StringBuilder list = new StringBuilder();
-        for (FireTruck truck : fireStation.getTrucks()) {
-            list.append("\n  - ").append(truck.type.getName());
-        }
-        return list.toString();
-    }
-
-    public String listAliveFortresses() {
-        StringBuilder list = new StringBuilder();
-        for (Fortress fortress : fortresses) {
-            list.append("\n  - ").append(fortress.getType().getName());
-        }
-        return list.toString();
     }
 
     public DifficultyLevel getDifficultyLevel() {

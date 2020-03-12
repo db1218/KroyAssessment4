@@ -7,7 +7,6 @@ import com.mozarellabytes.kroy.Screens.GameOverScreen;
  * has and how many fortresses have been destroyed and causes the game
  * to end declaring the player has having won or lost
  */
-
 public class GameState {
 
     /** Number of fire trucks there are on screen */
@@ -21,6 +20,9 @@ public class GameState {
     /** The number of trucks that have a fortress within their attack range */
     private int trucksInAttackRange;
 
+    /**
+     * If station is still alive or destroyed
+     */
     private boolean stationDestoyed;
 
     /** Constructor for GameState */
@@ -35,14 +37,6 @@ public class GameState {
     /** Adds one to activeFireTrucks, called when a firetruck is spawned */
     public void addFireTruck() {
         this.activeFireTrucks++;
-    }
-
-    public void setStationDestoyed() {
-        this.stationDestoyed = true;
-    }
-
-    public boolean hasStationDestoyed() {
-        return this.stationDestoyed;
     }
 
     /** Removes one from activeFireTrucks, called when a firetruck
@@ -67,11 +61,15 @@ public class GameState {
         else if (activeFireTrucks == 0) endGame(false, game);
     }
 
+    /**
+     * When one or both of the end game conditions have been met
+     *
+     * @return  <code>true</code> if game should end
+     *          <code>false</code> otherwise
+     */
     public boolean shouldGameEnd() {
         return fortressesDestroyed == 6 || activeFireTrucks == 0 ;
     }
-
-    public int getNumDestroyedFortresses() { return fortressesDestroyed; }
 
     /** Triggers the appropriate game over screen depending
      * on if the user has won or lost
@@ -84,9 +82,19 @@ public class GameState {
         else game.setScreen(new GameOverScreen(game, false));
     }
 
+    public void setStationDestoyed() {
+        this.stationDestoyed = true;
+    }
+
+    public boolean hasStationDestoyed() {
+        return this.stationDestoyed;
+    }
+
     public void setTrucksInAttackRange(int number){
         trucksInAttackRange = number;
     }
+
+    public int getNumDestroyedFortresses() { return fortressesDestroyed; }
 
     public void incrementTrucksInAttackRange(){
         trucksInAttackRange++;

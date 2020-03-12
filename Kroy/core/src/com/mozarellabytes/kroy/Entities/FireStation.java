@@ -8,11 +8,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import com.mozarellabytes.kroy.Descriptors.Desc;
 import com.mozarellabytes.kroy.Screens.GameScreen;
+import com.mozarellabytes.kroy.Utilities.SavedElement;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 /**
@@ -278,7 +278,7 @@ public class FireStation {
     /**
      * Set game screen object when loaded from a save
      * file as dont want to generate screen in
-     * {@link com.mozarellabytes.kroy.Screens.SavedElement}
+     * {@link SavedElement}
      *
      * @param gameScreen    gameScreen to set
      */

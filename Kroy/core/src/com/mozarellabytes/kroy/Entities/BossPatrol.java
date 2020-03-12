@@ -8,6 +8,12 @@ import com.mozarellabytes.kroy.Utilities.Constants;
 
 import java.util.ArrayList;
 
+/**
+ * Special Patrol which is the Boss. This spawns
+ * when a certain number (depending on difficulty)
+ * of fortresses have been destroyed and will head
+ * towards your Fortress.
+ */
 public class BossPatrol extends Patrol {
 
     private Vector2 shootingPosition;

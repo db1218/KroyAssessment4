@@ -18,7 +18,6 @@ import com.mozarellabytes.kroy.Utilities.*;
 /**
  * The screen for the minigame that triggers when a firetruck meets an ET patrol
  */
-
 public class DanceScreen implements Screen, BeatListener {
 
     /** Instance of our game that allows us the change screens */

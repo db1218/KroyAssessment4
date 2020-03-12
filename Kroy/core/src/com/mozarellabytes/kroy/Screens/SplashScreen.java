@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.GL20;
 /** This is the first screen shown when the user starts the game.
  * It shows the group's logo.
  */
-
 public class SplashScreen implements Screen {
 
     private final Kroy game;
