@@ -467,9 +467,13 @@ public class GameScreen implements Screen {
         }
 
         if (bossPatrol != null) {
-            bossPatrol.updateBossSpray();
-            if ((bossPatrol.inShootingPosition())) bossPatrol.attack(station);
-            else bossPatrol.move(0.01);
+            if (bossPatrol.getHP() <= 0) {
+                bossPatrol = null;
+            } else {
+                bossPatrol.updateBossSpray();
+                if ((bossPatrol.inShootingPosition())) bossPatrol.attack(station);
+                else bossPatrol.move(0.01);
+            }
         } else {
             if (!gameState.hasStationDestoyed() && gameState.getNumDestroyedFortresses() == level.getFortressesDestroyedBeforeBoss())
                 bossPatrol = new BossPatrol(PatrolType.Boss, fortresses.get(0).getPosition(), station.getCentrePosition());
