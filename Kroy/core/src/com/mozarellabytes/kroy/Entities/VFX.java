@@ -7,6 +7,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * Visual Effects within the game. Such as when
+ * Fortresses are destroyed, the explosion.
+ */
 public class VFX {
     private TextureAtlas atlas;
     private Vector2 position;
@@ -15,11 +19,22 @@ public class VFX {
     private Animation<TextureRegion> animation;
     private boolean isPowerup;
 
+    /**
+     * Constructor for VFX
+     * @param type      type of visual effect
+     * @param position  where the visual effect will be shown
+     */
     public VFX(int type, Vector2 position) {
         setType(type);
         this.position = position;
     }
 
+    /**
+     * Sets the attributes depending on the type
+     * of visual effect
+     *
+     * @param type  of visual effect
+     */
     private void setType(int type) {
         if (type == 0) {
             this.atlas = new TextureAtlas(Gdx.files.internal("sprites/vfx/explosion1.atlas"));
@@ -34,9 +49,19 @@ public class VFX {
         }
     }
 
-    public void update(Batch batch) {
-        elapsedTime += Gdx.graphics.getDeltaTime();
+    /**
+     * Updates the VFX animation
+     * @param delta time since last frame
+     */
+    public void update(float delta) {
+        elapsedTime += delta;
+    }
 
+    /**
+     * Draws the visual effect
+     * @param batch where to draw to
+     */
+    public void render(Batch batch) {
         TextureRegion currentFrame = animation.getKeyFrame(elapsedTime, false);
         batch.draw(currentFrame, position.x, position.y, this.width, this.height);
     }

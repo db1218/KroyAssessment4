@@ -329,7 +329,7 @@ public class GameScreen implements Screen {
 
         if (bossPatrol != null) bossPatrol.drawSprite(mapBatch);
 
-        for (VFX vfx : this.vfx) vfx.update(mapBatch);
+        for (VFX vfx : this.vfx) vfx.render(mapBatch);
 
         mapBatch.end();
 
@@ -416,6 +416,8 @@ public class GameScreen implements Screen {
             power.update();
             if (power.getCanBeDestroyed()) powerUpsToRemove.add(power);
         }
+
+        for (VFX vfx : this.vfx) vfx.update(delta);
 
         powerUps.removeAll(powerUpsToRemove);
 
@@ -661,6 +663,7 @@ public class GameScreen implements Screen {
     /** Exits the main game screen and goes to the menu, called when the home
      * button is clicked */
     public void toHomeScreen() {
+        SoundFX.sfx_truck_attack.stop();
         game.setScreen(new MenuScreen(game));
     }
 
