@@ -2,6 +2,7 @@ package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -22,9 +24,15 @@ import com.mozarellabytes.kroy.GUI.ClickableGroup;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
+import java.util.ArrayList;
+
 /**
  * Screen to find all information about a Save and select
- * it from a list of saves to carry on where you left off
+ * it from a list of saves to carry on where you left off.
+ * You select the save you want, then you can load it or
+ * delete it. You can navigate with your mouse an buttons,
+ * or by using the up, down, enter and delete keys!
+ * buttons
  */
 public class SaveScreen implements Screen {
 
@@ -38,6 +46,9 @@ public class SaveScreen implements Screen {
 
     // selected save element
     private SavedElement currentSaveSelected;
+
+    private ArrayList<SavedElement> savedElements;
+    private int savedIndex;
 
     // button styles
     private ImageButton.ImageButtonStyle closeButtonStyle;
@@ -74,6 +85,9 @@ public class SaveScreen implements Screen {
     public void show() {
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"), new TextureAtlas("skin/uiskin.atlas"));
 
+        savedElements = new ArrayList();
+        savedIndex = -1;
+
         // create widget groups
         Table table = new Table(); // stores everything in
         selectedTable = new Table();
@@ -97,6 +111,8 @@ public class SaveScreen implements Screen {
 
         for (FileHandle file : Gdx.files.internal("saves/").list()) {
             SavedElement save = new SavedElement(file.nameWithoutExtension());
+            int index = savedElements.size();
+            savedElements.add(save);
             Image screenshot = new Image(new Texture("saves/" + save.getTimestamp() + "/screenshot.png"));
             ClickableGroup saveItemTable = new ClickableGroup();
 
@@ -127,6 +143,7 @@ public class SaveScreen implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
                     currentSaveSelected = save;
+                    savedIndex = index;
                     updateCurrentlySelected();
                 }
             });
@@ -161,6 +178,48 @@ public class SaveScreen implements Screen {
                     if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
                     game.setScreen(new GameScreen(game, currentSaveSelected));
                 }
+            }
+        });
+
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                switch (keycode) {
+                    case Input.Keys.DOWN:
+                        savedIndex++;
+                        if (savedIndex > savedElements.size()-1) {
+                            savedIndex--;
+                        } else {
+                            currentSaveSelected = savedElements.get(savedIndex);
+                            if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
+                            updateCurrentlySelected();
+                        }
+                        break;
+                    case Input.Keys.UP:
+                        savedIndex--;
+                        if (savedIndex < 0) {
+                            savedIndex++;
+                        } else {
+                            currentSaveSelected = savedElements.get(savedIndex);
+                            if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
+                            updateCurrentlySelected();
+                        }
+                        break;
+                    case Input.Keys.ENTER:
+                        if (currentSaveSelected != null) {
+                            if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
+                            game.setScreen(new GameScreen(game, currentSaveSelected));
+                        }
+                        break;
+                    case Input.Keys.BACKSPACE:
+                    case Input.Keys.FORWARD_DEL:
+                        if (currentSaveSelected != null) {
+                            if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
+                            deleteSave();
+                        }
+                        break;
+                }
+                return true;
             }
         });
 
@@ -236,7 +295,10 @@ public class SaveScreen implements Screen {
      * Delete the currently selected save file
      */
     private void deleteSave() {
+        savedElements.remove(currentSaveSelected);
+        savedIndex = savedElements.size()-1;
         Gdx.files.local("saves/" + currentSaveSelected.getTimestamp() + "/").deleteDirectory();
+        currentSaveSelected = null;
         stage.clear();
         show();
     }
