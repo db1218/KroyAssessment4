@@ -29,7 +29,6 @@ public class GameState {
     public GameState() {
         this.activeFireTrucks = 0;
         this.fortressesDestroyed = 0;
-        int activePatrols = 0;
         this.stationDestoyed = false;
         this.hasShownDanceTutorial = false;
     }

@@ -129,7 +129,6 @@ public class DifficultyScreen implements Screen {
         soundOffClickedTexture = new Texture(Gdx.files.internal("ui/sound_off_clicked.png"), true);
         soundOffClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
-        // need a new input handler?
         DifficultyScreenInputHandler ih = new DifficultyScreenInputHandler(this);
 
         currentSoundTexture = (SoundFX.music_enabled) ? soundOffIdleTexture : soundOnIdleTexture;

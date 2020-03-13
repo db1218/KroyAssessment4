@@ -11,10 +11,14 @@ public class Freeze extends PowerUp {
 
     /**
      * Constructor with given location
-     * @param location  of power up
+     * @param location  where the PowerUp spawns on the map
      */
     public Freeze(Vector2 location) { super("water", location); }
 
+    /** This makes a Freeze instantly available in
+     * gameScreen and then sets the appropriate
+     * flags so that the PowerUp can be removed
+     * from gameScreen */
     @Override
     public void invokePower(FireTruck truck) {
         truck.makeFreezeAvailable();

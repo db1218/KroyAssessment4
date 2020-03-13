@@ -4,18 +4,25 @@ import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 
 /**
- * Water replenishes the water/reserve level to full
+ * Water resets a truck's reserve to the truck's maximum
+ * reserve
  */
 public class Water extends PowerUp {
 
     /**
-     * Contructor for Water
-     * @param location  where the power up is
+     * Constructor for Water
+     * @param location  where the PowerUp spawns on the map
      */
     public Water(Vector2 location) {
         super("water", location);
     }
 
+    /**
+     * This restores the truck's reserve and then sets the
+     * appropriate flags so that the PowerUp can be
+     * removed from gameScreen
+     * @param truck truck that gets the effect of the fire truck
+     */
     @Override
     public void invokePower(FireTruck truck) {
         refillReserve(truck);

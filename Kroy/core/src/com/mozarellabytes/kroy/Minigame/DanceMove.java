@@ -1,10 +1,17 @@
 package com.mozarellabytes.kroy.Minigame;
 
+/**********************************************************************************
+ *                               Edited for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
 /**
- * Possible moves that can be taken by dancers
+ * Enum containing the available dance moves and their appropriate textures. This is
+ * used in DanceScreen to render the firefighter, ET and arrows to the screen, in
+ * DanceChoreographer to generate the moves for the routine and in DanceManager to
+ * check if the player has pressed the key corresponding to the current move
  */
 public enum DanceMove {
 
@@ -19,6 +26,12 @@ public enum DanceMove {
     private final Texture ET;
     private final Texture arrow;
 
+    /** Constructor for DanceMove
+     *
+     * @param fireMan the fire fighter's texture for this move
+     * @param ET the ET's texture for this move
+     * @param arrow the arrow texture for this move
+     */
     DanceMove(Texture fireMan, Texture ET, Texture arrow) {
         this.firefighter = fireMan;
         this.ET = ET;

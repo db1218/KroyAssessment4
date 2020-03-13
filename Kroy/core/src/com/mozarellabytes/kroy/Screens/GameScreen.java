@@ -296,7 +296,6 @@ public class GameScreen implements Screen {
         for (FireTruck truck : station.getTrucks()) {
             truck.drawPath(mapBatch);
             truck.drawSprite(mapBatch);
-            //truck.updateBubble(mapBatch);
         }
 
         if(!gameState.hasStationDestoyed()) {

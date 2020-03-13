@@ -13,22 +13,40 @@ import com.mozarellabytes.kroy.Entities.FireTruck;
 import java.util.ArrayList;
 
 /**
- * Abstract class for powerups which can
- * spawn randomly aon roads and give the
+ * Abstract class for powerups which spawn
+ * at random locations on roads and give the
  * fire truck advantages
  */
 public abstract class PowerUp {
 
+    /** Used to animate the PowerUp to make it spin */
     private final Animation<TextureRegion> animation;
+
+    /** Used to get the multiple textures needed for the PowerUp to make
+     * it appear as though the PowerUp is spinning */
     private final TextureAtlas atlas;
+
+    /** The location on the map where the PowerUp should be spawned */
     private Vector2 position;
+
+    /** Used to change the PowerUp's currentFrame to give the impression
+     * of it spinning */
     private float elapsedTime;
+
+    /** The PowerUp's texture that should be rendered to the screen */
     private TextureRegion currentFrame;
 
+    /** The time in seconds that the PowerUp has left before it is destroyed */
     private float timeLeftOnScreen;
+
+    /** The total time in seconds that the powerup will be available for */
     private final float timeOnScreen;
 
+
+    /** Flag for whether the PowerUp can be rendered to the gameScreen */
     boolean canBeRendered;
+
+    /** Flag for whether the PowerUp can be destroyed in gameScreen */
     boolean canBeDestroyed;
 
     /**
@@ -74,7 +92,8 @@ public abstract class PowerUp {
     }
 
     /**
-     * Remove the power up
+     * Sets the appropriate boolean flags so that the PowerUp can be
+     * removed from currentPowerups in GameScreen.
      */
     void removePowerUp() {
         canBeRendered = false;
@@ -82,7 +101,7 @@ public abstract class PowerUp {
     }
 
     /**
-     * Render the powerup at that frame
+     * Renders the powerup's current frame
      *
      * @param mapBatch  where to render to
      */
@@ -91,9 +110,10 @@ public abstract class PowerUp {
     }
 
     /**
-     * Draw the time left bar of the powerup
+     * Draws a bar above the powerup to indicate how much longer the powerup
+     * will be available for
      *
-     * @param shapeMapRenderer  where to render to
+     * @param shapeMapRenderer  the ShapeRenderer used in gameScreen
      */
     public void drawStats(ShapeRenderer shapeMapRenderer) {
         if (this.canBeRendered) {
@@ -104,8 +124,8 @@ public abstract class PowerUp {
     }
 
     /**
-     * Generate list of powerups to then select a random one
-     * from GameScreen
+     * Generate a list of the available powerups, this is used in
+     * GameScreen to randomly choose which powerUp should be generated
      *
      * @param location  where it should spawn
      * @return          list of powerups
@@ -125,7 +145,7 @@ public abstract class PowerUp {
     }
 
     /**
-     * Deal the effect if the powerup to the truck
+     * Deal the effect of the powerup to the truck
      * @param truck truck that gets the effect of the fire truck
      */
     public abstract void invokePower(FireTruck truck);
