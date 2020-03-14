@@ -56,12 +56,12 @@ public class GameInputHandler implements InputProcessor {
             case Input.Keys.C:
                 gameScreen.toControlScreen();
                 break;
-            case Input.Keys.S:
+            case Input.Keys.M:
                 gui.clickedSoundButton();
                 gui.changeSound();
                 gui.idleSoundButton();
                 break;
-            case Input.Keys.K:
+            case Input.Keys.S:
                 gameScreen.saveGameState();
                 break;
             case Input.Keys.SPACE:
