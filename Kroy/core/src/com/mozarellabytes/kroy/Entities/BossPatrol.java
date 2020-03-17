@@ -146,6 +146,15 @@ public class BossPatrol extends Patrol {
         station.damage(0.15f);
     }
 
+    /**
+     * Get vector, but x and y are rounded to doubles instead of floats
+     *
+     * @return  new Vector
+     */
+    public Vector2 getDoublePosition() {
+        return new Vector2((float) (Math.round(position.x * 100.0) / 100.0), (float) (Math.round(position.y * 100.0) / 100.0));
+    }
+
     private ArrayList<Particle> getSpray() {
         return this.spray;
     }
