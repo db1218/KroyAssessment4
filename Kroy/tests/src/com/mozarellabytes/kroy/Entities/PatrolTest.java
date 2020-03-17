@@ -140,5 +140,5 @@ public class PatrolTest {
         when(truckMock.getTilePosition()).thenReturn(new Vector2(1.0f,0));
         assertFalse(patrol.collidesWithTruck(truckMock, stationMock));
     }
-    
+
 }

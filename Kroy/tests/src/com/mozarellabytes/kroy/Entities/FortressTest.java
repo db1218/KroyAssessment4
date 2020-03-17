@@ -8,9 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import static com.mozarellabytes.kroy.Entities.FortressType.Clifford;
-import static com.mozarellabytes.kroy.Entities.FortressType.Revs;
-import static com.mozarellabytes.kroy.Entities.FortressType.Walmgate;
+import static com.mozarellabytes.kroy.Entities.FortressType.*;
 import static org.junit.Assert.*;
 
 @RunWith(GdxTestRunner.class)
@@ -21,22 +19,38 @@ public class FortressTest {
 
     @Test
     public void differentRangeTest() {
-        assertTrue(Clifford.getRange() != Revs.getRange() && Revs.getRange() != Walmgate.getRange());
+        assertTrue(Clifford.getRange() != Revs.getRange() &&
+                Revs.getRange() != Walmgate.getRange() &&
+                Walmgate.getRange() != CentralHall.getRange() &&
+                CentralHall.getRange() != Museum.getRange() &&
+                Museum.getRange() != Railway.getRange());
     }
 
     @Test
     public void differentMaxHPTest() {
-        assertTrue(Clifford.getMaxHP() != Revs.getMaxHP() && Revs.getMaxHP() != Walmgate.getMaxHP());
+        assertTrue(Clifford.getMaxHP() != Revs.getMaxHP() &&
+                Revs.getMaxHP() != Walmgate.getMaxHP() &&
+                Walmgate.getMaxHP() != CentralHall.getMaxHP() &&
+                CentralHall.getMaxHP() != Museum.getMaxHP() &&
+                Museum.getMaxHP() != Railway.getMaxHP());
     }
 
     @Test
     public void differentFireRateTest() {
-        assertTrue(Clifford.getDelay() != Revs.getDelay() && Revs.getDelay() != Walmgate.getDelay());
+        assertTrue(Clifford.getDelay() != Revs.getDelay() &&
+                Revs.getDelay() != Walmgate.getDelay() &&
+                Walmgate.getDelay() != CentralHall.getDelay() &&
+                CentralHall.getDelay() != Museum.getDelay() &&
+                Museum.getDelay() != Railway.getDelay());
     }
 
     @Test
     public void differentAPTest() {
-        assertTrue(Clifford.getAP() != Revs.getAP() && Revs.getAP() != Walmgate.getAP());
+        assertTrue(Clifford.getAP() != Revs.getAP() &&
+                Revs.getAP() != Walmgate.getAP() &&
+                Walmgate.getAP() != CentralHall.getAP() &&
+                CentralHall.getAP() != Museum.getAP() &&
+                Museum.getAP() != Railway.getAP());
     }
 
     @Test
@@ -46,7 +60,7 @@ public class FortressTest {
         fireTruck.setTimeOfLastAttack(System.currentTimeMillis() - 5000);
         fortress.attack(fireTruck, false,1);
         fortress.updateBombs();
-        assertEquals(135, fireTruck.getHP(), 0.0);
+        assertEquals(127.5f, fireTruck.getHP(), 0.0);
     }
 
     @Test
@@ -56,7 +70,7 @@ public class FortressTest {
         fireTruck.setTimeOfLastAttack(System.currentTimeMillis() - 5000);
         fortress.attack(fireTruck, false,1);
         fortress.updateBombs();
-        assertEquals(140.0, fireTruck.getHP(), 0.0);
+        assertEquals(130.0, fireTruck.getHP(), 0.0);
     }
 
     @Test
@@ -66,13 +80,13 @@ public class FortressTest {
         fireTruck.setTimeOfLastAttack(System.currentTimeMillis() - 5000);
         fortress.attack(fireTruck, false,1);
         fortress.updateBombs();
-        assertEquals(140.0, fireTruck.getHP(), 0.0);
+        assertEquals(132.5, fireTruck.getHP(), 0.0);
     }
 
     @Test
     public void attackTruckFromWalmgateFortressBeforeRangeBoundaryTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate); // range = 8
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(17, 10), FireTruckType.RubyHard);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(17.9f, 10), FireTruckType.RubyHard);
         boolean withinRange = fortress.withinRange(fireTruck.getPosition());
         assertTrue(withinRange);
     }
@@ -88,31 +102,31 @@ public class FortressTest {
     @Test
     public void attackTruckFromWalmgateFortressAfterRangeBoundaryTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate); // range = 8
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(19, 10), FireTruckType.RubyHard);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(18.1f, 10), FireTruckType.RubyHard);
         boolean withinRange = fortress.withinRange(fireTruck.getPosition());
         assertFalse(withinRange);
     }
 
     @Test
     public void attackTruckFromCliffordFortressBeforeRangeBoundaryTest() {
-        Fortress fortress = new Fortress(10, 10, FortressType.Clifford); // range = 4
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(13, 10), FireTruckType.RubyHard);
+        Fortress fortress = new Fortress(10, 10, FortressType.Clifford); // range = 6.5
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(16.4f, 10), FireTruckType.RubyHard);
         boolean withinRange = fortress.withinRange(fireTruck.getPosition());
         assertTrue(withinRange);
     }
 
     @Test
     public void attackTruckFromCliffordFortressOnRangeBoundaryTest() {
-        Fortress fortress = new Fortress(10, 10, FortressType.Clifford); // range = 4
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(14, 10), FireTruckType.RubyHard);
+        Fortress fortress = new Fortress(10, 10, FortressType.Clifford); // range = 6.5
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(16.5f, 10), FireTruckType.RubyHard);
         boolean withinRange = fortress.withinRange(fireTruck.getPosition());
         assertTrue(withinRange);
     }
 
     @Test
     public void attackTruckFromCliffordFortressAfterRangeBoundaryTest() {
-        Fortress fortress = new Fortress(10, 10, FortressType.Clifford); // range = 4
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(15, 10), FireTruckType.RubyHard);
+        Fortress fortress = new Fortress(10, 10, FortressType.Clifford); // range = 6.5
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(16.6f, 10), FireTruckType.RubyHard);
         boolean withinRange = fortress.withinRange(fireTruck.getPosition());
         assertFalse(withinRange);
     }

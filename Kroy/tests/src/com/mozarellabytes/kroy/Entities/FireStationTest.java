@@ -107,11 +107,16 @@ public class FireStationTest {
         fireTruck1.addTileToPathSegment(new Vector2(11, 11));
         fireTruck1.addTileToPathSegment(new Vector2(11, 12));
         fireTruck1.addTileToPathSegment(new Vector2(11, 13));
+
+        fireTruck1.addPathSegmentToRoute();
+        fireTruck1.generatePathFromLastSegments();
+
         for (int i=0; i<100; i++) {
             station.checkForCollisions();
             fireTruck1.move();
         }
         Vector2 expectedPosition = new Vector2(11, 12);
+
         assertEquals(expectedPosition, fireTruck1.getPosition());
     }
 

@@ -45,6 +45,10 @@ public class FireTruckTest {
         fireTruck.addTileToPathSegment(new Vector2(10,10));
         fireTruck.addTileToPathSegment(new Vector2(10,11));
         fireTruck.addTileToPathSegment(new Vector2(11,11));
+
+        fireTruck.addPathSegmentToRoute();
+        fireTruck.generatePathFromLastSegments();
+
         for (int i=0; i<25; i++) {
             fireTruck.move();
         }
@@ -62,6 +66,10 @@ public class FireTruckTest {
         fireTruck.addTileToPathSegment(new Vector2(10,10));
         fireTruck.addTileToPathSegment(new Vector2(10,11));
         fireTruck.addTileToPathSegment(new Vector2(11,11));
+
+        fireTruck.addPathSegmentToRoute();
+        fireTruck.generatePathFromLastSegments();
+
         for (int i=0; i<25; i++) {
             fireTruck.move();
         }
@@ -70,7 +78,7 @@ public class FireTruckTest {
     }
 
     @Test
-    public void oceanTruckShouldMove3TilesIn50FramesTest() {
+    public void oceanTruckShouldMove3TilesIn70FramesTest() {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), SapphireHard);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,10);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,11);
@@ -79,7 +87,11 @@ public class FireTruckTest {
         fireTruck.addTileToPathSegment(new Vector2(10,10));
         fireTruck.addTileToPathSegment(new Vector2(10,11));
         fireTruck.addTileToPathSegment(new Vector2(11,11));
-        for (int i=0; i<50; i++) {
+
+        fireTruck.addPathSegmentToRoute();
+        fireTruck.generatePathFromLastSegments();
+
+        for (int i=0; i<70; i++) {
             fireTruck.move();
         }
         Vector2 expectedPosition = new Vector2(11, 11);
@@ -112,7 +124,7 @@ public class FireTruckTest {
         float fireTruck1ReserveEmpty = fireTruck.getReserve();
         float fireTruck2ReserveEmpty = fireTruck2.getReserve();
 
-        for (int i=0; i<2000; i++) {
+        for (int i=0; i<170; i++) {
             fireStation.restoreTrucks();
         }
 
@@ -121,7 +133,6 @@ public class FireTruckTest {
         boolean checkOceanTruckIsNotFull = fireTruck2.getReserve() !=  SapphireHard.getMaxReserve();
 
         assertTrue(checkEmptyReservesAreSame && checkSpeedTruckIsFull && checkOceanTruckIsNotFull);
-
     }
 
     @Test
@@ -134,14 +145,17 @@ public class FireTruckTest {
         FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(9,10), RubyHard);
         FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(10,10), SapphireHard);
         FireStation fireStation = new FireStation(8, 10, 100);
+
         fireStation.spawn(fireTruck1);
         fireStation.spawn(fireTruck2);
+
         fireTruck1.repair(RubyHard.getMaxHP()*-1);
         fireTruck2.repair(SapphireHard.getMaxHP()*-1);
+
         float fireTruck1Health0 = fireTruck1.getHP();
         float fireTruck2Health0 = fireTruck2.getHP();
 
-        for (int i=0; i<3000; i++) {
+        for (int i=0; i<310; i++) {
             fireStation.restoreTrucks();
         }
 
@@ -150,7 +164,6 @@ public class FireTruckTest {
         boolean checkSpeedTruckIsNotFullyRepaired = fireTruck1.getHP() !=  RubyHard.getMaxHP();
 
         assertTrue(checkHealth0IsSame && checkOceanTruckIsFullyRepaired && checkSpeedTruckIsNotFullyRepaired);
-
     }
 
     @Test
@@ -160,9 +173,11 @@ public class FireTruckTest {
 
     @Test
     public void checkDifferentRangeTest() {
-        Fortress fortress = new Fortress(10, 10, FortressType.Clifford);
-        fireTruck.fortressInRange(fortress.getPosition());
-        assertNotEquals(fireTruck.fortressInRange(fortress.getPosition()), fireTruck.fortressInRange(fortress.getPosition()));
+        Fortress fortress = new Fortress(15, 10, FortressType.Clifford);
+        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(10,10), SapphireEasy);
+        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(10,10), EmeraldEasy);
+
+        assertNotEquals(fireTruck1.fortressInRange(fortress.getPosition()), fireTruck2.fortressInRange(fortress.getPosition()));
     }
 
     @Test
@@ -197,6 +212,8 @@ public class FireTruckTest {
             fireTruck.updateSpray();
         }
         float fortressHealthAfter = fortress.getHP();
+        System.out.println(FortressType.Walmgate.getMaxHP());
+        System.out.println(RubyHard.getAP());
         assertEquals(FortressType.Walmgate.getMaxHP() - RubyHard.getAP(), fortressHealthAfter, 0.0);
     }
 
@@ -242,6 +259,10 @@ public class FireTruckTest {
         fireTruck.setMoving(true);
         fireTruck.addTileToPathSegment(new Vector2(10,10));
         fireTruck.addTileToPathSegment(new Vector2(10,11));
+
+        fireTruck.addPathSegmentToRoute();
+        fireTruck.generatePathFromLastSegments();
+
         for (int i=0; i<50; i++) {
             fireTruck.move();
         }
