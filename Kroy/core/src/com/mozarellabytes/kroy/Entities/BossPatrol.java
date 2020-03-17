@@ -3,7 +3,6 @@ package com.mozarellabytes.kroy.Entities;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
-import com.mozarellabytes.kroy.Descriptors.Desc;
 import com.mozarellabytes.kroy.Utilities.Constants;
 
 import java.util.ArrayList;
@@ -56,12 +55,15 @@ public class BossPatrol extends Patrol {
     }
 
     /**
-     * Generates a special path for the boss
+     * Generates a special path for the boss. The boss will
+     * end up in closest corner of the fire station (relative
+     * to where the positions of boss and fire station)
+     *
      * @param source    where the boss starts
      * @param target    where the boss is heading towards
      * @return          path the boss will take
      */
-    private Queue<Vector2> generatePath(Vector2 source, Vector2 target) {
+    public Queue<Vector2> generatePath(Vector2 source, Vector2 target) {
         shootingPosition = new Vector2();
         if (source.x > target.x) shootingPosition.x = Math.round(target.x) + 2;
         else shootingPosition.x = Math.round(target.x) - 2;
@@ -102,7 +104,7 @@ public class BossPatrol extends Patrol {
      *
      * @return  where spray comes out
      */
-    private Vector2 getSprayHole() {
+    public Vector2 getSprayHole() {
         return new Vector2(this.getDoublePosition().x + this.getWidth()/(Constants.TILE_WxH * 2f), this.getDoublePosition().y);
     }
 
@@ -141,7 +143,7 @@ public class BossPatrol extends Patrol {
      *
      * @param particle  the particle which damages the station
      */
-    private void damage(Particle particle) {
+    public void damage(Particle particle) {
         FireStation station = (FireStation) particle.getTarget();
         station.damage(0.15f);
     }
@@ -155,8 +157,16 @@ public class BossPatrol extends Patrol {
         return new Vector2((float) (Math.round(position.x * 100.0) / 100.0), (float) (Math.round(position.y * 100.0) / 100.0));
     }
 
-    private ArrayList<Particle> getSpray() {
+    public ArrayList<Particle> getSpray() {
         return this.spray;
+    }
+
+    public void setShootingPosition(Vector2 position) {
+        shootingPosition = position;
+    }
+
+    public void setSpray(ArrayList<Particle> spray) {
+        this.spray = spray;
     }
 
 }
