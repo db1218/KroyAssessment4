@@ -1,9 +1,11 @@
 package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.GdxTestRunner;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,8 +13,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+
+import java.util.ArrayList;
+
 import static com.mozarellabytes.kroy.Entities.FireTruckType.*;
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(GdxTestRunner.class)
 public class FireTruckTest {
@@ -38,9 +46,8 @@ public class FireTruckTest {
     @Test
     public void speedTruckShouldMove3TilesIn25FramesTest() {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), RubyHard);
-        Mockito.doReturn(true).when(gameScreenMock).isRoad(10,10);
-        Mockito.doReturn(true).when(gameScreenMock).isRoad(10,11);
-        Mockito.doReturn(true).when(gameScreenMock).isRoad(11,11);
+        when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
+
         fireTruck.setMoving(true);
         fireTruck.addTileToPathSegment(new Vector2(10,10));
         fireTruck.addTileToPathSegment(new Vector2(10,11));
@@ -59,9 +66,8 @@ public class FireTruckTest {
     @Test
     public void oceanTruckShouldNotMove3TilesIn25FramesTest() {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), SapphireHard);
-        Mockito.doReturn(true).when(gameScreenMock).isRoad(10,10);
-        Mockito.doReturn(true).when(gameScreenMock).isRoad(10,11);
-        Mockito.doReturn(true).when(gameScreenMock).isRoad(11,11);
+        when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
+
         fireTruck.setMoving(true);
         fireTruck.addTileToPathSegment(new Vector2(10,10));
         fireTruck.addTileToPathSegment(new Vector2(10,11));
@@ -80,9 +86,8 @@ public class FireTruckTest {
     @Test
     public void oceanTruckShouldMove3TilesIn70FramesTest() {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), SapphireHard);
-        Mockito.doReturn(true).when(gameScreenMock).isRoad(10,10);
-        Mockito.doReturn(true).when(gameScreenMock).isRoad(10,11);
-        Mockito.doReturn(true).when(gameScreenMock).isRoad(11,11);
+        when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
+
         fireTruck.setMoving(true);
         fireTruck.addTileToPathSegment(new Vector2(10,10));
         fireTruck.addTileToPathSegment(new Vector2(10,11));
@@ -128,11 +133,9 @@ public class FireTruckTest {
             fireStation.restoreTrucks();
         }
 
-        boolean checkEmptyReservesAreSame = fireTruck1ReserveEmpty == fireTruck2ReserveEmpty;
-        boolean checkSpeedTruckIsFull = fireTruck.getReserve() == RubyHard.getMaxReserve();
-        boolean checkOceanTruckIsNotFull = fireTruck2.getReserve() !=  SapphireHard.getMaxReserve();
-
-        assertTrue(checkEmptyReservesAreSame && checkSpeedTruckIsFull && checkOceanTruckIsNotFull);
+        assertEquals(fireTruck1ReserveEmpty, fireTruck2ReserveEmpty, 0.0);
+        assertEquals(fireTruck.getReserve(), RubyHard.getMaxReserve(), 0.0);
+        assertNotEquals(fireTruck2.getReserve(), SapphireHard.getMaxReserve(), 0.0);
     }
 
     @Test
@@ -159,11 +162,9 @@ public class FireTruckTest {
             fireStation.restoreTrucks();
         }
 
-        boolean checkHealth0IsSame = fireTruck1Health0 == fireTruck2Health0;
-        boolean checkOceanTruckIsFullyRepaired = fireTruck2.getHP() == SapphireHard.getMaxHP();
-        boolean checkSpeedTruckIsNotFullyRepaired = fireTruck1.getHP() !=  RubyHard.getMaxHP();
-
-        assertTrue(checkHealth0IsSame && checkOceanTruckIsFullyRepaired && checkSpeedTruckIsNotFullyRepaired);
+        assertEquals(fireTruck1Health0, fireTruck2Health0, 0.0);
+        assertEquals(fireTruck2.getHP(), SapphireHard.getMaxHP(), 0.0);
+        assertNotEquals(fireTruck1.getHP(), RubyHard.getMaxHP(), 0.0);
     }
 
     @Test
@@ -185,9 +186,9 @@ public class FireTruckTest {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
         float healthBefore = fortress.getHP();
         fireTruck.attack(fortress);
-        for (int i=0; i<200; i++) {
-            fireTruck.updateSpray();
-        }
+
+        for (int i=0; i<200; i++) fireTruck.updateSpray();
+
         float healthAfter = fortress.getHP();
         assertTrue(healthBefore > healthAfter);
     }
@@ -197,9 +198,9 @@ public class FireTruckTest {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
         float reserveBefore = fireTruck.getReserve();
         fireTruck.attack(fortress);
-        for (int i=0; i<100; i++) {
-            fireTruck.updateSpray();
-        }
+
+        for (int i=0; i<100; i++) fireTruck.updateSpray();
+
         float reserveAfter = fireTruck.getReserve();
         assertTrue(reserveBefore > reserveAfter);
     }
@@ -208,12 +209,10 @@ public class FireTruckTest {
     public void damageFortressWithSpeedByDamageTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
         fireTruck.attack(fortress);
-        for (int i=0; i<200; i++) {
-            fireTruck.updateSpray();
-        }
+
+        for (int i=0; i<200; i++) fireTruck.updateSpray();
+
         float fortressHealthAfter = fortress.getHP();
-        System.out.println(FortressType.Walmgate.getMaxHP());
-        System.out.println(RubyHard.getAP());
         assertEquals(FortressType.Walmgate.getMaxHP() - RubyHard.getAP(), fortressHealthAfter, 0.0);
     }
 
@@ -221,9 +220,9 @@ public class FireTruckTest {
     public void damageFortressWithSpeedByReserveTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
         fireTruck.attack(fortress);
-        for (int i=0; i<100; i++) {
-            fireTruck.updateSpray();
-        }
+
+        for (int i=0; i<100; i++) fireTruck.updateSpray();
+
         float fireTruckReserveAfter = fireTruck.getReserve();
         assertEquals(RubyHard.getMaxReserve() - RubyHard.getAP(), fireTruckReserveAfter, 0.0);
     }
@@ -233,9 +232,9 @@ public class FireTruckTest {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), SapphireHard);
         fireTruck.attack(fortress);
-        for (int i=0; i<200; i++) {
-            fireTruck.updateSpray();
-        }
+
+        for (int i=0; i<200; i++) fireTruck.updateSpray();
+
         float fortressHealthAfter = fortress.getHP();
         assertEquals(FortressType.Walmgate.getMaxHP() - SapphireHard.getAP(), fortressHealthAfter, 0.0);
     }
@@ -268,6 +267,199 @@ public class FireTruckTest {
         }
         Vector2 expectedPosition = new Vector2(10, 11);
         assertEquals(expectedPosition, fireTruck.getPosition());
+    }
+
+    @Test
+    public void cloneQueueTest() {
+        Queue<Vector2> queue = new Queue<>();
+        queue.addLast(new Vector2(0, 0));
+        queue.addLast(new Vector2(1, 2));
+        queue.addLast(new Vector2(2, 2));
+        queue.addLast(new Vector2(3, 3));
+
+        assertEquals(queue, fireTruck.cloneQueue(queue));
+    }
+
+    @Test
+    public void undoOneSegmentTest() {
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), SapphireHard);
+        when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
+        when(gameScreenMock.getState()).thenReturn(GameScreen.PlayState.FREEZE);
+
+        fireTruck.addTileToPathSegment(new Vector2(10,10));
+        fireTruck.addTileToPathSegment(new Vector2(10,11));
+        fireTruck.addTileToPathSegment(new Vector2(11,11));
+
+        fireTruck.addPathSegmentToRoute();
+
+        fireTruck.undoSegment();
+
+        Queue<Queue<Vector2>> pathSegmentsAfterUndo = clone2DQueue(fireTruck.pathSegments);
+
+        Queue<Queue<Vector2>> expectedPathSegments = new Queue<>();
+        Queue<Vector2> expectedPathSegment = new Queue<>();
+        expectedPathSegment.addLast(new Vector2(10, 10));
+        expectedPathSegments.addLast(expectedPathSegment);
+
+        assertEquals(expectedPathSegments, pathSegmentsAfterUndo);
+    }
+
+    @Test
+    public void undoTwoSegmentsTest() {
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), SapphireHard);
+        when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
+        when(gameScreenMock.getState()).thenReturn(GameScreen.PlayState.FREEZE);
+
+        fireTruck.addTileToPathSegment(new Vector2(10,10));
+        fireTruck.addTileToPathSegment(new Vector2(10,11));
+        fireTruck.addTileToPathSegment(new Vector2(11,11));
+
+        fireTruck.addPathSegmentToRoute();
+
+        Queue<Queue<Vector2>> pathSegmentsOneSegment = clone2DQueue(fireTruck.pathSegments);
+
+        fireTruck.addTileToPathSegment(new Vector2(11,11));
+        fireTruck.addTileToPathSegment(new Vector2(12,11));
+        fireTruck.addTileToPathSegment(new Vector2(13,11));
+
+        fireTruck.addPathSegmentToRoute();
+
+        Queue<Queue<Vector2>> pathSegmentsTwoSegments = clone2DQueue(fireTruck.pathSegments);
+
+        fireTruck.undoSegment();
+
+        Queue<Queue<Vector2>> pathSegmentsAfterUndo = clone2DQueue(fireTruck.pathSegments);
+
+        assertTrue(pathSegmentsTwoSegments.size > pathSegmentsAfterUndo.size);
+        assertEquals(pathSegmentsOneSegment, pathSegmentsAfterUndo);
+    }
+
+    @Test
+    public void redoOneSegmentTest() {
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), SapphireHard);
+        when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
+        when(gameScreenMock.getState()).thenReturn(GameScreen.PlayState.FREEZE);
+
+        fireTruck.addTileToPathSegment(new Vector2(10,10));
+        fireTruck.addTileToPathSegment(new Vector2(10,11));
+        fireTruck.addTileToPathSegment(new Vector2(11,11));
+        fireTruck.addPathSegmentToRoute();
+
+        Queue<Queue<Vector2>> pathSegmentsOneSegment = clone2DQueue(fireTruck.pathSegments);
+
+        fireTruck.undoSegment();
+
+        fireTruck.redoSegment();
+        Queue<Queue<Vector2>> pathSegmentsAfterRedo = clone2DQueue(fireTruck.pathSegments);
+
+        assertEquals(pathSegmentsOneSegment, pathSegmentsAfterRedo);
+    }
+
+    @Test
+    public void redoTwoSegmentsTest() {
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), SapphireHard);
+        when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
+        when(gameScreenMock.getState()).thenReturn(GameScreen.PlayState.FREEZE);
+
+        fireTruck.addTileToPathSegment(new Vector2(10,10));
+        fireTruck.addTileToPathSegment(new Vector2(10,11));
+        fireTruck.addTileToPathSegment(new Vector2(11,11));
+        fireTruck.addPathSegmentToRoute();
+
+        Queue<Queue<Vector2>> pathSegmentsOneSegment = clone2DQueue(fireTruck.pathSegments);
+
+        fireTruck.addTileToPathSegment(new Vector2(11,11));
+        fireTruck.addTileToPathSegment(new Vector2(12,11));
+        fireTruck.addTileToPathSegment(new Vector2(13,11));
+        fireTruck.addPathSegmentToRoute();
+
+        Queue<Queue<Vector2>> pathSegmentsTwoSegments = clone2DQueue(fireTruck.pathSegments);
+
+        fireTruck.undoSegment();
+        Queue<Queue<Vector2>> pathSegmentsAfterUndo = clone2DQueue(fireTruck.pathSegments);
+
+        fireTruck.redoSegment();
+        Queue<Queue<Vector2>> pathSegmentsAfterRedo = clone2DQueue(fireTruck.pathSegments);
+
+        assertEquals(pathSegmentsOneSegment, pathSegmentsAfterUndo);
+        assertEquals(pathSegmentsTwoSegments, pathSegmentsAfterRedo);
+    }
+
+    @Test
+    public void resetPathTests() {
+        Queue<Vector2> path = new Queue<>();
+        path.addFirst(new Vector2(0, 0));
+        path.addFirst(new Vector2(1, 1));
+        path.addFirst(new Vector2(2, 3));
+
+        fireTruck.path = path;
+
+        Queue<Vector2> pathSegment = new Queue<>();
+        pathSegment.addFirst(new Vector2(0, 0));
+        pathSegment.addFirst(new Vector2(1, 1));
+        pathSegment.addFirst(new Vector2(2, 3));
+
+        fireTruck.pathSegment = pathSegment;
+
+        fireTruck.resetPath();
+
+        assertTrue(fireTruck.path.isEmpty());
+        assertTrue(fireTruck.pathSegment.isEmpty());
+    }
+
+    @Test
+    public void pathSegmentCanBeAddedToRouteTest() {
+        Queue<Vector2> pathSegment = new Queue<>();
+        pathSegment.addFirst(new Vector2(0, 0));
+        pathSegment.addFirst(new Vector2(1, 1));
+        pathSegment.addFirst(new Vector2(2, 3));
+        fireTruck.pathSegment = pathSegment;
+
+        assertTrue(fireTruck.canPathSegmentBeAddedToRoute());
+    }
+
+    @Test
+    public void pathSegmentCannotBeAddedToRouteTest() {
+        Queue<Vector2> pathSegment = new Queue<>();
+        pathSegment.addFirst(new Vector2(0, 0));
+        fireTruck.pathSegment = pathSegment;
+
+        assertFalse(fireTruck.canPathSegmentBeAddedToRoute());
+    }
+
+    @Test
+    public void isOnBayTileTest() {
+        ArrayList<Vector2> bayTiles = new ArrayList<>();
+        bayTiles.add(new Vector2(0, 0));
+        bayTiles.add(new Vector2(1, 0));
+
+        FireStation stationMock = mock(FireStation.class);
+        when(stationMock.getBayTiles()).thenReturn(bayTiles);
+
+        fireTruck.setPosition(new Vector2(0, 0));
+
+        assertTrue(fireTruck.isOnBayTile(stationMock));
+    }
+
+    @Test
+    public void isNotOnBayTileTest() {
+        ArrayList<Vector2> bayTiles = new ArrayList<>();
+        bayTiles.add(new Vector2(0, 0));
+        bayTiles.add(new Vector2(1, 0));
+
+        FireStation stationMock = mock(FireStation.class);
+        when(stationMock.getBayTiles()).thenReturn(bayTiles);
+
+        fireTruck.setPosition(new Vector2(2, 0));
+
+        assertFalse(fireTruck.isOnBayTile(stationMock));
+    }
+
+    @Ignore
+    public Queue<Queue<Vector2>> clone2DQueue(Queue<Queue<Vector2>> queue2D) {
+        Queue<Queue<Vector2>> newQueue = new Queue<>();
+        for (Queue<Vector2> queue1D : queue2D) newQueue.addLast(fireTruck.cloneQueue(queue1D));
+        return newQueue;
     }
 
 }

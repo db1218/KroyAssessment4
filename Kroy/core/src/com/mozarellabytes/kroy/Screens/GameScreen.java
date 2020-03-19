@@ -94,7 +94,7 @@ public class GameScreen implements Screen {
     private final FireStation station;
 
     /** The FireTruck that the user is currently drawing a path for */
-    public FireTruck selectedTruck;
+    private FireTruck selectedTruck;
 
     /** The entity that the user has clicked on to show
      * the large stats in the top left corner */
@@ -342,7 +342,7 @@ public class GameScreen implements Screen {
 
         if (bossPatrol != null) bossPatrol.drawSpray(shapeMapRenderer);
 
-        if (station.getHP() > 0) station.drawStats(shapeMapRenderer);
+        if (station.isAlive()) station.drawStats(shapeMapRenderer);
 
         for (Fortress fortress : fortresses) {
             fortress.drawStats(shapeMapRenderer);
@@ -456,7 +456,7 @@ public class GameScreen implements Screen {
             checkIfTruckDestroyed(truck);
         }
 
-        if (station.getHP() <= 0) {
+        if (!station.isAlive()) {
             if(!(gameState.hasStationDestoyed())){
                 gameState.setStationDestoyed();
                 if (SoundFX.music_enabled) SoundFX.sfx_fortress_destroyed.play();
@@ -909,6 +909,14 @@ public class GameScreen implements Screen {
 
     public BossPatrol getBossPatrol() {
         return this.bossPatrol;
+    }
+
+    public FireTruck getSelectedTruck() {
+        return this.selectedTruck;
+    }
+
+    public void setSelectedTruck(FireTruck fireTruck) {
+        this.selectedTruck = fireTruck;
     }
 
 }

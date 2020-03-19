@@ -33,7 +33,8 @@ public class FireStation {
      * in tiles
      */
     private final float x, y;
-    private final int w, h;
+    private int w;
+    private int h;
 
     /** A tile inside the station where a truck can be repaired and refilled */
     private final ArrayList<Vector2> bayTiles;
@@ -207,13 +208,9 @@ public class FireStation {
      */
     public boolean doTrucksHaveSameLastTile() {
         for (FireTruck truck : this.getTrucks()) {
-            if (!truck.equals(gameScreen.selectedTruck)) {
+            if (!truck.equals(gameScreen.getSelectedTruck())) {
                 if (!truck.pathSegments.isEmpty() && !truck.pathSegments.last().isEmpty()) {
-                    if (truck.pathSegments.last().last().equals(gameScreen.selectedTruck.pathSegment.last())) {
-                        return true;
-                    } else if (truck.getPosition().equals(gameScreen.selectedTruck.pathSegment.last())) {
-                        return true;
-                    }
+                    return truck.pathSegments.last().last().equals(gameScreen.getSelectedTruck().pathSegment.last());
                 }
             }
         }
@@ -321,5 +318,14 @@ public class FireStation {
 
     public float getMaxHP() {
         return this.maxHP;
+    }
+
+    public void setDimensions(int w, int h) {
+        this.w = w;
+        this.h = h;
+    }
+
+    public void setHP(int HP) {
+        this.HP = HP;
     }
 }

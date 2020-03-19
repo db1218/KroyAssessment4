@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
+import java.util.ArrayList;
+
 import static com.mozarellabytes.kroy.Entities.FortressType.*;
 import static org.junit.Assert.*;
 
@@ -153,6 +155,22 @@ public class FortressTest {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(18, 10), FireTruckType.RubyHard);
         boolean withinRange = fortress.withinRange(fireTruck.getPosition());
         assertFalse(withinRange);
+    }
+
+    @Test
+    public void bombHasReachedTileTest() {
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(0,0), FireTruckType.AmethystEasy);
+        Fortress fortress = new Fortress(10, 10, FortressType.Revs);
+        ArrayList<Bomb> bombs = new ArrayList<>();
+
+        bombs.add(new Bomb(fortress, fireTruck, false, 2.0f));
+
+        fireTruck.setPosition(new Vector2(15, 5));
+        fortress.setBombs(bombs);
+
+        for (int i=0; i<20; i++) fortress.updateBombs();
+
+        assertTrue(bombs.isEmpty());
     }
 
 }

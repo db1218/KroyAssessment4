@@ -1,6 +1,7 @@
 package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.GdxTestRunner;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import org.junit.Before;
@@ -13,7 +14,13 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 
+import java.lang.reflect.Array;
+
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(GdxTestRunner.class)
 public class FireStationTest {
@@ -21,14 +28,13 @@ public class FireStationTest {
     @Mock
     GameScreen gameScreenMock;
 
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule();
-
     private FireStation station;
 
     @Before
     public void setUp() {
+        initMocks(this);
         station = new FireStation(10, 10, 100);
+        station.setGameScreen(gameScreenMock);
     }
 
     @Test
@@ -154,4 +160,125 @@ public class FireStationTest {
         assertTrue(!fireTruck1.getPosition().equals(fireTruck1TargetPosition) && !fireTruck2.getPosition().equals(fireTruck2TargetPosition));
     }
 
+    @Test
+    public void trucksHaveSameLastTileTest() {
+        FireTruck activeFireTruck = new FireTruck(gameScreenMock, new Vector2(10,10), FireTruckType.RubyEasy);
+
+        when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
+        when(gameScreenMock.getSelectedTruck()).thenReturn(activeFireTruck);
+
+        activeFireTruck.addTileToPathSegment(new Vector2(10, 10));
+        activeFireTruck.addTileToPathSegment(new Vector2(10, 11));
+        activeFireTruck.addTileToPathSegment(new Vector2(10, 12));
+        activeFireTruck.addTileToPathSegment(new Vector2(10, 13));
+
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10,15), FireTruckType.SapphireHard);
+        fireTruck.addTileToPathSegment(new Vector2(10, 15));
+        fireTruck.addTileToPathSegment(new Vector2(10, 14));
+        fireTruck.addTileToPathSegment(new Vector2(10, 13));
+        fireTruck.addPathSegmentToRoute();
+
+        station.spawn(fireTruck);
+
+        assertTrue(station.doTrucksHaveSameLastTile());
+    }
+
+    @Test
+    public void trucksDontHaveSameLastTileTest() {
+        FireTruck activeFireTruck = new FireTruck(gameScreenMock, new Vector2(10,10), FireTruckType.RubyEasy);
+
+        when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
+        when(gameScreenMock.getSelectedTruck()).thenReturn(activeFireTruck);
+
+        activeFireTruck.addTileToPathSegment(new Vector2(10, 10));
+        activeFireTruck.addTileToPathSegment(new Vector2(10, 11));
+        activeFireTruck.addTileToPathSegment(new Vector2(10, 12));
+
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10,15), FireTruckType.SapphireHard);
+        fireTruck.addTileToPathSegment(new Vector2(10, 15));
+        fireTruck.addTileToPathSegment(new Vector2(10, 14));
+        fireTruck.addTileToPathSegment(new Vector2(10, 13));
+        fireTruck.addPathSegmentToRoute();
+
+        station.spawn(fireTruck);
+
+        assertFalse(station.doTrucksHaveSameLastTile());
+    }
+
+    @Test
+    public void trucksDontHaveSameLastTileAsNoTrucksTest() {
+        FireTruck activeFireTruck = new FireTruck(gameScreenMock, new Vector2(10,10), FireTruckType.RubyEasy);
+
+        when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
+        when(gameScreenMock.getSelectedTruck()).thenReturn(activeFireTruck);
+
+        activeFireTruck.addTileToPathSegment(new Vector2(10, 10));
+        activeFireTruck.addTileToPathSegment(new Vector2(10, 11));
+        activeFireTruck.addTileToPathSegment(new Vector2(10, 12));
+
+        assertFalse(station.doTrucksHaveSameLastTile());
+    }
+
+    @Test
+    public void recalculateTruckPathsTest() {
+        FireTruck activeFireTruck = new FireTruck(gameScreenMock, new Vector2(10,10), FireTruckType.RubyEasy);
+
+        when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
+        when(gameScreenMock.getSelectedTruck()).thenReturn(activeFireTruck);
+
+        activeFireTruck.addTileToPathSegment(new Vector2(10, 10));
+        activeFireTruck.addTileToPathSegment(new Vector2(10, 11));
+        activeFireTruck.addTileToPathSegment(new Vector2(10, 12));
+        activeFireTruck.addTileToPathSegment(new Vector2(10, 13));
+
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10,15), FireTruckType.SapphireHard);
+        fireTruck.addTileToPathSegment(new Vector2(10, 15));
+        fireTruck.addTileToPathSegment(new Vector2(10, 14));
+        fireTruck.addTileToPathSegment(new Vector2(10, 13));
+        fireTruck.addPathSegmentToRoute();
+
+        station.spawn(fireTruck);
+
+        fireTruck.generatePathFromAllSegments();
+        Queue<Vector2> pathBefore = fireTruck.cloneQueue(fireTruck.path);
+
+        station.recalculateTruckPaths();
+
+        Queue<Vector2> pathAfter = fireTruck.path;
+
+        assertEquals(pathBefore, pathAfter);
+    }
+
+    @Test
+    public void testGetCentrePosition1() {
+        FireStation station = new FireStation(10, 10, 100);
+        assertEquals(new Vector2(13, 11.5f), station.getCentrePosition());
+    }
+
+    @Test
+    public void testGetCentrePosition2() {
+        FireStation station = new FireStation(0, 0, 100);
+        station.setDimensions(10, 10);
+        assertEquals(new Vector2(5, 5), station.getCentrePosition());
+    }
+
+    @Test
+    public void testIsAlive() {
+        station.setHP(5);
+        assertTrue(station.isAlive());
+    }
+
+    @Test
+    public void testIsNotAlive() {
+        station.setHP(0);
+        assertFalse(station.isAlive());
+    }
+
+    @Test
+    public void testDestroyTruck() {
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10,15), FireTruckType.SapphireHard);
+        station.spawn(fireTruck);
+        station.destroyTruck(fireTruck);
+        assertTrue(station.getTrucks().isEmpty());
+    }
 }
