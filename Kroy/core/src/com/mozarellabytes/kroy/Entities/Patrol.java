@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.Descriptors.Desc;
-import com.mozarellabytes.kroy.Utilities.Constants;
 
-import java.lang.invoke.VolatileCallSite;
-import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -111,7 +108,7 @@ public class Patrol extends Sprite {
     /**
      * Moves first to last and removes first in queue
      */
-    private void cycleQueue(){
+    public void cycleQueue(){
         path.addLast(path.first());
         path.removeFirst();
     }
@@ -143,7 +140,7 @@ public class Patrol extends Sprite {
      * @param mapH  map height
      * @return      path
      */
-    private Queue<Vector2> generatePath(int mapW, int mapH) {
+    public Queue<Vector2> generatePath(int mapW, int mapH) {
         path = new Queue<>();
         for (int i=0; i<4; i++) {
             final int X = new Random().nextInt(mapW);
@@ -161,7 +158,7 @@ public class Patrol extends Sprite {
      *                  <code>false</code>  otherwise
      */
     public boolean collidesWithTruck(FireTruck truck, FireStation station) {
-        return (getRoundedPosition().equals(truck.getTilePosition()) && (!truck.isOnBayTile(station) || !station.isAlive()));
+        return getRoundedPosition().equals(truck.getTilePosition()) && !(truck.isOnBayTile(station) && station.isAlive());
     }
 
     /**
@@ -171,15 +168,6 @@ public class Patrol extends Sprite {
      */
     public Vector2 getRoundedPosition() {
         return new Vector2(Math.round(position.x), Math.round(position.y));
-    }
-
-    /**
-     * Get vector, but x and y are rounded to doubles instead of floats
-     *
-     * @return  new Vector
-     */
-    public Vector2 getDoublePosition() {
-        return new Vector2((float) (Math.round(position.x * 100.0) / 100.0), (float) (Math.round(position.y * 100.0) / 100.0));
     }
 
     /**
@@ -219,6 +207,10 @@ public class Patrol extends Sprite {
 
     public String getName() {
         return this.name;
+    }
+
+    public void setPosition(float x, float y) {
+        this.position.set(x, y);
     }
 
 }

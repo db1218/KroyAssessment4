@@ -44,7 +44,7 @@ public class MenuInputHandler implements InputProcessor {
                 menu.clickedControlsButton();
                 menu.toControlScreen();
                 break;
-            case Input.Keys.S:
+            case Input.Keys.M:
                 menu.clickedSoundButton();
                 menu.changeSound();
                 break;

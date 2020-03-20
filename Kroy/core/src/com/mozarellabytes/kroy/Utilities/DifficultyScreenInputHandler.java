@@ -34,7 +34,7 @@ public class DifficultyScreenInputHandler implements InputProcessor {
                 Gdx.app.exit();
                 System.exit(1);
                 break;
-            case Input.Keys.S:
+            case Input.Keys.M:
                 difficultyScreen.clickedSoundButton();
                 difficultyScreen.changeSound();
                 break;

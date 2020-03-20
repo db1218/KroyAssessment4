@@ -196,4 +196,8 @@ public class Fortress {
         desc.y = this.getPosition().y;
         return desc;
     }
+
+    public void setBombs(ArrayList<Bomb> bombs) {
+        this.bombs = bombs;
+    }
 }

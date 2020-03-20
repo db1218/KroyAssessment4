@@ -43,12 +43,21 @@ public class FireTruck extends Sprite {
      * the path the slower the truck will go */
     public Queue<Vector2> path;
 
-    /** The visual path that users can see when drawing
-     * a firetruck's path */
+    /**
+     * The visual path that users can see when drawing
+     * the truck's route, this is the path finding path
+     */
     public Queue<Vector2> pathSegment;
 
+    /**
+     * Queue of individual path segments
+     */
     public Queue<Queue<Vector2>> pathSegments;
 
+    /**
+     * Stack of path segments, keeps track of when segments
+     * are added, therefore allows for undo and redos
+     */
     public Stack<Queue<Vector2>> pathSegmentsStack;
 
     /** If the truck is currently moving, determines whether the
@@ -198,10 +207,8 @@ public class FireTruck extends Sprite {
      *          <code>false</code> otherwise
      */
     public boolean canPathSegmentBeAddedToRoute() {
-        if (!this.pathSegment.first().equals(this.pathSegment.last())) {
-            return true;
-        }
-        this.pathSegment.clear();
+        if (!pathSegment.first().equals(pathSegment.last())) return true;
+        pathSegment.clear();
         return false;
     }
 
@@ -220,7 +227,7 @@ public class FireTruck extends Sprite {
      * @param oldQueue  queue to clone
      * @return          new cloned queue
      */
-    private Queue<Vector2> cloneQueue(Queue<Vector2> oldQueue) {
+    public Queue<Vector2> cloneQueue(Queue<Vector2> oldQueue) {
         Queue<Vector2> newQueue = new Queue<>();
         for (Vector2 vector : oldQueue) newQueue.addLast(vector);
         return newQueue;
@@ -357,14 +364,14 @@ public class FireTruck extends Sprite {
     private boolean isValidDraw(Vector2 coordinate) {
         if (coordinate.y < 28) {
             if (gameScreen.isRoad((Math.round(coordinate.x)), (Math.round(coordinate.y)))) {
-                if (this.pathSegment.isEmpty()) {
-                    if (this.getPosition().equals(coordinate)) {
+                if (pathSegment.isEmpty()) {
+                    if (getPosition().equals(coordinate)) {
                         return true;
-                    } else if (!this.pathSegments.isEmpty()) {
-                        return this.pathSegments.last().last().equals(coordinate);
+                    } else if (!pathSegments.isEmpty() && !pathSegments.last().isEmpty()) {
+                        return pathSegments.last().last().equals(coordinate);
                     }
                  } else {
-                    return !this.pathSegment.last().equals(coordinate);
+                    return !pathSegment.last().equals(coordinate);
                 }
             }
         }
@@ -733,14 +740,6 @@ public class FireTruck extends Sprite {
     }
 
     /**
-     * Sets time of last attack to unix timestamp provided
-     * @param timestamp  timestamp set as time of last attack
-     */
-    public void setTimeOfLastAttack(long timestamp) {
-        this.timeOfLastAttack = timestamp;
-    }
-
-    /**
      * Checks whether the fire truck is on a bay tile
      * of the fire station
      * @param station   contains bay tiles
@@ -748,7 +747,7 @@ public class FireTruck extends Sprite {
      *                  <code>false</code>  otherwise
      */
     public boolean isOnBayTile(FireStation station) {
-        return station.getBayTiles().contains(this.getTilePosition());
+        return station.getBayTiles().contains(getTilePosition());
     }
 
     /**
@@ -759,6 +758,15 @@ public class FireTruck extends Sprite {
      */
     public Vector2 getTilePosition() {
         return new Vector2(Math.round(this.position.x), Math.round(this.position.y));
+    }
+
+    /**
+     * Sets time of last attack to unix timestamp provided
+     *
+     * @param timestamp  timestamp set as time of last attack
+     */
+    public void setTimeOfLastAttack(long timestamp) {
+        this.timeOfLastAttack = timestamp;
     }
 
     public void setMoving(boolean t) {

@@ -16,17 +16,17 @@ public class DestroyedEntity {
      */
     private final Rectangle area;
 
-    /** Constuctor for DestroyedEntity class
+    /** Constructor for DestroyedEntity class for a Fortress
      *
      * @param deadTexture The texture to be displayed when the entity is destroyed
      * @param area The size and location of the destroyed entity on the map
      */
-    public DestroyedEntity(Texture deadTexture, Rectangle area){
+    public DestroyedEntity(Texture deadTexture, Rectangle area) {
         this.deadTexture = deadTexture;
         this.area = area;
     }
 
-    /** Constructor for DestroyedEntity class
+    /** Constructor for DestroyedEntity class for a Fire Station
      *
      * @param deadTexture The texture to be displayed when the entity is destroyed
      * @param x The x location of the entity on the map

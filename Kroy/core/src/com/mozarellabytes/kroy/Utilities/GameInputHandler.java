@@ -56,12 +56,12 @@ public class GameInputHandler implements InputProcessor {
             case Input.Keys.C:
                 gameScreen.toControlScreen();
                 break;
-            case Input.Keys.S:
+            case Input.Keys.M:
                 gui.clickedSoundButton();
                 gui.changeSound();
                 gui.idleSoundButton();
                 break;
-            case Input.Keys.K:
+            case Input.Keys.S:
                 gameScreen.saveGameState();
                 break;
             case Input.Keys.SPACE:
@@ -71,10 +71,10 @@ public class GameInputHandler implements InputProcessor {
                 if (gameScreen.isNotPaused()) gameScreen.toggleTruckAttack();
                 break;
             case Input.Keys.LEFT:
-                if (gameScreen.selectedTruck != null) gameScreen.selectedTruck.undoSegment();
+                if (gameScreen.getSelectedTruck() != null) gameScreen.getSelectedTruck().undoSegment();
                 break;
             case Input.Keys.RIGHT:
-                if (gameScreen.selectedTruck != null) gameScreen.selectedTruck.redoSegment();
+                if (gameScreen.getSelectedTruck() != null) gameScreen.getSelectedTruck().redoSegment();
         }
         return true;
     }
@@ -101,13 +101,13 @@ public class GameInputHandler implements InputProcessor {
         Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);
         if (gameScreen.isNotPaused()) {
             if (gameScreen.checkClick(clickCoordinates)) {
-                gameScreen.selectedTruck.resetPath();
-                gameScreen.selectedTruck.addTileToPathSegment(clickCoordinates);
+                gameScreen.getSelectedTruck().resetPath();
+                gameScreen.getSelectedTruck().addTileToPathSegment(clickCoordinates);
             } else if (!gameScreen.checkTrailClick(clickCoordinates) &&
                     !checkFortressClick(clickCoordinates) &&
                     !checkPatrolClick(clickCoordinates) &&
                     !checkFireStationClick(clickCoordinates)) {
-                gameScreen.selectedTruck = null;
+                gameScreen.setSelectedTruck(null);
                 gameScreen.setSelectedEntity(null);
             }
         } else {
@@ -126,9 +126,9 @@ public class GameInputHandler implements InputProcessor {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         if (gameScreen.isNotPaused()) {
-            if (gameScreen.selectedTruck != null) {
+            if (gameScreen.getSelectedTruck() != null) {
                 Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);
-                gameScreen.selectedTruck.addTileToPathSegment(clickCoordinates);
+                gameScreen.getSelectedTruck().addTileToPathSegment(clickCoordinates);
             }
         }
         return true;
@@ -143,15 +143,15 @@ public class GameInputHandler implements InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if (gameScreen.isNotPaused()) {
-            if (gameScreen.selectedTruck != null) {
-                if (!gameScreen.selectedTruck.pathSegment.isEmpty()) {
+            if (gameScreen.getSelectedTruck() != null) {
+                if (!gameScreen.getSelectedTruck().pathSegment.isEmpty()) {
                     if (gameScreen.getStation().doTrucksHaveSameLastTile()) {
                         gameScreen.shortenActiveSegment();
                     }
-                    if (gameScreen.selectedTruck.canPathSegmentBeAddedToRoute()) {
-                        gameScreen.selectedTruck.addPathSegmentToRoute();
+                    if (gameScreen.getSelectedTruck().canPathSegmentBeAddedToRoute()) {
+                        gameScreen.getSelectedTruck().addPathSegmentToRoute();
                         if (gameScreen.getState().equals(GameScreen.PlayState.PLAY))
-                            gameScreen.selectedTruck.generatePathFromLastSegments();
+                            gameScreen.getSelectedTruck().generatePathFromLastSegments();
                     }
                 }
             }
@@ -209,7 +209,7 @@ public class GameInputHandler implements InputProcessor {
                 return true;
             }
         }
-        gameScreen.selectedTruck = null;
+        gameScreen.setSelectedTruck(null);
         gameScreen.setSelectedEntity(null);
         return false;
     }
@@ -249,7 +249,7 @@ public class GameInputHandler implements InputProcessor {
                 return true;
             }
         }
-        gameScreen.selectedTruck = null;
+        gameScreen.setSelectedTruck(null);
         gameScreen.setSelectedEntity(null);
         return false;
     }
