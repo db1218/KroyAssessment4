@@ -22,7 +22,7 @@ public class DifficultyScreen implements Screen {
     private final Kroy game;
     public final OrthographicCamera camera;
 
-    /** The menu screen image - see ui/menuscreen_blank_2 */
+    /** The menu screen image - see ui/menuscreen_new */
     private final Texture backgroundImage;
 
     /** Rectangle containing the position of the play button */
@@ -97,7 +97,7 @@ public class DifficultyScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
 
-        backgroundImage = new Texture(Gdx.files.internal("menuscreen_blank_2.png"), true);
+        backgroundImage = new Texture(Gdx.files.internal("menuscreen_new.png"), true);
         backgroundImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         easyIdleTexture = new Texture(Gdx.files.internal("ui/easy_idle.png"), true);

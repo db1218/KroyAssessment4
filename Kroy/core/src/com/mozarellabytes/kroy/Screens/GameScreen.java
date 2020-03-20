@@ -163,8 +163,7 @@ public class GameScreen implements Screen {
      */
     public GameScreen(Kroy game, DifficultyLevel level) {
         // Entity related stuff
-     //   station = new FireStation(2, 7, 100);
-        station = new FireStation (27,19, 100);
+        station = new FireStation(level.getStationLocation().x, level.getStationLocation().y, 100);
         station.setGameScreen(this);
 
         setup(game, level);
@@ -175,11 +174,11 @@ public class GameScreen implements Screen {
         spawn(level.getEmerald());
 
         fortresses.add(new Fortress(level.getRevsLocation().x, level.getRevsLocation().y, FortressType.Revs));
-//        fortresses.add(new Fortress(level.getWalmgateLocation().x, level.getWalmgateLocation().y, FortressType.Walmgate));
-//        fortresses.add(new Fortress(level.getRailwayLocation().x, level.getRailwayLocation().y, FortressType.Railway));
-//        fortresses.add(new Fortress(level.getCliffordLocation().x, level.getCliffordLocation().y, FortressType.Clifford));
-//        fortresses.add(new Fortress(level.getMuseumLocation().x, level.getMuseumLocation().y, FortressType.Museum));
-//        fortresses.add(new Fortress(level.getCentralHallLocation().x, level.getCentralHallLocation().y, FortressType.CentralHall));
+        fortresses.add(new Fortress(level.getWalmgateLocation().x, level.getWalmgateLocation().y, FortressType.Walmgate));
+        fortresses.add(new Fortress(level.getRailwayLocation().x, level.getRailwayLocation().y, FortressType.Railway));
+        fortresses.add(new Fortress(level.getCliffordLocation().x, level.getCliffordLocation().y, FortressType.Clifford));
+        fortresses.add(new Fortress(level.getMuseumLocation().x, level.getMuseumLocation().y, FortressType.Museum));
+        fortresses.add(new Fortress(level.getCentralHallLocation().x, level.getCentralHallLocation().y, FortressType.CentralHall));
 
         generatePatrols();
 
@@ -682,7 +681,7 @@ public class GameScreen implements Screen {
      */
     private void spawn(FireTruckType type) {
         if (SoundFX.music_enabled) SoundFX.sfx_truck_spawn.play();
-        station.spawn(new FireTruck(this, new Vector2(3 + station.getTrucks().size(),7), type));
+        station.spawn(new FireTruck(this, new Vector2(station.getPosition().x + 1 + station.getTrucks().size(), station.getPosition().y), type));
         gameState.addFireTruck();
     }
 
