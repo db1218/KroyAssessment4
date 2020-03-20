@@ -72,7 +72,7 @@ public class DanceManager {
      * When the player gets the timing correct
      */
     private void onBeat() {
-        this.choreographer.nextMove();
+        this.choreographer.createMove();
         this.timeSinceBeat = 0f;
         notifyOnBeat();
     }

@@ -1,7 +1,7 @@
 package com.mozarellabytes.kroy.Minigame;
 
 /**
- * Interface for classes that subscribe to that phat beat
+ * Interface for classes that subscribe to the beat used in the minigame
  */
 public interface BeatListener {
     void onBeat();

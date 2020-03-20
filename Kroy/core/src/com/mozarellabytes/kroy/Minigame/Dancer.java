@@ -11,9 +11,15 @@ public class Dancer {
     
     /** The amount of health the dancer has left*/
     private int health;
+
+    /** The dance move that this dancer is currently executing */
     private DanceMove state;
+
+    /** The time that this dancer has been in this state (see above) */
     private float timeInState;
 
+
+    /** The number of steps in this dancer's celebratory dance (Jive) */
     private final int stepsInJive;
 
     /** Whether the dancer is doing a preset dance */
@@ -22,11 +28,14 @@ public class Dancer {
     /** How far through the jive the dancer is */
     private int jiveStep;
 
+    /** ArrayList containing the list of moves that the dancer
+     * executes when it is jiving */
     private final ArrayList<DanceMove> jiveRoutine;
 
     /**
      * Constructor for Dancer
-     * @param maxHealth health dancer starts with (from fire truck)
+     *
+     * @param maxHealth health dancer starts with
      */
     public Dancer(int maxHealth) {
         this.health = maxHealth;
@@ -40,7 +49,8 @@ public class Dancer {
     }
 
     /**
-     * Creates the jive routing, left then right
+     * Creates the jive routine, by adding moves to
+     * jiveRoutine
      */
     private void createRoutine() {
         this.jiveRoutine.add(DanceMove.LEFT);
@@ -51,11 +61,11 @@ public class Dancer {
     /**
      * Deals a set amount of damage to the dancer
      * @param amount the amount of damage to deal
-     * @return true if the dancer was killed, else false
+     * @return <code> true </code> if the dancer was killed,
+     *         <code> false </code> otherwise
      */
     public boolean damage(int amount) {
         if (amount < 0) amount = 0;
-
         this.health -= amount;
         return this.health <= 0;
     }
@@ -85,15 +95,17 @@ public class Dancer {
     }
 
     /**
-     * Sends an update to the dancer so that if they are jiving they can change moves in time to the music
+     * This controls the dancer's jive and stops this dancer jiving
+     * when it has danced a certain number of steps.
      */
     public void updateJive() {
         if (this.jiving) jive();
-        if (this.jiveStep >= this.stepsInJive) stopJiving();
+        if (this.jiveStep == this.stepsInJive) stopJiving();
     }
 
     /**
-     * Fireman dance
+     * While this dancer is jiving it will loop through its jiveRoutine
+     * executing each step
      */
     private void jive(){
         this.jiveStep++;
@@ -103,7 +115,7 @@ public class Dancer {
     }
 
     /**
-     * Finish fireman dance
+     * This stops this dancer from jiving
      */
     private void stopJiving() {
         this.jiving = false;
@@ -122,10 +134,6 @@ public class Dancer {
         return entity.equals("ET") ? ETTexture : firefighterTexture;
     }
 
-    /**
-     * Returns the amount of time that the dancer has been in its current state in seconds
-     * @return time in state
-     */
     public float getTimeInState() { return this.timeInState; }
 
     public DanceMove getState() {

@@ -4,19 +4,26 @@ import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 
 /**
- * Heart replenishes the Fire Truck's health to full
+ * Heart resets the Fire Truck's HP (health points) to
+ * it Fire Truck's maximum HP
  */
 public class Heart extends PowerUp {
 
     /**
      * Constructor for Heart
-     * @param location  where the power up is
+     * @param location where the PowerUp spawns on the map
      */
     public Heart(Vector2 location) { super("heart", location); }
 
+    /**
+     * This restores the truck's HP and then sets the
+     * appropriate flags so that the PowerUp can be
+     * removed from gameScreen
+     * @param truck truck that gets the effect of the fire truck
+     */
     @Override
     public void invokePower(FireTruck truck) {
-        restoreHealth(truck);
+        restoreTrucksHP(truck);
         removePowerUp();
     }
 
@@ -24,7 +31,7 @@ public class Heart extends PowerUp {
      * Replenish health
      * @param truck to heal
      */
-    private void restoreHealth(FireTruck truck) {
+    private void restoreTrucksHP(FireTruck truck) {
         int fullHP = (int)truck.type.getMaxHP();
         truck.setHP(fullHP);
     }

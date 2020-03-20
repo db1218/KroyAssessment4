@@ -5,53 +5,64 @@ import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 
 /**
- * Range extends the range of the fire truck's attack
+ * Range extends the range of a truck for a set amount
+ * of time
  */
 public class Range extends PowerUp {
 
-    final float timeInRange;
-    float elapsedTime;
+    /** The time in seconds that the PowerUp lasts for */
+    final float powerUpDuration;
+
+    /** The time in seconds that the truck has had in this PowerUp */
+    float timeInPowerUp;
+
+    /** The amount that the truck's range should increase */
     final int rangeIncrease;
+
+    /** The truck that the PowerUp is being used on */
     FireTruck truck;
 
     /**
      * Constructor for Range
      *
-     * @param location  where power up is
+     * @param location  where the PowerUp spawns on the map
      */
     public Range(Vector2 location) {
         super("heart", location);
-        timeInRange = 10;
-        elapsedTime = 0;
+        powerUpDuration = 10;
+        timeInPowerUp = 0;
         rangeIncrease = 3;
     }
 
-
+    /** This increases the truck's range */
     @Override
     public void invokePower(FireTruck truck) {
         this.truck = truck;
         truck.setRange(truck.type.getRange() + rangeIncrease);
     }
 
-
+    /** This updates the amount of time that the truck has been
+     * in the PowerUp, it sets canBeRendered to false so that
+     * gameScreen doesn't render the powerUp as the truck has
+     * driven over it */
     @Override
     public void update() {
         super.update();
         if (truck != null) {
             canBeRendered = false;
-            elapsedTime += Gdx.graphics.getRawDeltaTime();
-            checkIfFinishedRange();
+            timeInPowerUp += Gdx.graphics.getRawDeltaTime();
+            if (timeInPowerUp >= powerUpDuration)revokePowerUp();
         }
     }
 
     /**
-     * Restores the previous range (default from type)
+     * Returns the truck's range to the value of the truck's range
+     * before the powerup, sets canBeDestroyed to true so that the
+     * gameScreen can destroy this powerUp.
      */
-    private void checkIfFinishedRange() {
-        if (elapsedTime >= timeInRange){
-            truck.setRange(truck.type.getRange());
-            canBeDestroyed = true;
-        }
+    private void revokePowerUp() {
+        truck.setRange(truck.type.getRange());
+        canBeDestroyed = true;
     }
 
 
