@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.5" orientation="orthogonal" renderorder="right-down" width="40" height="24" tilewidth="48" tileheight="48" infinite="0" nextlayerid="9" nextobjectid="1">
+ <tileset firstgid="1" name="color city cops tileset" tilewidth="48" tileheight="48" tilecount="168" columns="8">
+  <image source="ccc_tileset.png" width="385" height="1008"/>
+  <tile id="54">
+   <animation>
+    <frame tileid="54" duration="300"/>
+    <frame tileid="62" duration="300"/>
+   </animation>
+  </tile>
+  <tile id="62">
+   <animation>
+    <frame tileid="62" duration="300"/>
+    <frame tileid="54" duration="300"/>
+   </animation>
+  </tile>
+  <tile id="70">
+   <animation>
+    <frame tileid="70" duration="100"/>
+    <frame tileid="71" duration="100"/>
+   </animation>
+  </tile>
+  <tile id="102">
+   <animation>
+    <frame tileid="94" duration="300"/>
+    <frame tileid="102" duration="300"/>
+   </animation>
+  </tile>
+  <tile id="127">
+   <animation>
+    <frame tileid="127" duration="300"/>
+    <frame tileid="135" duration="350"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="169" name="collision set" tilewidth="48" tileheight="48" tilecount="100" columns="10">
+  <image source="collision_objects.png" width="480" height="480"/>
+ </tileset>
+ <tileset firstgid="269" source="extras.tsx"/>
+ <layer id="6" name="ground" width="40" height="24" opacity="0.94">
+  <data encoding="base64" compression="zlib">
+   eJylVsGNwkAMNFGCFKAIusjzroNDOiF4ISpAKYEm+PGgFEqhlNtVPGLi2EnQPawNYZ0dj+3x3kTkZuyS7CtZo6u1q2MN+Vhrk1UTdgl878lWItuNyHch8kjPj4s5z8N3SPZDtgu+f5jAdUx2TrYfwVcob5U+M3+MZUf42i4u4Zgsf2PYlmoRbx6+bInH7TqtcyztfVTdeh7Zk9fnp5ZjbhRTobFY/sDVKdmvwx/84OPV3Fpj8Lgb46/Q84CpMmfZXjhpjTC+muK7SL8GI3xLmcbX0jeBifmDL9ec7Q/Gl9ej9Gvcw2exzcGH+OGf6y/X/KZ7/5hTf7X0e8rDZ3GN9a2Hz/KHlbXG8pf7Qvv3GdVf6fROSRoW6SXw2fqrdc1xI1bUFWtOS353kyfWFS+nXj+xnXTPXven+M+Ji6vmFTr9hH4iB1d5ayHO4Tx9yVDzpvAduvPd2mmk37fw52+jriy2SmJd8TBF+JCHSF9u5ANcdhbzuZXxsbM64o7fsx/wsTYdpN8f2d/Wsde/m2EOonmRc3aNZhvj41qL+ncpwzsM+LR5iM7Bnlr/45m36d6/0v4Xr7bWPsXH9dfKu6dxl4DuNdLPFWsC9nr3KehVIUPtBL471QhjHeMP+6wuW3wcizc30O+2/iL+GGfEH3PCfRjxd5/gr5WhDnj8WXyoH+6BBf3OvbOQeOZZ/qbwzeHPy2/mzHIT8cdzrX7j/Rd/Hj7Oz1p7y6s/T/9YJ62uevjm6oun8dAJDx/f+zz+YLUMsdl55t2/83zd6znB3empc/g1V//AH8+hsrvjvPjbpd53+D4U3RUi/lgLce7KxMn3KuaP6ySyufj+AG+t2qA=
+  </data>
+ </layer>
+ <layer id="7" name="deco1" width="40" height="24">
+  <data encoding="base64" compression="zlib">
+   eJxjYMAO8nGIYwNWRKpTh2IY2wCK8YEeKN2NxMYGwrCI+UGxL5HuIwdMgdKTkdjoIAMJ5yOJ0ROIA7EEHnlc7hGigVuwAXkgVoCy04A4HQkzYBEHshtAYopArIXFPELphVQAsgOWzkFpjZT8YQTEUmhi+NILOQBkB7Z0ji+dTQfiGUCshkeOFsASShsSoVYXiPVwyM0H4gXUcBAaQC6T0NMiepo0pYH9hIA+CWptkdikpFlagkggjgLiaBzy06holzIQq5CgHlZOJgFxMlQMvW6ZRwV3kQuQy8lRQBtAzXIFVJYQSu+kgIlAPIkK5sAAyH2JDKjpnVJAzfxLqH1IDoDlX3Yg5qDQrCwgzqbQDFyAH4gFKDSjCIiLqeAWGKBlu2AUjAJ6AwA+eydh
+  </data>
+ </layer>
+ <layer id="8" name="deco2" width="40" height="24">
+  <data encoding="base64" compression="zlib">
+   eJzdls1OAjEQx+cZxEQSSDQaDnLkwJGH8EJALgryzQVfgDtcEGMCB/RR/RfYdDLptrtlGz5+yS+UpcMOZaZdIj868AOW4bPnd6TlJeb6HcyLa2M4gZWgGe1Zwi/2vi+8hw/iM0VZxMu4aJ4NU4yMdeWnHMKRuFYR8Wlzs90v4hf+OeK7RLMpXj8tc25gj5mGnkFTfr51PocLz1gTdTZuwlcy90CErT5KcAW/M8yP8w7bpHvgMWFufTZX1m8I1nBDuiddqJqM5lbDpLQjB29Jr0HS/ax1mDuAtSNzsPVvARYP4x+m2qsbpOszNHH5PbHxlqnyeiNdn6GJ219cuPZbnzMja2z3zOLMOBbXevucGYpTrXdSfH/XJZG2P05BiP7IkqT9cW21xNf8HP4Hie3Z6BxyND03X1qt/AOEXFQP
+  </data>
+ </layer>
+</map>
