@@ -13,7 +13,7 @@ public class Freeze extends PowerUp {
      * Constructor with given location
      * @param location  where the PowerUp spawns on the map
      */
-    public Freeze(Vector2 location) { super("water", location); }
+    public Freeze(Vector2 location) { super("freeze", location); }
 
     /** This makes a Freeze instantly available in
      * gameScreen and then sets the appropriate

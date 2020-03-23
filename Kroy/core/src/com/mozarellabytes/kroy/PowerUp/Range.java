@@ -28,7 +28,7 @@ public class Range extends PowerUp {
      * @param location  where the PowerUp spawns on the map
      */
     public Range(Vector2 location) {
-        super("heart", location);
+        super("range", location);
         powerUpDuration = 10;
         timeInPowerUp = 0;
         rangeIncrease = 3;
