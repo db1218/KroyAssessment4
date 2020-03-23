@@ -25,6 +25,9 @@ public class CameraShake {
     /** Used to calculate sampleCount and affect the smoothing of the camera shake */
     private static final int frequency = 35;
 
+    /** Determines the strength of the camera shake */
+    private static float amplitude = 2;
+
     /** Determines the size of "samples" */
     private static int sampleCount;
 
@@ -71,7 +74,6 @@ public class CameraShake {
             float deltaY = samples[second] * deltaT + samples[third] * ( 1f - deltaT);
 
             boolean falloff = true;
-            float amplitude = 2;
             camera.position.x = center.x + deltaX * amplitude * (falloff ? Math.min(shakeDuration, 1f) : 1f);
             camera.position.y = center.y + deltaY * amplitude * (falloff ? Math.min(shakeDuration, 1f) : 1f);
             camera.update();
@@ -84,7 +86,8 @@ public class CameraShake {
      *
      * @param seconds Duration of the Camera Shake
      */
-    public void shakeIt(float seconds){
+    public void shakeIt(float seconds, float strength){
         shakeDuration = seconds;
+        amplitude = strength;
     }
 }

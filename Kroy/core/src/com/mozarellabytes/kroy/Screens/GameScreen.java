@@ -492,7 +492,7 @@ public class GameScreen implements Screen {
 
             boolean hitTruck = fortress.updateBombs();
             if (hitTruck) {
-                camShake.shakeIt(.2f);
+                camShake.shakeIt(.2f, 2f);
             }
 
             // check if fortress is destroyed

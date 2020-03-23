@@ -2,6 +2,7 @@ package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -31,6 +32,8 @@ public class DanceScreen implements Screen, BeatListener {
 
     /** Object for handling those funky beats */
     private final DanceManager danceMan;
+
+    private final CameraShake camShake;
 
     private final Screen previousScreen;
     private boolean hasShownTutorial = false;
@@ -70,6 +73,8 @@ public class DanceScreen implements Screen, BeatListener {
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
         this.previousScreen = previousScreen;
 
+        this.camShake = new CameraShake();
+
         this.danceMan = new DanceManager(140f);
         this.danceMan.subscribeToBeat(this);
 
@@ -102,6 +107,8 @@ public class DanceScreen implements Screen, BeatListener {
      */
     @Override
     public void render(float delta) {
+
+        camShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
 
         this.danceMan.update(delta);
 
@@ -287,8 +294,12 @@ public class DanceScreen implements Screen, BeatListener {
     @Override
     public void moveResult(DanceResult result) {
         if (result.equals(DanceResult.WRONG)){
+            if (SoundFX.music_enabled) {
+                SoundFX.sfx_wrong.play();
+            }
             if (!this.firetruck.inShield()) this.firefighter.damage(20);
             this.ETDancer.startJive();
+            camShake.shakeIt(2f, 8f);
         }
     }
 
@@ -322,6 +333,10 @@ public class DanceScreen implements Screen, BeatListener {
         int combo = danceMan.getCombo();
         this.ETDancer.damage((int)scaleDamage(combo));
         this.danceMan.killCombo();
+        camShake.shakeIt(.6f, 4);
+        if (SoundFX.music_enabled) {
+            SoundFX.sfx_combo.play();
+        }
     }
 
 }
