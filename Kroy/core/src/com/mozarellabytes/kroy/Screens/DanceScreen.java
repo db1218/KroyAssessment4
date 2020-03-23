@@ -36,6 +36,7 @@ public class DanceScreen implements Screen, BeatListener {
     private boolean hasShownTutorial = false;
 
     private final Texture targetBoxTexture;
+    private final Texture background;
 
     private final FireTruck firetruck;
     private final Patrol patrol;
@@ -80,6 +81,9 @@ public class DanceScreen implements Screen, BeatListener {
         this.targetBoxTexture = new Texture(Gdx.files.internal("sprites/dance/targetBox.png"), true);
         this.targetBoxTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
+        this.background = new Texture(Gdx.files.internal("sprites/dance/dancebg.png"), true);
+        this.background.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+
         this.arrowsOrigin = new Vector2(camera.viewportWidth/2-ARROW_SIZE/2f, camera.viewportHeight/3);
         this.resultLocation = new Vector2(0, camera.viewportHeight/4);
         this.comboLocation = new Vector2(0, camera.viewportHeight/7);
@@ -120,6 +124,8 @@ public class DanceScreen implements Screen, BeatListener {
         this.game.batch.setProjectionMatrix(camera.combined);
 
         this.game.batch.begin();
+
+        game.batch.draw(background, 0, 0, camera.viewportWidth, camera.viewportHeight);
 
         this.game.batch.draw(firefighter.getTexture("firefighter"), firefighterLocation.x, firefighterLocation.y, 512, 512);
         this.game.batch.draw(ETDancer.getTexture("ET"), etLocation.x, etLocation.y, 512, 512);
