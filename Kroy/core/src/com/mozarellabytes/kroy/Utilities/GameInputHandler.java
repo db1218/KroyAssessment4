@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Entities.Fortress;
 import com.mozarellabytes.kroy.Entities.Patrol;
+import com.mozarellabytes.kroy.GUI.Buttons;
 import com.mozarellabytes.kroy.GUI.GUI;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
@@ -27,6 +28,7 @@ public class GameInputHandler implements InputProcessor {
 
     /** The graphical user interface - contains the buttons */
     private final GUI gui;
+    private final Buttons buttons;
 
     /** Constructs the GameInputHandler
      *
@@ -36,6 +38,7 @@ public class GameInputHandler implements InputProcessor {
     public GameInputHandler(GameScreen gameScreen, GUI gui) {
         this.gameScreen = gameScreen;
         this.gui = gui;
+        this.buttons = gui.getButtons();
     }
 
     /** Called when a key was pressed
@@ -50,16 +53,13 @@ public class GameInputHandler implements InputProcessor {
     public boolean keyDown(int keycode) {
         switch (keycode) {
             case Input.Keys.ESCAPE:
-                gui.getButtons().clickedPauseButton();
-                gameScreen.changeState(GameScreen.PlayState.PAUSE);
+                buttons.clickedPauseButton();
                 break;
             case Input.Keys.C:
-                gameScreen.toControlScreen();
+                buttons.toControlScreen();
                 break;
             case Input.Keys.M:
-                gui.getButtons().clickedSoundButton();
-                gui.changeSound();
-                gui.getButtons().idleSoundButton();
+                buttons.clickedSoundButton();
                 break;
             case Input.Keys.S:
                 gameScreen.saveGameState();
@@ -81,7 +81,16 @@ public class GameInputHandler implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        return false;
+        switch (keycode) {
+            case Input.Keys.ESCAPE:
+                buttons.changePlayState();
+                break;
+            case Input.Keys.M:
+                buttons.changeSound();
+                break;
+        }
+        buttons.resetButtons();
+        return true;
     }
 
     @Override
@@ -115,7 +124,7 @@ public class GameInputHandler implements InputProcessor {
             checkPatrolClick(clickCoordinates);
             checkFireStationClick(clickCoordinates);
         }
-        checkButtonClick(new Vector2(screenX, Gdx.graphics.getHeight() - screenY));
+        checkButtonClick(screenX, screenY);
         return true;
     }
 
@@ -245,10 +254,12 @@ public class GameInputHandler implements InputProcessor {
 
     /** Checks if the user clicked on the home, pause or sound button
      * and changes the sprite accordingly
-     * @param screenCoords The tile that was clicked
+     * @param screenX The x coordinate, origin is in the upper left corner
+     * @param screenY The y coordinate, origin is in the upper left corner
      */
-    private void checkButtonClick(Vector2 screenCoords){
-        gui.getButtons().checkButtonClick(screenCoords);
+    private void checkButtonClick(int screenX, int screenY){
+        Vector2 screenCoords = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
+        buttons.checkButtonClick(screenCoords);
     }
 
 
@@ -259,6 +270,6 @@ public class GameInputHandler implements InputProcessor {
      */
     private void checkButtonUnclick(int screenX, int screenY){
         Vector2 screenCoords = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
-        gui.getButtons().checkButtonUnclick(screenCoords);
+        buttons.checkButtonUnclick(screenCoords);
     }
 }

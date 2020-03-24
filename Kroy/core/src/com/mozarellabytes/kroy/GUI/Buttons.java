@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Screens.GameScreen;
-import com.mozarellabytes.kroy.GUI.ButtonBar;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 public class Buttons {
@@ -102,11 +101,8 @@ public class Buttons {
         currentSaveTexture = saveButtonIdle;
         currentInfoTexture = infoButtonIdle;
 
-        if (SoundFX.music_enabled) {
-            currentSoundTexture = soundOffIdleTexture;
-        } else {
-            currentSoundTexture = soundOnIdleTexture;
-        }
+        if (SoundFX.music_enabled) currentSoundTexture = soundOffIdleTexture;
+        else currentSoundTexture = soundOnIdleTexture;
 
         homeButton = new Rectangle(Gdx.graphics.getWidth() - 33, Gdx.graphics.getHeight() - 33, 30, 30);
         soundButton = new Rectangle(Gdx.graphics.getWidth() - 70, Gdx.graphics.getHeight() - 33, 30, 30);
@@ -115,95 +111,6 @@ public class Buttons {
         saveButton = new Rectangle(Gdx.graphics.getWidth() - 181, Gdx.graphics.getHeight() - 33, 30, 30);
 
         this.parent = screen;
-    }
-
-    /** Sets the homeButton texture to homeButtonClicked while the homeButton
-     * is being clicked on */
-    public void clickedHomeButton() {
-        if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
-        currentHomeTexture = homeButtonClicked;
-    }
-
-    /** Sets the infoButton texture to "Idle" if the previous was "Clicked",
-     * else it sets it to "Clicked" */
-    public void clickedInfoButton() {
-        if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
-        if (currentInfoTexture == infoButtonIdle) currentInfoTexture = infoButtonClicked;
-        else currentInfoTexture = infoButtonIdle;
-    }
-
-    /** Sets the soundButton texture to either soundOffClickedTexture or
-     * soundOnClickedTexture while the soundButton is being clicked on */
-    public void clickedSoundButton() {
-        if (SoundFX.music_enabled) currentSoundTexture = soundOffClickedTexture;
-        else currentSoundTexture = soundOnClickedTexture;
-    }
-
-    /** Sets the pauseButton texture that is rendered to the screen and pauses
-     * and unpauses the game */
-    public void clickedPauseButton() {
-        currentPauseTexture = pauseButtonClicked;
-
-        if (SoundFX.music_enabled){
-            if (parent.getState().equals(GameScreen.PlayState.PLAY)) SoundFX.sfx_pause.play();
-            else SoundFX.sfx_unpause.play();
-        }
-    }
-
-    /** Sets the saveButton texture that is rendered to the screen and saves the game */
-    public void clickedSaveButton() {
-        if (SoundFX.music_enabled) SoundFX.sfx_pause.play();
-        if (currentSaveTexture == saveButtonIdle) currentSaveTexture = saveButtonClicked;
-        else currentSaveTexture = saveButtonIdle;
-    }
-
-    /** Sets the homeButton texture that is rendered to the screen */
-    public void idleHomeButton() {
-        currentHomeTexture = homeButtonIdle;
-    }
-
-    /** Sets the pauseButton texture that is rendered to the screen */
-    public void idlePauseButton() {
-        currentPauseTexture = pauseButtonIdle;
-    }
-
-    /** Sets the saveButton texture that is rendered to the screen */
-    public void idleSaveButton() {
-        currentSaveTexture = saveButtonIdle;
-    }
-
-    public void idleInfoButton() {
-        currentInfoTexture = infoButtonIdle;
-    }
-
-    /** Sets the soundButton texture that is rendered to the screen */
-    public void idleSoundButton() {
-        if (SoundFX.music_enabled) currentSoundTexture = soundOffIdleTexture;
-        else currentSoundTexture = soundOnIdleTexture;
-    }
-
-    /** Toggles the sound, called if 'S' key or the sound button
-     * is pressed */
-    public void changeSound() {
-        if (SoundFX.music_enabled) currentSoundTexture = soundOnIdleTexture;
-        else currentSoundTexture = soundOffIdleTexture;
-       // SoundFX.toggleMusic();
-    }
-
-    public void changeState() {
-        if (parent.getState().equals(GameScreen.PlayState.PAUSE)) parent.setState(GameScreen.PlayState.PLAY);
-        else if (parent.getState().equals(GameScreen.PlayState.PLAY)) parent.setState(GameScreen.PlayState.PAUSE);
-    }
-
-    /**
-     * Reset the buttons when game screen appears
-     */
-    public void resetButtons() {
-        idleHomeButton();
-        idleInfoButton();
-        idlePauseButton();
-        idleSoundButton();
-        idleSaveButton();
     }
 
     public void renderButtons(Batch batch) {
@@ -216,15 +123,6 @@ public class Buttons {
         batch.end();
     }
 
-    public void checkButtonUnclick(Vector2 screenCoords) {
-        resetButtons();
-        if (homeButton.contains(screenCoords)) parent.toHomeScreen();
-        if (soundButton.contains(screenCoords)) parent.changeSound();
-        if (pauseButton.contains(screenCoords)) changeState();
-        if (saveButton.contains(screenCoords)) parent.saveGameState();
-        if (infoButton.contains(screenCoords)) parent.toControlScreen();
-    }
-
     public void checkButtonClick(Vector2 screenCoords) {
         if (homeButton.contains(screenCoords)) clickedHomeButton();
         else if (pauseButton.contains(screenCoords)) clickedPauseButton();
@@ -232,4 +130,101 @@ public class Buttons {
         else if (infoButton.contains(screenCoords)) clickedInfoButton();
         else if (saveButton.contains(screenCoords)) clickedSaveButton();
     }
+
+    /** Sets the homeButton texture to homeButtonClicked while the homeButton
+     * is being clicked on */
+    public void clickedHomeButton() {
+        if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
+        currentHomeTexture = homeButtonClicked;
+    }
+
+
+    /** Sets the pauseButton texture that is rendered to the screen and pauses
+     * and unpauses the game */
+    public void clickedPauseButton() {
+        currentPauseTexture = pauseButtonClicked;
+        if (SoundFX.music_enabled){
+            if (parent.getState().equals(GameScreen.PlayState.PLAY)) SoundFX.sfx_pause.play();
+            else SoundFX.sfx_unpause.play();
+        }
+    }
+
+
+    /** Sets the soundButton texture to either soundOffClickedTexture or
+     * soundOnClickedTexture while the soundButton is being clicked on */
+    public void clickedSoundButton() {
+        if (SoundFX.music_enabled) currentSoundTexture = soundOffClickedTexture;
+        else currentSoundTexture = soundOnClickedTexture;
+    }
+
+
+    /** Sets the infoButton texture to "Idle" if the previous was "Clicked",
+     * else it sets it to "Clicked" */
+    public void clickedInfoButton() {
+        if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
+        if (currentInfoTexture == infoButtonIdle) currentInfoTexture = infoButtonClicked;
+        else currentInfoTexture = infoButtonIdle;
+    }
+
+
+    /** Sets the saveButton texture that is rendered to the screen and saves the game */
+    public void clickedSaveButton() {
+        if (SoundFX.music_enabled) SoundFX.sfx_pause.play();
+        if (currentSaveTexture == saveButtonIdle) currentSaveTexture = saveButtonClicked;
+        else currentSaveTexture = saveButtonIdle;
+    }
+
+
+    public void checkButtonUnclick(Vector2 screenCoords) {
+        resetButtons();
+        if (homeButton.contains(screenCoords)) toHomeScreen();
+        if (pauseButton.contains(screenCoords)) changePlayState();
+        if (soundButton.contains(screenCoords)) changeSound();
+        if (infoButton.contains(screenCoords)) toControlScreen();
+        if (saveButton.contains(screenCoords)) saveGameState();
+        resetButtons();
+    }
+
+    public void toHomeScreen() { parent.toHomeScreen(); }
+
+    public void changePlayState() {
+        if (parent.getState().equals(GameScreen.PlayState.PAUSE)) parent.setState(GameScreen.PlayState.PLAY);
+        else if (parent.getState().equals(GameScreen.PlayState.PLAY)) parent.setState(GameScreen.PlayState.PAUSE);
+    }
+
+    public void toControlScreen(){ parent.toControlScreen(); }
+
+    public void saveGameState() { parent.saveGameState(); }
+
+    public void changeSound() { parent.changeSound(); }
+
+    /**
+     * Reset the buttons when game screen appears
+     */
+    public void resetButtons() {
+        idleHomeButton();
+        idlePauseButton();
+        idleSoundButton();
+        idleInfoButton();
+        idleSaveButton();
+    }
+
+    /** Sets the homeButton texture that is rendered to the screen */
+    public void idleHomeButton() { currentHomeTexture = homeButtonIdle; }
+
+    /** Sets the pauseButton texture that is rendered to the screen */
+    public void idlePauseButton() { currentPauseTexture = pauseButtonIdle; }
+
+    /** Sets the soundButton texture that is rendered to the screen */
+    public void idleSoundButton() {
+        if (SoundFX.music_enabled) currentSoundTexture = soundOffIdleTexture;
+        else currentSoundTexture = soundOnIdleTexture;
+    }
+
+    public void idleInfoButton() { currentInfoTexture = infoButtonIdle; }
+
+    /** Sets the saveButton texture that is rendered to the screen */
+    public void idleSaveButton() { currentSaveTexture = saveButtonIdle; }
+
+
 }

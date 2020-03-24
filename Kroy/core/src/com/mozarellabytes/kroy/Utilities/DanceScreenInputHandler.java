@@ -47,7 +47,13 @@ public class DanceScreenInputHandler implements InputProcessor {
                 danceScreen.useCombo();
                 break;
             case Input.Keys.ESCAPE:
-                Gdx.app.exit();
+                buttons.clickedPauseButton();
+                break;
+            case Input.Keys.M:
+                buttons.clickedSoundButton();
+                break;
+            case Input.Keys.C:
+                buttons.toControlScreen();
                 break;
         }
         return false;
@@ -55,7 +61,15 @@ public class DanceScreenInputHandler implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        return false;
+        switch(keycode){
+            case Input.Keys.ESCAPE:
+                buttons.changePlayState();
+                break;
+            case Input.Keys.M:
+                buttons.changeSound();
+                break;
+        }
+        return true;
     }
 
     @Override

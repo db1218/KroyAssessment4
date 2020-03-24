@@ -4,11 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.mozarellabytes.kroy.Entities.FireStation;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Fortress;
@@ -311,8 +309,7 @@ public class GUI {
     /** Renders the text to the screen when the game is paused */
     public void renderPauseScreenText() {
         GlyphLayout layout = new GlyphLayout();
-        layout.setText(game.font26, "Game paused \n");
-        layout.setText(game.font26, "Press 'ESC' or the Pause button \n To return to the game");
+        layout.setText(game.font26, "Game paused \n \n Press 'ESC' or the Pause button \n To return to the game");
 
         batch.setProjectionMatrix(pauseCamera.combined);
         batch.begin();
@@ -382,10 +379,6 @@ public class GUI {
         else GUIElement.setText("Truck attack: OFF [A]");
         this.GUIElements.set(4, GUIElement);
     }
-
-    public void changeSound(){ buttons.changeSound(); }
-
-    public void resetButtons() { buttons.resetButtons(); }
 
     public Buttons getButtons() { return this.buttons; }
 

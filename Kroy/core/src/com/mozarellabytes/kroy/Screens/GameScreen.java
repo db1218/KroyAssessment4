@@ -281,7 +281,7 @@ public class GameScreen implements Screen, ButtonBar {
     public void show() {
         SoundFX.decideMusic(this);
         Gdx.input.setInputProcessor(inputHandler);
-        gui.resetButtons();
+        gui.getButtons().resetButtons();
     }
 
     @Override
@@ -661,9 +661,7 @@ public class GameScreen implements Screen, ButtonBar {
     }
 
     @Override
-    public void changeSound() {
-        gui.changeSound();
-    }
+    public void changeSound() { SoundFX.toggleMusic(this); }
 
     /** Exits the main game screen and goes to the menu, called when the home
      * button is clicked */

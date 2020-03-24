@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
@@ -29,8 +30,6 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
     /** Instance of our game that allows us the change screens */
     private final Kroy game;
     private final GameState gameState;
-
-    private final Batch batch;
 
     private final Buttons button;
 
@@ -68,6 +67,8 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
 
     private DanceResult lastResult = null;
 
+    private ShapeRenderer shapeMapRenderer;
+
     /**
      * Constructor for Dance Screen
      *
@@ -83,11 +84,13 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
+
+        this.shapeMapRenderer = new ShapeRenderer();
+        shapeMapRenderer.setProjectionMatrix(camera.combined);
+
         this.previousScreen = previousScreen;
 
         this.camShake = new CameraShake();
-
-        this.batch = game.batch;
 
         this.danceMan = new DanceManager(140f);
         this.danceMan.subscribeToBeat(this);
@@ -180,11 +183,24 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
                         this.lastResult = DanceResult.MISSED;
                     }
                 }
-                Gdx.app.log("Play", "play");
+
                 break;
 
             case PAUSE:
-                Gdx.app.log("Paused", "pause");
+                Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
+                shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeMapRenderer.setColor(0, 0, 0, 0.5f);
+                shapeMapRenderer.rect(0, 0, camera.viewportWidth, camera.viewportHeight);
+                shapeMapRenderer.end();
+
+                GlyphLayout layout = new GlyphLayout();
+               // layout.setText(game.font26, "Game paused \n");
+                layout.setText(game.font26, "Game paused \n Press 'ESC' or the Pause button \n To return to the game");
+
+                game.batch.setProjectionMatrix(camera.combined);
+                game.batch.begin();
+                game.font26.draw(game.batch, layout,camera.viewportWidth/2 - layout.width/2f, camera.viewportHeight/2);
+                game.batch.end();
                 break;
         }
 
@@ -360,9 +376,7 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
         this.ETDancer.damage((int)scaleDamage(combo));
         this.danceMan.killCombo();
         camShake.shakeIt(.6f, 4);
-        if (SoundFX.music_enabled) {
-            SoundFX.sfx_combo.play();
-        }
+        if (SoundFX.music_enabled) SoundFX.sfx_combo.play();
     }
 
     @Override
@@ -371,10 +385,8 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
     @Override
     public void toControlScreen() { game.setScreen(new ControlsScreen(game, this, "game")); }
 
-
     @Override
-    public void changeSound() {
-    }
+    public void changeSound() { SoundFX.toggleMusic(this); }
 
     @Override
     public void saveGameState() {
