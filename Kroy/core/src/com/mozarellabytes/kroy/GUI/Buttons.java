@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Screens.GameScreen;
-import com.mozarellabytes.kroy.Utilities.ButtonBar;
+import com.mozarellabytes.kroy.GUI.ButtonBar;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 public class Buttons {

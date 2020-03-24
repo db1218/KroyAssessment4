@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Patrol;
+import com.mozarellabytes.kroy.GUI.ButtonBar;
 import com.mozarellabytes.kroy.GUI.Buttons;
 import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
@@ -123,21 +124,6 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
     @Override
     public void render(float delta) {
 
-        camShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
-
-        this.danceMan.update(delta);
-
-        checkIfOver();
-
-        this.firefighter.addTimeInState(delta);
-        this.ETDancer.addTimeInState(delta);
-
-        if (this.danceMan.hasMissedLastBeat()) {
-            if (this.firefighter.getTimeInState() > this.danceMan.getPhase()/4) {
-                this.lastResult = DanceResult.MISSED;
-            }
-        }
-
         Gdx.gl.glClearColor(51/255f, 34/255f, 99/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -181,6 +167,7 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
 
         switch (state) {
             case PLAY:
+                camShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
                 this.danceMan.update(delta);
 
                 checkIfOver();
