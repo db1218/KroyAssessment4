@@ -50,16 +50,16 @@ public class GameInputHandler implements InputProcessor {
     public boolean keyDown(int keycode) {
         switch (keycode) {
             case Input.Keys.ESCAPE:
-                gui.clickedPauseButton();
+                gui.getButtons().clickedPauseButton();
                 gameScreen.changeState(GameScreen.PlayState.PAUSE);
                 break;
             case Input.Keys.C:
                 gameScreen.toControlScreen();
                 break;
             case Input.Keys.M:
-                gui.clickedSoundButton();
+                gui.getButtons().clickedSoundButton();
                 gui.changeSound();
-                gui.idleSoundButton();
+                gui.getButtons().idleSoundButton();
                 break;
             case Input.Keys.S:
                 gameScreen.saveGameState();
@@ -182,17 +182,6 @@ public class GameInputHandler implements InputProcessor {
         return new Vector2((int) position.x, (int) position.y);
     }
 
-    /** Checks if the user clicked on the home, pause or sound button
-     * and changes the sprite accordingly
-     * @param position2d The tile that was clicked
-     */
-    private void checkButtonClick(Vector2 position2d){
-        if (gui.getHomeButton().contains(position2d)) gui.clickedHomeButton();
-        else if (gui.getPauseButton().contains(position2d)) gui.clickedPauseButton();
-        else if (gui.getSoundButton().contains(position2d)) gui.clickedSoundButton();
-        else if (gui.getInfoButton().contains(position2d)) gui.clickedInfoButton();
-        else if (gui.getSaveButton().contains(position2d)) gui.clickedSaveButton();
-    }
 
     /** Checks if user clicked on a fortress, if it did this fortress
      * becomes the selected entity meaning its stats will be rendered
@@ -254,6 +243,15 @@ public class GameInputHandler implements InputProcessor {
         return false;
     }
 
+    /** Checks if the user clicked on the home, pause or sound button
+     * and changes the sprite accordingly
+     * @param screenCoords The tile that was clicked
+     */
+    private void checkButtonClick(Vector2 screenCoords){
+        gui.getButtons().checkButtonClick(screenCoords);
+    }
+
+
     /** Checks if the user has lifted the mouse over a button and triggers the
      * appropriate action
      * @param screenX The x coordinate, origin is in the upper left corner
@@ -261,18 +259,6 @@ public class GameInputHandler implements InputProcessor {
      */
     private void checkButtonUnclick(int screenX, int screenY){
         Vector2 screenCoords = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
-
-        gui.idleHomeButton();
-        gui.idleSoundButton();
-        gui.idlePauseButton();
-        gui.idleInfoButton();
-        gui.idleSaveButton();
-
-        if (gui.getHomeButton().contains(screenCoords)) gameScreen.toHomeScreen();
-        if (gui.getSoundButton().contains(screenCoords)) gui.changeSound();
-        if (gui.getPauseButton().contains(screenCoords)) gameScreen.changeState(GameScreen.PlayState.PAUSE);
-        if (gui.getSaveButton().contains(screenCoords)) gameScreen.saveGameState();
-        if (gui.getInfoButton().contains(screenCoords)) gameScreen.toControlScreen();
-
+        gui.getButtons().checkButtonUnclick(screenCoords);
     }
 }

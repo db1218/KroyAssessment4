@@ -7,23 +7,31 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Patrol;
+import com.mozarellabytes.kroy.GUI.Buttons;
 import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Minigame.*;
 import com.mozarellabytes.kroy.Utilities.*;
 
+import java.awt.*;
+
 /**
  * The screen for the minigame that triggers when a firetruck meets an ET patrol
  */
-public class DanceScreen implements Screen, BeatListener {
+public class DanceScreen implements Screen, BeatListener, ButtonBar {
 
     /** Instance of our game that allows us the change screens */
     private final Kroy game;
     private final GameState gameState;
+
+    private final Batch batch;
+
+    private final Buttons button;
 
     private final DanceScreenInputHandler danceInputHandler;
 
@@ -53,6 +61,8 @@ public class DanceScreen implements Screen, BeatListener {
     private final Vector2 etLocation;
     private final Vector2 comboHintLocation;
 
+    private GameScreen.PlayState state;
+
     private final int ARROW_SIZE = 96;
 
     private DanceResult lastResult = null;
@@ -69,11 +79,14 @@ public class DanceScreen implements Screen, BeatListener {
     public DanceScreen(Kroy game, GameState gameState, Screen previousScreen, FireTruck firetruck, Patrol patrol) {
         this.game = game;
         this.gameState = gameState;
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
         this.previousScreen = previousScreen;
 
         this.camShake = new CameraShake();
+
+        this.batch = game.batch;
 
         this.danceMan = new DanceManager(140f);
         this.danceMan.subscribeToBeat(this);
@@ -96,6 +109,8 @@ public class DanceScreen implements Screen, BeatListener {
         this.etLocation = new Vector2((3*camera.viewportWidth)/4-256, camera.viewportHeight/5);
         this.comboHintLocation = new Vector2(camera.viewportWidth/4, (3*camera.viewportHeight)/5);
 
+        this.state = GameScreen.PlayState.PLAY;
+        this.button = new Buttons(this);
         this.danceInputHandler = new DanceScreenInputHandler(this);
 
     }
@@ -162,6 +177,30 @@ public class DanceScreen implements Screen, BeatListener {
         this.game.batch.end();
 
         drawHealthBars();
+        button.renderButtons(game.batch);
+
+        switch (state) {
+            case PLAY:
+                this.danceMan.update(delta);
+
+                checkIfOver();
+
+                this.firefighter.addTimeInState(delta);
+                this.ETDancer.addTimeInState(delta);
+
+                if (this.danceMan.hasMissedLastBeat()) {
+                    if (this.firefighter.getTimeInState() > this.danceMan.getPhase() / 4) {
+                        this.lastResult = DanceResult.MISSED;
+                    }
+                }
+                Gdx.app.log("Play", "play");
+                break;
+
+            case PAUSE:
+                Gdx.app.log("Paused", "pause");
+                break;
+        }
+
     }
 
     @Override
@@ -339,4 +378,27 @@ public class DanceScreen implements Screen, BeatListener {
         }
     }
 
+    @Override
+    public void toHomeScreen() { game.setScreen(new MenuScreen(game)); }
+
+    @Override
+    public void toControlScreen() { game.setScreen(new ControlsScreen(game, this, "game")); }
+
+
+    @Override
+    public void changeSound() {
+    }
+
+    @Override
+    public void saveGameState() {
+
+    }
+
+    @Override
+    public void setState(GameScreen.PlayState state) { this.state = state; }
+
+    @Override
+    public GameScreen.PlayState getState() { return this.state; }
+
+    public Buttons getButtons() { return this.button; }
 }

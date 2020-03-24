@@ -3,6 +3,8 @@ package com.mozarellabytes.kroy.Utilities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Vector2;
+import com.mozarellabytes.kroy.GUI.Buttons;
 import com.mozarellabytes.kroy.Minigame.DanceMove;
 import com.mozarellabytes.kroy.Screens.DanceScreen;
 
@@ -15,6 +17,7 @@ public class DanceScreenInputHandler implements InputProcessor {
      * Dance screen this class controls inputs for
      */
     final DanceScreen danceScreen;
+    final Buttons buttons;
 
     /**
      * Dance screen constructor
@@ -22,6 +25,7 @@ public class DanceScreenInputHandler implements InputProcessor {
      */
     public DanceScreenInputHandler(DanceScreen danceScreen){
         this.danceScreen = danceScreen;
+        this.buttons = danceScreen.getButtons();
     }
 
     @Override
@@ -61,12 +65,14 @@ public class DanceScreenInputHandler implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
+        checkButtonClick(screenX, screenY);
+        return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
+        checkButtonUnclick(screenX, screenY);
+        return true;
     }
 
     @Override
@@ -83,4 +89,21 @@ public class DanceScreenInputHandler implements InputProcessor {
     public boolean scrolled(int amount) {
         return false;
     }
+
+    private void checkButtonClick(int screenX, int screenY){
+        Vector2 screenCoords = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
+        buttons.checkButtonClick(screenCoords);
+    }
+
+
+    /** Checks if the user has lifted the mouse over a button and triggers the
+     * appropriate action
+     * @param screenX The x coordinate, origin is in the upper left corner
+     * @param screenY The y coordinate, origin is in the upper left corner
+     */
+    private void checkButtonUnclick(int screenX, int screenY){
+        Vector2 screenCoords = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
+        buttons.checkButtonUnclick(screenCoords);
+    }
 }
+
