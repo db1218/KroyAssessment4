@@ -92,7 +92,7 @@ public class SoundFX {
 
     /**
      * Turn toggle the music when the player hits the mute button,
-     * and play the play the music for that screen
+     * and play the music for that screen
      *
      * @param screen    that the player just entered
      */

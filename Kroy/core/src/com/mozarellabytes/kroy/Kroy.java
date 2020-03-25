@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Screens.*;
+import com.mozarellabytes.kroy.Utilities.DifficultyLevel;
 
 /**
  * Our main class where everything starts from. It contains
@@ -71,11 +73,12 @@ public class Kroy extends Game {
 		font50b = generator.generateFont(parameter);
 
 //		this.setScreen(new SplashScreen(this));
-		this.setScreen(new MenuScreen(this));
-//		this.setScreen(new GameScreen(this));
+//		this.setScreen(new MenuScreen(this));
+		this.setScreen(new GameScreen(this, DifficultyLevel.Hard));
 //		this.setScreen(new GameScreen(this, new SavedElement("2020-03-04-01-01-00")));
 //		this.setScreen(new SaveScreen(this, null));
 //		this.setScreen(new DifficultyScreen(this));
+	//	this.setScreen(new DanceScreen(this, GameScreen.PlayState.PLAY, new GameScreen(this, DifficultyLevel.Hard),new FireTruck());
 
 	}
 	//Kroy game, Screen previousScreen, FireTruck firetruck, Patrol patrol

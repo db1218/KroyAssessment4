@@ -1,6 +1,8 @@
 package com.mozarellabytes.kroy.Screens;
 
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.*;
+import com.mozarellabytes.kroy.GUI.ButtonBar;
 import com.mozarellabytes.kroy.PowerUp.PowerUp;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -31,7 +33,7 @@ import java.util.Random;
  * clicks the Start button, and exits when
  * the player wins or loses the game
  */
-public class GameScreen implements Screen {
+public class GameScreen implements Screen, ButtonBar {
 
     /** Instance of our game that allows us the change screens */
     private Kroy game;
@@ -279,7 +281,7 @@ public class GameScreen implements Screen {
     public void show() {
         SoundFX.decideMusic(this);
         Gdx.input.setInputProcessor(inputHandler);
-        gui.resetButtons();
+        gui.getButtons().resetButtons();
     }
 
     @Override
@@ -658,6 +660,9 @@ public class GameScreen implements Screen {
         game.setScreen(new ControlsScreen(game, this, "game"));
     }
 
+    @Override
+    public void changeSound() { SoundFX.toggleMusic(this); }
+
     /** Exits the main game screen and goes to the menu, called when the home
      * button is clicked */
     public void toHomeScreen() {
@@ -693,10 +698,6 @@ public class GameScreen implements Screen {
      */
     public void changeState(PlayState action) {
         switch (action) {
-            case PAUSE:
-                if (state.equals(PlayState.PLAY)) state = PlayState.PAUSE;
-                else state = PlayState.PLAY;
-                break;
             case FREEZE:
                 if (state.equals(PlayState.FREEZE)) {
                     state = PlayState.PLAY;
@@ -709,6 +710,8 @@ public class GameScreen implements Screen {
                 break;
         }
     }
+
+    public void setState(PlayState state){ this.state = state; }
 
     /**
      * Enables/Disables auto attack
@@ -902,9 +905,7 @@ public class GameScreen implements Screen {
         return this.selectedEntity;
     }
 
-    public void setFreezeCooldown(float time) {
-        freezeCooldown = time;
-    }
+    public void setFreezeCooldown(float time) { freezeCooldown = time; }
 
     public BossPatrol getBossPatrol() {
         return this.bossPatrol;
@@ -917,5 +918,6 @@ public class GameScreen implements Screen {
     public void setSelectedTruck(FireTruck fireTruck) {
         this.selectedTruck = fireTruck;
     }
+
 
 }
