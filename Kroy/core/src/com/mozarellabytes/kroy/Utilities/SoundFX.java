@@ -21,7 +21,7 @@ public class SoundFX {
     /** All sounds can be played when this is true, else no sound will play */
     public static boolean music_enabled = true;
 
-    public static final Music sfx_menu = Gdx.audio.newMusic(Gdx.files.internal("sounds/menu.mp3"));
+    public static final Music sfx_menu = Gdx.audio.newMusic(Gdx.files.internal("sounds/spooky.wav"));
     public static final Music sfx_soundtrack = Gdx.audio.newMusic(Gdx.files.internal("sounds/soundtrack.mp3"));
     public static final Music sfx_danceoff = Gdx.audio.newMusic(Gdx.files.internal("sounds/140bpm.mp3"));
 
