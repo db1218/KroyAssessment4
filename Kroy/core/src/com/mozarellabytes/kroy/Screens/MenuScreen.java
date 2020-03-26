@@ -27,7 +27,7 @@ public class MenuScreen implements Screen {
     /** The menu screen image - see ui/menuscreen_blank_2 */
     private final Texture backgroundImage;
 
-    /** Rectangle containing the position of the play button */
+    /** Custom Menu buttons */
     private final MenuButton newGameButton;
     private final MenuButton savesButton;
     private final MenuButton controlsButton;
