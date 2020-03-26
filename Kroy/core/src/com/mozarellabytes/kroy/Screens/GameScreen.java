@@ -685,7 +685,7 @@ public class GameScreen implements Screen, ButtonBar {
      * @param type Type of truck to be spawned (Ocean, Speed)
      */
     private void spawn(FireTruckType type) {
-        if (SoundFX.music_enabled) SoundFX.sfx_truck_spawn.play();
+        if (SoundFX.music_enabled) SoundFX.sfx_truck_spawn.play(0.1f);
         station.spawn(new FireTruck(this, new Vector2(station.getPosition().x + 1 + station.getTrucks().size(), station.getPosition().y), type));
         gameState.addFireTruck();
     }
