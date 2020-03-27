@@ -255,7 +255,7 @@ public class GameScreen implements Screen, ButtonBar {
         vfx = new ArrayList<>();
 
         freezeCooldown = 0f;
-        truckAttack = false;
+        truckAttack = true;
         gui.updateAttackMode(false);
 
         powerUps = new ArrayList<>();
