@@ -155,8 +155,6 @@ public class GameScreen implements Screen, ButtonBar {
         // patrols
         patrols = save.getPatrols();
         bossPatrol = save.getBossPatrol();
-
-        if (save.wasInMinigame()) doDanceOff(save.getMinigameFireTruck(), save.getMinigamePatrol());
     }
 
     /**
@@ -258,7 +256,7 @@ public class GameScreen implements Screen, ButtonBar {
 
         freezeCooldown = 0f;
         truckAttack = true;
-        gui.updateAttackMode(false);
+        gui.updateAttackMode(true);
 
         powerUps = new ArrayList<>();
 
@@ -678,9 +676,7 @@ public class GameScreen implements Screen, ButtonBar {
      * @param patrol        patrol to be used in the dance game
      */
     public void doDanceOff(FireTruck firetruck, Patrol patrol) {
-        truckAttack = false;
         game.setScreen(new DanceScreen(game, gameState,this, firetruck, patrol));
-        this.hide();
     }
 
     /**
@@ -935,5 +931,8 @@ public class GameScreen implements Screen, ButtonBar {
         this.selectedTruck = fireTruck;
     }
 
+    public ArrayList<PowerUp> getPowerUps() {
+        return this.powerUps;
+    }
 
 }

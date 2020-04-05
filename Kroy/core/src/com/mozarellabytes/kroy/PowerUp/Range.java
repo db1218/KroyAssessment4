@@ -41,6 +41,16 @@ public class Range extends PowerUp {
         truck.setRange(truck.type.getRange() + rangeIncrease);
     }
 
+    @Override
+    public String getName() {
+        return "Range";
+    }
+
+    @Override
+    public String getDesc() {
+        return "Increase range of the fire truck by 3 tiles for 10 seconds";
+    }
+
     /** This updates the amount of time that the truck has been
      * in the PowerUp, it sets canBeRendered to false so that
      * gameScreen doesn't render the powerUp as the truck has

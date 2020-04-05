@@ -51,6 +51,16 @@ public class Shield extends PowerUp {
         truck.setShield(true);
     }
 
+    @Override
+    public String getName() {
+        return "Shield";
+    }
+
+    @Override
+    public String getDesc() {
+        return "Makes the fire truck immune to damage for 5 seconds";
+    }
+
     /**
      * Turns the truck's shield off, sets
      * canBeDestroyed to true so that the

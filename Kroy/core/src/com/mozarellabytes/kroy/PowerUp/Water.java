@@ -29,6 +29,16 @@ public class Water extends PowerUp {
         removePowerUp();
     }
 
+    @Override
+    public String getName() {
+        return "Water";
+    }
+
+    @Override
+    public String getDesc() {
+        return "Restores the fire truck's water supply back to full";
+    }
+
     /**
      * Refills the truck to full reserve capacity
      *

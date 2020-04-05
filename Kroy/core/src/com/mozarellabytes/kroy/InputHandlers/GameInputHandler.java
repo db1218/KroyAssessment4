@@ -1,4 +1,4 @@
-package com.mozarellabytes.kroy.Utilities;
+package com.mozarellabytes.kroy.InputHandlers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -9,6 +9,7 @@ import com.mozarellabytes.kroy.Entities.Fortress;
 import com.mozarellabytes.kroy.Entities.Patrol;
 import com.mozarellabytes.kroy.GUI.Buttons;
 import com.mozarellabytes.kroy.GUI.GUI;
+import com.mozarellabytes.kroy.PowerUp.PowerUp;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
 /**
@@ -115,14 +116,11 @@ public class GameInputHandler implements InputProcessor {
             } else if (!gameScreen.checkTrailClick(clickCoordinates) &&
                     !checkFortressClick(clickCoordinates) &&
                     !checkPatrolClick(clickCoordinates) &&
-                    !checkFireStationClick(clickCoordinates)) {
+                    !checkFireStationClick(clickCoordinates) &&
+                    !checkPowerupClick(clickCoordinates)) {
                 gameScreen.setSelectedTruck(null);
                 gameScreen.setSelectedEntity(null);
             }
-        } else {
-            checkFortressClick(clickCoordinates);
-            checkPatrolClick(clickCoordinates);
-            checkFireStationClick(clickCoordinates);
         }
         checkButtonClick(screenX, screenY);
         return true;
@@ -207,8 +205,6 @@ public class GameInputHandler implements InputProcessor {
                 return true;
             }
         }
-        gameScreen.setSelectedTruck(null);
-        gameScreen.setSelectedEntity(null);
         return false;
     }
 
@@ -224,6 +220,24 @@ public class GameInputHandler implements InputProcessor {
         if (gameScreen.getStation().getArea().contains(position2d)) {
             gameScreen.setSelectedEntity(gameScreen.getStation());
             return true;
+        }
+        return false;
+    }
+
+    /** Checks if user clicked on a power up, if it did it
+     * becomes the selected entity meaning its stats will be rendered
+     * in the top left hand corner
+     *
+     * @param position2d the tile that was clicked
+     * @return <code> true </code> If a power up has been clicked on
+     *         <code> false </code> Otherwise
+     */
+    private boolean checkPowerupClick(Vector2 position2d) {
+        for (PowerUp powerUp : gameScreen.getPowerUps()) {
+            if (powerUp.getPosition().equals(position2d)) {
+                gameScreen.setSelectedEntity(powerUp);
+                return true;
+            }
         }
         return false;
     }
@@ -247,8 +261,6 @@ public class GameInputHandler implements InputProcessor {
                 return true;
             }
         }
-        gameScreen.setSelectedTruck(null);
-        gameScreen.setSelectedEntity(null);
         return false;
     }
 
@@ -261,7 +273,6 @@ public class GameInputHandler implements InputProcessor {
         Vector2 screenCoords = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
         buttons.checkButtonClick(screenCoords);
     }
-
 
     /** Checks if the user has lifted the mouse over a button and triggers the
      * appropriate action

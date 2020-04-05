@@ -42,7 +42,6 @@ public abstract class PowerUp {
     /** The total time in seconds that the powerup will be available for */
     private final float timeOnScreen;
 
-
     /** Flag for whether the PowerUp can be rendered to the gameScreen */
     boolean canBeRendered;
 
@@ -150,6 +149,10 @@ public abstract class PowerUp {
      */
     public abstract void invokePower(FireTruck truck);
 
+    public abstract String getName();
+
+    public abstract String getDesc();
+
     public boolean getCanBeRendered() { return this.canBeRendered; }
 
     public boolean getCanBeDestroyed() { return this.canBeDestroyed; }
@@ -157,5 +160,13 @@ public abstract class PowerUp {
     public void setPosition(Vector2 position) { this.position = position; }
 
     public Vector2 getPosition() { return this.position; }
+
+    public float getTimeOnScreen() {
+        return timeOnScreen;
+    }
+
+    public float getTimeLeftOnScreen() {
+        return timeLeftOnScreen;
+    }
 
 }

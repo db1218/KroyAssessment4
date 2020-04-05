@@ -12,8 +12,8 @@ import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Fortress;
 import com.mozarellabytes.kroy.Entities.Patrol;
 import com.mozarellabytes.kroy.Kroy;
+import com.mozarellabytes.kroy.PowerUp.PowerUp;
 import com.mozarellabytes.kroy.Screens.GameScreen;
-import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.ArrayList;
 
@@ -131,6 +131,13 @@ public class GUI {
                 batch.begin();
                 renderSelectedEntityText(station);
                 batch.end();
+            } else if (entity instanceof PowerUp) {
+                PowerUp powerup = (PowerUp) entity;
+                renderSelectedEntityBars(powerup);
+                shapeRenderer.end();
+                batch.begin();
+                renderSelectedEntityText(powerup);
+                batch.end();
             }
         } else {
             shapeRenderer.end();
@@ -195,12 +202,22 @@ public class GUI {
 
     /**
      * Calls the methods which render the attributes and
-     * health of a fortress in the stats area
+     * health of a patrol in the stats area
      *
      * @param patrol  in stats area
      */
     private void renderSelectedEntityBars(Patrol patrol) {
         renderSelectedEntityBar(patrol.getHP(), patrol.getType().getMaxHP(), Color.RED, Color.FIREBRICK, 1);
+    }
+
+    /**
+     * Calls the methods which render the attributes and
+     * health of a power up in the stats area
+     *
+     * @param powerUp  in stats area
+     */
+    private void renderSelectedEntityBars(PowerUp powerUp) {
+        renderSelectedEntityBar(powerUp.getTimeLeftOnScreen(), powerUp.getTimeOnScreen(), Color.GOLD, Color.GOLDENROD, 1);
     }
 
     /**
@@ -235,6 +252,43 @@ public class GUI {
         renderEntityName("Fire Station");
         game.font19.draw(batch, "HP: ", this.selectedX + 15, this.selectedY + this.selectedH - 50);
         game.font19.draw(batch, String.format("%.1f", station.getHP()) + " / " + String.format("%.1f", station.getMaxHP()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLineHeight);
+    }
+
+    /**
+     * Renders the attributes in a vertical layout
+     * of a PowerUp
+     *
+     * @param powerUp   the Power Upp that owns the stats
+     *                  that are being displayed
+     */
+    private void renderSelectedEntityText(PowerUp powerUp) {
+        renderEntityName(powerUp.getName() + " Power up");
+        game.font19.draw(batch, "Despawn time: ", this.selectedX + 15, this.selectedY + this.selectedH - 50);
+        game.font19.draw(batch, (powerUp.getTimeLeftOnScreen() <= 0) ? "Despawned" : String.format("%.1f", powerUp.getTimeLeftOnScreen()) + " / " + String.format("%.1f", powerUp.getTimeOnScreen()), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLineHeight);
+        game.font19.draw(batch, "Description: ", this.selectedX + 15, this.selectedY + this.selectedH - 50 - newLineHeight*2);
+        game.font19.draw(batch, wrapString(powerUp.getDesc(), 20), this.selectedX + 20, this.selectedY + this.selectedH - 50 - newLineHeight*3);
+    }
+
+    /**
+     * Wraps a string by inserting new lines with
+     * a maximum of maxLetters on each line
+     *
+     * @param string        string to wrap
+     * @param maxLetters    maximum chars on a line
+     * @return              wrapped string
+     */
+    private String wrapString(String string, int maxLetters) {
+        StringBuilder toReturn = new StringBuilder();
+        int index = 0;
+        for (String word : string.split(" ")) {
+            index += word.length() + 1;
+            if (index >= maxLetters) {
+                toReturn.append("\n");
+                index = word.length() + 1;
+            }
+            toReturn.append(word).append(" ");
+        }
+        return toReturn.toString();
     }
 
     /**

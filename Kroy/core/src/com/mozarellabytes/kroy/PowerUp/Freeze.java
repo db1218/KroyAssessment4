@@ -25,6 +25,16 @@ public class Freeze extends PowerUp {
         removePowerUp();
     }
 
+    @Override
+    public String getName() {
+        return "Freeze";
+    }
+
+    @Override
+    public String getDesc() {
+        return "Makes the freeze ability available, bypassing the cooldown ";
+    }
+
 }
 
 
