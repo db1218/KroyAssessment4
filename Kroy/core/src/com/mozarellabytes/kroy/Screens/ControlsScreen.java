@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.mozarellabytes.kroy.InputHandlers.ControlScreenInputHandler;
 import com.mozarellabytes.kroy.Kroy;
-import com.mozarellabytes.kroy.Utilities.*;
 
 import java.awt.*;
 

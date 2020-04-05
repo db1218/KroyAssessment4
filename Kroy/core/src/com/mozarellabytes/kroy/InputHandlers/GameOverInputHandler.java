@@ -1,9 +1,10 @@
-package com.mozarellabytes.kroy.Utilities;
+package com.mozarellabytes.kroy.InputHandlers;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Screens.MenuScreen;
+import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 /** This class controls the input for the game over screen, it
  * is used when the game over screen is displayed and the player

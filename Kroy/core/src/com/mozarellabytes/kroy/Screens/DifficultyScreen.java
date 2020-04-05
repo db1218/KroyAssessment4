@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.DifficultyLevel;
-import com.mozarellabytes.kroy.Utilities.DifficultyScreenInputHandler;
+import com.mozarellabytes.kroy.InputHandlers.DifficultyScreenInputHandler;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 /**

@@ -1,7 +1,6 @@
 package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,7 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.mozarellabytes.kroy.GUI.MenuButton;
 import com.mozarellabytes.kroy.GUI.MenuToggleButton;
 import com.mozarellabytes.kroy.Kroy;
-import com.mozarellabytes.kroy.Utilities.MenuInputHandler;
+import com.mozarellabytes.kroy.InputHandlers.MenuInputHandler;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 import com.mozarellabytes.kroy.GUI.MenuButton.State;
 import com.mozarellabytes.kroy.GUI.MenuToggleButton.ToggleState;

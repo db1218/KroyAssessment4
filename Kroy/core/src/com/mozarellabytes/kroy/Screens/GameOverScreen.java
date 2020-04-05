@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.mozarellabytes.kroy.Kroy;
-import com.mozarellabytes.kroy.Utilities.GameOverInputHandler;
+import com.mozarellabytes.kroy.InputHandlers.GameOverInputHandler;
 
 /** This screen is shown after the game has ended.
  * It tells the player if they have won or lost.

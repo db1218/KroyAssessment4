@@ -2,12 +2,10 @@ package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -17,11 +15,10 @@ import com.mozarellabytes.kroy.Entities.Patrol;
 import com.mozarellabytes.kroy.GUI.ButtonBar;
 import com.mozarellabytes.kroy.GUI.Buttons;
 import com.mozarellabytes.kroy.GameState;
+import com.mozarellabytes.kroy.InputHandlers.DanceScreenInputHandler;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Minigame.*;
 import com.mozarellabytes.kroy.Utilities.*;
-
-import java.awt.*;
 
 /**
  * The screen for the minigame that triggers when a firetruck meets an ET patrol

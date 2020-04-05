@@ -2,6 +2,7 @@ package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.utils.*;
 import com.mozarellabytes.kroy.GUI.ButtonBar;
+import com.mozarellabytes.kroy.InputHandlers.GameInputHandler;
 import com.mozarellabytes.kroy.PowerUp.PowerUp;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

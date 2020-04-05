@@ -1,10 +1,11 @@
-package com.mozarellabytes.kroy.Utilities;
+package com.mozarellabytes.kroy.InputHandlers;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Screens.ControlsScreen;
+import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 /**
  * This class controls the input for the Control screen

@@ -1,4 +1,4 @@
-package com.mozarellabytes.kroy.Utilities;
+package com.mozarellabytes.kroy.InputHandlers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Screens.DifficultyScreen;
+import com.mozarellabytes.kroy.Utilities.DifficultyLevel;
 
 /**
  * Manages the inputs for the difficulty screen, such as button presses

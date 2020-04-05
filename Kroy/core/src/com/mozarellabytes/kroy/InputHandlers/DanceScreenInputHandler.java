@@ -1,4 +1,4 @@
-package com.mozarellabytes.kroy.Utilities;
+package com.mozarellabytes.kroy.InputHandlers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
