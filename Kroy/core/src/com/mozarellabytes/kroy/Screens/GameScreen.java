@@ -1,6 +1,5 @@
 package com.mozarellabytes.kroy.Screens;
 
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.*;
 import com.mozarellabytes.kroy.GUI.ButtonBar;
 import com.mozarellabytes.kroy.PowerUp.PowerUp;
@@ -20,7 +19,6 @@ import com.mozarellabytes.kroy.GUI.GUI;
 import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.*;
-
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -124,6 +122,8 @@ public class GameScreen implements Screen, ButtonBar {
 
     private DifficultyLevel level;
 
+    private OrderedMap<String, Object> saveMap;
+
     /** Play when the game is being played
      * Pause when the pause button is clicked */
     public enum PlayState {
@@ -155,6 +155,8 @@ public class GameScreen implements Screen, ButtonBar {
         // patrols
         patrols = save.getPatrols();
         bossPatrol = save.getBossPatrol();
+
+        if (save.wasInMinigame()) doDanceOff(save.getMinigameFireTruck(), save.getMinigamePatrol());
     }
 
     /**
@@ -673,11 +675,12 @@ public class GameScreen implements Screen, ButtonBar {
     /**
      * Starts a dance-off between the given firetruck and the given ET
      * @param firetruck firetruck to be converted into fireman
-     * @param et        patrol to be used in the dance game
+     * @param patrol        patrol to be used in the dance game
      */
-    public void doDanceOff(FireTruck firetruck, Patrol et) {
+    public void doDanceOff(FireTruck firetruck, Patrol patrol) {
         truckAttack = false;
-        game.setScreen(new DanceScreen(game, gameState,this, firetruck, et));
+        game.setScreen(new DanceScreen(game, gameState,this, firetruck, patrol));
+        this.hide();
     }
 
     /**
@@ -779,7 +782,19 @@ public class GameScreen implements Screen, ButtonBar {
     }
 
     /**
-     * Save the game to a JSON file which can then be resumed
+     * When save is initiated in the minigame screen, the minigame
+     * state is added to the save file too
+     *
+     * @param minigameMap   patrol and firetruck map
+     */
+    public void saveGameFromMinigame(OrderedMap<String, String> minigameMap) {
+        saveMap = new OrderedMap<>();
+        saveMap.put("Minigame", minigameMap);
+        saveGameState();
+    }
+
+    /**
+     * Save the game to a JSON file which can then be resumed later
      */
     public void saveGameState() {
         Json json = new Json(JsonWriter.OutputType.json);
@@ -793,16 +808,17 @@ public class GameScreen implements Screen, ButtonBar {
         entitiesMap.put("Patrols", this.getPatrolsDescriptor());
         if (bossPatrol != null) entitiesMap.put("Boss Patrol", bossPatrol.getDescriptor());
 
-        OrderedMap<String, Object> map = new OrderedMap<>();
-        map.put("Timestamp", timestamp);
-        map.put("enTimestamp", enTimestamp);
-        map.put("Entities", entitiesMap);
-        map.put("Difficulty", difficultyControl);
-        map.put("Difficulty Level", difficultyLevel);
-        map.put("GameState", gameState);
+        if (saveMap == null) saveMap = new OrderedMap<>();
+
+        saveMap.put("Timestamp", timestamp);
+        saveMap.put("enTimestamp", enTimestamp);
+        saveMap.put("Entities", entitiesMap);
+        saveMap.put("Difficulty", difficultyControl);
+        saveMap.put("Difficulty Level", difficultyLevel);
+        saveMap.put("GameState", gameState);
 
         FileHandle file = Gdx.files.local("saves/" + timestamp + "/data.json");
-        file.writeString(json.prettyPrint(map),false);
+        file.writeString(json.prettyPrint(saveMap),false);
 
         takeScreenshot(timestamp);
     }

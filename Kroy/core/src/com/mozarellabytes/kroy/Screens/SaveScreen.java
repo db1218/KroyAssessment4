@@ -46,7 +46,7 @@ public class SaveScreen implements Screen {
     private Table selectedTable;
 
     // selected save element
-    private SavedElement currentSaveSelected;
+    private SavedElement selectedSave;
 
     private ArrayList<SavedElement> savedElements;
     private int savedIndex;
@@ -143,7 +143,7 @@ public class SaveScreen implements Screen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
-                    currentSaveSelected = save;
+                    selectedSave = save;
                     savedIndex = index;
                     updateCurrentlySelected();
                 }
@@ -157,7 +157,7 @@ public class SaveScreen implements Screen {
         deleteButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (currentSaveSelected != null) {
+                if (selectedSave != null) {
                     if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
                     deleteSave();
                 }
@@ -175,9 +175,19 @@ public class SaveScreen implements Screen {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (currentSaveSelected != null) {
+                if (selectedSave != null) {
                     if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
-                    game.setScreen(new GameScreen(game, currentSaveSelected));
+                    if (selectedSave.wasInMinigame()) {
+                        GameScreen gameScreen = new GameScreen(game, selectedSave);
+                        DanceScreen danceScreen = new DanceScreen(game,
+                                selectedSave.getGameState(),
+                                gameScreen,
+                                selectedSave.getMinigameFireTruck(),
+                                selectedSave.getMinigamePatrol());
+                        game.setScreen(danceScreen);
+                    } else {
+                        game.setScreen(new GameScreen(game, selectedSave));
+                    }
                 }
             }
         });
@@ -191,7 +201,7 @@ public class SaveScreen implements Screen {
                         if (savedIndex > savedElements.size()-1) {
                             savedIndex--;
                         } else {
-                            currentSaveSelected = savedElements.get(savedIndex);
+                            selectedSave = savedElements.get(savedIndex);
                             if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
                             updateCurrentlySelected();
                         }
@@ -201,20 +211,20 @@ public class SaveScreen implements Screen {
                         if (savedIndex < 0) {
                             savedIndex++;
                         } else {
-                            currentSaveSelected = savedElements.get(savedIndex);
+                            selectedSave = savedElements.get(savedIndex);
                             if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
                             updateCurrentlySelected();
                         }
                         break;
                     case Input.Keys.ENTER:
-                        if (currentSaveSelected != null) {
+                        if (selectedSave != null) {
                             if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
-                            game.setScreen(new GameScreen(game, currentSaveSelected));
+                            game.setScreen(new GameScreen(game, selectedSave));
                         }
                         break;
                     case Input.Keys.BACKSPACE:
                     case Input.Keys.FORWARD_DEL:
-                        if (currentSaveSelected != null) {
+                        if (selectedSave != null) {
                             if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();
                             deleteSave();
                         }
@@ -296,10 +306,10 @@ public class SaveScreen implements Screen {
      * Delete the currently selected save file
      */
     private void deleteSave() {
-        savedElements.remove(currentSaveSelected);
+        savedElements.remove(selectedSave);
         savedIndex = savedElements.size()-1;
-        Gdx.files.local("saves/" + currentSaveSelected.getTimestamp() + "/").deleteDirectory();
-        currentSaveSelected = null;
+        Gdx.files.local("saves/" + selectedSave.getTimestamp() + "/").deleteDirectory();
+        selectedSave = null;
         stage.clear();
         show();
     }
@@ -328,30 +338,30 @@ public class SaveScreen implements Screen {
      * trucks alive and fortresses alive
      */
     private void updateCurrentlySelected() {
-        Image screenshot = new Image(new Texture("saves/" + currentSaveSelected.getTimestamp() + "/screenshot.png"));
+        Image screenshot = new Image(new Texture("saves/" + selectedSave.getTimestamp() + "/screenshot.png"));
         selectedTable.clearChildren();
-        selectedTable.add(new Label(currentSaveSelected.getEnTimestamp(), new Label.LabelStyle(game.font60, Color.WHITE))).padBottom(20).row();
+        selectedTable.add(new Label(selectedSave.getEnTimestamp(), new Label.LabelStyle(game.font60, Color.WHITE))).padBottom(20).row();
         selectedTable.add(screenshot).maxWidth(Gdx.graphics.getWidth()/3f).maxHeight(Gdx.graphics.getHeight()/3f).padBottom(20).row();
         VerticalGroup savesList = new VerticalGroup();
         savesList.space(10);
 
         Label difficultyLabel = new Label("Difficulty: " +
-                currentSaveSelected.getDifficultyControl().getDifficultyMultiplier() + "x", new Label.LabelStyle(game.font25, Color.WHITE));
+                selectedSave.getDifficultyControl().getDifficultyMultiplier() + "x", new Label.LabelStyle(game.font25, Color.WHITE));
         difficultyLabel.setAlignment(Align.left);
 
-        Label fireTrucksLabel = new Label("Fire Trucks: (" + currentSaveSelected.getFireTrucks().size() + ")" +
-                currentSaveSelected.listAliveFireTrucks(), new Label.LabelStyle(game.font25, Color.WHITE));
+        Label fireTrucksLabel = new Label("Fire Trucks: (" + selectedSave.getFireTrucks().size() + ")" +
+                selectedSave.listAliveFireTrucks(), new Label.LabelStyle(game.font25, Color.WHITE));
         fireTrucksLabel.setAlignment(Align.left);
 
-        Label fortressesLabel = new Label("Fortresses: (" + currentSaveSelected.getFortresses().size() + ")" +
-                currentSaveSelected.listAliveFortresses(), new Label.LabelStyle(game.font25, Color.WHITE));
+        Label fortressesLabel = new Label("Fortresses: (" + selectedSave.getFortresses().size() + ")" +
+                selectedSave.listAliveFortresses(), new Label.LabelStyle(game.font25, Color.WHITE));
         fortressesLabel.setAlignment(Align.left);
 
-        Label patrolsLabel = new Label("Patrols: (" + currentSaveSelected.getPatrols().size() + ")",
+        Label patrolsLabel = new Label("Patrols: (" + selectedSave.getPatrols().size() + ")",
                 new Label.LabelStyle(game.font25, Color.WHITE));
         patrolsLabel.setAlignment(Align.left);
 
-        Label bossPatrolLabel = new Label("Boss Patrol: " + (currentSaveSelected.getBossPatrol() == null ? "inactive" : "active"),
+        Label bossPatrolLabel = new Label("Boss Patrol: " + (selectedSave.getBossPatrol() == null ? "inactive" : "active"),
                 new Label.LabelStyle(game.font25, Color.WHITE));
         bossPatrolLabel.setAlignment(Align.left);
 

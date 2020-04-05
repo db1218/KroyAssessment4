@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.OrderedMap;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Patrol;
 import com.mozarellabytes.kroy.GUI.ButtonBar;
@@ -116,7 +117,6 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
         this.state = GameScreen.PlayState.PLAY;
         this.button = new Buttons(this);
         this.danceInputHandler = new DanceScreenInputHandler(this);
-
     }
 
     /**
@@ -390,7 +390,14 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
 
     @Override
     public void saveGameState() {
+        firetruck.setHP(firefighter.getHealth());
+        patrol.setHP(ETDancer.getHealth());
 
+        OrderedMap<String, String> minigameMap = new OrderedMap<>();
+        minigameMap.put("FireTruck", firetruck.getType().getName());
+        minigameMap.put("Patrol", patrol.getName());
+
+        ((GameScreen) previousScreen).saveGameFromMinigame(minigameMap);
     }
 
     @Override

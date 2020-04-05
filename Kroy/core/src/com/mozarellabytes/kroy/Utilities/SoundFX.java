@@ -19,7 +19,7 @@ public class SoundFX {
     public static boolean isPlaying = false;
 
     /** All sounds can be played when this is true, else no sound will play */
-    public static boolean music_enabled = true;
+    public static boolean music_enabled = false;
 
     public static final Music sfx_menu = Gdx.audio.newMusic(Gdx.files.internal("sounds/spooky.wav"));
     public static final Music sfx_soundtrack = Gdx.audio.newMusic(Gdx.files.internal("sounds/soundtrack.mp3"));
@@ -38,6 +38,7 @@ public class SoundFX {
     public static final Sound sfx_snare = Gdx.audio.newSound(Gdx.files.internal("sounds/snare.wav"));
     public static final Sound sfx_combo = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/usecombo.wav"));
     public static final Sound sfx_wrong = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/wrong.mp3"));
+
     /** Plays attacking sound for FireTrucks only if it isn't already playing */
     public static void playTruckAttack() {
         if (!isPlaying) {

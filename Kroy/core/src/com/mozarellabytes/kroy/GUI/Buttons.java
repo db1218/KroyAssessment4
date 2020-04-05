@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.mozarellabytes.kroy.Screens.DanceScreen;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
@@ -192,7 +193,7 @@ public class Buttons {
         else if (parent.getState().equals(GameScreen.PlayState.PLAY)) parent.setState(GameScreen.PlayState.PAUSE);
     }
 
-    public void toControlScreen(){ parent.toControlScreen(); }
+    public void toControlScreen() { parent.toControlScreen(); }
 
     public void saveGameState() { parent.saveGameState(); }
 

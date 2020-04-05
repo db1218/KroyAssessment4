@@ -32,6 +32,9 @@ public class SavedElement {
     private final DifficultyControl difficultyControl;
     private final DifficultyLevel difficultyLevel;
 
+    private final FireTruck minigameFireTruck;
+    private final Patrol minigamePatrol;
+
     /**
      * Constructor for creating a SavedElement
      * @param timestamp when save occurred
@@ -83,6 +86,43 @@ public class SavedElement {
 
         difficultyLevel = (DifficultyLevel) data.get("Difficulty Level");
 
+        // if player was in minigame
+        if (data.get("Minigame") != null) {
+            OrderedMap<String, Object> minigameMap = (OrderedMap<String, Object>) data.get("Minigame");
+            System.out.println(minigameMap);
+            minigameFireTruck = findFireTruck((String) minigameMap.get("FireTruck"));
+            minigamePatrol = findPatrol((String) minigameMap.get("Patrol"));
+        } else {
+            minigameFireTruck = null;
+            minigamePatrol = null;
+        }
+
+    }
+
+    /**
+     * Finds a patrol by their name
+     *
+     * @param patrolName    name input
+     * @return              patrol output
+     */
+    private Patrol findPatrol(String patrolName) {
+        for (Patrol patrol : getPatrols())
+            if (patrol.getName().equals(patrolName))
+                return patrol;
+        throw new RuntimeException("Cannot find patrol: " + patrolName);
+    }
+
+    /**
+     * Finds a fire truck by their name
+     *
+     * @param fireTruckName name input
+     * @return              fire truck output
+     */
+    private FireTruck findFireTruck(String fireTruckName) {
+        for (FireTruck fireTruck : getFireTrucks())
+            if (fireTruck.getType().getName().equals(fireTruckName))
+                return fireTruck;
+        throw new RuntimeException("Cannot find truck: " + fireTruckName);
     }
 
     /**
@@ -149,5 +189,17 @@ public class SavedElement {
 
     public DifficultyLevel getDifficultyLevel() {
         return this.difficultyLevel;
+    }
+
+    public boolean wasInMinigame() {
+        return minigameFireTruck != null || minigamePatrol != null;
+    }
+
+    public FireTruck getMinigameFireTruck() {
+        return minigameFireTruck;
+    }
+
+    public Patrol getMinigamePatrol() {
+        return minigamePatrol;
     }
 }
