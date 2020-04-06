@@ -195,7 +195,9 @@ public class MenuScreen implements Screen {
 
     /** Changes the screen from the menu screen to the saves screen */
     public void toSavesScreen() {
-        game.setScreen(new SaveScreen(game, this));
+        if (Gdx.files.internal("saves/").list().length > 0) {
+            game.setScreen(new SaveScreen(game, this));
+        }
     }
 
     public Rectangle getNewGameButton() {

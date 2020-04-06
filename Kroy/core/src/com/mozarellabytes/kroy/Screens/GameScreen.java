@@ -1,6 +1,8 @@
 package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.utils.*;
+import com.mozarellabytes.kroy.Bubbles.BubbleThought;
+import com.mozarellabytes.kroy.Bubbles.Death;
 import com.mozarellabytes.kroy.GUI.ButtonBar;
 import com.mozarellabytes.kroy.InputHandlers.GameInputHandler;
 import com.mozarellabytes.kroy.PowerUp.PowerUp;
@@ -362,7 +364,6 @@ public class GameScreen implements Screen, ButtonBar {
             case PAUSE:
                 // render dark background
                 SoundFX.stopTruckAttack();
-
                 Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
                 shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
                 shapeMapRenderer.setColor(0, 0, 0, 0.5f);
@@ -447,13 +448,17 @@ public class GameScreen implements Screen, ButtonBar {
             }
 
             // checks patrol collision with fire trucks
-            for (Patrol patrol : this.patrols)
-                if (patrol.collidesWithTruck(truck, station))
+            for (Patrol patrol : this.patrols) {
+                if (patrol.collidesWithTruck(truck, station)) {
                     doDanceOff(truck, patrol);
+                }
+            }
 
-            if (bossPatrol != null)
-                if (bossPatrol.collidesWithTruck(truck, station))
+            if (bossPatrol != null){
+                if (bossPatrol.collidesWithTruck(truck, station)) {
                     doDanceOff(truck, bossPatrol);
+                }
+            }
 
             checkIfTruckDestroyed(truck);
         }
@@ -517,7 +522,7 @@ public class GameScreen implements Screen, ButtonBar {
 
         }
 
-        if (gameState.getTrucksInAttackRange() > 0 && SoundFX.music_enabled && truckAttack){
+        if (gameState.getTrucksInAttackRange() > 0 && SoundFX.music_enabled && truckAttack && !gameState.isDancing){
             SoundFX.playTruckAttack();
         } else {
             SoundFX.stopTruckAttack();
@@ -677,6 +682,7 @@ public class GameScreen implements Screen, ButtonBar {
      * @param patrol        patrol to be used in the dance game
      */
     public void doDanceOff(FireTruck firetruck, Patrol patrol) {
+        gameState.isDancing = true;
         game.setScreen(new DanceScreen(game, gameState,this, firetruck, patrol));
     }
 

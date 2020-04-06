@@ -25,6 +25,11 @@ public class GameState {
      */
     private boolean stationDestoyed;
 
+    /**
+     * Is the player currently playing the minigame?
+     */
+    public boolean isDancing;
+
     /** Constructor for GameState */
     public GameState() {
         this.activeFireTrucks = 0;

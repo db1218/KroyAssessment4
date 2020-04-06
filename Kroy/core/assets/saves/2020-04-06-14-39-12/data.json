@@ -1,11 +1,11 @@
 {
 "Timestamp": {
 	"class": "java.lang.String",
-	"value": "2020-03-24-12-39-14"
+	"value": "2020-04-06-14-39-12"
 },
 "enTimestamp": {
 	"class": "java.lang.String",
-	"value": "24 Mar 2020 12:39:14"
+	"value": "06 Apr 2020 14:39:12"
 },
 "Entities": {
 	"class": "com.badlogic.gdx.utils.OrderedMap",
@@ -39,14 +39,6 @@
 			"y": 7,
 			"health": 230,
 			"reserve": 280
-		},
-		{
-			"type": "EmeraldHard",
-			"rotation": "down",
-			"x": 6,
-			"y": 7,
-			"health": 100,
-			"reserve": 120
 		}
 	],
 	"Fortresses": [
@@ -66,7 +58,7 @@
 			"type": "Railway",
 			"x": 16.5,
 			"y": 3.5,
-			"health": 250
+			"health": 247.59998
 		},
 		{
 			"type": "Clifford",
@@ -89,175 +81,176 @@
 	],
 	"Patrols": [
 		{
-			"type": "Peach",
-			"name": "Peach Patrol 1",
-			"x": 27,
-			"y": 28,
+			"type": "Green",
+			"name": "Green Patrol 1",
+			"x": 26,
+			"y": 18,
 			"health": 100,
 			"path": [
 				{
-					"x": 16,
-					"y": 28
+					"x": 26,
+					"y": 22
 				},
+				{
+					"x": 46,
+					"y": 12
+				},
+				{
+					"x": 27,
+					"y": 5
+				},
+				{
+					"x": 23,
+					"y": 9
+				}
+			]
+		},
+		{
+			"type": "Green",
+			"name": "Green Patrol 2",
+			"x": 11,
+			"y": 16,
+			"health": 100,
+			"path": [
 				{
 					"x": 11,
-					"y": 19
+					"y": 9
 				},
 				{
-					"x": 29,
-					"y": 4
+					"x": 30,
+					"y": 10
 				},
 				{
-					"x": 43,
-					"y": 28
+					"x": 19,
+					"y": 24
+				},
+				{
+					"x": 16,
+					"y": 27
 				}
 			]
 		},
 		{
 			"type": "Yellow",
 			"name": "Yellow Patrol 1",
-			"x": 19,
-			"y": 16,
+			"x": 36,
+			"y": 9,
 			"health": 150,
 			"path": [
 				{
-					"x": 19,
-					"y": 6
-				},
-				{
-					"x": 42,
-					"y": 18
-				},
-				{
-					"x": 21,
-					"y": 26
-				},
-				{
-					"x": 17,
-					"y": 24
-				}
-			]
-		},
-		{
-			"type": "Peach",
-			"name": "Peach Patrol 2",
-			"x": 16,
-			"y": 18,
-			"health": 100,
-			"path": [
-				{
-					"y": 8
-				},
-				{
-					"x": 17,
-					"y": 18
-				},
-				{
-					"x": 17,
+					"x": 44,
 					"y": 13
 				},
 				{
-					"x": 19,
-					"y": 19
+					"x": 40,
+					"y": 18
+				},
+				{
+					"x": 6,
+					"y": 25
+				},
+				{
+					"x": 27,
+					"y": 9
 				}
 			]
 		},
 		{
 			"type": "Yellow",
 			"name": "Yellow Patrol 2",
-			"x": 38,
-			"y": 3,
+			"x": 24,
+			"y": 11,
 			"health": 150,
 			"path": [
 				{
-					"x": 14,
-					"y": 3
+					"x": 20,
+					"y": 4
 				},
 				{
-					"x": 1,
-					"y": 27
+					"x": 20,
+					"y": 13
 				},
 				{
-					"x": 31,
-					"y": 11
+					"x": 37,
+					"y": 14
 				},
 				{
 					"x": 39,
-					"y": 4
+					"y": 11
 				}
 			]
 		},
 		{
-			"type": "Violet",
-			"name": "Violet Patrol 1",
-			"x": 15,
-			"y": 4,
-			"health": 150,
-			"path": [
-				{
-					"x": 26,
-					"y": 27
-				},
-				{
-					"x": 28,
-					"y": 19
-				},
-				{
-					"x": 30,
-					"y": 25
-				},
-				{
-					"y": 4
-				}
-			]
-		},
-		{
-			"type": "Peach",
-			"name": "Peach Patrol 3",
-			"x": 25,
-			"y": 11,
+			"type": "Green",
+			"name": "Green Patrol 3",
+			"x": 41,
+			"y": 23,
 			"health": 100,
 			"path": [
 				{
-					"x": 21,
-					"y": 21
-				},
-				{
-					"x": 36,
-					"y": 3
-				},
-				{
 					"x": 41,
+					"y": 12
+				},
+				{
+					"x": 45,
+					"y": 8
+				},
+				{
+					"x": 43
+				},
+				{
+					"x": 47,
+					"y": 25
+				}
+			]
+		},
+		{
+			"type": "Green",
+			"name": "Green Patrol 4",
+			"x": 15,
+			"y": 1,
+			"health": 100,
+			"path": [
+				{
+					"x": 2,
+					"y": 12
+				},
+				{
+					"x": 28,
+					"y": 13
+				},
+				{
+					"x": 38,
 					"y": 25
 				},
 				{
-					"x": 41,
-					"y": 11
+					"x": 20,
+					"y": 1
 				}
 			]
 		},
 		{
 			"type": "Yellow",
 			"name": "Yellow Patrol 3",
-			"x": 20,
-			"y": 18,
+			"x": 1,
+			"y": 5,
 			"health": 150,
 			"path": [
 				{
-					"x": 21,
-					"y": 1
+					"x": 1,
+					"y": 5
 				},
 				{
-					"x": 7,
-					"y": 19
-				},
-				{
-					"x": 5,
+					"x": 24,
 					"y": 24
 				},
 				{
-					"x": 12,
-					"y": 25
+					"x": 31,
+					"y": 22
+				},
+				{
+					"x": 29,
+					"y": 9
 				}
 			]
 		}
@@ -267,7 +260,7 @@
 	"class": "com.mozarellabytes.kroy.Utilities.DifficultyControl",
 	"currentDifficulty": 4,
 	"difficultyChangeInterval": 50,
-	"currentTime": 44.228924
+	"currentTime": 34.323357
 },
 "Difficulty Level": {
 	"class": "com.mozarellabytes.kroy.Utilities.DifficultyLevel",
@@ -275,6 +268,7 @@
 },
 "GameState": {
 	"class": "com.mozarellabytes.kroy.GameState",
-	"activeFireTrucks": 4
+	"activeFireTrucks": 3,
+	"hasShownDanceTutorial": true
 }
 }

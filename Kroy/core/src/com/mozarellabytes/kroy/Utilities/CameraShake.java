@@ -90,4 +90,9 @@ public class CameraShake {
         shakeDuration = seconds;
         amplitude = strength;
     }
+
+    public void cancel() {
+        shakeDuration = 0;
+        amplitude = 0;
+    }
 }

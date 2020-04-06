@@ -114,6 +114,8 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
         this.state = GameScreen.PlayState.PLAY;
         this.button = new Buttons(this);
         this.danceInputHandler = new DanceScreenInputHandler(this);
+
+        SoundFX.stopTruckAttack();
     }
 
     /**
@@ -262,6 +264,8 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
      * Go back to Game screen
      */
     private void goToGameScreen() {
+        camShake.cancel();
+        gameState.isDancing = false;
         game.setScreen(previousScreen);
     }
 
@@ -349,20 +353,6 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
     public void setLastMove(DanceMove move){
         this.lastResult = this.danceMan.takeMove(move);
         this.firefighter.setState(move);
-        //this.kickNum++;
-        //kickIt();
-    }
-
-    /**
-     * Play sound effect
-     */
-    public void kickIt() {
-        int kickNum = 0;
-        if (kickNum %2 == 0) {
-            SoundFX.sfx_kick.play();
-        } else {
-            SoundFX.sfx_snare.play();
-        }
     }
 
     /**
