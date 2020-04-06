@@ -13,8 +13,8 @@ import com.mozarellabytes.kroy.Entities.FireTruckType;
 public enum DifficultyLevel {
 
     Easy(new TmxMapLoader().load("maps/Easy.tmx"),
-            20,
-            12,
+            40,
+            24,
             0,
             80f,
             4,
@@ -25,7 +25,7 @@ public enum DifficultyLevel {
             FireTruckType.AmethystEasy,
             FireTruckType.EmeraldEasy,
             2,
-            new Vector2(3, 7),
+            new Vector2(3, 9),
             new Vector2(10, 22),
             new Vector2(14, 2),
             new Vector2(42, 0),
