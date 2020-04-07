@@ -1,8 +1,7 @@
 package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.utils.*;
-import com.mozarellabytes.kroy.Bubbles.BubbleThought;
-import com.mozarellabytes.kroy.Bubbles.Death;
+import com.mozarellabytes.kroy.PowerUp.Warning;
 import com.mozarellabytes.kroy.GUI.ButtonBar;
 import com.mozarellabytes.kroy.InputHandlers.GameInputHandler;
 import com.mozarellabytes.kroy.PowerUp.PowerUp;
@@ -119,6 +118,7 @@ public class GameScreen implements Screen, ButtonBar {
     private float freezeCooldown;
 
     private boolean truckAttack;
+    private Warning warn;
 
     private ArrayList<PowerUp> powerUps;
     private ArrayList<Vector2> powerUpLocations;
@@ -362,15 +362,21 @@ public class GameScreen implements Screen, ButtonBar {
                 this.update(delta);
                 break;
             case PAUSE:
-                // render dark background
-                SoundFX.stopTruckAttack();
-                Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
-                shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
-                shapeMapRenderer.setColor(0, 0, 0, 0.5f);
-                shapeMapRenderer.rect(0, 0, camera.viewportWidth, camera.viewportHeight);
-                shapeMapRenderer.end();
+                if (!gameState.getHitPatrol()) {
+                    // render dark background
+                    SoundFX.stopTruckAttack();
+                    Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
+                    shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                    shapeMapRenderer.setColor(0, 0, 0, 0.5f);
+                    shapeMapRenderer.rect(0, 0, camera.viewportWidth, camera.viewportHeight);
+                    shapeMapRenderer.end();
 
-                gui.renderPauseScreenText();
+                    gui.renderPauseScreenText();
+                } else {
+                    mapBatch.begin();
+                    this.warn.render(mapBatch);
+                    mapBatch.end();
+                }
                 break;
             case FREEZE:
                 // render dark background
@@ -423,6 +429,14 @@ public class GameScreen implements Screen, ButtonBar {
 
         powerUps.removeAll(powerUpsToRemove);
 
+        for (int i=0;i<this.patrols.size();i++) {
+            Patrol patrol = this.patrols.get(i);
+            patrol.move(0.05);
+            if (patrol.getHP() <= 0) {
+                patrols.remove(patrol);
+            }
+        }
+
         for (int i = 0; i < station.getTrucks().size(); i++) {
             FireTruck truck = station.getTruck(i);
 
@@ -450,13 +464,13 @@ public class GameScreen implements Screen, ButtonBar {
             // checks patrol collision with fire trucks
             for (Patrol patrol : this.patrols) {
                 if (patrol.collidesWithTruck(truck, station)) {
-                    doDanceOff(truck, patrol);
+                    patrolCollision(patrol, truck);
                 }
             }
 
             if (bossPatrol != null){
                 if (bossPatrol.collidesWithTruck(truck, station)) {
-                    doDanceOff(truck, bossPatrol);
+                    patrolCollision(bossPatrol, truck);
                 }
             }
 
@@ -485,14 +499,6 @@ public class GameScreen implements Screen, ButtonBar {
         } else {
             if (!gameState.hasStationDestoyed() && gameState.getNumDestroyedFortresses() == level.getFortressesDestroyedBeforeBoss())
                 bossPatrol = new BossPatrol(PatrolType.Boss, fortresses.get(0).getPosition(), station.getCentrePosition());
-        }
-
-        for (int i=0;i<this.patrols.size();i++) {
-            Patrol patrol = this.patrols.get(i);
-            patrol.move(0.05);
-            if (patrol.getHP() <= 0) {
-                patrols.remove(patrol);
-            }
         }
 
         for (int i = 0; i < this.fortresses.size(); i++) {
@@ -886,6 +892,26 @@ public class GameScreen implements Screen, ButtonBar {
                 }
             }
         }
+    }
+
+    private void patrolCollision(Patrol patrol, FireTruck truck) {
+        gameState.setHitPatrol(true);
+        gameState.isDancing = true;
+        this.warn = new Warning(truck.getPosition());
+        if (SoundFX.music_enabled) {
+            SoundFX.sfx_soundtrack.stop();
+            SoundFX.sfx_patrolCollision.play();
+        }
+        setState(PlayState.PAUSE);
+        Timer.schedule(new Timer.Task() {
+
+            @Override
+            public void run() {
+                setState(PlayState.PLAY);
+                doDanceOff(truck, patrol);
+            }
+
+        }, 3);
     }
 
     public boolean isNotPaused() {

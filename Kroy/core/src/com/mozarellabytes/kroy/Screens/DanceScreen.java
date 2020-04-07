@@ -256,6 +256,7 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
             }
         } else if (ETDancer.getHealth() <= 0) {
             patrol.setHP(Math.max(ETDancer.getHealth(), 0));
+            patrol.setHP(-1);
             goToGameScreen();
         }
     }
@@ -266,6 +267,7 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
     private void goToGameScreen() {
         camShake.cancel();
         gameState.isDancing = false;
+        gameState.setHitPatrol(false);
         game.setScreen(previousScreen);
     }
 

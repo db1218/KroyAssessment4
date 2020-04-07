@@ -38,6 +38,7 @@ public class SoundFX {
     public static final Sound sfx_snare = Gdx.audio.newSound(Gdx.files.internal("sounds/snare.wav"));
     public static final Sound sfx_combo = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/usecombo.wav"));
     public static final Sound sfx_wrong = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/wrong.mp3"));
+    public static final Sound sfx_patrolCollision = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/patrolcollision.wav"));
 
     /** Plays attacking sound for FireTrucks only if it isn't already playing */
     public static void playTruckAttack() {

@@ -26,6 +26,11 @@ public class GameState {
     private boolean stationDestoyed;
 
     /**
+     * Has a FireTruck just hit a patrol?
+     */
+    private boolean hitPatrol;
+
+    /**
      * Is the player currently playing the minigame?
      */
     public boolean isDancing;
@@ -111,6 +116,10 @@ public class GameState {
     public void setDanceTutorialShown() { this.hasShownDanceTutorial = true; }
 
     public boolean hasDanceTutorialShown() { return this.hasShownDanceTutorial; }
+
+    public boolean getHitPatrol() { return this.hitPatrol; }
+
+    public void setHitPatrol(boolean bool) { this.hitPatrol = bool; }
 
 
 }

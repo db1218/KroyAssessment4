@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
-import com.mozarellabytes.kroy.Bubbles.BubbleThought;
 import com.mozarellabytes.kroy.Descriptors.Desc;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
@@ -32,9 +31,6 @@ public class FireTruck extends Sprite {
 
     /** Water Reserve */
     private float reserve;
-
-    private BubbleThought bubble;
-    private boolean hasBubble = false;
 
     /** Position of FireTruck in tiles */
     private Vector2 position;
