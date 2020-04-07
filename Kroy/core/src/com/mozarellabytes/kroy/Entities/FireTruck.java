@@ -247,24 +247,6 @@ public class FireTruck extends Sprite {
         this.HP += HP;
     }
 
-    /* Updates the bubble sprite based on the truck's stats
-    public void updateBubble(Batch batch) {
-        if (!hasBubble) {
-            if (this.getReserve() < this.type.getMaxReserve() / 2f) {
-                bubble = new BubbleThought(1, this.getPosition());
-            }
-            else if (this.getHP() < this.type.getMaxHP() / 2f) {
-                bubble = new BubbleThought(0, this.getPosition());
-            }
-            bubble.update(batch);
-            hasBubble = true;
-        } else {
-            bubble.setPosition(this.getPosition());
-            bubble.update(batch);
-        }
-    }
-     */
-
     /**
      * Increases the Reserve of the truck
      *
@@ -375,7 +357,7 @@ public class FireTruck extends Sprite {
     }
 
     /**
-     * Finds a path between two points
+     * Finds a path between two points.
      *
      * @param endPos    Position on the screen that the user's mouse is on
      * @param startPos    Position of last tile in the path queue
@@ -387,7 +369,7 @@ public class FireTruck extends Sprite {
         vistited = new boolean[48][29];
         prev = new Vector2[1392];
 
-        for(int i=0; i<48; i++){
+        for(int i=0; i<48; i++) {
             for(int j=0; j<29; j++){
                 vistited[i][j] = false;
             }
@@ -395,6 +377,12 @@ public class FireTruck extends Sprite {
 
         positions.addLast(startPos);
         vistited[(int) startPos.x][(int) startPos.y] = true;
+
+        // makes sure the truck always goes down first from fire station
+        if (gameScreen.getStation().getBayTiles().contains(new Vector2(startPos))) {
+            positions.addLast(new Vector2(startPos.x, startPos.y-1));
+            vistited[(int) startPos.x][(int) startPos.y-1] = true;
+        }
 
         while (!positions.isEmpty()) {
             currentPos = positions.removeLast();

@@ -5,6 +5,8 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruckType;
 
+import static com.mozarellabytes.kroy.Entities.FireTruckType.*;
+
 /**
  * The actual level which defines many different variables within
  * the game which change depending on the difficulty to change
@@ -20,10 +22,10 @@ public enum DifficultyLevel {
             4,
             4,
             6f,
-            FireTruckType.RubyEasy,
-            FireTruckType.SapphireEasy,
-            FireTruckType.AmethystEasy,
-            FireTruckType.EmeraldEasy,
+            RubyEasy,
+            SapphireEasy,
+            AmethystEasy,
+            EmeraldEasy,
             2,
             new Vector2(3, 9),
             new Vector2(10, 22),
@@ -41,10 +43,10 @@ public enum DifficultyLevel {
             10,
             2,
             10f,
-            FireTruckType.RubyMedium,
-            FireTruckType.SapphireMedium,
-            FireTruckType.AmethystMedium,
-            FireTruckType.EmeraldMedium,
+            RubyMedium,
+            SapphireMedium,
+            AmethystMedium,
+            EmeraldMedium,
             4,
             new Vector2(24, 5),
             new Vector2(28.5f, 21.5f),
@@ -62,10 +64,10 @@ public enum DifficultyLevel {
             20,
             1,
             15f,
-            FireTruckType.RubyHard,
-            FireTruckType.SapphireHard,
-            FireTruckType.AmethystHard,
-            FireTruckType.EmeraldHard,
+            RubyHard,
+            SapphireHard,
+            AmethystHard,
+            EmeraldHard,
             7,
             new Vector2(2, 7),
             new Vector2(12,23.5f),

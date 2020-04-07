@@ -191,26 +191,6 @@ public class GameScreen implements Screen, ButtonBar {
 
     }
 
-    private void generatePatrols() {
-        for (int i=0; i<level.getNumPatrols(); i++) {
-            patrols.add(generateRandomPatrol());
-        }
-    }
-
-    private Patrol generateRandomPatrol() {
-        PatrolType type = generateRandomPatrolType();
-        int patrolOfType = 0;
-        for (Patrol patrol : patrols) if (patrol.getType().equals(type)) patrolOfType++;
-        if (patrolOfType == 0)
-            return new Patrol(type, level.getMapWidth(), level.getMapHeight(), type.name() + " Patrol 1");
-            return new Patrol(type, level.getMapWidth(), level.getMapHeight(), type.name() + " Patrol " + (patrolOfType + 1));
-    }
-
-    private PatrolType generateRandomPatrolType() {
-        PatrolType[] types = new PatrolType[]{PatrolType.Blue, PatrolType.Green, PatrolType.Peach, PatrolType.Violet, PatrolType.Yellow};
-        return types[new Random().nextInt(types.length)];
-    }
-
     /**
      * Initialise common objects independent on if a new Game
      * is being made, or loaded from a save state
@@ -571,6 +551,38 @@ public class GameScreen implements Screen, ButtonBar {
     }
 
     /**
+     * Spawns initial patrols
+     */
+    private void generatePatrols() {
+        for (int i=0; i<level.getNumPatrols(); i++) {
+            patrols.add(generateRandomPatrol());
+        }
+    }
+
+    /**
+     * Generate a random patrol with a unique name
+     * @return  new patrol
+     */
+    private Patrol generateRandomPatrol() {
+        PatrolType type = generateRandomPatrolType();
+        int patrolOfType = 0;
+        for (Patrol patrol : patrols) if (patrol.getType().equals(type)) patrolOfType++;
+        if (patrolOfType == 0)
+            return new Patrol(type, level.getMapWidth(), level.getMapHeight(), type.name() + " Patrol 1");
+        return new Patrol(type, level.getMapWidth(), level.getMapHeight(), type.name() + " Patrol " + (patrolOfType + 1));
+    }
+
+    /**
+     * Generates a random patrol type
+     *
+     * @return  patrol type
+     */
+    private PatrolType generateRandomPatrolType() {
+        PatrolType[] types = new PatrolType[]{PatrolType.Blue, PatrolType.Green, PatrolType.Peach, PatrolType.Violet, PatrolType.Yellow};
+        return types[new Random().nextInt(types.length)];
+    }
+
+    /**
      * Checks whether the player has clicked on a truck and sets that
      * truck to selected truck and entity
      *
@@ -722,8 +734,6 @@ public class GameScreen implements Screen, ButtonBar {
                 break;
         }
     }
-
-    public void setState(PlayState state){ this.state = state; }
 
     /**
      * Enables/Disables auto attack
@@ -894,6 +904,13 @@ public class GameScreen implements Screen, ButtonBar {
         }
     }
 
+    /**
+     * Check collision between patrol and truck to enter
+     * into the dance off minigame after 3 seconds
+     *
+     * @param patrol    patrol to check if collided with truck
+     * @param truck     truck to check if collided with patrol
+     */
     private void patrolCollision(Patrol patrol, FireTruck truck) {
         gameState.setHitPatrol(true);
         gameState.isDancing = true;
@@ -917,6 +934,8 @@ public class GameScreen implements Screen, ButtonBar {
     public boolean isNotPaused() {
         return state != PlayState.PAUSE;
     }
+
+    public void setState(PlayState state){ this.state = state; }
 
     public boolean isTruckAttackEnabled() {
         return this.truckAttack;
