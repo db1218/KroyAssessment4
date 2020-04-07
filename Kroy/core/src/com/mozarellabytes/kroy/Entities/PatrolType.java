@@ -20,11 +20,11 @@ public enum PatrolType {
      * The preset values for the different patrol types includes the type's:
      * texture, speed, name, name, attack range, attack points
      */
-    Green(new Texture(Gdx.files.internal("sprites/Patrol/greenPatrol.png")), 0.16f, 100),
-    Blue(new Texture(Gdx.files.internal("sprites/Patrol/bluePatrol.png")), 0.08f, 150),
-    Peach(new Texture(Gdx.files.internal("sprites/Patrol/peachPatrol.png")),0.16f, 100),
-    Violet(new Texture(Gdx.files.internal("sprites/Patrol/violetPatrol.png")),0.08f, 150),
-    Yellow(new Texture(Gdx.files.internal("sprites/Patrol/yellowPatrol.png")),0.08f, 150),
+    Green(new Texture(Gdx.files.internal("sprites/Patrol/greenPatrol.png")), 0.16f, 70),
+    Blue(new Texture(Gdx.files.internal("sprites/Patrol/bluePatrol.png")), 0.08f, 120),
+    Peach(new Texture(Gdx.files.internal("sprites/Patrol/peachPatrol.png")),0.16f, 70),
+    Violet(new Texture(Gdx.files.internal("sprites/Patrol/violetPatrol.png")),0.08f, 120),
+    Yellow(new Texture(Gdx.files.internal("sprites/Patrol/yellowPatrol.png")),0.08f, 120),
     Boss(new Texture(Gdx.files.internal("sprites/Patrol/PatrolBoss.png")),0.04f, 150);
 
     /**

@@ -18,32 +18,32 @@ public enum FortressType {
      * name, delay between firing bombs, attack range, maximum health points,
      * attack points, width, height and sprite.
      */
-    Revs ("Revolution", 2500, 7, 100, 7.5f, 5, 3,
+    Revs ("Revolution", 2500, 7, 200, 7.5f, 5, 3,
             new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_full.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_dead.png"))),
 
-    Walmgate ("Walmgate Bar", 1500, 8, 200, 12.5f, 5, 5,
+    Walmgate ("Walmgate Bar", 1500, 8, 140, 10f, 5, 5,
             new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate_full.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate_dead.png"))),
 
-    Clifford ("Clifford's Tower", 500, 6.5f, 150, 10, 4, 3,
+    Clifford ("Clifford's Tower", 500, 6.5f, 100, 7.5f, 4, 3,
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford_full.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford_dead.png"))),
 
-    CentralHall ("Central Hall", 500, 7.5f, 175, 17.5f, 4, 3,
+    CentralHall ("Central Hall", 500, 7.5f, 115, 7.5f, 4, 3,
             new Texture(Gdx.files.internal("sprites/fortress/UoY_central_hall_full.png")),
             new Texture(Gdx.files.internal("sprites/fortress/UoY_central_hall_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/UoY_central_hall_dead.png"))),
 
-    Museum ("York Museum", 1500, 5.5f, 180, 20, 4, 3,
+    Museum ("York Museum", 1500, 5.5f, 110, 10f, 4, 3,
             new Texture(Gdx.files.internal("sprites/fortress/fortress_yorkshire_museum_full.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_yorkshire_museum_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_yorkshire_museum_dead.png"))),
     
-    Railway ("Railway Museum", 1000, 8.5f, 250, 15, 5, 4,
+    Railway ("Railway Museum", 1000, 8.5f, 150, 11f, 5, 4,
             new Texture(Gdx.files.internal("sprites/fortress/york_railway_museum_full.png")),
             new Texture(Gdx.files.internal("sprites/fortress/york_railway_museum_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/york_railway_museum_dead.png")));

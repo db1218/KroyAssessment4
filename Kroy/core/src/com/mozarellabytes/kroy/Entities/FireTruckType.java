@@ -17,20 +17,20 @@ public enum FireTruckType {
     /** The preset values for the different truck types includes the type's:
      * maximum reserve, speed, trailColour, name, attack range, attack points
      */
-    RubyEasy(120, 4.2f, Color.RED, "Ruby Truck", 5.5f, 0.11f, 160,"red"),
-    SapphireEasy(250, 2.3f, Color.CYAN, "Sapphire Truck", 6.5f, 0.2f, 140, "blue"),
-    AmethystEasy(280, 1.7f, Color.PURPLE, "Amethyst Truck", 6.7f, 0.22f, 230,"purple"),
-    EmeraldEasy(140, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.35f, 120, "green"),
+    RubyEasy(160, 4.2f, Color.RED, "Ruby Truck", 5.5f, 0.16f, 180,"red"),
+    SapphireEasy(290, 3.3f, Color.CYAN, "Sapphire Truck", 6.5f, 0.25f, 150, "blue"),
+    AmethystEasy(320, 2.7f, Color.PURPLE, "Amethyst Truck", 6.7f, 0.27f, 240,"purple"),
+    EmeraldEasy(180, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.4f, 150, "green"),
 
-    RubyMedium(110, 4.2f, Color.RED, "Ruby Truck", 5.5f, 0.1f, 150, "red"),
-    SapphireMedium(250, 2.2f, Color.CYAN, "Sapphire Truck", 6.2f, 0.16f, 130, "blue"),
-    AmethystMedium(280, 1.6f, Color.PURPLE, "Amethyst Truck", 6.5f, 0.2f, 230, "purple"),
-    EmeraldMedium(130, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.3f, 110, "green"),
+    RubyMedium(140, 4.2f, Color.RED, "Ruby Truck", 5.5f, 0.14f, 160, "red"),
+    SapphireMedium(280, 3.2f, Color.CYAN, "Sapphire Truck", 6.2f, 0.20f, 140, "blue"),
+    AmethystMedium(300, 2.6f, Color.PURPLE, "Amethyst Truck", 6.5f, 0.24f, 230, "purple"),
+    EmeraldMedium(160, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.34f, 140, "green"),
 
-    RubyHard(100, 4.2f, Color.RED, "Ruby Truck", 5, 0.08f, 140, "red"),
-    SapphireHard(250, 2, Color.CYAN, "Sapphire Truck", 6, 0.16f, 120, "blue"),
-    AmethystHard(280, 1.4f, Color.PURPLE, "Amethyst Truck", 6.5f, 0.2f, 230, "purple"),
-    EmeraldHard(120, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.3f, 100, "green");
+    RubyHard(130, 4.2f, Color.RED, "Ruby Truck", 5, 0.12f, 150, "red"),
+    SapphireHard(270, 3, Color.CYAN, "Sapphire Truck", 6, 0.18f, 130, "blue"),
+    AmethystHard(290, 2.4f, Color.PURPLE, "Amethyst Truck", 6.5f, 0.22f, 220, "purple"),
+    EmeraldHard(150, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.32f, 130, "green");
 
 
     /** The maximum amount of water this type of truck can have,
