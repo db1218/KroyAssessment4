@@ -89,8 +89,6 @@ public class ControlsScreen implements Screen {
                 backgroundImage = new Texture(Gdx.files.internal("menuscreen_new.png"), true);
                 break;
             case "game":
-                backgroundImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
-                break;
             case "dance":
                 backgroundImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
                 break;
@@ -109,10 +107,7 @@ public class ControlsScreen implements Screen {
         arrow = new Texture(Gdx.files.internal("sprites/dance/arrowRight.png"), true);
         arrowBox = new Texture(Gdx.files.internal("sprites/dance/targetBox.png"), true);
 
-
         HP = 200;
-        /** Counter to reset the fortresses health bar */
-        int count = 0;
 
         exitButton = new Rectangle();
         exitButton.x = (int)camera.viewportWidth - 105;
@@ -151,7 +146,6 @@ public class ControlsScreen implements Screen {
 
         game.batch.begin();
 
-
         if (screen.equals("game") || screen.equals("menu")) {
             game.font50.draw(game.batch, "Control screen", screenWidth / 2.8f, screenHeight / 1.1678f);
             game.font25.draw(game.batch, "Flood the fortresses before the fortresses destroy your fire trucks to win", (screenWidth / 2) - (36 * 15),screenHeight / 1.29f);
@@ -183,14 +177,18 @@ public class ControlsScreen implements Screen {
             game.batch.draw(trailImage, screenWidth / 4.74f, screenHeight / 8.89f);
             game.batch.draw(trailEndImage, screenWidth / 4.74f, screenHeight / 8.89f);
 
-            game.font33.draw(game.batch, "Tactical Pause", screenWidth / 1.88f, screenHeight * 0.6875f);
-            game.font25.draw(game.batch, "Press [SPACE] to pause and give your trucks orders.", screenWidth / 1.87f,screenHeight * 0.6125f);
-            game.font25.draw(game.batch, "Press [Q] to cancel the selected trucks' path.", screenWidth / 1.87f,screenHeight * 0.56875f);
+            game.font33.draw(game.batch, "Tactical Freeze", screenWidth / 1.88f, screenHeight * 0.6875f);
+            game.font25.draw(game.batch, "Press [SPACE] to freeze and draw truck paths.", screenWidth / 1.87f,screenHeight * 0.6125f);
+            game.font25.draw(game.batch, "Use arrow keys to undo/redo a path.", screenWidth / 1.87f,screenHeight * 0.56875f);
+
+            game.font33.draw(game.batch, "Attacking Fortresses", screenWidth / 1.88f,screenHeight * 0.5f);
+            game.font25.draw(game.batch, "Toggle spray with [A].", screenWidth / 1.87f,screenHeight * 0.45f);
 
             game.batch.setColor(Color.WHITE);
             game.batch.draw(truckRight, screenWidth / 7.44f, screenHeight / 2.33f);
-            game.batch.draw(fortress,screenWidth / 1.62f, screenHeight / 6.15f);
-            game.batch.draw(truckLeft,screenWidth / 1.23f, screenHeight / 4.21f);
+            game.batch.draw(fortress,screenWidth / 1.62f, screenHeight / 8.89f);
+            game.batch.draw(truckLeft,screenWidth / 1.23f, screenHeight / 7.21f);
+
         } else if (screen.equals("dance")) {
             game.font50.draw(game.batch, "Control screen", screenWidth / 2.8f, screenHeight / 1.1678f);
             game.font25.draw(game.batch, "An ET has challenged you to a dance-off!", (screenWidth / 2) - (36 * 15),screenHeight / 1.29f);
@@ -248,14 +246,14 @@ public class ControlsScreen implements Screen {
     public void changeScreen() { this.game.setScreen(parent); }
 
     /** Draws the image being shown behind the controls panel */
-    private void drawBackgroundImage(){
+    private void drawBackgroundImage() {
         game.batch.begin();
         game.batch.draw(backgroundImage, 0, 0, camera.viewportWidth, camera.viewportHeight);
         game.batch.end();
     }
 
     /** Draws the black rectangle over which the controls are shown */
-    private void drawFilledBackgroundBox(){
+    private void drawFilledBackgroundBox() {
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         game.shapeRenderer.rect(screenWidth / 25.6f,screenHeight / 16, screenWidth / 1.085f , screenHeight / 1.14f, Color.BLACK, Color.BLACK,Color.BLACK, Color.BLACK);
         game.shapeRenderer.end();
@@ -272,22 +270,12 @@ public class ControlsScreen implements Screen {
     }
 
     /** This draws the fortresses health bar */
-    private void drawFortressHealthBar(){
-
+    private void drawFortressHealthBar() {
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        game.shapeRenderer.rect(screenWidth / 1.4713f,  screenHeight / 2.58f, 35, 60);
-        game.shapeRenderer.rect(screenWidth / 1.4629f, screenHeight / 2.5297f, 24, 50, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-        game.shapeRenderer.rect(screenWidth / 1.4629f, screenHeight / 2.5297f, 24,  HP / 4f, Color.RED, Color.RED, Color.RED, Color.RED);
+        game.shapeRenderer.rect(screenWidth / 1.5713f,  screenHeight / 2.78f, 35, 60);
+        game.shapeRenderer.rect(screenWidth / 1.5629f, screenHeight / 2.7297f, 24, 50, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+        game.shapeRenderer.rect(screenWidth / 1.5629f, screenHeight / 2.7297f, 24,  HP / 4f, Color.RED, Color.RED, Color.RED, Color.RED);
         game.shapeRenderer.end();
-
-        /*
-        if (count <= 30) {
-            drawFireTruckAttacking();
-        } else if (count == 60){
-            count = 0;
-        }
-        count++;
-         */
     }
 
     /**
