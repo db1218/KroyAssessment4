@@ -78,7 +78,6 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
      */
     public DanceScreen(Kroy game, GameState gameState, GameScreen previousScreen, FireTruck firetruck, Patrol patrol) {
 
-        Gdx.app.log("dance ", "s");
         this.game = game;
         this.gameState = gameState;
 
@@ -252,7 +251,7 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
     private void checkIfOver() {
         if (firefighter.getHealth() <= 0) {
             firetruck.setHP(firefighter.getHealth());
-            ((GameScreen) previousScreen).checkIfTruckDestroyed(firetruck);
+            previousScreen.checkIfTruckDestroyed(firetruck);
             if (gameState.shouldGameEnd()) {
                 gameState.hasGameEnded(game);
             } else {
