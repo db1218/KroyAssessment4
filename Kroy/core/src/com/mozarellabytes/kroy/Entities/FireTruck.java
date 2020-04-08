@@ -753,6 +753,13 @@ public class FireTruck extends Sprite {
         this.timeOfLastAttack = timestamp;
     }
 
+    /**
+     * Clears the path segment
+     */
+    public void clearPathSegment() {
+        this.pathSegment.clear();
+    }
+
     public void setMoving(boolean t) {
         this.moving = t;
     }
