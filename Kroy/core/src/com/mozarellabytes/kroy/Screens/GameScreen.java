@@ -924,11 +924,27 @@ public class GameScreen implements Screen, ButtonBar {
         }, 3);
     }
 
+    /** This updates the active power ups, if the power up has been
+     * active for longer then the duration of the power up then it
+     * is removed */
+    public void updatePowerUps() {
+        ArrayList<PowerUp> powerUpsToRemove = new ArrayList<>();
+
+        for (PowerUp power : powerUps) {
+            power.update();
+            if (power.getCanBeDestroyed()) powerUpsToRemove.add(power);
+        }
+
+        powerUps.removeAll(powerUpsToRemove);
+    }
+
     public boolean isNotPaused() {
         return state != PlayState.PAUSE;
     }
 
-    public void setState(PlayState state){ this.state = state; }
+    public void setState(PlayState state){
+        this.state = state;
+    }
 
     public boolean isTruckAttackEnabled() {
         return this.truckAttack;
@@ -978,17 +994,6 @@ public class GameScreen implements Screen, ButtonBar {
 
     public ArrayList<PowerUp> getPowerUps() {
         return this.powerUps;
-    }
-
-    public void updatePowerUps() {
-        ArrayList<PowerUp> powerUpsToRemove = new ArrayList<>();
-
-        for (PowerUp power : powerUps) {
-            power.update();
-            if (power.getCanBeDestroyed()) powerUpsToRemove.add(power);
-        }
-
-        powerUps.removeAll(powerUpsToRemove);
     }
 
 }
