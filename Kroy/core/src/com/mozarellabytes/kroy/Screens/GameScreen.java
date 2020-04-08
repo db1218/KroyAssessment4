@@ -398,16 +398,8 @@ public class GameScreen implements Screen, ButtonBar {
 
         gameState.setTrucksInAttackRange(0);
 
-        ArrayList<PowerUp> powerUpsToRemove = new ArrayList<>();
-
-        for (PowerUp power : powerUps) {
-            power.update();
-            if (power.getCanBeDestroyed()) powerUpsToRemove.add(power);
-        }
-
+        updatePowerUps();
         for (VFX vfx : this.vfx) vfx.update(delta);
-
-        powerUps.removeAll(powerUpsToRemove);
 
         for (int i=0;i<this.patrols.size();i++) {
             Patrol patrol = this.patrols.get(i);
@@ -986,6 +978,17 @@ public class GameScreen implements Screen, ButtonBar {
 
     public ArrayList<PowerUp> getPowerUps() {
         return this.powerUps;
+    }
+
+    public void updatePowerUps() {
+        ArrayList<PowerUp> powerUpsToRemove = new ArrayList<>();
+
+        for (PowerUp power : powerUps) {
+            power.update();
+            if (power.getCanBeDestroyed()) powerUpsToRemove.add(power);
+        }
+
+        powerUps.removeAll(powerUpsToRemove);
     }
 
 }

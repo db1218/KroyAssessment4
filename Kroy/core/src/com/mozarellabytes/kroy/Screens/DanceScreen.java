@@ -41,7 +41,7 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
 
     private final CameraShake camShake;
 
-    private final Screen previousScreen;
+    private final GameScreen previousScreen;
     private boolean hasShownTutorial = false;
 
     private final Texture targetBoxTexture;
@@ -76,7 +76,9 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
      * @param firetruck         the firetruck from the game (fire man in minigame)
      * @param patrol            the patrol from the game
      */
-    public DanceScreen(Kroy game, GameState gameState, Screen previousScreen, FireTruck firetruck, Patrol patrol) {
+    public DanceScreen(Kroy game, GameState gameState, GameScreen previousScreen, FireTruck firetruck, Patrol patrol) {
+
+        Gdx.app.log("dance ", "s");
         this.game = game;
         this.gameState = gameState;
 
@@ -170,6 +172,9 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
         switch (state) {
             case PLAY:
                 camShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
+
+                previousScreen.updatePowerUps();
+
                 this.danceMan.update(delta);
 
                 checkIfOver();
@@ -193,7 +198,6 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
                 shapeMapRenderer.end();
 
                 GlyphLayout layout = new GlyphLayout();
-               // layout.setText(game.font26, "Game paused \n");
                 layout.setText(game.font26, "Game paused \n Press 'ESC' or the Pause button \n To return to the game");
 
                 game.batch.setProjectionMatrix(camera.combined);
