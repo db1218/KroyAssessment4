@@ -17,6 +17,7 @@ import org.mockito.junit.MockitoRule;
 import java.lang.reflect.Array;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -102,6 +103,7 @@ public class FireStationTest {
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,11);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,12);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,13);
+        when(gameScreenMock.getStation()).thenReturn(station);
 
         FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(11, 11), FireTruckType.RubyHard);
         FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(11, 13), FireTruckType.SapphireHard);
@@ -128,10 +130,11 @@ public class FireStationTest {
 
     @Test
     public void trucksShouldNotMovePastEachOtherTest() {
-        Mockito.doReturn(true).when(gameScreenMock).isRoad(11,11);
-        Mockito.doReturn(true).when(gameScreenMock).isRoad(11,12);
-        Mockito.doReturn(true).when(gameScreenMock).isRoad(11,13);
-        Mockito.doReturn(true).when(gameScreenMock).isRoad(11,14);
+        when(gameScreenMock.isRoad(11,11)).thenReturn(true);
+        when(gameScreenMock.isRoad(11,12)).thenReturn(true);
+        when(gameScreenMock.isRoad(11,13)).thenReturn(true);
+        when(gameScreenMock.isRoad(11,14)).thenReturn(true);
+        when(gameScreenMock.getStation()).thenReturn(station);
 
         FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(11, 11), FireTruckType.RubyHard);
         FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(11, 14), FireTruckType.SapphireHard);
@@ -166,6 +169,7 @@ public class FireStationTest {
 
         when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
         when(gameScreenMock.getSelectedTruck()).thenReturn(activeFireTruck);
+        when(gameScreenMock.getStation()).thenReturn(station);
 
         activeFireTruck.addTileToPathSegment(new Vector2(10, 10));
         activeFireTruck.addTileToPathSegment(new Vector2(10, 11));
@@ -189,6 +193,7 @@ public class FireStationTest {
 
         when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
         when(gameScreenMock.getSelectedTruck()).thenReturn(activeFireTruck);
+        when(gameScreenMock.getStation()).thenReturn(station);
 
         activeFireTruck.addTileToPathSegment(new Vector2(10, 10));
         activeFireTruck.addTileToPathSegment(new Vector2(10, 11));
@@ -211,6 +216,7 @@ public class FireStationTest {
 
         when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
         when(gameScreenMock.getSelectedTruck()).thenReturn(activeFireTruck);
+        when(gameScreenMock.getStation()).thenReturn(station);
 
         activeFireTruck.addTileToPathSegment(new Vector2(10, 10));
         activeFireTruck.addTileToPathSegment(new Vector2(10, 11));
@@ -225,6 +231,7 @@ public class FireStationTest {
 
         when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
         when(gameScreenMock.getSelectedTruck()).thenReturn(activeFireTruck);
+        when(gameScreenMock.getStation()).thenReturn(station);
 
         activeFireTruck.addTileToPathSegment(new Vector2(10, 10));
         activeFireTruck.addTileToPathSegment(new Vector2(10, 11));

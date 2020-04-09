@@ -15,12 +15,14 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static com.mozarellabytes.kroy.Entities.FireTruckType.*;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(GdxTestRunner.class)
 public class FireTruckTest {
@@ -28,13 +30,14 @@ public class FireTruckTest {
     @Mock
     GameScreen gameScreenMock;
 
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule();
+    @Mock
+    FireStation stationMock;
 
     private FireTruck fireTruck;
 
     @Before
     public void setUp() {
+        initMocks(this);
         fireTruck = new FireTruck(gameScreenMock, new Vector2(10,10), RubyHard);
     }
 
@@ -47,6 +50,11 @@ public class FireTruckTest {
     public void speedTruckShouldMove3TilesIn25FramesTest() {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), RubyHard);
         when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
+        when(gameScreenMock.getStation()).thenReturn(stationMock);
+        ArrayList<Vector2> bayTilesMock = new ArrayList<>();
+        bayTilesMock.add(new Vector2(0, 0));
+        bayTilesMock.add(new Vector2(1, 1));
+        when(stationMock.getBayTiles()).thenReturn(bayTilesMock);
 
         fireTruck.setMoving(true);
         fireTruck.addTileToPathSegment(new Vector2(10,10));
@@ -67,6 +75,11 @@ public class FireTruckTest {
     public void oceanTruckShouldNotMove3TilesIn25FramesTest() {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), SapphireHard);
         when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
+        when(gameScreenMock.getStation()).thenReturn(stationMock);
+        ArrayList<Vector2> bayTilesMock = new ArrayList<>();
+        bayTilesMock.add(new Vector2(0, 0));
+        bayTilesMock.add(new Vector2(1, 1));
+        when(stationMock.getBayTiles()).thenReturn(bayTilesMock);
 
         fireTruck.setMoving(true);
         fireTruck.addTileToPathSegment(new Vector2(10,10));
@@ -87,6 +100,11 @@ public class FireTruckTest {
     public void oceanTruckShouldMove3TilesIn70FramesTest() {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), SapphireHard);
         when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
+        when(gameScreenMock.getStation()).thenReturn(stationMock);
+        ArrayList<Vector2> bayTilesMock = new ArrayList<>();
+        bayTilesMock.add(new Vector2(0, 0));
+        bayTilesMock.add(new Vector2(1, 1));
+        when(stationMock.getBayTiles()).thenReturn(bayTilesMock);
 
         fireTruck.setMoving(true);
         fireTruck.addTileToPathSegment(new Vector2(10,10));
@@ -255,9 +273,16 @@ public class FireTruckTest {
     public void moveTest() {
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,10);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,11);
+        when(gameScreenMock.getStation()).thenReturn(stationMock);
+        ArrayList<Vector2> bayTilesMock = new ArrayList<>();
+        bayTilesMock.add(new Vector2(0, 0));
+        bayTilesMock.add(new Vector2(1, 1));
+        when(stationMock.getBayTiles()).thenReturn(bayTilesMock);
+
         fireTruck.setMoving(true);
         fireTruck.addTileToPathSegment(new Vector2(10,10));
         fireTruck.addTileToPathSegment(new Vector2(10,11));
+
 
         fireTruck.addPathSegmentToRoute();
         fireTruck.generatePathFromLastSegments();
@@ -285,6 +310,11 @@ public class FireTruckTest {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), SapphireHard);
         when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
         when(gameScreenMock.getState()).thenReturn(GameScreen.PlayState.FREEZE);
+        when(gameScreenMock.getStation()).thenReturn(stationMock);
+        ArrayList<Vector2> bayTilesMock = new ArrayList<>();
+        bayTilesMock.add(new Vector2(0, 0));
+        bayTilesMock.add(new Vector2(1, 1));
+        when(stationMock.getBayTiles()).thenReturn(bayTilesMock);
 
         fireTruck.addTileToPathSegment(new Vector2(10,10));
         fireTruck.addTileToPathSegment(new Vector2(10,11));
@@ -309,6 +339,11 @@ public class FireTruckTest {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), SapphireHard);
         when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
         when(gameScreenMock.getState()).thenReturn(GameScreen.PlayState.FREEZE);
+        when(gameScreenMock.getStation()).thenReturn(stationMock);
+        ArrayList<Vector2> bayTilesMock = new ArrayList<>();
+        bayTilesMock.add(new Vector2(0, 0));
+        bayTilesMock.add(new Vector2(1, 1));
+        when(stationMock.getBayTiles()).thenReturn(bayTilesMock);
 
         fireTruck.addTileToPathSegment(new Vector2(10,10));
         fireTruck.addTileToPathSegment(new Vector2(10,11));
@@ -339,6 +374,11 @@ public class FireTruckTest {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), SapphireHard);
         when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
         when(gameScreenMock.getState()).thenReturn(GameScreen.PlayState.FREEZE);
+        when(gameScreenMock.getStation()).thenReturn(stationMock);
+        ArrayList<Vector2> bayTilesMock = new ArrayList<>();
+        bayTilesMock.add(new Vector2(0, 0));
+        bayTilesMock.add(new Vector2(1, 1));
+        when(stationMock.getBayTiles()).thenReturn(bayTilesMock);
 
         fireTruck.addTileToPathSegment(new Vector2(10,10));
         fireTruck.addTileToPathSegment(new Vector2(10,11));
@@ -360,6 +400,11 @@ public class FireTruckTest {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), SapphireHard);
         when(gameScreenMock.isRoad(anyInt(), anyInt())).thenReturn(true);
         when(gameScreenMock.getState()).thenReturn(GameScreen.PlayState.FREEZE);
+        when(gameScreenMock.getStation()).thenReturn(stationMock);
+        ArrayList<Vector2> bayTilesMock = new ArrayList<>();
+        bayTilesMock.add(new Vector2(0, 0));
+        bayTilesMock.add(new Vector2(1, 1));
+        when(stationMock.getBayTiles()).thenReturn(bayTilesMock);
 
         fireTruck.addTileToPathSegment(new Vector2(10,10));
         fireTruck.addTileToPathSegment(new Vector2(10,11));
