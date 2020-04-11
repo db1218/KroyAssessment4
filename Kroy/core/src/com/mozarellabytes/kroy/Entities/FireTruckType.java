@@ -27,10 +27,10 @@ public enum FireTruckType {
     AmethystMedium(300, 2.6f, Color.PURPLE, "Amethyst Truck", 6.5f, 0.24f, 230, "purple"),
     EmeraldMedium(160, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.34f, 140, "green"),
 
-    RubyHard(130, 4.2f, Color.RED, "Ruby Truck", 5, 0.12f, 150, "red"),
-    SapphireHard(270, 3, Color.CYAN, "Sapphire Truck", 6, 0.18f, 130, "blue"),
-    AmethystHard(290, 2.4f, Color.PURPLE, "Amethyst Truck", 6.5f, 0.22f, 220, "purple"),
-    EmeraldHard(150, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.32f, 130, "green");
+    RubyHard(160, 4.2f, Color.RED, "Ruby Truck", 5, 0.17f, 150, "red"),
+    SapphireHard(300, 3, Color.CYAN, "Sapphire Truck", 6, 0.23f, 130, "blue"),
+    AmethystHard(320, 2.4f, Color.PURPLE, "Amethyst Truck", 6.5f, 0.27f, 220, "purple"),
+    EmeraldHard(180, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.37f, 130, "green");
 
 
     /** The maximum amount of water this type of truck can have,
