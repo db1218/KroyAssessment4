@@ -6,16 +6,12 @@ import com.mozarellabytes.kroy.GdxTestRunner;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import org.junit.Before;
 import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static com.mozarellabytes.kroy.Entities.FireTruckType.*;
 import static org.junit.Assert.*;
@@ -147,7 +143,7 @@ public class FireTruckTest {
         float fireTruck1ReserveEmpty = fireTruck.getReserve();
         float fireTruck2ReserveEmpty = fireTruck2.getReserve();
 
-        for (int i=0; i<170; i++) {
+        for (int i=0; i<275; i++) {
             fireStation.restoreTrucks();
         }
 
@@ -176,13 +172,13 @@ public class FireTruckTest {
         float fireTruck1Health0 = fireTruck1.getHP();
         float fireTruck2Health0 = fireTruck2.getHP();
 
-        for (int i=0; i<310; i++) {
+        for (int i=0; i<350; i++) {
             fireStation.restoreTrucks();
         }
 
         assertEquals(fireTruck1Health0, fireTruck2Health0, 0.0);
-        assertEquals(fireTruck2.getHP(), SapphireHard.getMaxHP(), 0.0);
         assertNotEquals(fireTruck1.getHP(), RubyHard.getMaxHP(), 0.0);
+        assertEquals(fireTruck2.getHP(), SapphireHard.getMaxHP(), 0.0);
     }
 
     @Test

@@ -18,12 +18,12 @@ public enum FortressType {
      * name, delay between firing bombs, attack range, maximum health points,
      * attack points, width, height and sprite.
      */
-    Revs ("Revolution", 2500, 7, 200, 7.5f, 5, 3,
+    Revs ("Revolution", 2500, 7, 200, 7.25f, 5, 3,
             new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_full.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_dead.png"))),
 
-    Walmgate ("Walmgate Bar", 1500, 8, 140, 10f, 5, 5,
+    Walmgate ("Walmgate Bar", 1500, 8, 140, 9.5f, 5, 5,
             new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate_full.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate_dead.png"))),
@@ -33,7 +33,7 @@ public enum FortressType {
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford_dead.png"))),
 
-    CentralHall ("Central Hall", 500, 7.5f, 115, 7.5f, 4, 3,
+    CentralHall ("Central Hall", 500, 7.5f, 115, 7.75f, 4, 3,
             new Texture(Gdx.files.internal("sprites/fortress/UoY_central_hall_full.png")),
             new Texture(Gdx.files.internal("sprites/fortress/UoY_central_hall_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/UoY_central_hall_dead.png"))),

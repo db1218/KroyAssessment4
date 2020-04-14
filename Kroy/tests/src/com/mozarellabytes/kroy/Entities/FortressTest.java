@@ -62,7 +62,7 @@ public class FortressTest {
         fireTruck.setTimeOfLastAttack(System.currentTimeMillis() - 5000);
         fortress.attack(fireTruck, false,1);
         fortress.updateBombs();
-        assertEquals(127.5f, fireTruck.getHP(), 0.0);
+        assertEquals(140.5f, fireTruck.getHP(), 0.0);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class FortressTest {
         fireTruck.setTimeOfLastAttack(System.currentTimeMillis() - 5000);
         fortress.attack(fireTruck, false,1);
         fortress.updateBombs();
-        assertEquals(130.0, fireTruck.getHP(), 0.0);
+        assertEquals(142.5, fireTruck.getHP(), 0.0);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class FortressTest {
         fireTruck.setTimeOfLastAttack(System.currentTimeMillis() - 5000);
         fortress.attack(fireTruck, false,1);
         fortress.updateBombs();
-        assertEquals(132.5, fireTruck.getHP(), 0.0);
+        assertEquals(142.75, fireTruck.getHP(), 0.0);
     }
 
     @Test
