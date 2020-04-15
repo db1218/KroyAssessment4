@@ -7,13 +7,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-
-import java.util.ArrayList;
-
 import com.mozarellabytes.kroy.Descriptors.Desc;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import com.mozarellabytes.kroy.Utilities.SavedElement;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
+
+import java.util.ArrayList;
 
 /**
  * FireStation is a class created when it is called from GameScreen.
@@ -105,11 +104,9 @@ public class FireStation {
     public void restoreTrucks() {
         for (FireTruck truck : this.trucks) {
             if (this.HP > 0) {
-                for (Vector2 bayTile : bayTiles) {
-                    if (truck.getPosition().equals(bayTile)) {
-                        repair(truck);
-                        refill(truck);
-                    }
+                if (truck.isOnBayTile(this)) {
+                    repair(truck);
+                    refill(truck);
                 }
             }
         }
