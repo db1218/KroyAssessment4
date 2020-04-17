@@ -89,7 +89,6 @@ public class Bomb extends Sprite {
      *
      */
     public void updatePosition() {
-        System.out.println(this.source.getType().getSpeed());
         this.currentPosition = this.startPosition.interpolate(this.targetPosition, this.source.getType().getSpeed(), Interpolation.pow5Out);
     }
 
