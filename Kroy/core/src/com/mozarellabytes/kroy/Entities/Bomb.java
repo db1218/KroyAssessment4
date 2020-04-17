@@ -25,6 +25,9 @@ public class Bomb extends Sprite {
     /** The start position of the bomb */
     private final Vector2 startPosition;
 
+    /** Source of the bomb */
+    private final Fortress source;
+
     /** Current position of the bomb */
     private Vector2 currentPosition;
 
@@ -47,6 +50,7 @@ public class Bomb extends Sprite {
      */
     public Bomb(Fortress fortress, FireTruck target, boolean isRandom, float difficultyMultiplier) {
         this.target = target;
+        this.source = fortress;
         this.truckPosition = new Vector2(getMiddleOfTile(target.getPosition()));
         this.startPosition = new Vector2(fortress.getPosition());
         this.currentPosition = this.startPosition;
@@ -67,7 +71,7 @@ public class Bomb extends Sprite {
      *          <code>false</code> otherwise.
      */
     public boolean checkHit() {
-        return targetPosition.equals(truckPosition) && getMiddleOfTile(this.currentPosition).equals(truckPosition);
+        return getMiddleOfTile(target.getPosition()).equals(truckPosition) && getMiddleOfTile(this.currentPosition).equals(truckPosition);
     }
 
     /**
@@ -85,7 +89,8 @@ public class Bomb extends Sprite {
      *
      */
     public void updatePosition() {
-        this.currentPosition = this.startPosition.interpolate(this.targetPosition, 0.03f, Interpolation.pow5Out);
+        System.out.println(this.source.getType().getSpeed());
+        this.currentPosition = this.startPosition.interpolate(this.targetPosition, this.source.getType().getSpeed(), Interpolation.pow5Out);
     }
 
     /**
