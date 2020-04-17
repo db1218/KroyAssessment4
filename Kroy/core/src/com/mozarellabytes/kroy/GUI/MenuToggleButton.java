@@ -2,10 +2,8 @@ package com.mozarellabytes.kroy.GUI;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Rectangle;
 import com.mozarellabytes.kroy.Screens.MenuScreen;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
-import javafx.scene.control.Toggle;
 
 /**
  * Extension of {@link MenuButton} which allows

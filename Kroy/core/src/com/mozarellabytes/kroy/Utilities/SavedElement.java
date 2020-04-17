@@ -8,8 +8,6 @@ import com.badlogic.gdx.utils.OrderedMap;
 import com.mozarellabytes.kroy.Descriptors.Desc;
 import com.mozarellabytes.kroy.Entities.*;
 import com.mozarellabytes.kroy.GameState;
-import com.mozarellabytes.kroy.Utilities.DifficultyControl;
-import com.mozarellabytes.kroy.Utilities.DifficultyLevel;
 
 import java.util.ArrayList;
 
@@ -89,7 +87,6 @@ public class SavedElement {
         // if player was in minigame
         if (data.get("Minigame") != null) {
             OrderedMap<String, Object> minigameMap = (OrderedMap<String, Object>) data.get("Minigame");
-            System.out.println(minigameMap);
             minigameFireTruck = findFireTruck((String) minigameMap.get("FireTruck"));
             minigamePatrol = findPatrol((String) minigameMap.get("Patrol"));
         } else {
