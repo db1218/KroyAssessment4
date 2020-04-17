@@ -86,6 +86,36 @@ public class FortressTest {
     }
 
     @Test
+    public void attackTruckFromCentralHallFortressDamageTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.CentralHall);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.RubyHard);
+        fireTruck.setTimeOfLastAttack(System.currentTimeMillis() - 5000);
+        fortress.attack(fireTruck, false,1);
+        fortress.updateBombs();
+        assertEquals(142.25, fireTruck.getHP(), 0.0);
+    }
+
+    @Test
+    public void attackTruckFromMuseumFortressDamageTest() {
+        Fortress fortress = new Fortress(10, 10, Museum);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.RubyHard);
+        fireTruck.setTimeOfLastAttack(System.currentTimeMillis() - 5000);
+        fortress.attack(fireTruck, false,1);
+        fortress.updateBombs();
+        assertEquals(140.0, fireTruck.getHP(), 0.0);
+    }
+
+    @Test
+    public void attackTruckFromRailwayFortressDamageTest() {
+        Fortress fortress = new Fortress(10, 10, Railway);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.RubyHard);
+        fireTruck.setTimeOfLastAttack(System.currentTimeMillis() - 5000);
+        fortress.attack(fireTruck, false,1);
+        fortress.updateBombs();
+        assertEquals(139.0, fireTruck.getHP(), 0.0);
+    }
+
+    @Test
     public void attackTruckFromWalmgateFortressBeforeRangeBoundaryTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate); // range = 8
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(17.9f, 10), FireTruckType.RubyHard);
@@ -158,8 +188,100 @@ public class FortressTest {
     }
 
     @Test
-    public void bombHasReachedTileTest() {
+    public void attackTruckFromCentralHallFortressBeforeRangeBoundaryTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.CentralHall); // range = 7.5
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(17.4f, 10), FireTruckType.RubyHard);
+        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
+        assertTrue(withinRange);
+    }
+
+    @Test
+    public void attackTruckFromCentralHallFortressOnRangeBoundaryTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.CentralHall); // range = 7.5
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(17.5f, 10), FireTruckType.RubyHard);
+        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
+        assertTrue(withinRange);
+    }
+
+    @Test
+    public void attackTruckFromCentralHallFortressAfterRangeBoundaryTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.CentralHall); // range = 7.5
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(17.6f, 10), FireTruckType.RubyHard);
+        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
+        assertFalse(withinRange);
+    }
+
+    @Test
+    public void attackTruckFromMuseumFortressBeforeRangeBoundaryTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.Museum); // range = 5.5
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(15.4f, 10), FireTruckType.RubyHard);
+        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
+        assertTrue(withinRange);
+    }
+
+    @Test
+    public void attackTruckFromMuseumFortressOnRangeBoundaryTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.Museum); // range = 5.5
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(15.5f, 10), FireTruckType.RubyHard);
+        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
+        assertTrue(withinRange);
+    }
+
+    @Test
+    public void attackTruckFromMuseumFortressAfterRangeBoundaryTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.Museum); // range = 5.5
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(15.6f, 10), FireTruckType.RubyHard);
+        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
+        assertFalse(withinRange);
+    }
+
+    @Test
+    public void attackTruckFromRailwayFortressBeforeRangeBoundaryTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.Railway); // range = 8.5
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(18.4f, 10), FireTruckType.RubyHard);
+        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
+        assertTrue(withinRange);
+    }
+
+    @Test
+    public void attackTruckFromRailwayFortressOnRangeBoundaryTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.Railway); // range = 8.5
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(18.5f, 10), FireTruckType.RubyHard);
+        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
+        assertTrue(withinRange);
+    }
+
+    @Test
+    public void attackTruckFromRailwayFortressAfterRangeBoundaryTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.Railway); // range = 8.5
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(18.6f, 10), FireTruckType.RubyHard);
+        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
+        assertFalse(withinRange);
+    }
+
+    @Test
+    public void bombHasReachedTileHitTest() {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(0,0), FireTruckType.AmethystEasy);
+        float fireTruckHealthBefore = fireTruck.getHP();
+        Fortress fortress = new Fortress(10, 10, FortressType.Revs);
+        ArrayList<Bomb> bombs = new ArrayList<>();
+
+        bombs.add(new Bomb(fortress, fireTruck, false, 2.0f));
+
+        fortress.setBombs(bombs);
+
+        for (int i=0; i<20; i++) fortress.updateBombs();
+
+        float fireTruckHealthAfter = fireTruck.getHP();
+
+        assertTrue(fireTruckHealthBefore > fireTruckHealthAfter);
+        assertTrue(bombs.isEmpty());
+    }
+
+    @Test
+    public void bombHasReachedTileMissTest() {
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(0,0), FireTruckType.AmethystEasy);
+        float fireTruckHealthBefore = fireTruck.getHP();
         Fortress fortress = new Fortress(10, 10, FortressType.Revs);
         ArrayList<Bomb> bombs = new ArrayList<>();
 
@@ -170,6 +292,9 @@ public class FortressTest {
 
         for (int i=0; i<20; i++) fortress.updateBombs();
 
+        float fireTruckHealthAfter = fireTruck.getHP();
+
+        assertEquals(fireTruckHealthBefore, fireTruckHealthAfter, 0.0);
         assertTrue(bombs.isEmpty());
     }
 
