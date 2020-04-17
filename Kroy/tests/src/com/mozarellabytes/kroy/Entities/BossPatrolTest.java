@@ -6,12 +6,10 @@ import com.mozarellabytes.kroy.GdxTestRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(GdxTestRunner.class)
 public class BossPatrolTest {
@@ -102,23 +100,28 @@ public class BossPatrolTest {
         FireStation station = new FireStation(10, 10, 100);
 
         ArrayList<Particle> expectedSpray = new ArrayList<>();
-        expectedSpray.add(new Particle(new Vector2(0.5416667f,0), new Vector2(13, 11.5f), station));
+        expectedSpray.add(new Particle(new Vector2(0.5f,0), new Vector2(13, 11.5f), station));
 
         bossPatrol.attack(station);
 
-        assertEquals(expectedSpray.get(0).getPosition(), bossPatrol.getSpray().get(0).getPosition());
+        assertEquals(expectedSpray.get(0).getPosition().x, bossPatrol.getSpray().get(0).getPosition().x, 0.1);
+        assertEquals(expectedSpray.get(0).getPosition().y, bossPatrol.getSpray().get(0).getPosition().y, 0.1);
     }
 
     @Test
     public void testUpdateBossSprayNotHit() {
         FireStation station = new FireStation(10, 10, 100);
+        float HPBeforeBeingAttacked = station.getHP();
         ArrayList<Particle> spray = new ArrayList<>();
-        spray.add(new Particle(new Vector2(0,0), new Vector2(13, 11.5f), station));
+        spray.add(new Particle(new Vector2(0,0), station.getPosition(), station));
 
         bossPatrol.setSpray(spray);
 
         bossPatrol.updateBossSpray();
 
+        float HPAfterBeingAttacked = station.getHP();
+
+        assertEquals(HPBeforeBeingAttacked, HPAfterBeingAttacked, 0.0);
         assertEquals(0.5f, bossPatrol.getSpray().get(0).getPosition().x, 0.1);
         assertEquals(0.5f, bossPatrol.getSpray().get(0).getPosition().y, 0.1);
     }
@@ -126,25 +129,18 @@ public class BossPatrolTest {
     @Test
     public void testUpdateBossSprayHit() {
         FireStation station = new FireStation(10, 10, 100);
+        float HPBeforeBeingAttacked = station.getHP();
         ArrayList<Particle> spray = new ArrayList<>();
-        spray.add(new Particle(new Vector2(13,11.5f), new Vector2(13, 11.5f), station));
+        spray.add(new Particle(new Vector2(13,11.5f), station.getPosition(), station));
 
         bossPatrol.setSpray(spray);
 
-        bossPatrol.updateBossSpray();
+        for (int i=0; i<250; i++)
+            bossPatrol.updateBossSpray();
 
+        float HPAfterBeingAttacked = station.getHP();
+
+        assertTrue(HPBeforeBeingAttacked > HPAfterBeingAttacked);
         assertTrue(bossPatrol.getSpray().isEmpty());
-    }
-
-    @Test
-    public void testDamage() {
-        FireStation station = new FireStation(10, 10, 100);
-        float healthBefore = station.getHP();
-        Particle particle = new Particle(new Vector2(0, 0), new Vector2(10, 10), station);
-        bossPatrol.damage(particle);
-        float healthAfter = station.getHP();
-
-        assertTrue(healthBefore > healthAfter);
-        assertEquals(99.85f, station.getHP(), 0.0);
     }
 }

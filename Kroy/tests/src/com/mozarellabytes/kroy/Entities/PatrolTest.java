@@ -158,7 +158,7 @@ public class PatrolTest {
     public void testShouldNotCollideWithTruckStationAlive() {
         when(stationMock.isAlive()).thenReturn(true);
         when(truckMock.isOnBayTile(mock(FireStation.class))).thenReturn(true);
-        when(truckMock.getTilePosition()).thenReturn(new Vector2(0,0));
+        when(truckMock.getTilePosition()).thenReturn(new Vector2(1,0));
         assertFalse(patrol.collidesWithTruck(truckMock, stationMock));
     }
 
