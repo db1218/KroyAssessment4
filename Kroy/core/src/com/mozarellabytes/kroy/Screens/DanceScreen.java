@@ -356,19 +356,23 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
      * @param move  the move the player took
      */
     public void setLastMove(DanceMove move){
-        this.lastResult = this.danceMan.takeMove(move);
-        this.firefighter.setState(move);
+        if (this.state.equals(GameScreen.PlayState.PLAY)) {
+            this.lastResult = this.danceMan.takeMove(move);
+            this.firefighter.setState(move);
+        }
     }
 
     /**
      * When space is clicked, combo is used
      */
     public void useCombo(){
-        int combo = danceMan.getCombo();
-        this.ETDancer.damage((int)scaleDamage(combo));
-        this.danceMan.killCombo();
-        camShake.shakeIt(.6f, 4);
-        if (SoundFX.music_enabled) SoundFX.sfx_combo.play();
+        if (this.state.equals(GameScreen.PlayState.PLAY)) {
+            int combo = danceMan.getCombo();
+            this.ETDancer.damage((int)scaleDamage(combo));
+            this.danceMan.killCombo();
+            camShake.shakeIt(.6f, 4);
+            if (SoundFX.music_enabled) SoundFX.sfx_combo.play();
+        }
     }
 
     @Override
