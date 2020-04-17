@@ -171,9 +171,6 @@ public class FireTruckTest {
             fireStation.restoreTrucks();
         }
 
-        System.out.println(fireTruck1.getHP());
-        System.out.println(fireTruck2.getHP());
-
         assertEquals(fireTruck1Health0, fireTruck2Health0, 0.0);
         assertNotEquals(fireTruck1.getHP(), RubyHard.getMaxHP(), 0.0);
         assertEquals(fireTruck2.getHP(), SapphireHard.getMaxHP(), 0.0);

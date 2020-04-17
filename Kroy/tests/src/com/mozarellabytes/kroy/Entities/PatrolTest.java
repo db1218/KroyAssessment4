@@ -3,7 +3,7 @@ package com.mozarellabytes.kroy.Entities;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.GdxTestRunner;
-import com.mozarellabytes.kroy.Screens.GameScreen;
+import com.mozarellabytes.kroy.Utilities.DifficultyLevel;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,8 +37,59 @@ public class PatrolTest {
     }
 
     @Test
-    public void generatePath() {
-        Patrol patrol = new Patrol(PatrolType.Blue, 10, 10, "Blue Patrol 1");
+    public void generatePathEasy() {
+        Patrol patrol = new Patrol(PatrolType.Blue, DifficultyLevel.Easy.getMapWidth(), DifficultyLevel.Easy.getMapHeight(), "Blue Patrol 1");
+
+        int mapWidth = DifficultyLevel.Easy.getMapWidth();
+        int mapHeight = DifficultyLevel.Easy.getMapHeight();
+
+        boolean validLocations = true;
+        for (Vector2 patrolPosition : patrol.getPath()) {
+            if (patrolPosition.x > mapWidth || patrolPosition.x < 0 || patrolPosition.y > mapHeight || patrolPosition.y < 0) {
+                validLocations = false;
+                break;
+            }
+        }
+
+        assertTrue(validLocations);
+        assertEquals(4, patrol.getPath().size);
+    }
+
+    @Test
+    public void generatePathMedium() {
+        Patrol patrol = new Patrol(PatrolType.Blue, DifficultyLevel.Medium.getMapWidth(), DifficultyLevel.Medium.getMapHeight(), "Blue Patrol 1");
+
+        int mapWidth = DifficultyLevel.Medium.getMapWidth();
+        int mapHeight = DifficultyLevel.Medium.getMapHeight();
+
+        boolean validLocations = true;
+        for (Vector2 patrolPosition : patrol.getPath()) {
+            if (patrolPosition.x > mapWidth || patrolPosition.x < 0 || patrolPosition.y > mapHeight || patrolPosition.y < 0) {
+                validLocations = false;
+                break;
+            }
+        }
+
+        assertTrue(validLocations);
+        assertEquals(4, patrol.getPath().size);
+    }
+
+    @Test
+    public void generatePathHard() {
+        Patrol patrol = new Patrol(PatrolType.Blue, DifficultyLevel.Hard.getMapWidth(), DifficultyLevel.Hard.getMapHeight(), "Blue Patrol 1");
+
+        int mapWidth = DifficultyLevel.Hard.getMapWidth();
+        int mapHeight = DifficultyLevel.Hard.getMapHeight();
+
+        boolean validLocations = true;
+        for (Vector2 patrolPosition : patrol.getPath()) {
+            if (patrolPosition.x > mapWidth || patrolPosition.x < 0 || patrolPosition.y > mapHeight || patrolPosition.y < 0) {
+                validLocations = false;
+                break;
+            }
+        }
+
+        assertTrue(validLocations);
         assertEquals(4, patrol.getPath().size);
     }
 
@@ -46,12 +97,14 @@ public class PatrolTest {
     public void testCycleQueue() {
         Queue<Vector2> queue = new Queue<>();
         queue.addLast(new Vector2(0,0));
-        queue.addLast(new Vector2(10,0));
+        queue.addLast(new Vector2(10,10));
+        queue.addLast(new Vector2(5,5));
         Patrol patrol = new Patrol("Green", 100, 0, 0, queue, "Green Patrol 1");
         patrol.cycleQueue();
 
         Queue<Vector2> expectedQueue = new Queue<>();
-        expectedQueue.addLast(new Vector2(10,0));
+        expectedQueue.addLast(new Vector2(10,10));
+        expectedQueue.addLast(new Vector2(5,5));
         expectedQueue.addLast(new Vector2(0,0));
 
         assertEquals(expectedQueue, patrol.getPath());
@@ -102,10 +155,11 @@ public class PatrolTest {
     }
 
     @Test
-    public void testGeneratePath() {
-        Patrol patrol = new Patrol(PatrolType.Green);
-        patrol.generatePath(10, 10);
-        assertEquals(4, patrol.getPath().size);
+    public void testShouldNotCollideWithTruckStationAlive() {
+        when(stationMock.isAlive()).thenReturn(true);
+        when(truckMock.isOnBayTile(mock(FireStation.class))).thenReturn(true);
+        when(truckMock.getTilePosition()).thenReturn(new Vector2(0,0));
+        assertFalse(patrol.collidesWithTruck(truckMock, stationMock));
     }
 
     @Test
@@ -130,14 +184,6 @@ public class PatrolTest {
         when(truckMock.isOnBayTile(mock(FireStation.class))).thenReturn(true);
         when(truckMock.getTilePosition()).thenReturn(new Vector2(0,0));
         patrol.setPosition(1.0f, 0);
-        assertFalse(patrol.collidesWithTruck(truckMock, stationMock));
-    }
-
-    @Test
-    public void testShouldNotCollideWithTruckPositionTruck() {
-        when(stationMock.isAlive()).thenReturn(true);
-        when(truckMock.isOnBayTile(mock(FireStation.class))).thenReturn(true);
-        when(truckMock.getTilePosition()).thenReturn(new Vector2(1.0f,0));
         assertFalse(patrol.collidesWithTruck(truckMock, stationMock));
     }
 
