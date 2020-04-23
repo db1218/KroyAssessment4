@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.mozarellabytes.kroy.Descriptors.Desc;
+import com.mozarellabytes.kroy.Utilities.Desc;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import com.mozarellabytes.kroy.Utilities.SavedElement;
 import com.mozarellabytes.kroy.Utilities.SoundFX;

@@ -15,7 +15,7 @@ import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.mozarellabytes.kroy.Descriptors.Desc;
+import com.mozarellabytes.kroy.Utilities.Desc;
 import com.mozarellabytes.kroy.Entities.*;
 import com.mozarellabytes.kroy.GUI.GUI;
 import com.mozarellabytes.kroy.GameState;
