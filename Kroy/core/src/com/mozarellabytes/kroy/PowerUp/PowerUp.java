@@ -169,4 +169,12 @@ public abstract class PowerUp {
         return timeLeftOnScreen;
     }
 
+    public TextureRegion getCurrentFrame() {
+        return this.currentFrame;
+    }
+
+    public float getElapsedTime() {
+        return this.elapsedTime;
+    }
+
 }

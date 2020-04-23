@@ -45,10 +45,6 @@ public class Water extends PowerUp {
      * @param truck to get refilled
      */
     private void refillReserve(FireTruck truck) {
-        int maxReserve = (int) truck.type.getMaxReserve();
-        int currentReserve = (int) truck.getReserve();
-        truck.refill(maxReserve - currentReserve);
+        truck.setReserve(truck.type.getMaxReserve());
     }
-
-
 }

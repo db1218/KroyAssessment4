@@ -527,6 +527,7 @@ public class FireTruck extends Sprite {
         if (this.reserve > 0) {
             this.spray.add(new Particle(this.getVisualPosition(), fortress.getPosition(), fortress));
             this.reserve -= Math.min(this.reserve, this.AP);
+            System.out.println(this.reserve);
         }
     }
 
@@ -824,5 +825,9 @@ public class FireTruck extends Sprite {
 
     public void setGameScreen(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
+    }
+
+    public void setReserve(float reserve) {
+        this.reserve = reserve;
     }
 }
