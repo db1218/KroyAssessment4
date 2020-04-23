@@ -86,7 +86,7 @@ public class ControlsScreen implements Screen {
         Gdx.input.setInputProcessor(new ControlScreenInputHandler(this));
         switch (screen) {
             case "menu":
-                backgroundImage = new Texture(Gdx.files.internal("menuscreen_new.png"), true);
+                backgroundImage = new Texture(Gdx.files.internal("menu_background.png"), true);
                 break;
             case "game":
             case "dance":

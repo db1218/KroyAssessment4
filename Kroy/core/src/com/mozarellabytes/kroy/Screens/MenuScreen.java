@@ -44,7 +44,7 @@ public class MenuScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
 
-        backgroundImage = new Texture(Gdx.files.internal("menuscreen_new.png"), true);
+        backgroundImage = new Texture(Gdx.files.internal("menu_background.png"), true);
         backgroundImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         newGameButton = new MenuButton("ui/newgame_idle.png", "ui/newgame_clicked.png");
