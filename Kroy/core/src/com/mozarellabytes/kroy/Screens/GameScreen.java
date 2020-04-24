@@ -898,8 +898,9 @@ public class GameScreen implements Screen, ButtonBar {
     }
 
     /**
-     * Check collision between patrol and truck to enter
-     * into the dance off minigame after 3 seconds
+     * Called when a truck collides with a patrol.
+     * Pauses the game, creates a warning sign at the collision location
+     * and enters the minigame after a 3 second pause.
      *
      * @param patrol    patrol to check if collided with truck
      * @param truck     truck to check if collided with patrol
