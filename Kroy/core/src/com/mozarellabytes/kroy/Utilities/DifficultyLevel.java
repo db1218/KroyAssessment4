@@ -40,7 +40,7 @@ public enum DifficultyLevel {
             24,
             1,
             60f,
-            1,
+            10,
             3,
             10f,
             RubyMedium,
