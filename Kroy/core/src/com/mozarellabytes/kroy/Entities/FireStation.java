@@ -50,7 +50,7 @@ public class FireStation {
      * Health of the fortress
      */
     private float HP;
-    private float maxHP;
+    private final float maxHP;
 
     /**
      * Constructs the Firestation with at a given position with locations

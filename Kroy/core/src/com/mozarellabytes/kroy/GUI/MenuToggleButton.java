@@ -21,7 +21,8 @@ public class MenuToggleButton extends MenuButton {
     /**
      * Properties of the toggle button.
      */
-    private Texture activeTexture2, idleTexture2;
+    private final Texture activeTexture2;
+    private final Texture idleTexture2;
     private ToggleState toggleState;
 
     /**

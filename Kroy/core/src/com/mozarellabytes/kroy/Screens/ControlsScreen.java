@@ -278,15 +278,6 @@ public class ControlsScreen implements Screen {
         game.shapeRenderer.end();
     }
 
-    /**
-     * This draws the 'A' above the fire truck - Removed
-     */
-    private void drawFireTruckAttacking(){
-        game.batch.begin();
-        game.font33.draw(game.batch, "A", screenWidth / 1.205f, screenHeight /2.81f);
-        game.batch.end();
-    }
-
     /** Renders the exit button */
     private void renderExitButton(){
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);

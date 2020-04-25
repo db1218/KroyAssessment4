@@ -1,6 +1,5 @@
 package com.mozarellabytes.kroy.GUI;
 
-import com.badlogic.gdx.utils.OrderedMap;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
 public interface ButtonBar {

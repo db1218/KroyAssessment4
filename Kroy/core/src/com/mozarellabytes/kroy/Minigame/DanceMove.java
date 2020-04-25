@@ -1,7 +1,7 @@
 package com.mozarellabytes.kroy.Minigame;
 
 /**********************************************************************************
- *                               Edited for assessment 4
+                                Edited for assessment 4
  **********************************************************************************/
 
 import com.badlogic.gdx.Gdx;

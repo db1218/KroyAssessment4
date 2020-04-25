@@ -18,7 +18,7 @@ public class MenuButton {
     /**
      * Properties of the button
      */
-    private Rectangle area;
+    private final Rectangle area;
     protected Texture currentTexture, activeTexture, idleTexture;
 
     /**

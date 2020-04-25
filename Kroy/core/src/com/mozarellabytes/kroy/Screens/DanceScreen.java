@@ -65,7 +65,7 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
 
     private DanceResult lastResult = null;
 
-    private ShapeRenderer shapeMapRenderer;
+    private final ShapeRenderer shapeMapRenderer;
 
     /**
      * Constructor for Dance Screen

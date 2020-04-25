@@ -1,4 +1,4 @@
-package com.mozarellabytes.kroy.PowerUp;
+package com.mozarellabytes.kroy.Utilities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,8 +11,8 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Warning {
 
-    private Texture texture;
-    private Vector2 coord;
+    private final Texture texture;
+    private final Vector2 coord;
 
     /**
      * Constructor for the warning sprite.
