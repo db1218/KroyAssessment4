@@ -36,7 +36,6 @@ public class Range extends PowerUp {
     /** This increases the truck's range */
     @Override
     public void invokePower(FireTruck truck) {
-        Gdx.app.log("Power up range start", String.valueOf(truck.getRange()));
         this.isPowerCurrentlyInvoked = true;
         this.truck = truck;
         truck.setRange(truck.type.getRange() + rangeIncrease);
