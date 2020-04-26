@@ -48,6 +48,7 @@ public abstract class PowerUp {
     /** Flag for whether the PowerUp can be destroyed in gameScreen */
     boolean canBeDestroyed;
 
+    /** Flag for whether the PowerUp is currently being used */
     boolean isPowerCurrentlyInvoked;
 
     /**
@@ -160,8 +161,6 @@ public abstract class PowerUp {
 
     public boolean getCanBeDestroyed() { return this.canBeDestroyed; }
 
-    public void setPosition(Vector2 position) { this.position = position; }
-
     public Vector2 getPosition() { return this.position; }
 
     public float getTimeOnScreen() { return timeOnScreen; }
@@ -175,7 +174,5 @@ public abstract class PowerUp {
     public float getElapsedTime() {
         return this.elapsedTime;
     }
-
-    public  boolean isPowerCurrentlyInvoked() { return this.isPowerCurrentlyInvoked; };
 
 }

@@ -466,8 +466,10 @@ public class GameScreen implements Screen, ButtonBar {
                 else bossPatrol.move(0.01);
             }
         } else {
-            if (!gameState.hasStationDestoyed() && gameState.getNumDestroyedFortresses() == level.getFortressesDestroyedBeforeBoss())
+            if (!gameState.hasStationDestoyed() && gameState.getNumDestroyedFortresses() >= level.getFortressesDestroyedBeforeBoss()) {
                 bossPatrol = new BossPatrol(PatrolType.Boss, fortresses.get(0).getPosition(), station.getCentrePosition());
+            }
+
         }
 
         for (int i = 0; i < this.fortresses.size(); i++) {
@@ -736,6 +738,28 @@ public class GameScreen implements Screen, ButtonBar {
         gui.updateAttackMode(truckAttack);
     }
 
+
+    /**
+     * Populate powerUpLocations with all the tiles that
+     * are roads therefore a power up can spawn there
+     *
+     * @param level used to determine the tile map dimensions
+     *              which depends on the map and therefore
+     *              difficulty level current being played
+     */
+    private void generatePowerUpLocations(DifficultyLevel level) {
+        ArrayList<Vector2> bayTiles = station.getBayTiles();
+        for (int width = 0; width < level.getMapWidth(); width++){
+            for (int height = 0 ; height < level.getMapHeight(); height++){
+                Vector2 tile = new Vector2(width, height);
+                if (isRoad(width, height) && !bayTiles.contains(tile)){
+                    powerUpLocations.add(tile);
+                }
+            }
+        }
+    }
+
+
     /**
      * Checks if a new power up can spawn
      */
@@ -758,6 +782,21 @@ public class GameScreen implements Screen, ButtonBar {
     }
 
     /**
+     * Checks if a powerup is already in a location that a new
+     * powerup is trying to spawn at
+     *
+     * @param newPowerUpLocation    attempted location to spawn at
+     * @return  <code>true</code>   tile is occupied
+     *          <code>false</code>  tile is not occupied
+     */
+    private boolean checkIfPowerupInLocation(Vector2 newPowerUpLocation) {
+        for (PowerUp power : powerUps) {
+            if (power.getPosition().equals(newPowerUpLocation)) return true;
+        }
+        return false;
+    }
+
+    /**
      * Create random power up
      *
      * @param location  to spawn power up
@@ -771,19 +810,19 @@ public class GameScreen implements Screen, ButtonBar {
         powerUps.add(powerup);
     }
 
-    /**
-     * Checks if a powerup is already in a location that a new
-     * powerup is trying to spawn at
-     *
-     * @param newPowerUpLocation    attempted location to spawn at
-     * @return  <code>true</code>   tile is occupied
-     *          <code>false</code>  tile is not occupied
-     */
-    private boolean checkIfPowerupInLocation(Vector2 newPowerUpLocation) {
+
+    /** This updates the active power ups, if the power up has been
+     * active for longer then the duration of the power up then it
+     * is removed */
+    public void updatePowerUps() {
+        ArrayList<PowerUp> powerUpsToRemove = new ArrayList<>();
+
         for (PowerUp power : powerUps) {
-            if (power.getPosition().equals(newPowerUpLocation)) return true;
+            power.update();
+            if (power.getCanBeDestroyed()) powerUpsToRemove.add(power);
         }
-        return false;
+
+        powerUps.removeAll(powerUpsToRemove);
     }
 
     /** The method for giving trucks that have the same end tiles adjacent end tiles
@@ -877,25 +916,6 @@ public class GameScreen implements Screen, ButtonBar {
         return patrols;
     }
 
-    /**
-     * Populate powerUpLocations with all the tiles that
-     * are roads therefore a power up can spawn there
-     *
-     * @param level used to determine the tile map dimensions
-     *              which depends on the map and therefore
-     *              difficulty level current being played
-     */
-    private void generatePowerUpLocations(DifficultyLevel level) {
-        ArrayList<Vector2> bayTiles = station.getBayTiles();
-        for (int width = 0; width < level.getMapWidth(); width++){
-            for (int height = 0 ; height < level.getMapHeight(); height++){
-                Vector2 tile = new Vector2(width, height);
-                if (isRoad(width, height) && !bayTiles.contains(tile)){
-                    powerUpLocations.add(tile);
-                }
-            }
-        }
-    }
 
     /**
      * Called when a truck collides with a patrol.
@@ -925,20 +945,6 @@ public class GameScreen implements Screen, ButtonBar {
             }
 
         }, 3);
-    }
-
-    /** This updates the active power ups, if the power up has been
-     * active for longer than the duration of the power up then it
-     * is removed */
-    public void updatePowerUps() {
-        ArrayList<PowerUp> powerUpsToRemove = new ArrayList<>();
-
-        for (PowerUp power : powerUps) {
-            power.update();
-            if (power.getCanBeDestroyed()) powerUpsToRemove.add(power);
-        }
-
-        powerUps.removeAll(powerUpsToRemove);
     }
 
     public boolean isNotPaused() {

@@ -10,11 +10,8 @@ import com.mozarellabytes.kroy.Entities.FireTruck;
  */
 public class Range extends PowerUp {
 
-    /** The time in seconds that the PowerUp lasts for */
-    float powerUpDuration;
-
-    /** The time in seconds that the truck has had in this PowerUp */
-    float timeInPowerUp;
+    /** The time in seconds that the truck has left in this PowerUp */
+    float timeLeftInPowerUp;
 
     /** The amount that the truck's range should increase */
     final int rangeIncrease;
@@ -29,7 +26,7 @@ public class Range extends PowerUp {
      */
     public Range(Vector2 location) {
         super("range", location);
-        powerUpDuration = 10;
+        timeLeftInPowerUp = 10;
         rangeIncrease = 3;
     }
 
@@ -42,16 +39,6 @@ public class Range extends PowerUp {
 
     }
 
-    @Override
-    public String getName() {
-        return "Range";
-    }
-
-    @Override
-    public String getDesc() {
-        return "Increase range of the fire truck by 3 tiles for 10 seconds";
-    }
-
 
     /** This updates the amount of time that the truck has been
      * in the PowerUp, it sets canBeRendered to false so that
@@ -62,8 +49,8 @@ public class Range extends PowerUp {
         super.update();
         if (truck != null) {
             canBeRendered = false;
-            powerUpDuration -= Gdx.graphics.getRawDeltaTime();
-            if (powerUpDuration <= 0)revokePowerUp();
+            timeLeftInPowerUp -= Gdx.graphics.getRawDeltaTime();
+            if (timeLeftInPowerUp <= 0)revokePowerUp();
         }
     }
 
@@ -77,5 +64,12 @@ public class Range extends PowerUp {
         canBeDestroyed = true;
         isPowerCurrentlyInvoked = false;
     }
+
+    @Override
+    public String getName() { return "Range"; }
+
+    @Override
+    public String getDesc() { return "Increase range of the fire truck by 3 tiles for 10 seconds"; }
+
 
 }

@@ -27,16 +27,6 @@ public class Heart extends PowerUp {
         removePowerUp();
     }
 
-    @Override
-    public String getName() {
-        return "Heart";
-    }
-
-    @Override
-    public String getDesc() {
-        return "Heals the fire truck to full HP";
-    }
-
     /**
      * Replenish health
      * @param truck to heal
@@ -45,5 +35,11 @@ public class Heart extends PowerUp {
         int fullHP = (int)truck.type.getMaxHP();
         truck.setHP(fullHP);
     }
+
+    @Override
+    public String getName() { return "Heart"; }
+
+    @Override
+    public String getDesc() { return "Heals the fire truck to full HP"; }
 
 }

@@ -29,6 +29,15 @@ public class Water extends PowerUp {
         removePowerUp();
     }
 
+    /**
+     * Refills the truck to full reserve capacity
+     *
+     * @param truck to get refilled
+     */
+    private void refillReserve(FireTruck truck) {
+        truck.setReserve(truck.type.getMaxReserve());
+    }
+
     @Override
     public String getName() {
         return "Water";
@@ -37,14 +46,5 @@ public class Water extends PowerUp {
     @Override
     public String getDesc() {
         return "Restores the fire truck's water supply back to full";
-    }
-
-    /**
-     * Refills the truck to full reserve capacity
-     *
-     * @param truck to get refilled
-     */
-    private void refillReserve(FireTruck truck) {
-        truck.setReserve(truck.type.getMaxReserve());
     }
 }
