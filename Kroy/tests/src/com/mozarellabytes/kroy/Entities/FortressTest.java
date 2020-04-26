@@ -298,4 +298,15 @@ public class FortressTest {
         assertTrue(bombs.isEmpty());
     }
 
+    @Test
+    public void attackTruckMultiplierTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.RubyHard);
+        fireTruck.setTimeOfLastAttack(System.currentTimeMillis() - 5000);
+        fortress.attack(fireTruck, false,2);
+        fortress.updateBombs();
+        System.out.println(fireTruck.getHP());
+        assertEquals(FireTruckType.RubyHard.getMaxHP() - (Walmgate.getAP() * 2), fireTruck.getHP(), 0.0);
+    }
+
 }

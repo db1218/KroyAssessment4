@@ -11,7 +11,7 @@ import com.mozarellabytes.kroy.Entities.FireTruck;
 public class Range extends PowerUp {
 
     /** The time in seconds that the PowerUp lasts for */
-    final float powerUpDuration;
+    float powerUpDuration;
 
     /** The time in seconds that the truck has had in this PowerUp */
     float timeInPowerUp;
@@ -30,15 +30,16 @@ public class Range extends PowerUp {
     public Range(Vector2 location) {
         super("range", location);
         powerUpDuration = 10;
-        timeInPowerUp = 0;
         rangeIncrease = 3;
     }
 
     /** This increases the truck's range */
     @Override
     public void invokePower(FireTruck truck) {
+        this.isPowerCurrentlyInvoked = true;
         this.truck = truck;
         truck.setRange(truck.type.getRange() + rangeIncrease);
+
     }
 
     @Override
@@ -51,6 +52,7 @@ public class Range extends PowerUp {
         return "Increase range of the fire truck by 3 tiles for 10 seconds";
     }
 
+
     /** This updates the amount of time that the truck has been
      * in the PowerUp, it sets canBeRendered to false so that
      * gameScreen doesn't render the powerUp as the truck has
@@ -60,8 +62,8 @@ public class Range extends PowerUp {
         super.update();
         if (truck != null) {
             canBeRendered = false;
-            timeInPowerUp += Gdx.graphics.getRawDeltaTime();
-            if (timeInPowerUp >= powerUpDuration)revokePowerUp();
+            powerUpDuration -= Gdx.graphics.getRawDeltaTime();
+            if (powerUpDuration <= 0)revokePowerUp();
         }
     }
 
@@ -73,7 +75,7 @@ public class Range extends PowerUp {
     private void revokePowerUp() {
         truck.setRange(truck.type.getRange());
         canBeDestroyed = true;
+        isPowerCurrentlyInvoked = false;
     }
-
 
 }

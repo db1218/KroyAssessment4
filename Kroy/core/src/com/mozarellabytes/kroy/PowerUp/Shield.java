@@ -11,7 +11,7 @@ import com.mozarellabytes.kroy.Entities.FireTruck;
 public class Shield extends PowerUp {
 
     /** The time in seconds that the PowerUp lasts for */
-    final float powerUpDuration;
+    float powerUpDuration;
 
     /** The time in seconds that the truck has had in this PowerUp */
     float timeInPowerUp;
@@ -26,8 +26,7 @@ public class Shield extends PowerUp {
      */
     public Shield(Vector2 location) {
         super("shield", location);
-        powerUpDuration = 5;
-        timeInPowerUp = 0;
+        powerUpDuration = 15;
     }
 
     /** This updates the amount of time that the truck has been
@@ -39,8 +38,8 @@ public class Shield extends PowerUp {
         super.update();
         if (truck != null) {
             canBeRendered = false;
-            timeInPowerUp += Gdx.graphics.getRawDeltaTime();
-            if (timeInPowerUp >= powerUpDuration) revokePowerUp();
+            powerUpDuration -= Gdx.graphics.getRawDeltaTime();
+            if (powerUpDuration <= 0)revokePowerUp();
         }
     }
 
@@ -48,6 +47,7 @@ public class Shield extends PowerUp {
     @Override
     public void invokePower(FireTruck truck) {
         this.truck = truck;
+        this.isPowerCurrentlyInvoked = true;
         truck.setShield(true);
     }
 
@@ -68,6 +68,7 @@ public class Shield extends PowerUp {
      */
     private void revokePowerUp() {
         truck.setShield(false);
+        isPowerCurrentlyInvoked = false;
         canBeDestroyed = true;
     }
 }

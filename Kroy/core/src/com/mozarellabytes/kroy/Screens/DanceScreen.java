@@ -211,9 +211,9 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
     @Override
     public void show() {
         SoundFX.decideMusic(this);
-        if (!hasShownTutorial && !((GameScreen)previousScreen).gameState.hasDanceTutorialShown()) {
+        if (!hasShownTutorial && !(previousScreen).gameState.hasDanceTutorialShown()) {
             this.hasShownTutorial = true;
-            ((GameScreen)previousScreen).gameState.setDanceTutorialShown();
+            (previousScreen).gameState.setDanceTutorialShown();
             this.game.setScreen(new ControlsScreen(game, this, "dance"));
         } else {
             Gdx.input.setInputProcessor(danceInputHandler);
@@ -316,7 +316,7 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
      * @return      amount of damage done
      */
     public static float scaleDamage(float combo) {
-        return (float) (20 * (Math.pow(1.2, combo)-1f));
+        return (float) (25 * (Math.pow(1.3, combo)-1f));
     }
 
     /**
@@ -393,7 +393,7 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
         minigameMap.put("FireTruck", firetruck.getType().getName());
         minigameMap.put("Patrol", patrol.getName());
 
-        ((GameScreen) previousScreen).saveGameFromMinigame(minigameMap);
+        (previousScreen).saveGameFromMinigame(minigameMap);
     }
 
     @Override

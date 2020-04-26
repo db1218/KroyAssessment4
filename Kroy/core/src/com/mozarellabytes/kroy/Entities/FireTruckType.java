@@ -20,17 +20,17 @@ public enum FireTruckType {
     RubyEasy(160, 4.2f, Color.RED, "Ruby Truck", 5.5f, 0.16f, 180,"red"),
     SapphireEasy(290, 3.3f, Color.CYAN, "Sapphire Truck", 6.5f, 0.25f, 150, "blue"),
     AmethystEasy(320, 2.7f, Color.PURPLE, "Amethyst Truck", 6.7f, 0.27f, 240,"purple"),
-    EmeraldEasy(180, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.4f, 150, "green"),
+    EmeraldEasy(180, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.3f, 150, "green"),
 
     RubyMedium(140, 4.2f, Color.RED, "Ruby Truck", 5.5f, 0.14f, 160, "red"),
     SapphireMedium(280, 3.2f, Color.CYAN, "Sapphire Truck", 6.2f, 0.20f, 140, "blue"),
     AmethystMedium(300, 2.6f, Color.PURPLE, "Amethyst Truck", 6.5f, 0.24f, 230, "purple"),
-    EmeraldMedium(160, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.34f, 140, "green"),
+    EmeraldMedium(160, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.3f, 140, "green"),
 
-    RubyHard(160, 4.2f, Color.RED, "Ruby Truck", 5, 0.17f, 150, "red"),
-    SapphireHard(300, 3, Color.CYAN, "Sapphire Truck", 6, 0.23f, 130, "blue"),
-    AmethystHard(320, 2.4f, Color.PURPLE, "Amethyst Truck", 6.5f, 0.27f, 220, "purple"),
-    EmeraldHard(180, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.37f, 130, "green");
+    RubyHard(160, 4.2f, Color.RED, "Ruby Truck", 5, 0.14f, 120, "red"),
+    SapphireHard(300, 3, Color.CYAN, "Sapphire Truck", 6, 0.16f, 130, "blue"),
+    AmethystHard(320, 2.4f, Color.PURPLE, "Amethyst Truck", 6.5f, 0.20f, 180, "purple"),
+    EmeraldHard(180, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.24f, 110, "green");
 
 
     /** The maximum amount of water this type of truck can have,
