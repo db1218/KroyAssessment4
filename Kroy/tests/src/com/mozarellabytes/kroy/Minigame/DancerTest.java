@@ -9,8 +9,6 @@ import static org.junit.Assert.*;
 @RunWith(GdxTestRunner.class)
 public class DancerTest {
 
-
-
     private Dancer dancer;
 
     @Test
@@ -23,34 +21,89 @@ public class DancerTest {
         assertEquals(0, dancer.getHealth());
         dancer = new Dancer(-50);
         assertEquals(-50, dancer.getHealth());
-
     }
 
     @Test
     public void testDamage() {
         dancer = new Dancer(100);
-        assertEquals(false, dancer.damage(10));
+        assertFalse(dancer.damage(10));
         assertEquals(90, dancer.getHealth());
-        assertEquals(true, dancer.damage(100));
-        assertEquals(-10, dancer.getHealth());
-
-        // Negative damage shouldn't happen
-        dancer.damage(-100);
+        assertTrue(dancer.damage(100));
         assertEquals(-10, dancer.getHealth());
     }
 
     @Test
-    public void testState() {
+    public void testJiveFirstMove() {
         dancer = new Dancer(100);
+        dancer.startJive();
+        dancer.updateJive();
         assertEquals(DanceMove.NONE, dancer.getState());
-        dancer.setState(DanceMove.UP);
-        assertEquals(DanceMove.UP, dancer.getState());
-        dancer.setState(DanceMove.DOWN);
-        assertEquals(DanceMove.DOWN, dancer.getState());
-        dancer.setState(DanceMove.LEFT);
-        assertEquals(DanceMove.LEFT, dancer.getState());
-        dancer.setState(DanceMove.RIGHT);
-        assertEquals(DanceMove.RIGHT, dancer.getState());
+    }
 
+    @Test
+    public void testJiveSecondMove() {
+        dancer = new Dancer(100);
+        dancer.startJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        assertEquals(DanceMove.RIGHT, dancer.getState());
+    }
+
+    @Test
+    public void testJiveThirdMove() {
+        dancer = new Dancer(100);
+        dancer.startJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        assertEquals(DanceMove.LEFT, dancer.getState());
+    }
+
+    @Test
+    public void testJiveForthMove() {
+        dancer = new Dancer(100);
+        dancer.startJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        assertEquals(DanceMove.NONE, dancer.getState());
+    }
+
+    @Test
+    public void testJiveCannotStart() {
+        dancer = new Dancer(100);
+        dancer.updateJive();
+        dancer.updateJive();
+        assertEquals(dancer.getState(), DanceMove.NONE);
+    }
+
+    @Test
+    public void testJiveNotStopped() {
+        dancer = new Dancer(100);
+        dancer.startJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        assertTrue(dancer.isJiving());
+    }
+
+    @Test
+    public void testJiveStopped() {
+        dancer = new Dancer(100);
+        dancer.startJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        dancer.updateJive();
+        assertFalse(dancer.isJiving());
     }
 }
