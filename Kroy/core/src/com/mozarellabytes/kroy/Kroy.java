@@ -70,13 +70,7 @@ public class Kroy extends Game {
 		parameter.size = 50;
 		font50b = generator.generateFont(parameter);
 
-//		this.setScreen(new SplashScreen(this));
-		this.setScreen(new MenuScreen(this));
-//		this.setScreen(new GameScreen(this, DifficultyLevel.Hard));
-//		this.setScreen(new GameScreen(this, new SavedElement("2020-03-04-01-01-00")));
-//		this.setScreen(new SaveScreen(this, null));
-//		this.setScreen(new DifficultyScreen(this));
-	//	this.setScreen(new DanceScreen(this, GameScreen.PlayState.PLAY, new GameScreen(this, DifficultyLevel.Hard),new FireTruck());
+		this.setScreen(new SplashScreen(this));
 
 	}
 	//Kroy game, Screen previousScreen, FireTruck firetruck, Patrol patrol

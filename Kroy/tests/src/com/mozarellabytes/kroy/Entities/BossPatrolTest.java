@@ -122,8 +122,8 @@ public class BossPatrolTest {
         float HPAfterBeingAttacked = station.getHP();
 
         assertEquals(HPBeforeBeingAttacked, HPAfterBeingAttacked, 0.0);
-        assertEquals(0.5f, bossPatrol.getSpray().get(0).getPosition().x, 0.1);
-        assertEquals(0.5f, bossPatrol.getSpray().get(0).getPosition().y, 0.1);
+        assertTrue(bossPatrol.getSpray().get(0).getPosition().x > 0.35);
+        assertTrue(bossPatrol.getSpray().get(0).getPosition().y > 0.35);
     }
 
     @Test

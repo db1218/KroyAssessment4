@@ -5,21 +5,13 @@ import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.GdxTestRunner;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
-
-
-import java.lang.reflect.Array;
 
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -68,6 +60,17 @@ public class FireStationTest {
     }
 
     @Test
+    public void repairFireStationDestroyedTest() {
+        station.setHP(0);
+        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.RubyHard));
+        station.getTruck(0).setHP(50);
+        float HPBeforeRepair = station.getTruck(0).getHP();
+        station.restoreTrucks();
+        float HPAfterRepair = station.getTruck(0).getHP();
+        assertEquals(HPAfterRepair, HPBeforeRepair, 0.0);
+    }
+
+    @Test
     public void refillPassTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
         station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.RubyHard));
@@ -99,6 +102,17 @@ public class FireStationTest {
     }
 
     @Test
+    public void refillFireStationDestroyedTest() {
+        station.setHP(0);
+        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), FireTruckType.RubyHard));
+        station.getTruck(0).setReserve(50);
+        float ReserveBeforeRefill = station.getTruck(0).getReserve();
+        station.restoreTrucks();
+        float ReserveAfterRefill = station.getTruck(0).getReserve();
+        assertEquals(ReserveAfterRefill, ReserveBeforeRefill, 0.0);
+    }
+
+    @Test
     public void trucksCannotOccupySameTileTest() {
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,11);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(11,12);
@@ -126,41 +140,6 @@ public class FireStationTest {
         Vector2 expectedPosition = new Vector2(11, 12);
 
         assertEquals(expectedPosition, fireTruck1.getPosition());
-    }
-
-    @Test
-    public void trucksShouldNotMovePastEachOtherTest() {
-        when(gameScreenMock.isRoad(11,11)).thenReturn(true);
-        when(gameScreenMock.isRoad(11,12)).thenReturn(true);
-        when(gameScreenMock.isRoad(11,13)).thenReturn(true);
-        when(gameScreenMock.isRoad(11,14)).thenReturn(true);
-        when(gameScreenMock.getStation()).thenReturn(station);
-
-        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(11, 11), FireTruckType.RubyHard);
-        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(11, 14), FireTruckType.SapphireHard);
-
-        station.spawn(fireTruck1);
-        station.spawn(fireTruck2);
-
-        fireTruck1.setMoving(true);
-        fireTruck1.addTileToPathSegment(new Vector2(11, 11));
-        fireTruck1.addTileToPathSegment(new Vector2(11, 12));
-        fireTruck1.addTileToPathSegment(new Vector2(11, 13));
-        fireTruck1.addTileToPathSegment(new Vector2(11, 14));
-
-        fireTruck2.setMoving(true);
-        fireTruck2.addTileToPathSegment(new Vector2(11, 14));
-        fireTruck2.addTileToPathSegment(new Vector2(11, 13));
-        fireTruck2.addTileToPathSegment(new Vector2(11, 12));
-        fireTruck2.addTileToPathSegment(new Vector2(11, 11));
-        for (int i=0; i<100; i++) {
-            station.checkForCollisions();
-            fireTruck1.move();
-            fireTruck2.move();
-        }
-        Vector2 fireTruck1TargetPosition = new Vector2(11, 14);
-        Vector2 fireTruck2TargetPosition = new Vector2(11, 11);
-        assertTrue(!fireTruck1.getPosition().equals(fireTruck1TargetPosition) && !fireTruck2.getPosition().equals(fireTruck2TargetPosition));
     }
 
     @Test
@@ -226,6 +205,41 @@ public class FireStationTest {
     }
 
     @Test
+    public void trucksShouldNotMovePastEachOtherTest() {
+        when(gameScreenMock.isRoad(11,11)).thenReturn(true);
+        when(gameScreenMock.isRoad(11,12)).thenReturn(true);
+        when(gameScreenMock.isRoad(11,13)).thenReturn(true);
+        when(gameScreenMock.isRoad(11,14)).thenReturn(true);
+        when(gameScreenMock.getStation()).thenReturn(station);
+
+        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(11, 11), FireTruckType.RubyHard);
+        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(11, 14), FireTruckType.SapphireHard);
+
+        station.spawn(fireTruck1);
+        station.spawn(fireTruck2);
+
+        fireTruck1.setMoving(true);
+        fireTruck1.addTileToPathSegment(new Vector2(11, 11));
+        fireTruck1.addTileToPathSegment(new Vector2(11, 12));
+        fireTruck1.addTileToPathSegment(new Vector2(11, 13));
+        fireTruck1.addTileToPathSegment(new Vector2(11, 14));
+
+        fireTruck2.setMoving(true);
+        fireTruck2.addTileToPathSegment(new Vector2(11, 14));
+        fireTruck2.addTileToPathSegment(new Vector2(11, 13));
+        fireTruck2.addTileToPathSegment(new Vector2(11, 12));
+        fireTruck2.addTileToPathSegment(new Vector2(11, 11));
+        for (int i=0; i<100; i++) {
+            station.checkForCollisions();
+            fireTruck1.move();
+            fireTruck2.move();
+        }
+        Vector2 fireTruck1TargetPosition = new Vector2(11, 14);
+        Vector2 fireTruck2TargetPosition = new Vector2(11, 11);
+        assertTrue(!fireTruck1.getPosition().equals(fireTruck1TargetPosition) && !fireTruck2.getPosition().equals(fireTruck2TargetPosition));
+    }
+
+    @Test
     public void recalculateTruckPathsTest() {
         FireTruck activeFireTruck = new FireTruck(gameScreenMock, new Vector2(10,10), FireTruckType.RubyEasy);
 
@@ -278,6 +292,12 @@ public class FireStationTest {
     @Test
     public void testIsNotAlive() {
         station.setHP(0);
+        assertFalse(station.isAlive());
+    }
+
+    @Test
+    public void testIsDefinatelyNotAlive() {
+        station.setHP(-5);
         assertFalse(station.isAlive());
     }
 

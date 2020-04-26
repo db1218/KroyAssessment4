@@ -76,7 +76,7 @@ public class Particle {
      *
      * @param target    central position to aim around
      */
-    private void createTargetPosition(Vector2 target) {
+    public void createTargetPosition(Vector2 target) {
         float xCoord = (float)(Math.random()-0.5+target.x);
         float yCoord = (float)(Math.random()-0.5+target.y);
         this.targetPosition = new Vector2(xCoord, yCoord);

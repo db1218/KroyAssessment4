@@ -1,5 +1,6 @@
 package com.mozarellabytes.kroy.Entities;
 
+import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.GdxTestRunner;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,11 +24,10 @@ public class ParticleTest {
 
     @Test
     public void isHitWaterParticle() {
-        waterParticle.setPositionX(1);
-        waterParticle.setPositionY(5);
+        waterParticle.createTargetPosition(new Vector2(1,5));
 
-        waterParticle.setTargetPositionX(1);
-        waterParticle.setTargetPositionY(5);
+        for (int i=0; i<100; i++) waterParticle.updatePosition();
+
         assertTrue(waterParticle.isHit());
 
         waterParticle.setPositionX(2);
@@ -37,11 +37,10 @@ public class ParticleTest {
 
     @Test
     public void isHitBlasterParticle() {
-        blasterParticle.setPositionX(1);
-        blasterParticle.setPositionY(5);
+        blasterParticle.createTargetPosition(new Vector2(1,5));
 
-        blasterParticle.setTargetPositionX(1);
-        blasterParticle.setTargetPositionY(5);
+        for (int i=0; i<100; i++) blasterParticle.updatePosition();
+
         assertTrue(blasterParticle.isHit());
 
         blasterParticle.setPositionX(2);
