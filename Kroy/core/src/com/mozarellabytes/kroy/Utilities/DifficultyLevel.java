@@ -62,7 +62,7 @@ public enum DifficultyLevel {
             3,
             50f,
             20,
-            3,
+            4,
             15f,
             RubyHard,
             SapphireHard,
