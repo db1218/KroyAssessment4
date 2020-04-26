@@ -692,7 +692,7 @@ public class GameScreen implements Screen, ButtonBar {
      */
     public void doDanceOff(FireTruck firetruck, Patrol patrol) {
         gameState.isDancing = true;
-        selectedTruck.clearPathSegment();
+        if (selectedTruck != null) selectedTruck.clearPathSegment();
         game.setScreen(new DanceScreen(game, gameState,this, firetruck, patrol));
     }
 
