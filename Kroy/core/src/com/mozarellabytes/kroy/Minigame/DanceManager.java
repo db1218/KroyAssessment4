@@ -133,13 +133,13 @@ public class DanceManager {
             doneThisBeat = true;
 
             if (proximityToBeat > .91f) {
-                goodMove();
+                goodMove(3);
                 result = DanceResult.GREAT;
             } else if (proximityToBeat > .86f) {
-                goodMove();
+                goodMove(2);
                 result = DanceResult.GOOD;
             } else if (proximityToBeat > .75f) {
-                goodMove();
+                goodMove(1);
                 result = DanceResult.OKAY;
             } else if (proximityToBeat > .5 && phase > .5f) {
                 killCombo();
@@ -203,7 +203,7 @@ public class DanceManager {
      * Called if the player made a sufficiently correct move
      * Good moves include GREAT moves, GOOD moves and OKAY moves
      */
-    public void goodMove() { combo++; }
+    public void goodMove(int multiplier) { combo+=multiplier; }
 
     /**
      * Gets the current number of successive correct moves
