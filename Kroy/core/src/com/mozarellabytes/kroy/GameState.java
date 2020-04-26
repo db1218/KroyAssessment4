@@ -35,6 +35,11 @@ public class GameState {
      */
     public boolean isDancing;
 
+    /**
+     * Has the player just exited the game?
+     */
+    public boolean hasQuitTheGame;
+
     /** Constructor for GameState */
     public GameState() {
         this.activeFireTrucks = 0;

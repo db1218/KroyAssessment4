@@ -682,6 +682,7 @@ public class GameScreen implements Screen, ButtonBar {
      * button is clicked */
     public void toHomeScreen() {
         SoundFX.sfx_truck_attack.stop();
+        gameState.hasQuitTheGame = true;
         game.setScreen(new MenuScreen(game));
     }
 
@@ -918,14 +919,16 @@ public class GameScreen implements Screen, ButtonBar {
             @Override
             public void run() {
                 setState(PlayState.PLAY);
-                doDanceOff(truck, patrol);
+                if (!gameState.hasQuitTheGame) {
+                    doDanceOff(truck, patrol);
+                }
             }
 
         }, 3);
     }
 
     /** This updates the active power ups, if the power up has been
-     * active for longer then the duration of the power up then it
+     * active for longer than the duration of the power up then it
      * is removed */
     public void updatePowerUps() {
         ArrayList<PowerUp> powerUpsToRemove = new ArrayList<>();
