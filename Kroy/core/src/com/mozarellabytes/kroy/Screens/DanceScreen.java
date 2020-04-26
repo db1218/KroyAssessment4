@@ -316,7 +316,7 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
      * @return      amount of damage done
      */
     public static float scaleDamage(float combo) {
-        return (float) (25 * (Math.pow(1.3, combo)-1f));
+        return (float) (25 * (Math.pow(1.15, combo)-1f));
     }
 
     /**
