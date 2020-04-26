@@ -466,8 +466,10 @@ public class GameScreen implements Screen, ButtonBar {
                 else bossPatrol.move(0.01);
             }
         } else {
-            if (!gameState.hasStationDestoyed() && gameState.getNumDestroyedFortresses() == level.getFortressesDestroyedBeforeBoss())
+            if (!gameState.hasStationDestoyed() && gameState.getNumDestroyedFortresses() >= level.getFortressesDestroyedBeforeBoss()) {
                 bossPatrol = new BossPatrol(PatrolType.Boss, fortresses.get(0).getPosition(), station.getCentrePosition());
+            }
+
         }
 
         for (int i = 0; i < this.fortresses.size(); i++) {
