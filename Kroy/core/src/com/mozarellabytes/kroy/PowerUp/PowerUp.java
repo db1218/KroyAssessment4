@@ -48,6 +48,8 @@ public abstract class PowerUp {
     /** Flag for whether the PowerUp can be destroyed in gameScreen */
     boolean canBeDestroyed;
 
+    boolean isPowerCurrentlyInvoked;
+
     /**
      * Constructor for PowerUp
      * @param animationType type of animation
@@ -62,6 +64,7 @@ public abstract class PowerUp {
         this.position = position;
         this.timeOnScreen = 15;
         this.timeLeftOnScreen = timeOnScreen;
+        this.isPowerCurrentlyInvoked = false;
     }
 
     /**
@@ -87,7 +90,7 @@ public abstract class PowerUp {
      */
     private void updateTimeOnScreen(){
         timeLeftOnScreen -= Gdx.graphics.getDeltaTime();
-        if (timeLeftOnScreen <= 0) removePowerUp();
+        if (timeLeftOnScreen <= 0 && !isPowerCurrentlyInvoked) removePowerUp();
     }
 
     /**
@@ -161,13 +164,9 @@ public abstract class PowerUp {
 
     public Vector2 getPosition() { return this.position; }
 
-    public float getTimeOnScreen() {
-        return timeOnScreen;
-    }
+    public float getTimeOnScreen() { return timeOnScreen; }
 
-    public float getTimeLeftOnScreen() {
-        return timeLeftOnScreen;
-    }
+    public float getTimeLeftOnScreen() { return timeLeftOnScreen; }
 
     public TextureRegion getCurrentFrame() {
         return this.currentFrame;
@@ -176,5 +175,7 @@ public abstract class PowerUp {
     public float getElapsedTime() {
         return this.elapsedTime;
     }
+
+    public  boolean isPowerCurrentlyInvoked() { return this.isPowerCurrentlyInvoked; };
 
 }

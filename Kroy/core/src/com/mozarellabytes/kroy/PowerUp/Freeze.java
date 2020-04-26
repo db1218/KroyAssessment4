@@ -35,6 +35,7 @@ public class Freeze extends PowerUp {
         return "Makes the freeze ability available, bypassing the cooldown ";
     }
 
+
 }
 
 

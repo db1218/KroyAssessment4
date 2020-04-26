@@ -18,6 +18,7 @@ import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.InputHandlers.DanceScreenInputHandler;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Minigame.*;
+import com.mozarellabytes.kroy.PowerUp.PowerUp;
 import com.mozarellabytes.kroy.Utilities.*;
 
 /**

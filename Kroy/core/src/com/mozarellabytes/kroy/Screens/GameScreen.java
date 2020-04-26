@@ -396,7 +396,6 @@ public class GameScreen implements Screen, ButtonBar {
 
         gameState.setTrucksInAttackRange(0);
 
-        updatePowerUps();
         for (VFX vfx : this.vfx) vfx.update(delta);
 
         for (int i=0;i<this.patrols.size();i++) {
@@ -497,6 +496,8 @@ public class GameScreen implements Screen, ButtonBar {
             }
 
         }
+
+        updatePowerUps();
 
         if (gameState.getTrucksInAttackRange() > 0 && SoundFX.music_enabled && truckAttack && !gameState.isDancing){
             SoundFX.playTruckAttack();
