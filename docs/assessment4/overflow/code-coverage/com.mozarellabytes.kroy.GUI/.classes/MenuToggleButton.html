@@ -1,0 +1,210 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MenuToggleButton</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy.GUI</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MenuToggleButton (com.mozarellabytes.kroy.GUI)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MenuToggleButton</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 14)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">MenuToggleButton$ToggleState</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 17)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy.GUI;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.badlogic.gdx.Gdx;
+<i>4</i>&nbsp;import com.badlogic.gdx.graphics.Texture;
+<i>5</i>&nbsp;import com.mozarellabytes.kroy.Screens.MenuScreen;
+<i>6</i>&nbsp;import com.mozarellabytes.kroy.Utilities.SoundFX;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;/**
+<i>9</i>&nbsp; * Extension of {@link MenuButton} which allows
+<i>10</i>&nbsp; * for the button to change between 4 states:
+<i>11</i>&nbsp; * - Idle state 1
+<i>12</i>&nbsp; * - Clicked state 1
+<i>13</i>&nbsp; * then when released...
+<i>14</i>&nbsp; * - Idle state 2
+<i>15</i>&nbsp; * - Clicked state 2
+<i>16</i>&nbsp; * This acts as a toggle button, which changes
+<i>17</i>&nbsp; * state each time it is clicked.
+<i>18</i>&nbsp; */
+<i>19</i>&nbsp;public class MenuToggleButton extends MenuButton {
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    /**
+<i>22</i>&nbsp;     * Properties of the toggle button.
+<i>23</i>&nbsp;     */
+<i>24</i>&nbsp;    private final Texture activeTexture2;
+<i>25</i>&nbsp;    private final Texture idleTexture2;
+<i>26</i>&nbsp;    private ToggleState toggleState;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    /**
+<i>29</i>&nbsp;     * Two states of a toggle button
+<i>30</i>&nbsp;     */
+<b class="nc"><i>31</i>&nbsp;    public enum ToggleState {</b>
+<b class="nc"><i>32</i>&nbsp;        ON,</b>
+<b class="nc"><i>33</i>&nbsp;        OFF</b>
+<i>34</i>&nbsp;    }
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    /**
+<i>37</i>&nbsp;     * Constructs a Toggle Button, with the first textures
+<i>38</i>&nbsp;     * being set to the {@link MenuButton} textures, then
+<i>39</i>&nbsp;     * the second textures are kept in this class.
+<i>40</i>&nbsp;     *
+<i>41</i>&nbsp;     * @param idleTexturePath1      first idle texture path
+<i>42</i>&nbsp;     * @param activeTexturePath1    first active texture path
+<i>43</i>&nbsp;     * @param idleTexturePath2      second idle texture path
+<i>44</i>&nbsp;     * @param activeTexturePath2    second active texture path
+<i>45</i>&nbsp;     */
+<i>46</i>&nbsp;    public MenuToggleButton(String idleTexturePath1, String activeTexturePath1, String idleTexturePath2, String activeTexturePath2) {
+<b class="nc"><i>47</i>&nbsp;        super(idleTexturePath1, activeTexturePath1);</b>
+<b class="nc"><i>48</i>&nbsp;        this.idleTexture2 = new Texture(Gdx.files.internal(idleTexturePath2), true);</b>
+<b class="nc"><i>49</i>&nbsp;        this.idleTexture2.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<b class="nc"><i>50</i>&nbsp;        this.activeTexture2 = new Texture(Gdx.files.internal(activeTexturePath2), true);</b>
+<b class="nc"><i>51</i>&nbsp;        this.activeTexture2.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<i>52</i>&nbsp;    }
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    /**
+<i>55</i>&nbsp;     * Changes the state of the button
+<i>56</i>&nbsp;     *
+<i>57</i>&nbsp;     * @param state new state of the button
+<i>58</i>&nbsp;     */
+<i>59</i>&nbsp;    @Override
+<i>60</i>&nbsp;    public void changeState(State state) {
+<b class="nc"><i>61</i>&nbsp;        if (state.equals(State.ACTIVE)) setClicked();</b>
+<b class="nc"><i>62</i>&nbsp;        else setIdle();</b>
+<i>63</i>&nbsp;    }
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    /**
+<i>66</i>&nbsp;     * Sets the clicked texture, depending
+<i>67</i>&nbsp;     * on the toggle state + plays sfx
+<i>68</i>&nbsp;     */
+<i>69</i>&nbsp;    private void setClicked() {
+<b class="nc"><i>70</i>&nbsp;        if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();</b>
+<b class="nc"><i>71</i>&nbsp;        super.currentTexture = (toggleState.equals(ToggleState.ON)) ? activeTexture : activeTexture2;</b>
+<i>72</i>&nbsp;    }
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    /**
+<i>75</i>&nbsp;     * Sets the idle texture, depending
+<i>76</i>&nbsp;     * on the toggle state
+<i>77</i>&nbsp;     */
+<i>78</i>&nbsp;    private void setIdle() {
+<b class="nc"><i>79</i>&nbsp;        super.currentTexture = (toggleState.equals(ToggleState.ON)) ? idleTexture : idleTexture2;</b>
+<i>80</i>&nbsp;    }
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    /**
+<i>83</i>&nbsp;     * Sets the toggle state of the button
+<i>84</i>&nbsp;     * and sets the button to its idle texture
+<i>85</i>&nbsp;     *
+<i>86</i>&nbsp;     * @param toggleState   of the button
+<i>87</i>&nbsp;     */
+<i>88</i>&nbsp;    public void setToggleState(ToggleState toggleState) {
+<b class="nc"><i>89</i>&nbsp;        this.toggleState = toggleState;</b>
+<b class="nc"><i>90</i>&nbsp;        this.setIdle();</b>
+<i>91</i>&nbsp;    }
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    /**
+<i>94</i>&nbsp;     * Objects to dispose of when {@link MenuScreen}
+<i>95</i>&nbsp;     * is disposed of
+<i>96</i>&nbsp;     */
+<i>97</i>&nbsp;    public void dispose() {
+<b class="nc"><i>98</i>&nbsp;        this.idleTexture2.dispose();</b>
+<b class="nc"><i>99</i>&nbsp;        this.activeTexture2.dispose();</b>
+<i>100</i>&nbsp;    }
+<i>101</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-27 02:20</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,196 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DifficultyScreenInputHandler</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy.InputHandlers</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DifficultyScreenInputHandler (com.mozarellabytes.kroy.InputHandlers)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DifficultyScreenInputHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 45)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy.InputHandlers;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.badlogic.gdx.Gdx;
+<i>4</i>&nbsp;import com.badlogic.gdx.Input;
+<i>5</i>&nbsp;import com.badlogic.gdx.InputProcessor;
+<i>6</i>&nbsp;import com.badlogic.gdx.math.Vector2;
+<i>7</i>&nbsp;import com.badlogic.gdx.math.Vector3;
+<i>8</i>&nbsp;import com.mozarellabytes.kroy.Screens.DifficultyScreen;
+<i>9</i>&nbsp;import com.mozarellabytes.kroy.Utilities.DifficultyLevel;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;/**
+<i>12</i>&nbsp; * Manages the inputs for the difficulty screen, such as button presses
+<i>13</i>&nbsp; * for selecting a difficulty and returning to the main menu
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;public class DifficultyScreenInputHandler implements InputProcessor {
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    /**
+<i>18</i>&nbsp;     * Screen managing inputs for
+<i>19</i>&nbsp;     */
+<i>20</i>&nbsp;    final DifficultyScreen difficultyScreen;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    /**
+<i>23</i>&nbsp;     * Constructor for handler
+<i>24</i>&nbsp;     *
+<i>25</i>&nbsp;     * @param difficultyScreen  screen managing inputs for
+<i>26</i>&nbsp;     */
+<b class="nc"><i>27</i>&nbsp;    public DifficultyScreenInputHandler(DifficultyScreen difficultyScreen) {</b>
+<b class="nc"><i>28</i>&nbsp;        this.difficultyScreen = difficultyScreen;</b>
+<i>29</i>&nbsp;    }
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    @Override
+<i>32</i>&nbsp;    public boolean keyDown(int keycode) {
+<b class="nc"><i>33</i>&nbsp;        switch (keycode) {</b>
+<i>34</i>&nbsp;            case Input.Keys.ESCAPE:
+<b class="nc"><i>35</i>&nbsp;                Gdx.app.exit();</b>
+<b class="nc"><i>36</i>&nbsp;                System.exit(1);</b>
+<b class="nc"><i>37</i>&nbsp;                break;</b>
+<i>38</i>&nbsp;            case Input.Keys.M:
+<b class="nc"><i>39</i>&nbsp;                difficultyScreen.clickedSoundButton();</b>
+<b class="nc"><i>40</i>&nbsp;                difficultyScreen.changeSound();</b>
+<i>41</i>&nbsp;                break;
+<i>42</i>&nbsp;        }
+<b class="nc"><i>43</i>&nbsp;        return false;</b>
+<i>44</i>&nbsp;    }
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    @Override
+<i>47</i>&nbsp;    public boolean keyUp(int keycode) {
+<b class="nc"><i>48</i>&nbsp;        return false;</b>
+<i>49</i>&nbsp;    }
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    @Override
+<i>52</i>&nbsp;    public boolean keyTyped(char character) {
+<b class="nc"><i>53</i>&nbsp;        return false;</b>
+<i>54</i>&nbsp;    }
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    @Override
+<i>57</i>&nbsp;    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+<b class="nc"><i>58</i>&nbsp;        Vector2 clickCoordinates = new Vector2(screenX, screenY);</b>
+<b class="nc"><i>59</i>&nbsp;        Vector3 position = difficultyScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));</b>
+<b class="nc"><i>60</i>&nbsp;        if (difficultyScreen.getEasyButton().contains(position.x, position.y))</b>
+<b class="nc"><i>61</i>&nbsp;            difficultyScreen.clickedEasyButton();</b>
+<b class="nc"><i>62</i>&nbsp;        else if (difficultyScreen.getMediumButton().contains(position.x, position.y))</b>
+<b class="nc"><i>63</i>&nbsp;            difficultyScreen.clickedMediumButton();</b>
+<b class="nc"><i>64</i>&nbsp;        else if (difficultyScreen.getHardButton().contains(position.x, position.y))</b>
+<b class="nc"><i>65</i>&nbsp;            difficultyScreen.clickedHardButton();</b>
+<b class="nc"><i>66</i>&nbsp;        else if (difficultyScreen.getReturnButton().contains(position.x, position.y))</b>
+<b class="nc"><i>67</i>&nbsp;            difficultyScreen.clickedReturnButton();</b>
+<b class="nc"><i>68</i>&nbsp;        else if (difficultyScreen.getSoundButton().contains(position.x, position.y))</b>
+<b class="nc"><i>69</i>&nbsp;            difficultyScreen.clickedSoundButton();</b>
+<i>70</i>&nbsp;
+<b class="nc"><i>71</i>&nbsp;        return true;</b>
+<i>72</i>&nbsp;    }
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    @Override
+<i>75</i>&nbsp;    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+<b class="nc"><i>76</i>&nbsp;        Vector2 clickCoordinates = new Vector2(screenX, screenY);</b>
+<b class="nc"><i>77</i>&nbsp;        Vector3 position = difficultyScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));</b>
+<i>78</i>&nbsp;
+<b class="nc"><i>79</i>&nbsp;        difficultyScreen.idleEasyButton();</b>
+<b class="nc"><i>80</i>&nbsp;        difficultyScreen.idleMediumButton();</b>
+<b class="nc"><i>81</i>&nbsp;        difficultyScreen.idleHardButton();</b>
+<b class="nc"><i>82</i>&nbsp;        difficultyScreen.idleReturnButton();</b>
+<b class="nc"><i>83</i>&nbsp;        difficultyScreen.idleSoundButton();</b>
+<i>84</i>&nbsp;
+<b class="nc"><i>85</i>&nbsp;        if (difficultyScreen.getEasyButton().contains(position.x, position.y))</b>
+<b class="nc"><i>86</i>&nbsp;            difficultyScreen.toGameScreen(DifficultyLevel.Easy);</b>
+<b class="nc"><i>87</i>&nbsp;        else if (difficultyScreen.getMediumButton().contains(position.x, position.y))</b>
+<b class="nc"><i>88</i>&nbsp;            difficultyScreen.toGameScreen(DifficultyLevel.Medium);</b>
+<b class="nc"><i>89</i>&nbsp;        else if (difficultyScreen.getHardButton().contains(position.x, position.y))</b>
+<b class="nc"><i>90</i>&nbsp;            difficultyScreen.toGameScreen(DifficultyLevel.Hard);</b>
+<b class="nc"><i>91</i>&nbsp;        else if (difficultyScreen.getReturnButton().contains(position.x, position.y))</b>
+<b class="nc"><i>92</i>&nbsp;            difficultyScreen.toMenu();</b>
+<b class="nc"><i>93</i>&nbsp;        else if (difficultyScreen.getSoundButton().contains(position.x, position.y))</b>
+<b class="nc"><i>94</i>&nbsp;            difficultyScreen.changeSound();</b>
+<i>95</i>&nbsp;
+<b class="nc"><i>96</i>&nbsp;        return true;</b>
+<i>97</i>&nbsp;    }
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    @Override
+<i>100</i>&nbsp;    public boolean touchDragged(int screenX, int screenY, int pointer) {
+<b class="nc"><i>101</i>&nbsp;        return false;</b>
+<i>102</i>&nbsp;    }
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    @Override
+<i>105</i>&nbsp;    public boolean mouseMoved(int screenX, int screenY) {
+<b class="nc"><i>106</i>&nbsp;        return false;</b>
+<i>107</i>&nbsp;    }
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;    @Override
+<i>110</i>&nbsp;    public boolean scrolled(int amount) {
+<b class="nc"><i>111</i>&nbsp;        return false;</b>
+<i>112</i>&nbsp;    }
+<i>113</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-27 02:20</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,234 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Dancer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy.Minigame</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Dancer (com.mozarellabytes.kroy.Minigame)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Dancer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    78.6%
+  </span>
+  <span class="absValue">
+    (11/ 14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (36/ 42)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy.Minigame;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.badlogic.gdx.graphics.Texture;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.util.ArrayList;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;/**
+<i>8</i>&nbsp; * Class for entities that are taking part in the dance-off
+<i>9</i>&nbsp; */
+<i>10</i>&nbsp;public class Dancer {
+<i>11</i>&nbsp;    
+<i>12</i>&nbsp;    /** The amount of health the dancer has left*/
+<i>13</i>&nbsp;    private int health;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    /** The dance move that this dancer is currently executing */
+<i>16</i>&nbsp;    private DanceMove state;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /** The time that this dancer has been in this state (see above) */
+<i>19</i>&nbsp;    private float timeInState;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    /** The number of steps in this dancer&#39;s celebratory dance (Jive) */
+<i>23</i>&nbsp;    private final int stepsInJive;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    /** Whether the dancer is doing a preset dance */
+<i>26</i>&nbsp;    private boolean jiving;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    /** How far through the jive the dancer is */
+<i>29</i>&nbsp;    private int jiveStep;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /** ArrayList containing the list of moves that the dancer
+<i>32</i>&nbsp;     * executes when it is jiving */
+<i>33</i>&nbsp;    private final ArrayList&lt;DanceMove&gt; jiveRoutine;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    /**
+<i>36</i>&nbsp;     * Constructor for Dancer
+<i>37</i>&nbsp;     *
+<i>38</i>&nbsp;     * @param maxHealth health dancer starts with
+<i>39</i>&nbsp;     */
+<b class="fc"><i>40</i>&nbsp;    public Dancer(int maxHealth) {</b>
+<b class="fc"><i>41</i>&nbsp;        this.health = maxHealth;</b>
+<b class="fc"><i>42</i>&nbsp;        this.state = DanceMove.NONE;</b>
+<b class="fc"><i>43</i>&nbsp;        this.timeInState = 0f;</b>
+<b class="fc"><i>44</i>&nbsp;        this.jiving = false;</b>
+<b class="fc"><i>45</i>&nbsp;        this.jiveRoutine = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>46</i>&nbsp;        this.stepsInJive = 8;</b>
+<i>47</i>&nbsp;
+<b class="fc"><i>48</i>&nbsp;        createRoutine();</b>
+<b class="fc"><i>49</i>&nbsp;    }</b>
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    /**
+<i>52</i>&nbsp;     * Creates the jive routine, by adding moves to
+<i>53</i>&nbsp;     * jiveRoutine
+<i>54</i>&nbsp;     */
+<i>55</i>&nbsp;    private void createRoutine() {
+<b class="fc"><i>56</i>&nbsp;        this.jiveRoutine.add(DanceMove.LEFT);</b>
+<b class="fc"><i>57</i>&nbsp;        this.jiveRoutine.add(DanceMove.NONE);</b>
+<b class="fc"><i>58</i>&nbsp;        this.jiveRoutine.add(DanceMove.RIGHT);</b>
+<b class="fc"><i>59</i>&nbsp;    }</b>
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    /**
+<i>62</i>&nbsp;     * Deals a set amount of damage to the dancer
+<i>63</i>&nbsp;     * @param amount the amount of damage to deal
+<i>64</i>&nbsp;     * @return &lt;code&gt; true &lt;/code&gt; if the dancer was killed,
+<i>65</i>&nbsp;     *         &lt;code&gt; false &lt;/code&gt; otherwise
+<i>66</i>&nbsp;     */
+<i>67</i>&nbsp;    public boolean damage(int amount) {
+<b class="fc"><i>68</i>&nbsp;        if (amount &lt; 0) amount = 0;</b>
+<b class="fc"><i>69</i>&nbsp;        this.health -= amount;</b>
+<b class="fc"><i>70</i>&nbsp;        return this.health &lt;= 0;</b>
+<i>71</i>&nbsp;    }
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;    /**
+<i>74</i>&nbsp;     * Sets the current state of the dancer
+<i>75</i>&nbsp;     * @param move the Dancemove the dancer should perform
+<i>76</i>&nbsp;     */
+<i>77</i>&nbsp;    public void setState(DanceMove move) {
+<b class="fc"><i>78</i>&nbsp;        this.state = move;</b>
+<b class="fc"><i>79</i>&nbsp;        this.timeInState = 0f;</b>
+<b class="fc"><i>80</i>&nbsp;    }</b>
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    /**
+<i>83</i>&nbsp;     * Update the dancer so that it knows how long it has been in the current position
+<i>84</i>&nbsp;     * @param delta the amount of time elapsed since the last update in seconds
+<i>85</i>&nbsp;     */
+<i>86</i>&nbsp;    public void addTimeInState(float delta) {
+<b class="nc"><i>87</i>&nbsp;        this.timeInState += delta;</b>
+<b class="nc"><i>88</i>&nbsp;    }</b>
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    /**
+<i>91</i>&nbsp;     * Sets the dancer to perform an automatic celebratory dance
+<i>92</i>&nbsp;     */
+<i>93</i>&nbsp;    public void startJive() {
+<b class="fc"><i>94</i>&nbsp;        this.jiving = true;</b>
+<b class="fc"><i>95</i>&nbsp;    }</b>
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    /**
+<i>98</i>&nbsp;     * This controls the dancer&#39;s jive and stops this dancer jiving
+<i>99</i>&nbsp;     * when it has danced a certain number of steps.
+<i>100</i>&nbsp;     */
+<i>101</i>&nbsp;    public void updateJive() {
+<b class="fc"><i>102</i>&nbsp;        if (this.jiving) jive();</b>
+<b class="fc"><i>103</i>&nbsp;        if (this.jiveStep == this.stepsInJive) stopJiving();</b>
+<b class="fc"><i>104</i>&nbsp;    }</b>
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;    /**
+<i>107</i>&nbsp;     * While this dancer is jiving it will loop through its jiveRoutine
+<i>108</i>&nbsp;     * executing each step
+<i>109</i>&nbsp;     */
+<i>110</i>&nbsp;    private void jive(){
+<b class="fc"><i>111</i>&nbsp;        this.jiveStep++;</b>
+<b class="fc"><i>112</i>&nbsp;        int stepIndex = this.jiveStep % 3;</b>
+<b class="fc"><i>113</i>&nbsp;        DanceMove move = jiveRoutine.get(stepIndex);</b>
+<b class="fc"><i>114</i>&nbsp;        this.setState(move);</b>
+<b class="fc"><i>115</i>&nbsp;    }</b>
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;    /**
+<i>118</i>&nbsp;     * This stops this dancer from jiving
+<i>119</i>&nbsp;     */
+<i>120</i>&nbsp;    private void stopJiving() {
+<b class="fc"><i>121</i>&nbsp;        this.jiving = false;</b>
+<b class="fc"><i>122</i>&nbsp;        this.jiveStep = 0;</b>
+<b class="fc"><i>123</i>&nbsp;        this.state = DanceMove.NONE;</b>
+<b class="fc"><i>124</i>&nbsp;    }</b>
+<i>125</i>&nbsp;
+<i>126</i>&nbsp;    /**
+<i>127</i>&nbsp;     * Get texture of entity
+<i>128</i>&nbsp;     * @param entity    entity to get texture for
+<i>129</i>&nbsp;     * @return          the texture
+<i>130</i>&nbsp;     */
+<i>131</i>&nbsp;    public Texture getTexture(String entity) {
+<b class="nc"><i>132</i>&nbsp;        Texture ETTexture = this.state.getETTexture();</b>
+<b class="nc"><i>133</i>&nbsp;        Texture firefighterTexture = this.state.getFirefighterTexture();</b>
+<b class="nc"><i>134</i>&nbsp;        return entity.equals(&quot;ET&quot;) ? ETTexture : firefighterTexture;</b>
+<i>135</i>&nbsp;    }
+<i>136</i>&nbsp;
+<b class="nc"><i>137</i>&nbsp;    public float getTimeInState() { return this.timeInState; }</b>
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;    public DanceMove getState() {
+<b class="fc"><i>140</i>&nbsp;        return this.state;</b>
+<i>141</i>&nbsp;    }
+<i>142</i>&nbsp;
+<i>143</i>&nbsp;    public int getHealth() {
+<b class="fc"><i>144</i>&nbsp;        return this.health;</b>
+<i>145</i>&nbsp;    }
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    public boolean isJiving() {
+<b class="fc"><i>148</i>&nbsp;        return this.jiving;</b>
+<i>149</i>&nbsp;    }
+<i>150</i>&nbsp;
+<i>151</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-27 02:20</div>
+</div>
+</body>
+</html>

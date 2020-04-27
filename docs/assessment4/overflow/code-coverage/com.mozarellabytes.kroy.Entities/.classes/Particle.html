@@ -1,0 +1,206 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Particle</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy.Entities</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Particle (com.mozarellabytes.kroy.Entities)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Particle</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71.4%
+  </span>
+  <span class="absValue">
+    (10/ 14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.1%
+  </span>
+  <span class="absValue">
+    (27/ 31)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy.Entities;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.badlogic.gdx.graphics.Color;
+<i>4</i>&nbsp;import com.badlogic.gdx.math.Interpolation;
+<i>5</i>&nbsp;import com.badlogic.gdx.math.Vector2;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;/**
+<i>8</i>&nbsp; * One of many colourful visual rectangles which spawn
+<i>9</i>&nbsp; * when a FireTruck attacks a Fortress, or when the Boss
+<i>10</i>&nbsp; * attacks the FireStation. It goes towards the target
+<i>11</i>&nbsp; * and deals damage once it reaches.
+<i>12</i>&nbsp; */
+<i>13</i>&nbsp;public class Particle {
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    /** Random colour of Rectangle */
+<i>16</i>&nbsp;    private Color colour;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /** Random size of the Rectangle */
+<i>19</i>&nbsp;    private final float size;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    /** The position where the water particle starts from (the position
+<i>22</i>&nbsp;     * of the truck)
+<i>23</i>&nbsp;     */
+<i>24</i>&nbsp;    private final Vector2 startPosition;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /** The current position of the water particle */
+<i>27</i>&nbsp;    private Vector2 currentPosition;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    private Color[] colours;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    private final Object target;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /** The end position of the water particle (the fortress the truck
+<i>34</i>&nbsp;     * is attacking)
+<i>35</i>&nbsp;     */
+<i>36</i>&nbsp;    private Vector2 targetPosition;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    /**
+<i>39</i>&nbsp;     * Constructor for Particle
+<i>40</i>&nbsp;     *
+<i>41</i>&nbsp;     * @param startPosition source position of particle
+<i>42</i>&nbsp;     * @param endPosition   target position of particle
+<i>43</i>&nbsp;     * @param target        target entity
+<i>44</i>&nbsp;     */
+<b class="fc"><i>45</i>&nbsp;    public Particle(Vector2 startPosition, Vector2 endPosition, Object target) {</b>
+<b class="fc"><i>46</i>&nbsp;        this.target = target;</b>
+<b class="fc"><i>47</i>&nbsp;        if (target instanceof Fortress) setWaterColour();</b>
+<b class="fc"><i>48</i>&nbsp;        if (target instanceof FireStation) setBlasterColour();</b>
+<i>49</i>&nbsp;
+<b class="fc"><i>50</i>&nbsp;        this.size = (float)(Math.random()/5 + 0.1);</b>
+<b class="fc"><i>51</i>&nbsp;        this.startPosition = new Vector2(startPosition.x, startPosition.y);</b>
+<b class="fc"><i>52</i>&nbsp;        this.currentPosition = startPosition;</b>
+<b class="fc"><i>53</i>&nbsp;        this.targetPosition = endPosition;</b>
+<b class="fc"><i>54</i>&nbsp;        createTargetPosition(endPosition);</b>
+<b class="fc"><i>55</i>&nbsp;    }</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    /**
+<i>58</i>&nbsp;     * Sets random water colour (fire truck)
+<i>59</i>&nbsp;     */
+<i>60</i>&nbsp;    private void setWaterColour() {
+<b class="fc"><i>61</i>&nbsp;        this.colours = new Color[] {Color.CYAN, Color.NAVY, Color.BLUE, Color.PURPLE, Color.SKY, Color.TEAL};</b>
+<b class="fc"><i>62</i>&nbsp;        this.colour = colours[(int)(Math.random() * 4)];</b>
+<b class="fc"><i>63</i>&nbsp;    }</b>
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    /**
+<i>66</i>&nbsp;     * Sets random blaster colour (boss patrol)
+<i>67</i>&nbsp;     */
+<i>68</i>&nbsp;    private void setBlasterColour() {
+<b class="fc"><i>69</i>&nbsp;        this.colours = new Color[] {Color.RED, Color.CHARTREUSE, Color.FIREBRICK, Color.MAGENTA, Color.ORANGE, Color.BROWN};</b>
+<b class="fc"><i>70</i>&nbsp;        this.colour = colours[(int)(Math.random() * 4)];</b>
+<b class="fc"><i>71</i>&nbsp;    }</b>
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;    /**
+<i>74</i>&nbsp;     * Scatter particles around the target instead of
+<i>75</i>&nbsp;     * just at once singular location
+<i>76</i>&nbsp;     *
+<i>77</i>&nbsp;     * @param target    central position to aim around
+<i>78</i>&nbsp;     */
+<i>79</i>&nbsp;    public void createTargetPosition(Vector2 target) {
+<b class="fc"><i>80</i>&nbsp;        float xCoord = (float)(Math.random()-0.5+target.x);</b>
+<b class="fc"><i>81</i>&nbsp;        float yCoord = (float)(Math.random()-0.5+target.y);</b>
+<b class="fc"><i>82</i>&nbsp;        this.targetPosition = new Vector2(xCoord, yCoord);</b>
+<b class="fc"><i>83</i>&nbsp;    }</b>
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    /**
+<i>86</i>&nbsp;     * Updates the position of the WaterParticle
+<i>87</i>&nbsp;     * using the Interpolation function
+<i>88</i>&nbsp;     */
+<i>89</i>&nbsp;    public void updatePosition() {
+<b class="fc"><i>90</i>&nbsp;        this.currentPosition = this.startPosition.interpolate(this.targetPosition, 0.2f, Interpolation.circle);</b>
+<b class="fc"><i>91</i>&nbsp;    }</b>
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    /**
+<i>94</i>&nbsp;     * Checks if the Particle has reached the the Fortress
+<i>95</i>&nbsp;     *
+<i>96</i>&nbsp;     * @return  &lt;code&gt;true&lt;/code&gt; if Particle hit Target entity
+<i>97</i>&nbsp;     *          &lt;code&gt;false&lt;/code&gt; otherwise
+<i>98</i>&nbsp;     */
+<i>99</i>&nbsp;    public boolean isHit() {
+<b class="fc"><i>100</i>&nbsp;        return (((int) this.targetPosition.x == (int) this.currentPosition.x) &amp;&amp;</b>
+<i>101</i>&nbsp;                ((int) this.targetPosition.y == (int) this.currentPosition.y));
+<i>102</i>&nbsp;    }
+<i>103</i>&nbsp;
+<b class="fc"><i>104</i>&nbsp;    public Object getTarget() { return this.target; }</b>
+<i>105</i>&nbsp;
+<b class="nc"><i>106</i>&nbsp;    public float getSize() { return this.size; }</b>
+<i>107</i>&nbsp;
+<b class="nc"><i>108</i>&nbsp;    public Color getColour() { return this.colour; }</b>
+<i>109</i>&nbsp;
+<b class="fc"><i>110</i>&nbsp;    public Vector2 getPosition() { return this.currentPosition; }</b>
+<i>111</i>&nbsp;
+<b class="fc"><i>112</i>&nbsp;    public void setPositionX(float x) {this.currentPosition.x = x;}</b>
+<i>113</i>&nbsp;
+<b class="fc"><i>114</i>&nbsp;    public void setPositionY(float y) {this.currentPosition.y = y;}</b>
+<i>115</i>&nbsp;
+<b class="nc"><i>116</i>&nbsp;    public void setTargetPositionX(float x) {this.targetPosition.x = x;}</b>
+<i>117</i>&nbsp;
+<b class="nc"><i>118</i>&nbsp;    public void setTargetPositionY(float y) {this.targetPosition.y = y;}</b>
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;}
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-27 02:20</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,339 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DanceManager</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy.Minigame</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DanceManager (com.mozarellabytes.kroy.Minigame)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DanceManager</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 78)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy.Minigame;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.util.ArrayList;
+<i>4</i>&nbsp;import java.util.List;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;/**
+<i>7</i>&nbsp; * DanceManager controls all aspects of the minigame
+<i>8</i>&nbsp; */
+<i>9</i>&nbsp;public class DanceManager {
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;    /** The time in seconds between beats */
+<i>12</i>&nbsp;    private final float beatDuration;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    /** The time since the last beat in seconds */
+<i>15</i>&nbsp;    private float timeSinceBeat;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    /** The time since the last half-beat in seconds */
+<i>18</i>&nbsp;    private float halfBeat;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    /** Whether an input has already been given this beat */
+<i>21</i>&nbsp;    private boolean doneThisBeat;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    /** Whether the player missed the last move */
+<b class="nc"><i>24</i>&nbsp;    private boolean missedLastTurn = false;</b>
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /** List of classes to notify about the beat */
+<i>27</i>&nbsp;    private final List&lt;BeatListener&gt; beatListeners;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    private final List&lt;DanceMove&gt; notDanceMoves;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /** The number of successive correct moves the player has performed */
+<b class="nc"><i>32</i>&nbsp;    private int combo = 0;</b>
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    /** Technical class for deciding upcoming moves */
+<i>35</i>&nbsp;    private final DanceChoreographer choreographer;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    /**
+<i>38</i>&nbsp;     * Constructor for Dance Manager with a given bpm
+<i>39</i>&nbsp;     *
+<i>40</i>&nbsp;     * @param beatsPerMinute    bpm to match the song
+<i>41</i>&nbsp;     */
+<b class="nc"><i>42</i>&nbsp;    public DanceManager(float beatsPerMinute) {</b>
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;        // All measurements are in seconds
+<b class="nc"><i>45</i>&nbsp;        this.beatDuration = 60/beatsPerMinute;</b>
+<b class="nc"><i>46</i>&nbsp;        this.timeSinceBeat = 0;</b>
+<b class="nc"><i>47</i>&nbsp;        this.halfBeat = -beatDuration/2;</b>
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;        // Setup dance queue
+<b class="nc"><i>50</i>&nbsp;        this.choreographer = new DanceChoreographer();</b>
+<b class="nc"><i>51</i>&nbsp;        this.beatListeners = new ArrayList&lt;&gt;();</b>
+<i>52</i>&nbsp;
+<b class="nc"><i>53</i>&nbsp;        this.notDanceMoves = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>54</i>&nbsp;        this.notDanceMoves.add(DanceMove.WAIT);</b>
+<b class="nc"><i>55</i>&nbsp;        this.notDanceMoves.add(DanceMove.NONE);</b>
+<i>56</i>&nbsp;    }
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    /**
+<i>59</i>&nbsp;     * Called once a frame to update the dance manager
+<i>60</i>&nbsp;     *
+<i>61</i>&nbsp;     * @param delta time since last frame
+<i>62</i>&nbsp;     */
+<i>63</i>&nbsp;    public void update(float delta) {
+<b class="nc"><i>64</i>&nbsp;        this.timeSinceBeat += delta;</b>
+<b class="nc"><i>65</i>&nbsp;        this.halfBeat += delta;</b>
+<i>66</i>&nbsp;
+<b class="nc"><i>67</i>&nbsp;        if (this.timeSinceBeat &gt;= this.beatDuration) onBeat();</b>
+<b class="nc"><i>68</i>&nbsp;        if (this.halfBeat &gt;= this.beatDuration) offBeat();</b>
+<i>69</i>&nbsp;    }
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;    /**
+<i>72</i>&nbsp;     * When the player gets the timing correct
+<i>73</i>&nbsp;     */
+<i>74</i>&nbsp;    private void onBeat() {
+<b class="nc"><i>75</i>&nbsp;        this.choreographer.createMove();</b>
+<b class="nc"><i>76</i>&nbsp;        this.timeSinceBeat = 0f;</b>
+<b class="nc"><i>77</i>&nbsp;        notifyOnBeat();</b>
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    /**
+<i>81</i>&nbsp;     * When the player gets the timing incorrect
+<i>82</i>&nbsp;     */
+<i>83</i>&nbsp;    private void offBeat() {
+<b class="nc"><i>84</i>&nbsp;        this.halfBeat = 0f;</b>
+<b class="nc"><i>85</i>&nbsp;        if (!doneThisBeat &amp;&amp; !notDanceMoves.contains(getNearestMove()) ){</b>
+<b class="nc"><i>86</i>&nbsp;            killCombo();</b>
+<b class="nc"><i>87</i>&nbsp;            missedLastTurn = true;</b>
+<i>88</i>&nbsp;        }
+<b class="nc"><i>89</i>&nbsp;        doneThisBeat = false;</b>
+<b class="nc"><i>90</i>&nbsp;        notifyOffBeat();</b>
+<i>91</i>&nbsp;    }
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    /**
+<i>94</i>&nbsp;     * Returns the phase difference of the beat at the current time where 0 is directly on the beat
+<i>95</i>&nbsp;     * and lim x = 1 is directly on the next beat.
+<i>96</i>&nbsp;     * @return the phase through the next beat
+<i>97</i>&nbsp;     * */
+<i>98</i>&nbsp;    public float getPhase() {
+<b class="nc"><i>99</i>&nbsp;        return timeSinceBeat/beatDuration;</b>
+<i>100</i>&nbsp;    }
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;    /**
+<i>103</i>&nbsp;     * Gets the distance to the nearest beat where .5f is equidistant between two beats and 0f is directly on the beat
+<i>104</i>&nbsp;     * @return float distance to nearest beat
+<i>105</i>&nbsp;     */
+<i>106</i>&nbsp;    public float getBeatProximity() {
+<b class="nc"><i>107</i>&nbsp;        return 2 * Math.abs(getPhase()-.5f);</b>
+<i>108</i>&nbsp;    }
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;    /**
+<i>111</i>&nbsp;     * Makes the dancer perform a move
+<i>112</i>&nbsp;     * @param move the DanceMove for the dancer to perform
+<i>113</i>&nbsp;     * @return the DanceResult for the move, eg &#39;MISSED&#39; or &#39;GREAT&#39;
+<i>114</i>&nbsp;     */
+<i>115</i>&nbsp;    public DanceResult takeMove(DanceMove move) {
+<i>116</i>&nbsp;
+<b class="nc"><i>117</i>&nbsp;        missedLastTurn = false;</b>
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;        // The wrong move is input
+<b class="nc"><i>120</i>&nbsp;        if (move != getNearestMove()) {</b>
+<b class="nc"><i>121</i>&nbsp;            wrongMove();</b>
+<b class="nc"><i>122</i>&nbsp;            notifyResult(DanceResult.WRONG);</b>
+<b class="nc"><i>123</i>&nbsp;            return DanceResult.WRONG;</b>
+<i>124</i>&nbsp;        }
+<i>125</i>&nbsp;
+<i>126</i>&nbsp;        // This is the first attempted move this beat
+<b class="nc"><i>127</i>&nbsp;        if (!doneThisBeat) {</b>
+<b class="nc"><i>128</i>&nbsp;            float proximityToBeat = getBeatProximity();</b>
+<b class="nc"><i>129</i>&nbsp;            float phase = getPhase();</b>
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;            DanceResult result;
+<i>132</i>&nbsp;
+<b class="nc"><i>133</i>&nbsp;            doneThisBeat = true;</b>
+<i>134</i>&nbsp;
+<b class="nc"><i>135</i>&nbsp;            if (proximityToBeat &gt; .91f) {</b>
+<b class="nc"><i>136</i>&nbsp;                goodMove(3);</b>
+<b class="nc"><i>137</i>&nbsp;                result = DanceResult.GREAT;</b>
+<b class="nc"><i>138</i>&nbsp;            } else if (proximityToBeat &gt; .86f) {</b>
+<b class="nc"><i>139</i>&nbsp;                goodMove(2);</b>
+<b class="nc"><i>140</i>&nbsp;                result = DanceResult.GOOD;</b>
+<b class="nc"><i>141</i>&nbsp;            } else if (proximityToBeat &gt; .75f) {</b>
+<b class="nc"><i>142</i>&nbsp;                goodMove(1);</b>
+<b class="nc"><i>143</i>&nbsp;                result = DanceResult.OKAY;</b>
+<b class="nc"><i>144</i>&nbsp;            } else if (proximityToBeat &gt; .5 &amp;&amp; phase &gt; .5f) {</b>
+<b class="nc"><i>145</i>&nbsp;                killCombo();</b>
+<b class="nc"><i>146</i>&nbsp;                result = DanceResult.EARLY;</b>
+<b class="nc"><i>147</i>&nbsp;            } else if (proximityToBeat &gt; .5 &amp;&amp; phase &lt; .5f) {</b>
+<b class="nc"><i>148</i>&nbsp;                killCombo();</b>
+<b class="nc"><i>149</i>&nbsp;                result = DanceResult.LATE;</b>
+<i>150</i>&nbsp;            } else {
+<b class="nc"><i>151</i>&nbsp;                wrongMove();</b>
+<b class="nc"><i>152</i>&nbsp;                result = DanceResult.WRONG;</b>
+<i>153</i>&nbsp;            }
+<b class="nc"><i>154</i>&nbsp;            notifyResult(result);</b>
+<b class="nc"><i>155</i>&nbsp;            return result;</b>
+<i>156</i>&nbsp;        } else {
+<i>157</i>&nbsp;            // Player attempted two moves this beat, punish them :)
+<b class="nc"><i>158</i>&nbsp;            doneThisBeat = true;</b>
+<b class="nc"><i>159</i>&nbsp;            wrongMove();</b>
+<b class="nc"><i>160</i>&nbsp;            notifyResult(DanceResult.WRONG);</b>
+<b class="nc"><i>161</i>&nbsp;            return DanceResult.WRONG;</b>
+<i>162</i>&nbsp;        }
+<i>163</i>&nbsp;    }
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;    /**
+<i>166</i>&nbsp;     * gets the queue of upcoming DanceMoves
+<i>167</i>&nbsp;     * @return array of DanceMoves
+<i>168</i>&nbsp;     */
+<i>169</i>&nbsp;    public List&lt;DanceMove&gt; getMoveList() {
+<b class="nc"><i>170</i>&nbsp;        return this.choreographer.getMoveList();</b>
+<i>171</i>&nbsp;    }
+<i>172</i>&nbsp;
+<i>173</i>&nbsp;    /**
+<i>174</i>&nbsp;     * get the move nearest to the current beat
+<i>175</i>&nbsp;     * eg if phase is .3f returns previous beat. If phase is .8f returns next beat.
+<i>176</i>&nbsp;     * @return DanceMove that on the nearest beat
+<i>177</i>&nbsp;     */
+<i>178</i>&nbsp;    public DanceMove getNearestMove() {
+<b class="nc"><i>179</i>&nbsp;        DanceMove previousBeat = choreographer.getMoveList().get(0);</b>
+<b class="nc"><i>180</i>&nbsp;        DanceMove nextBeat = choreographer.getMoveList().get(1);</b>
+<b class="nc"><i>181</i>&nbsp;        return this.getPhase() &lt; .5f ? previousBeat : nextBeat;</b>
+<i>182</i>&nbsp;    }
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;    /**
+<i>185</i>&nbsp;     * Did the player attempt a DanceMove last turn?
+<i>186</i>&nbsp;     * @return true if move attempted last beat
+<i>187</i>&nbsp;     */
+<i>188</i>&nbsp;    public boolean hasMissedLastBeat() {
+<b class="nc"><i>189</i>&nbsp;        return missedLastTurn;</b>
+<i>190</i>&nbsp;    }
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;    /**
+<i>193</i>&nbsp;     * Called if the player makes an incorrect move
+<i>194</i>&nbsp;     * Incorrect moves are those that are registered as WRONG
+<i>195</i>&nbsp;     * It does not include missed moves
+<i>196</i>&nbsp;     */
+<i>197</i>&nbsp;    public void wrongMove() {
+<b class="nc"><i>198</i>&nbsp;        killCombo();</b>
+<b class="nc"><i>199</i>&nbsp;        choreographer.clearQueue();</b>
+<i>200</i>&nbsp;    }
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;    /**
+<i>203</i>&nbsp;     * Called if the player made a sufficiently correct move
+<i>204</i>&nbsp;     * Good moves include GREAT moves, GOOD moves and OKAY moves
+<i>205</i>&nbsp;     */
+<b class="nc"><i>206</i>&nbsp;    public void goodMove(int multiplier) { combo+=multiplier; }</b>
+<i>207</i>&nbsp;
+<i>208</i>&nbsp;    /**
+<i>209</i>&nbsp;     * Gets the current number of successive correct moves
+<i>210</i>&nbsp;     * @return combo size as int
+<i>211</i>&nbsp;     */
+<b class="nc"><i>212</i>&nbsp;    public int getCombo() { return this.combo; }</b>
+<i>213</i>&nbsp;
+<i>214</i>&nbsp;    /**
+<i>215</i>&nbsp;     * Zeroes the combo counter
+<i>216</i>&nbsp;     * Called when the player makes a WRONG move, MISSES a move or makes a LATE or EARLY move
+<i>217</i>&nbsp;     */
+<b class="nc"><i>218</i>&nbsp;    public void killCombo() { combo = 0; }</b>
+<i>219</i>&nbsp;
+<i>220</i>&nbsp;    /**
+<i>221</i>&nbsp;     * Register an object to be notified when the beat drops
+<i>222</i>&nbsp;     * @param listener  beat listener
+<i>223</i>&nbsp;     */
+<i>224</i>&nbsp;    public void subscribeToBeat(BeatListener listener) {
+<b class="nc"><i>225</i>&nbsp;        beatListeners.add(listener);</b>
+<i>226</i>&nbsp;    }
+<i>227</i>&nbsp;
+<i>228</i>&nbsp;    /**
+<i>229</i>&nbsp;     * Notify subscribed beat listeners that an onbeat has occured
+<i>230</i>&nbsp;     */
+<i>231</i>&nbsp;    public void notifyOnBeat() {
+<b class="nc"><i>232</i>&nbsp;        for (BeatListener listener : beatListeners) {</b>
+<b class="nc"><i>233</i>&nbsp;            listener.onBeat();</b>
+<b class="nc"><i>234</i>&nbsp;        }</b>
+<i>235</i>&nbsp;    }
+<i>236</i>&nbsp;
+<i>237</i>&nbsp;    /**
+<i>238</i>&nbsp;     * Notify subscribed beat listeners that an offbeat has occured
+<i>239</i>&nbsp;     */
+<i>240</i>&nbsp;    public void notifyOffBeat() {
+<b class="nc"><i>241</i>&nbsp;        for (BeatListener listener : beatListeners) {</b>
+<b class="nc"><i>242</i>&nbsp;            listener.offBeat();</b>
+<b class="nc"><i>243</i>&nbsp;        }</b>
+<i>244</i>&nbsp;    }
+<i>245</i>&nbsp;
+<i>246</i>&nbsp;    /**
+<i>247</i>&nbsp;     * Notify subscribed beat listeners of the result of the DanceResult recent move
+<i>248</i>&nbsp;     * @param result    result of move
+<i>249</i>&nbsp;     */
+<i>250</i>&nbsp;    public void notifyResult(DanceResult result) {
+<b class="nc"><i>251</i>&nbsp;        for (BeatListener listener : beatListeners) {</b>
+<b class="nc"><i>252</i>&nbsp;            listener.moveResult(result);</b>
+<b class="nc"><i>253</i>&nbsp;        }</b>
+<i>254</i>&nbsp;    }
+<i>255</i>&nbsp;
+<i>256</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-27 02:20</div>
+</div>
+</body>
+</html>
