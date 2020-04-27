@@ -135,16 +135,16 @@ public class DanceManager {
             if (proximityToBeat > .91f) {
                 goodMove(3);
                 result = DanceResult.GREAT;
-            } else if (proximityToBeat > .86f) {
+            } else if (proximityToBeat > .75f) {
                 goodMove(2);
                 result = DanceResult.GOOD;
-            } else if (proximityToBeat > .75f) {
+            } else if (proximityToBeat > .5f) {
                 goodMove(1);
                 result = DanceResult.OKAY;
-            } else if (proximityToBeat > .5 && phase > .5f) {
+            } else if (proximityToBeat > .25 && phase > .25f) {
                 killCombo();
                 result = DanceResult.EARLY;
-            } else if (proximityToBeat > .5 && phase < .5f) {
+            } else if (proximityToBeat > .25 && phase < .25f) {
                 killCombo();
                 result = DanceResult.LATE;
             } else {
