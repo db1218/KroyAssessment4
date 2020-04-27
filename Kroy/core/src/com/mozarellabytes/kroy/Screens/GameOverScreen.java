@@ -17,8 +17,11 @@ public class GameOverScreen implements Screen {
     /** The game - to be able to use the fonts from game */
     private final Kroy game;
 
-    /** The texture that makes up the background screen */
-    private final Texture backgroundLogo;
+    /** The texture that makes up the background screen depending on if the player
+     * won or lost the game*/
+    private final Texture chosenImage;
+    private final Texture winImage;
+    private final Texture loseImage;
 
     /** Camera to set the projection for the screen */
     private final OrthographicCamera camera;
@@ -39,14 +42,16 @@ public class GameOverScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
 
-        backgroundLogo = new Texture(Gdx.files.internal("images/backgroundLogo.jpg"), true);
-        backgroundLogo.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        winImage = new Texture(Gdx.files.internal("images/WIN_SCREEN.png"), true);
+        winImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        loseImage = new Texture(Gdx.files.internal("images/LOSE_SCREEN.png"), true);
+        loseImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         Gdx.input.setInputProcessor(new GameOverInputHandler(game));
 
         layout = new GlyphLayout();
-        if (won) this.text = "We did it! Good job little guy.";
-        else this.text = "Mission Failed. We'll get 'em next time.";
+        if (won) this.chosenImage = winImage;
+        else this.chosenImage = loseImage;
 
         this.text = this.text + "\n" + "   Click to return to the main menu...";
         layout.setText(game.font26, this.text);
@@ -69,8 +74,14 @@ public class GameOverScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
+        game.batch.draw(chosenImage, 0, 0, Gdx.app.getGraphics().getWidth(), Gdx.app.getGraphics().getHeight());
+        game.batch.end();
+
+        /*
+        game.batch.begin();
         game.font26.draw(game.batch, this.text, camera.viewportWidth/2 - layout.width/2, camera.viewportHeight/2 - layout.height/2);
         game.batch.end();
+        */
     }
 
     @Override
@@ -96,7 +107,7 @@ public class GameOverScreen implements Screen {
     /** Called when this screen should release all resources. */
     @Override
     public void dispose() {
-        backgroundLogo.dispose();
+        chosenImage.dispose();
     }
 
 
