@@ -1,6 +1,5 @@
 package com.mozarellabytes.kroy.PowerUp;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 
@@ -26,7 +25,6 @@ public class Water extends PowerUp {
      */
     @Override
     public void invokePower(FireTruck truck) {
-        Gdx.app.log("new water", String.valueOf(this));
         isPowerCurrentlyInvoked = true;
         refillReserve(truck);
         removePowerUp();
