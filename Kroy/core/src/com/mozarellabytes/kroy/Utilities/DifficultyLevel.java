@@ -51,7 +51,7 @@ public enum DifficultyLevel {
             new Vector2(24, 5),
             new Vector2(28.5f, 21.5f),
             new Vector2(3.5f, 4.5f),
-            new Vector2(4.5f, 17.5f),
+            new Vector2(8.5f, 20f),
             new Vector2(36f, 8.5f),
             new Vector2(26.5f, 12.5f),
             new Vector2(12.5f, 12.5f)),
