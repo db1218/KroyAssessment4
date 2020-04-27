@@ -1,0 +1,299 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MenuScreen</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy.Screens</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MenuScreen (com.mozarellabytes.kroy.Screens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MenuScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 61)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy.Screens;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.badlogic.gdx.*;
+<i>4</i>&nbsp;import com.badlogic.gdx.graphics.GL20;
+<i>5</i>&nbsp;import com.badlogic.gdx.graphics.OrthographicCamera;
+<i>6</i>&nbsp;import com.badlogic.gdx.graphics.Texture;
+<i>7</i>&nbsp;import com.badlogic.gdx.math.Rectangle;
+<i>8</i>&nbsp;import com.mozarellabytes.kroy.GUI.MenuButton;
+<i>9</i>&nbsp;import com.mozarellabytes.kroy.GUI.MenuToggleButton;
+<i>10</i>&nbsp;import com.mozarellabytes.kroy.Kroy;
+<i>11</i>&nbsp;import com.mozarellabytes.kroy.InputHandlers.MenuInputHandler;
+<i>12</i>&nbsp;import com.mozarellabytes.kroy.Utilities.SoundFX;
+<i>13</i>&nbsp;import com.mozarellabytes.kroy.GUI.MenuButton.State;
+<i>14</i>&nbsp;import com.mozarellabytes.kroy.GUI.MenuToggleButton.ToggleState;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;/** This screen is shown after the splash screen and is
+<i>17</i>&nbsp; * where the player can choose to start the game or view
+<i>18</i>&nbsp; * the control screen */
+<i>19</i>&nbsp;public class MenuScreen implements Screen {
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    /** The game */
+<i>22</i>&nbsp;    private final Kroy game;
+<i>23</i>&nbsp;    private final MenuInputHandler inputHandler;
+<i>24</i>&nbsp;    public final OrthographicCamera camera;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /** The menu screen image - see ui/menuscreen_blank_2 */
+<i>27</i>&nbsp;    private final Texture backgroundImage;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    /** Custom Menu buttons */
+<i>30</i>&nbsp;    private final MenuButton newGameButton;
+<i>31</i>&nbsp;    private final MenuButton savesButton;
+<i>32</i>&nbsp;    private final MenuButton controlsButton;
+<i>33</i>&nbsp;    private final MenuToggleButton soundButton;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    /**
+<i>36</i>&nbsp;     * Constructs the MenuScreen
+<i>37</i>&nbsp;     *
+<i>38</i>&nbsp;     * @param game  LibGdx game
+<i>39</i>&nbsp;     */
+<b class="nc"><i>40</i>&nbsp;    public MenuScreen(final Kroy game) {</b>
+<b class="nc"><i>41</i>&nbsp;        this.game = game;</b>
+<b class="nc"><i>42</i>&nbsp;        inputHandler = new MenuInputHandler(this);</b>
+<i>43</i>&nbsp;
+<b class="nc"><i>44</i>&nbsp;        camera = new OrthographicCamera();</b>
+<b class="nc"><i>45</i>&nbsp;        camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);</b>
+<i>46</i>&nbsp;
+<b class="nc"><i>47</i>&nbsp;        backgroundImage = new Texture(Gdx.files.internal(&quot;menu_background.png&quot;), true);</b>
+<b class="nc"><i>48</i>&nbsp;        backgroundImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<i>49</i>&nbsp;
+<b class="nc"><i>50</i>&nbsp;        newGameButton = new MenuButton(&quot;ui/newgame_idle.png&quot;, &quot;ui/newgame_clicked.png&quot;);</b>
+<b class="nc"><i>51</i>&nbsp;        savesButton = new MenuButton(&quot;ui/load_idle.png&quot;, &quot;ui/load_clicked.png&quot;);</b>
+<b class="nc"><i>52</i>&nbsp;        controlsButton = new MenuButton(&quot;ui/controls_idle.png&quot;, &quot;ui/controls_clicked.png&quot;);</b>
+<b class="nc"><i>53</i>&nbsp;        soundButton = new MenuToggleButton(&quot;ui/sound_on_idle.png&quot;, &quot;ui/sound_on_clicked.png&quot;, &quot;ui/sound_off_idle.png&quot;, &quot;ui/sound_off_clicked.png&quot;);</b>
+<i>54</i>&nbsp;
+<b class="nc"><i>55</i>&nbsp;        if (SoundFX.music_enabled) {</b>
+<b class="nc"><i>56</i>&nbsp;            SoundFX.sfx_menu.setLooping(true);</b>
+<b class="nc"><i>57</i>&nbsp;            SoundFX.sfx_menu.play();</b>
+<b class="nc"><i>58</i>&nbsp;            soundButton.setToggleState(ToggleState.ON);</b>
+<i>59</i>&nbsp;        } else {
+<b class="nc"><i>60</i>&nbsp;            soundButton.setToggleState(ToggleState.OFF);</b>
+<i>61</i>&nbsp;        }
+<i>62</i>&nbsp;
+<b class="nc"><i>63</i>&nbsp;        newGameButton.setPosition((int) (camera.viewportWidth/2 - newGameButton.getWidth()/2),</b>
+<b class="nc"><i>64</i>&nbsp;                (int) ((camera.viewportHeight/2 - newGameButton.getHeight()/2) * 0.8));</b>
+<i>65</i>&nbsp;
+<b class="nc"><i>66</i>&nbsp;        savesButton.setPosition((int) (camera.viewportWidth/2 - savesButton.getWidth()/2),</b>
+<b class="nc"><i>67</i>&nbsp;                (int) ((camera.viewportHeight/2 - savesButton.getHeight()/2) * 0.5));</b>
+<i>68</i>&nbsp;
+<b class="nc"><i>69</i>&nbsp;        controlsButton.setPosition((int) (camera.viewportWidth/2 - controlsButton.getWidth()/2),</b>
+<b class="nc"><i>70</i>&nbsp;                (int) ((camera.viewportHeight/2 - controlsButton.getHeight()/2) * 0.2));</b>
+<i>71</i>&nbsp;
+<b class="nc"><i>72</i>&nbsp;        soundButton.setPosition((int) (camera.viewportWidth - soundButton.getWidth() - 5),</b>
+<b class="nc"><i>73</i>&nbsp;                (int) (camera.viewportHeight - soundButton.getHeight() - 5));</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    }
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    @Override
+<i>78</i>&nbsp;    public void show() {
+<b class="nc"><i>79</i>&nbsp;        Gdx.input.setInputProcessor(inputHandler);</b>
+<b class="nc"><i>80</i>&nbsp;        SoundFX.decideMusic(this);</b>
+<i>81</i>&nbsp;    }
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;    /** Renders the menu screen consisting of the background and the start, controls and sound buttons.
+<i>84</i>&nbsp;     *
+<i>85</i>&nbsp;     * @param delta The time in seconds since the last render.
+<i>86</i>&nbsp;     */
+<i>87</i>&nbsp;    @Override
+<i>88</i>&nbsp;    public void render(float delta) {
+<b class="nc"><i>89</i>&nbsp;        Gdx.gl.glClearColor(51/255f, 34/255f, 99/255f, 1);</b>
+<b class="nc"><i>90</i>&nbsp;        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</b>
+<i>91</i>&nbsp;
+<b class="nc"><i>92</i>&nbsp;        camera.update();</b>
+<i>93</i>&nbsp;
+<b class="nc"><i>94</i>&nbsp;        game.batch.setProjectionMatrix(camera.combined);</b>
+<i>95</i>&nbsp;
+<b class="nc"><i>96</i>&nbsp;        game.batch.begin();</b>
+<b class="nc"><i>97</i>&nbsp;        game.batch.draw(backgroundImage, 0, 0, camera.viewportWidth, camera.viewportHeight);</b>
+<b class="nc"><i>98</i>&nbsp;        game.batch.draw(newGameButton.getCurrentTexture(), newGameButton.getX(), newGameButton.getY(), newGameButton.getWidth(), newGameButton.getHeight());</b>
+<b class="nc"><i>99</i>&nbsp;        game.batch.draw(savesButton.getCurrentTexture(), savesButton.getX(), savesButton.getY(), savesButton.getWidth(), savesButton.getHeight());</b>
+<b class="nc"><i>100</i>&nbsp;        game.batch.draw(controlsButton.getCurrentTexture(), controlsButton.getX(), controlsButton.getY(), controlsButton.getWidth(), controlsButton.getHeight());</b>
+<b class="nc"><i>101</i>&nbsp;        game.batch.draw(soundButton.getCurrentTexture(), soundButton.getX(), soundButton.getY(), soundButton.getWidth(), soundButton.getHeight());</b>
+<b class="nc"><i>102</i>&nbsp;        game.batch.end();</b>
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    }
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;    @Override
+<i>107</i>&nbsp;    public void resize(int width, int height) {
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;    }
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;    @Override
+<i>112</i>&nbsp;    public void pause() {
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;    }
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;    @Override
+<i>117</i>&nbsp;    public void resume() {
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;    }
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    @Override
+<i>122</i>&nbsp;    public void hide() {
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;    }
+<i>125</i>&nbsp;
+<i>126</i>&nbsp;    /** Called when this screen should release all resources. */
+<i>127</i>&nbsp;    @Override
+<i>128</i>&nbsp;    public void dispose() {
+<b class="nc"><i>129</i>&nbsp;        backgroundImage.dispose();</b>
+<b class="nc"><i>130</i>&nbsp;        savesButton.dispose();</b>
+<b class="nc"><i>131</i>&nbsp;        controlsButton.dispose();</b>
+<b class="nc"><i>132</i>&nbsp;        newGameButton.dispose();</b>
+<b class="nc"><i>133</i>&nbsp;        soundButton.dispose();</b>
+<i>134</i>&nbsp;    }
+<i>135</i>&nbsp;
+<i>136</i>&nbsp;    /** Changes the screen from menu screen to game screen */
+<i>137</i>&nbsp;    public void toDifficultyScreen() {
+<b class="nc"><i>138</i>&nbsp;        game.setScreen(new DifficultyScreen(game));</b>
+<b class="nc"><i>139</i>&nbsp;        this.dispose();</b>
+<i>140</i>&nbsp;    }
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;    /** Changes the texture of the start button when it has been clicked on */
+<i>143</i>&nbsp;    public void clickedNewGameButton() {
+<b class="nc"><i>144</i>&nbsp;        newGameButton.changeState(State.ACTIVE);</b>
+<i>145</i>&nbsp;    }
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    /** Changes the texture of the controls button when it has been clicked on */
+<i>148</i>&nbsp;    public void clickedControlsButton() {
+<b class="nc"><i>149</i>&nbsp;        controlsButton.changeState(State.ACTIVE);</b>
+<i>150</i>&nbsp;    }
+<i>151</i>&nbsp;
+<i>152</i>&nbsp;    /** Changes the texture of the controls button when it has been clicked on */
+<i>153</i>&nbsp;    public void clickedSavesButton() {
+<b class="nc"><i>154</i>&nbsp;        savesButton.changeState(State.ACTIVE);</b>
+<i>155</i>&nbsp;    }
+<i>156</i>&nbsp;
+<i>157</i>&nbsp;    /** Changes the texture of the sound button when it has been clicked on */
+<i>158</i>&nbsp;    public void clickedSoundButton() {
+<b class="nc"><i>159</i>&nbsp;        soundButton.changeState(State.ACTIVE);</b>
+<i>160</i>&nbsp;    }
+<i>161</i>&nbsp;
+<i>162</i>&nbsp;    /** Turns the sound on and off and changes the sound icon accordingly,
+<i>163</i>&nbsp;     * turns the sound off in the sound was on and turns the sound on if the
+<i>164</i>&nbsp;     * sound was off */
+<i>165</i>&nbsp;    public void changeSound() {
+<b class="nc"><i>166</i>&nbsp;        if (SoundFX.music_enabled) soundButton.setToggleState(ToggleState.OFF);</b>
+<b class="nc"><i>167</i>&nbsp;        else soundButton.setToggleState(ToggleState.ON);</b>
+<b class="nc"><i>168</i>&nbsp;        SoundFX.toggleMusic(this);</b>
+<i>169</i>&nbsp;    }
+<i>170</i>&nbsp;
+<i>171</i>&nbsp;    /** The texture of the start button when it has not been clicked on */
+<i>172</i>&nbsp;    public void idleNewGameButton() {
+<b class="nc"><i>173</i>&nbsp;        newGameButton.changeState(State.IDLE);</b>
+<i>174</i>&nbsp;    }
+<i>175</i>&nbsp;
+<i>176</i>&nbsp;    /** The texture of the control button when it has not been clicked on */
+<i>177</i>&nbsp;    public void idleControlsButton() {
+<b class="nc"><i>178</i>&nbsp;        controlsButton.changeState(State.IDLE);</b>
+<i>179</i>&nbsp;    }
+<i>180</i>&nbsp;
+<i>181</i>&nbsp;    /** The texture of the saves button when it has not been clicked on */
+<i>182</i>&nbsp;    public void idleSavesButton() {
+<b class="nc"><i>183</i>&nbsp;        savesButton.changeState(State.IDLE);</b>
+<i>184</i>&nbsp;    }
+<i>185</i>&nbsp;
+<i>186</i>&nbsp;    /** The texture of the sound button when it has not been clicked on */
+<i>187</i>&nbsp;    public void idleSoundButton() {
+<b class="nc"><i>188</i>&nbsp;        soundButton.changeState(State.IDLE);</b>
+<i>189</i>&nbsp;    }
+<i>190</i>&nbsp;
+<i>191</i>&nbsp;    /** Changes the screen from the menu screen to the control screen */
+<i>192</i>&nbsp;    public void toControlScreen() {
+<b class="nc"><i>193</i>&nbsp;        game.setScreen(new ControlsScreen(game, this, &quot;menu&quot;));</b>
+<i>194</i>&nbsp;    }
+<i>195</i>&nbsp;
+<i>196</i>&nbsp;    /** Changes the screen from the menu screen to the saves screen */
+<i>197</i>&nbsp;    public void toSavesScreen() {
+<b class="nc"><i>198</i>&nbsp;        game.setScreen(new SaveScreen(game, this));</b>
+<i>199</i>&nbsp;    }
+<i>200</i>&nbsp;
+<i>201</i>&nbsp;    public Rectangle getNewGameButton() {
+<b class="nc"><i>202</i>&nbsp;        return newGameButton.getRectangle();</b>
+<i>203</i>&nbsp;    }
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;    public Rectangle getControlsButton() {
+<b class="nc"><i>206</i>&nbsp;        return controlsButton.getRectangle();</b>
+<i>207</i>&nbsp;    }
+<i>208</i>&nbsp;
+<i>209</i>&nbsp;    public Rectangle getSoundButton() {
+<b class="nc"><i>210</i>&nbsp;        return soundButton.getRectangle();</b>
+<i>211</i>&nbsp;    }
+<i>212</i>&nbsp;
+<i>213</i>&nbsp;    public Rectangle getSavesButton() {
+<b class="nc"><i>214</i>&nbsp;        return savesButton.getRectangle();</b>
+<i>215</i>&nbsp;    }
+<i>216</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-27 02:20</div>
+</div>
+</body>
+</html>

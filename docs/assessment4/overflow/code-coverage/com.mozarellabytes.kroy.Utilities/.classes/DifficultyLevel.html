@@ -1,0 +1,319 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DifficultyLevel</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy.Utilities</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DifficultyLevel (com.mozarellabytes.kroy.Utilities)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DifficultyLevel</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    21.7%
+  </span>
+  <span class="absValue">
+    (5/ 23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60.9%
+  </span>
+  <span class="absValue">
+    (28/ 46)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy.Utilities;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.badlogic.gdx.maps.tiled.TiledMap;
+<i>4</i>&nbsp;import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+<i>5</i>&nbsp;import com.badlogic.gdx.math.Vector2;
+<i>6</i>&nbsp;import com.mozarellabytes.kroy.Entities.FireTruckType;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import static com.mozarellabytes.kroy.Entities.FireTruckType.*;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;/**
+<i>11</i>&nbsp; * The actual level which defines many different variables within
+<i>12</i>&nbsp; * the game which change depending on the difficulty to change
+<i>13</i>&nbsp; * the easy or hard the game is to play
+<i>14</i>&nbsp; */
+<b class="fc"><i>15</i>&nbsp;public enum DifficultyLevel {</b>
+<i>16</i>&nbsp;
+<b class="fc"><i>17</i>&nbsp;    Easy(new TmxMapLoader().load(&quot;maps/Easy.tmx&quot;),</b>
+<i>18</i>&nbsp;            40,
+<i>19</i>&nbsp;            24,
+<i>20</i>&nbsp;            0,
+<i>21</i>&nbsp;            80f,
+<i>22</i>&nbsp;            4,
+<i>23</i>&nbsp;            5,
+<i>24</i>&nbsp;            6f,
+<i>25</i>&nbsp;            RubyEasy,
+<i>26</i>&nbsp;            SapphireEasy,
+<i>27</i>&nbsp;            AmethystEasy,
+<i>28</i>&nbsp;            EmeraldEasy,
+<i>29</i>&nbsp;            2,
+<i>30</i>&nbsp;            new Vector2(3, 9),
+<i>31</i>&nbsp;            new Vector2(22, 13),
+<i>32</i>&nbsp;            new Vector2(30, 21.5f),
+<i>33</i>&nbsp;            new Vector2(15.5f, 19.5f),
+<i>34</i>&nbsp;            new Vector2(35, 4.5f),
+<i>35</i>&nbsp;            new Vector2(7, 1.5f),
+<i>36</i>&nbsp;            new Vector2(22, 2)),
+<i>37</i>&nbsp;
+<b class="fc"><i>38</i>&nbsp;    Medium(new TmxMapLoader().load(&quot;maps/Medium.tmx&quot;),</b>
+<i>39</i>&nbsp;            40,
+<i>40</i>&nbsp;            24,
+<i>41</i>&nbsp;            1,
+<i>42</i>&nbsp;            60f,
+<i>43</i>&nbsp;            10,
+<i>44</i>&nbsp;            4,
+<i>45</i>&nbsp;            10f,
+<i>46</i>&nbsp;            RubyMedium,
+<i>47</i>&nbsp;            SapphireMedium,
+<i>48</i>&nbsp;            AmethystMedium,
+<i>49</i>&nbsp;            EmeraldMedium,
+<i>50</i>&nbsp;            4,
+<i>51</i>&nbsp;            new Vector2(24, 5),
+<i>52</i>&nbsp;            new Vector2(28.5f, 21.5f),
+<i>53</i>&nbsp;            new Vector2(3.5f, 4.5f),
+<i>54</i>&nbsp;            new Vector2(4.5f, 17.5f),
+<i>55</i>&nbsp;            new Vector2(36f, 8.5f),
+<i>56</i>&nbsp;            new Vector2(26.5f, 12.5f),
+<i>57</i>&nbsp;            new Vector2(12.5f, 12.5f)),
+<i>58</i>&nbsp;
+<b class="fc"><i>59</i>&nbsp;    Hard(new TmxMapLoader().load(&quot;maps/Hard.tmx&quot;),</b>
+<i>60</i>&nbsp;            48,
+<i>61</i>&nbsp;            29,
+<i>62</i>&nbsp;            3,
+<i>63</i>&nbsp;            50f,
+<i>64</i>&nbsp;            20,
+<i>65</i>&nbsp;            3,
+<i>66</i>&nbsp;            15f,
+<i>67</i>&nbsp;            RubyHard,
+<i>68</i>&nbsp;            SapphireHard,
+<i>69</i>&nbsp;            AmethystHard,
+<i>70</i>&nbsp;            EmeraldHard,
+<i>71</i>&nbsp;            7,
+<i>72</i>&nbsp;            new Vector2(2, 7),
+<i>73</i>&nbsp;            new Vector2(12,23.5f),
+<i>74</i>&nbsp;            new Vector2(30.5f, 22.5f),
+<i>75</i>&nbsp;            new Vector2(16.5f,3.5f),
+<i>76</i>&nbsp;            new Vector2(32f,1.5f),
+<i>77</i>&nbsp;            new Vector2(41.95f, 23.5f),
+<i>78</i>&nbsp;            new Vector2(44f,11f));
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    final TiledMap map;
+<i>81</i>&nbsp;    final int mapWidth;
+<i>82</i>&nbsp;    final int mapHeight;
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    final Vector2 stationLocation;
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;    final Vector2 revsLocation;
+<i>87</i>&nbsp;    final Vector2 walmgateLocation;
+<i>88</i>&nbsp;    final Vector2 railwayLocation;
+<i>89</i>&nbsp;    final Vector2 cliffordLocation;
+<i>90</i>&nbsp;    final Vector2 museumLocation;
+<i>91</i>&nbsp;    final Vector2 centralHallLocation;
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    final int startDifficultyLevel;
+<i>94</i>&nbsp;    final float difficultyChangeInterval;
+<i>95</i>&nbsp;    final int timeTillPowerup;
+<i>96</i>&nbsp;    final int fortressesDestroyedBeforeBoss;
+<i>97</i>&nbsp;    final float timeTillNextFreeze;
+<i>98</i>&nbsp;    float additionalAP;
+<i>99</i>&nbsp;    final int numPatrols;
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;    final FireTruckType ruby;
+<i>102</i>&nbsp;    final FireTruckType sapphire;
+<i>103</i>&nbsp;    final FireTruckType amethyst;
+<i>104</i>&nbsp;    final FireTruckType emerald;
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;    /**
+<i>107</i>&nbsp;     * Constructor for Difficulty Level
+<i>108</i>&nbsp;     *
+<i>109</i>&nbsp;     * @param map                           the tiled map for this level
+<i>110</i>&nbsp;     * @param mapWidth                      the width of this map
+<i>111</i>&nbsp;     * @param mapHeight                     the height of this map
+<i>112</i>&nbsp;     * @param revsLocation                  the location of the revolution fortress
+<i>113</i>&nbsp;     * @param startDifficultyLevel          the starting difficulty multiplier
+<i>114</i>&nbsp;     * @param difficultyChangeInterval      how often the difficulty increase
+<i>115</i>&nbsp;     * @param timeTillPowerup               how often power ups spawn
+<i>116</i>&nbsp;     * @param fortressesDestroyedBeforeBoss how many fortresses destroyed before boss spawns
+<i>117</i>&nbsp;     * @param timeTillNextFreeze            freeze cool down
+<i>118</i>&nbsp;     * @param ruby                          the ruby fire truck type
+<i>119</i>&nbsp;     * @param sapphire                      the sapphire fire truck type
+<i>120</i>&nbsp;     * @param amethyst                      the amethyst fire truck type
+<i>121</i>&nbsp;     * @param emerald                       the emerald fire truck type
+<i>122</i>&nbsp;     * @param numPatrols                    number of patrols roaming the map
+<i>123</i>&nbsp;     */
+<i>124</i>&nbsp;    DifficultyLevel(TiledMap map, int mapWidth, int mapHeight, int startDifficultyLevel,
+<i>125</i>&nbsp;                    float difficultyChangeInterval, int timeTillPowerup, int fortressesDestroyedBeforeBoss,
+<i>126</i>&nbsp;                    float timeTillNextFreeze, FireTruckType ruby, FireTruckType sapphire,
+<i>127</i>&nbsp;                    FireTruckType amethyst, FireTruckType emerald, int numPatrols, Vector2 stationLocation,
+<i>128</i>&nbsp;                    Vector2 revsLocation, Vector2 walmgateLocation, Vector2 railwayLocation, Vector2 cliffordLocation,
+<b class="fc"><i>129</i>&nbsp;                    Vector2 museumLocation, Vector2 centralHallLocation) {</b>
+<i>130</i>&nbsp;
+<b class="fc"><i>131</i>&nbsp;        this.map = map;</b>
+<b class="fc"><i>132</i>&nbsp;        this.mapWidth = mapWidth;</b>
+<b class="fc"><i>133</i>&nbsp;        this.mapHeight = mapHeight;</b>
+<i>134</i>&nbsp;
+<b class="fc"><i>135</i>&nbsp;        this.stationLocation = stationLocation;</b>
+<i>136</i>&nbsp;
+<b class="fc"><i>137</i>&nbsp;        this.revsLocation = revsLocation;</b>
+<b class="fc"><i>138</i>&nbsp;        this.walmgateLocation = walmgateLocation;</b>
+<b class="fc"><i>139</i>&nbsp;        this.railwayLocation = railwayLocation;</b>
+<b class="fc"><i>140</i>&nbsp;        this.cliffordLocation = cliffordLocation;</b>
+<b class="fc"><i>141</i>&nbsp;        this.museumLocation = museumLocation;</b>
+<b class="fc"><i>142</i>&nbsp;        this.centralHallLocation = centralHallLocation;</b>
+<i>143</i>&nbsp;
+<b class="fc"><i>144</i>&nbsp;        this.startDifficultyLevel = startDifficultyLevel;</b>
+<b class="fc"><i>145</i>&nbsp;        this.difficultyChangeInterval = difficultyChangeInterval;</b>
+<b class="fc"><i>146</i>&nbsp;        this.timeTillPowerup = timeTillPowerup;</b>
+<b class="fc"><i>147</i>&nbsp;        this.fortressesDestroyedBeforeBoss = fortressesDestroyedBeforeBoss;</b>
+<b class="fc"><i>148</i>&nbsp;        this.timeTillNextFreeze = timeTillNextFreeze;</b>
+<b class="fc"><i>149</i>&nbsp;        this.numPatrols = numPatrols;</b>
+<i>150</i>&nbsp;
+<b class="fc"><i>151</i>&nbsp;        this.ruby = ruby;</b>
+<b class="fc"><i>152</i>&nbsp;        this.sapphire = sapphire;</b>
+<b class="fc"><i>153</i>&nbsp;        this.amethyst = amethyst;</b>
+<b class="fc"><i>154</i>&nbsp;        this.emerald = emerald;</b>
+<b class="fc"><i>155</i>&nbsp;    }</b>
+<i>156</i>&nbsp;
+<i>157</i>&nbsp;    public TiledMap getMap() {
+<b class="nc"><i>158</i>&nbsp;        return this.map;</b>
+<i>159</i>&nbsp;    }
+<i>160</i>&nbsp;
+<i>161</i>&nbsp;    public int getMapWidth() {
+<b class="fc"><i>162</i>&nbsp;        return this.mapWidth;</b>
+<i>163</i>&nbsp;    }
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;    public int getMapHeight() {
+<b class="fc"><i>166</i>&nbsp;        return this.mapHeight;</b>
+<i>167</i>&nbsp;    }
+<i>168</i>&nbsp;
+<i>169</i>&nbsp;    public Vector2 getStationLocation() {
+<b class="nc"><i>170</i>&nbsp;        return this.stationLocation;</b>
+<i>171</i>&nbsp;    }
+<i>172</i>&nbsp;
+<i>173</i>&nbsp;    public Vector2 getRevsLocation() {
+<b class="nc"><i>174</i>&nbsp;        return this.revsLocation;</b>
+<i>175</i>&nbsp;    }
+<i>176</i>&nbsp;
+<i>177</i>&nbsp;    public Vector2 getWalmgateLocation() {
+<b class="nc"><i>178</i>&nbsp;        return this.walmgateLocation;</b>
+<i>179</i>&nbsp;    }
+<i>180</i>&nbsp;
+<i>181</i>&nbsp;    public Vector2 getRailwayLocation() {
+<b class="nc"><i>182</i>&nbsp;        return this.railwayLocation;</b>
+<i>183</i>&nbsp;    }
+<i>184</i>&nbsp;
+<i>185</i>&nbsp;    public Vector2 getCliffordLocation() {
+<b class="nc"><i>186</i>&nbsp;        return this.cliffordLocation;</b>
+<i>187</i>&nbsp;    }
+<i>188</i>&nbsp;
+<i>189</i>&nbsp;    public Vector2 getMuseumLocation() {
+<b class="nc"><i>190</i>&nbsp;        return this.museumLocation;</b>
+<i>191</i>&nbsp;    }
+<i>192</i>&nbsp;
+<i>193</i>&nbsp;    public Vector2 getCentralHallLocation() {
+<b class="nc"><i>194</i>&nbsp;        return this.centralHallLocation;</b>
+<i>195</i>&nbsp;    }
+<i>196</i>&nbsp;
+<i>197</i>&nbsp;    public int getStartDifficultyLevel() {
+<b class="nc"><i>198</i>&nbsp;        return this.startDifficultyLevel;</b>
+<i>199</i>&nbsp;    }
+<i>200</i>&nbsp;
+<i>201</i>&nbsp;    public float getDifficultyChangeInterval() {
+<b class="nc"><i>202</i>&nbsp;        return this.difficultyChangeInterval;</b>
+<i>203</i>&nbsp;    }
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;    public int getTimeTillPowerup() {
+<b class="nc"><i>206</i>&nbsp;        return this.timeTillPowerup;</b>
+<i>207</i>&nbsp;    }
+<i>208</i>&nbsp;
+<i>209</i>&nbsp;    public int getFortressesDestroyedBeforeBoss() {
+<b class="nc"><i>210</i>&nbsp;        return this.fortressesDestroyedBeforeBoss;</b>
+<i>211</i>&nbsp;    }
+<i>212</i>&nbsp;
+<i>213</i>&nbsp;    public float getTimeTillNextFreeze() {
+<b class="nc"><i>214</i>&nbsp;        return this.timeTillNextFreeze;</b>
+<i>215</i>&nbsp;    }
+<i>216</i>&nbsp;
+<i>217</i>&nbsp;    public int getNumPatrols() {
+<b class="nc"><i>218</i>&nbsp;        return this.numPatrols;</b>
+<i>219</i>&nbsp;    }
+<i>220</i>&nbsp;
+<i>221</i>&nbsp;    public FireTruckType getRuby() {
+<b class="nc"><i>222</i>&nbsp;        return this.ruby;</b>
+<i>223</i>&nbsp;    }
+<i>224</i>&nbsp;
+<i>225</i>&nbsp;    public FireTruckType getSapphire() {
+<b class="nc"><i>226</i>&nbsp;        return this.sapphire;</b>
+<i>227</i>&nbsp;    }
+<i>228</i>&nbsp;
+<i>229</i>&nbsp;    public FireTruckType getAmethyst() {
+<b class="nc"><i>230</i>&nbsp;        return this.amethyst;</b>
+<i>231</i>&nbsp;    }
+<i>232</i>&nbsp;
+<i>233</i>&nbsp;    public FireTruckType getEmerald() {
+<b class="nc"><i>234</i>&nbsp;        return this.emerald;</b>
+<i>235</i>&nbsp;    }
+<i>236</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-27 02:20</div>
+</div>
+</body>
+</html>

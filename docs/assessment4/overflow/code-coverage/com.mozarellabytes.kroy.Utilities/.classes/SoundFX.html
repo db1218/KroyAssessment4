@@ -1,0 +1,195 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: SoundFX</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy.Utilities</a> ]
+</div>
+
+<h1>Coverage Summary for Class: SoundFX (com.mozarellabytes.kroy.Utilities)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SoundFX</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    14.3%
+  </span>
+  <span class="absValue">
+    (1/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    32.8%
+  </span>
+  <span class="absValue">
+    (19/ 58)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy.Utilities;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.badlogic.gdx.Gdx;
+<i>4</i>&nbsp;import com.badlogic.gdx.Screen;
+<i>5</i>&nbsp;import com.badlogic.gdx.audio.Music;
+<i>6</i>&nbsp;import com.badlogic.gdx.audio.Sound;
+<i>7</i>&nbsp;import com.mozarellabytes.kroy.Screens.DanceScreen;
+<i>8</i>&nbsp;import com.mozarellabytes.kroy.Screens.DifficultyScreen;
+<i>9</i>&nbsp;import com.mozarellabytes.kroy.Screens.GameScreen;
+<i>10</i>&nbsp;import com.mozarellabytes.kroy.Screens.MenuScreen;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;/**
+<i>13</i>&nbsp; * Sound Effects Manager for all in-game audio, accessed via static context.
+<i>14</i>&nbsp; * All Music and SoundFX can be enabled/disabled with the StopMusic/PlayMusic.
+<i>15</i>&nbsp; */
+<b class="nc"><i>16</i>&nbsp;public class SoundFX {</b>
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /** Used only for the truck attacking sound. True if it is playing, false if it isn&#39;t */
+<b class="fc"><i>19</i>&nbsp;    public static boolean isPlaying = false;</b>
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    /** All sounds can be played when this is true, else no sound will play */
+<b class="fc"><i>22</i>&nbsp;    public static boolean music_enabled = true;</b>
+<i>23</i>&nbsp;
+<b class="fc"><i>24</i>&nbsp;    public static final Music sfx_menu = Gdx.audio.newMusic(Gdx.files.internal(&quot;sounds/spooky.wav&quot;));</b>
+<b class="fc"><i>25</i>&nbsp;    public static final Music sfx_soundtrack = Gdx.audio.newMusic(Gdx.files.internal(&quot;sounds/soundtrack.mp3&quot;));</b>
+<b class="fc"><i>26</i>&nbsp;    public static final Music sfx_danceoff = Gdx.audio.newMusic(Gdx.files.internal(&quot;sounds/140bpm.mp3&quot;));</b>
+<i>27</i>&nbsp;
+<b class="fc"><i>28</i>&nbsp;    public static final Sound sfx_truck_attack = Gdx.audio.newSound(Gdx.files.internal(&quot;sounds/sfx/truck_attack.wav&quot;));</b>
+<b class="fc"><i>29</i>&nbsp;    public static final Sound sfx_truck_damage = Gdx.audio.newSound(Gdx.files.internal(&quot;sounds/sfx/truck_damage.wav&quot;));</b>
+<b class="fc"><i>30</i>&nbsp;    public static final Sound sfx_truck_spawn = Gdx.audio.newSound(Gdx.files.internal(&quot;sounds/sfx/truck_spawn.wav&quot;));</b>
+<b class="fc"><i>31</i>&nbsp;    public static final Sound sfx_fortress_destroyed = Gdx.audio.newSound(Gdx.files.internal(&quot;sounds/sfx/fortress_destroyed.wav&quot;));</b>
+<b class="fc"><i>32</i>&nbsp;    public static final Sound sfx_fortress_attack = Gdx.audio.newSound(Gdx.files.internal(&quot;sounds/sfx/fortress_attack.wav&quot;));</b>
+<b class="fc"><i>33</i>&nbsp;    public static final Sound sfx_pause = Gdx.audio.newSound(Gdx.files.internal(&quot;sounds/sfx/pause.wav&quot;));</b>
+<b class="fc"><i>34</i>&nbsp;    public static final Sound sfx_unpause = Gdx.audio.newSound(Gdx.files.internal(&quot;sounds/sfx/unpause.wav&quot;));</b>
+<b class="fc"><i>35</i>&nbsp;    public static final Sound sfx_horn = Gdx.audio.newSound(Gdx.files.internal(&quot;sounds/sfx/horn.mp3&quot;));</b>
+<b class="fc"><i>36</i>&nbsp;    public static final Sound sfx_button_clicked = Gdx.audio.newSound(Gdx.files.internal(&quot;sounds/sfx/button_clicked.wav&quot;));</b>
+<b class="fc"><i>37</i>&nbsp;    public static final Sound sfx_kick = Gdx.audio.newSound(Gdx.files.internal(&quot;sounds/kick.wav&quot;));</b>
+<b class="fc"><i>38</i>&nbsp;    public static final Sound sfx_snare = Gdx.audio.newSound(Gdx.files.internal(&quot;sounds/snare.wav&quot;));</b>
+<b class="fc"><i>39</i>&nbsp;    public static final Sound sfx_combo = Gdx.audio.newSound(Gdx.files.internal(&quot;sounds/sfx/usecombo.wav&quot;));</b>
+<b class="fc"><i>40</i>&nbsp;    public static final Sound sfx_wrong = Gdx.audio.newSound(Gdx.files.internal(&quot;sounds/sfx/wrong.mp3&quot;));</b>
+<b class="fc"><i>41</i>&nbsp;    public static final Sound sfx_patrolCollision = Gdx.audio.newSound(Gdx.files.internal(&quot;sounds/sfx/patrolcollision.wav&quot;));</b>
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    /** Plays attacking sound for FireTrucks only if it isn&#39;t already playing */
+<i>44</i>&nbsp;    public static void playTruckAttack() {
+<b class="nc"><i>45</i>&nbsp;        if (!isPlaying) {</b>
+<b class="nc"><i>46</i>&nbsp;            sfx_truck_attack.loop();</b>
+<b class="nc"><i>47</i>&nbsp;            sfx_truck_attack.play();</b>
+<b class="nc"><i>48</i>&nbsp;            isPlaying = true;</b>
+<i>49</i>&nbsp;        }
+<b class="nc"><i>50</i>&nbsp;    }</b>
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    /** Stops the sound of FireTrucks attacking and resets isPlaying to false */
+<i>53</i>&nbsp;    public static void stopTruckAttack() {
+<b class="nc"><i>54</i>&nbsp;        if (isPlaying) {</b>
+<b class="nc"><i>55</i>&nbsp;            sfx_truck_attack.stop();</b>
+<b class="nc"><i>56</i>&nbsp;            isPlaying = false;</b>
+<i>57</i>&nbsp;        }
+<b class="nc"><i>58</i>&nbsp;    }</b>
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    /**
+<i>61</i>&nbsp;     * Manages which song to play depending on which screen
+<i>62</i>&nbsp;     * the user is currently viewing. It plays the music for
+<i>63</i>&nbsp;     * that song, and mutes/pauses other music.
+<i>64</i>&nbsp;     *
+<i>65</i>&nbsp;     * @param screen    that the player just entered
+<i>66</i>&nbsp;     */
+<i>67</i>&nbsp;    public static void decideMusic(Screen screen) {
+<b class="nc"><i>68</i>&nbsp;        if (music_enabled) {</b>
+<b class="nc"><i>69</i>&nbsp;            if (screen instanceof GameScreen) {</b>
+<b class="nc"><i>70</i>&nbsp;                sfx_danceoff.stop();</b>
+<b class="nc"><i>71</i>&nbsp;                sfx_menu.stop();</b>
+<b class="nc"><i>72</i>&nbsp;                sfx_soundtrack.play();</b>
+<b class="nc"><i>73</i>&nbsp;                sfx_soundtrack.setVolume(0.5f);</b>
+<b class="nc"><i>74</i>&nbsp;                sfx_soundtrack.setLooping(true);</b>
+<b class="nc"><i>75</i>&nbsp;            } else if (screen instanceof MenuScreen || screen instanceof DifficultyScreen) {</b>
+<b class="nc"><i>76</i>&nbsp;                sfx_danceoff.stop();</b>
+<b class="nc"><i>77</i>&nbsp;                sfx_soundtrack.pause();</b>
+<b class="nc"><i>78</i>&nbsp;                sfx_menu.play();</b>
+<b class="nc"><i>79</i>&nbsp;                sfx_menu.setVolume(0.5f);</b>
+<b class="nc"><i>80</i>&nbsp;                sfx_menu.setLooping(true);</b>
+<b class="nc"><i>81</i>&nbsp;            } else if (screen instanceof DanceScreen) {</b>
+<b class="nc"><i>82</i>&nbsp;                sfx_soundtrack.pause();</b>
+<b class="nc"><i>83</i>&nbsp;                sfx_menu.stop();</b>
+<b class="nc"><i>84</i>&nbsp;                sfx_danceoff.play();</b>
+<b class="nc"><i>85</i>&nbsp;                sfx_danceoff.setVolume(0.5f);</b>
+<b class="nc"><i>86</i>&nbsp;                sfx_danceoff.setLooping(true);</b>
+<i>87</i>&nbsp;            }
+<i>88</i>&nbsp;        } else {
+<b class="nc"><i>89</i>&nbsp;            sfx_danceoff.setVolume(0);</b>
+<b class="nc"><i>90</i>&nbsp;            sfx_menu.setVolume(0);</b>
+<b class="nc"><i>91</i>&nbsp;            sfx_soundtrack.setVolume(0);</b>
+<i>92</i>&nbsp;        }
+<b class="nc"><i>93</i>&nbsp;    }</b>
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    /**
+<i>96</i>&nbsp;     * Turn toggle the music when the player hits the mute button,
+<i>97</i>&nbsp;     * and play the music for that screen
+<i>98</i>&nbsp;     *
+<i>99</i>&nbsp;     * @param screen    that the player just entered
+<i>100</i>&nbsp;     */
+<i>101</i>&nbsp;    public static void toggleMusic(Screen screen) {
+<b class="nc"><i>102</i>&nbsp;        music_enabled = !music_enabled;</b>
+<b class="nc"><i>103</i>&nbsp;        decideMusic(screen);</b>
+<b class="nc"><i>104</i>&nbsp;    }</b>
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;    /** Plays danceoff music */
+<i>107</i>&nbsp;    public static void playDanceoffMusic() {
+<b class="nc"><i>108</i>&nbsp;        sfx_danceoff.setLooping(true);</b>
+<b class="nc"><i>109</i>&nbsp;        sfx_danceoff.play();</b>
+<b class="nc"><i>110</i>&nbsp;    }</b>
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-27 02:20</div>
+</div>
+</body>
+</html>

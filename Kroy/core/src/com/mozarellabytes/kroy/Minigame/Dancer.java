@@ -144,4 +144,8 @@ public class Dancer {
         return this.health;
     }
 
+    public boolean isJiving() {
+        return this.jiving;
+    }
+
 }

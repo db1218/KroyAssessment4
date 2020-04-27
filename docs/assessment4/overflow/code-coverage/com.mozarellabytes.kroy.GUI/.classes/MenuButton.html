@@ -1,0 +1,210 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MenuButton</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy.GUI</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MenuButton (com.mozarellabytes.kroy.GUI)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MenuButton</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 20)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">MenuButton$State</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 23)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy.GUI;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.badlogic.gdx.Gdx;
+<i>4</i>&nbsp;import com.badlogic.gdx.graphics.Texture;
+<i>5</i>&nbsp;import com.badlogic.gdx.math.Rectangle;
+<i>6</i>&nbsp;import com.mozarellabytes.kroy.Screens.MenuScreen;
+<i>7</i>&nbsp;import com.mozarellabytes.kroy.Utilities.SoundFX;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;/**
+<i>10</i>&nbsp; * Buttons which change image when a user
+<i>11</i>&nbsp; * clicks on it. This button only has &quot;idle&quot;
+<i>12</i>&nbsp; * and &quot;active&quot; to simulate the user clicking
+<i>13</i>&nbsp; * the button. Once the button is released,
+<i>14</i>&nbsp; * the button returns to an idle state.
+<i>15</i>&nbsp; */
+<i>16</i>&nbsp;public class MenuButton {
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /**
+<i>19</i>&nbsp;     * Properties of the button
+<i>20</i>&nbsp;     */
+<i>21</i>&nbsp;    private final Rectangle area;
+<i>22</i>&nbsp;    protected Texture currentTexture, activeTexture, idleTexture;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    /**
+<i>25</i>&nbsp;     * States of the button
+<i>26</i>&nbsp;     */
+<b class="nc"><i>27</i>&nbsp;    public enum State {</b>
+<b class="nc"><i>28</i>&nbsp;        ACTIVE,</b>
+<b class="nc"><i>29</i>&nbsp;        IDLE</b>
+<i>30</i>&nbsp;    }
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    /**
+<i>33</i>&nbsp;     * Constructs a menu button
+<i>34</i>&nbsp;     *
+<i>35</i>&nbsp;     * @param idleTexturePath   path of the idle image
+<i>36</i>&nbsp;     * @param activeTexturePath path of the active image
+<i>37</i>&nbsp;     */
+<b class="nc"><i>38</i>&nbsp;    public MenuButton(String idleTexturePath, String activeTexturePath) {</b>
+<b class="nc"><i>39</i>&nbsp;        this.idleTexture = new Texture(Gdx.files.internal(idleTexturePath), true);</b>
+<b class="nc"><i>40</i>&nbsp;        this.idleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<b class="nc"><i>41</i>&nbsp;        this.currentTexture = new Texture(Gdx.files.internal(idleTexturePath), true);</b>
+<b class="nc"><i>42</i>&nbsp;        this.currentTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<b class="nc"><i>43</i>&nbsp;        this.activeTexture = new Texture(Gdx.files.internal(activeTexturePath), true);</b>
+<b class="nc"><i>44</i>&nbsp;        this.activeTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<i>45</i>&nbsp;
+<b class="nc"><i>46</i>&nbsp;        this.area = new Rectangle(0, 0, currentTexture.getWidth()*0.75f, currentTexture.getHeight()*0.75f);</b>
+<i>47</i>&nbsp;    }
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    /**
+<i>50</i>&nbsp;     * Changes the state of the button
+<i>51</i>&nbsp;     *
+<i>52</i>&nbsp;     * @param state new state of the button
+<i>53</i>&nbsp;     */
+<i>54</i>&nbsp;    public void changeState(State state) {
+<b class="nc"><i>55</i>&nbsp;        if (SoundFX.music_enabled &amp;&amp; state.equals(State.ACTIVE)) SoundFX.sfx_button_clicked.play();</b>
+<b class="nc"><i>56</i>&nbsp;        currentTexture = (state.equals(State.IDLE)) ? idleTexture : activeTexture;</b>
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /**
+<i>60</i>&nbsp;     * Sets the x and y coordinates of the button
+<i>61</i>&nbsp;     * @param x coordinate
+<i>62</i>&nbsp;     * @param y coordinate
+<i>63</i>&nbsp;     */
+<i>64</i>&nbsp;    public void setPosition(int x, int y) {
+<b class="nc"><i>65</i>&nbsp;        this.area.setPosition(x, y);</b>
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    public float getX() {
+<b class="nc"><i>69</i>&nbsp;        return this.area.getX();</b>
+<i>70</i>&nbsp;    }
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    public float getY() {
+<b class="nc"><i>73</i>&nbsp;        return this.area.getY();</b>
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    public float getWidth() {
+<b class="nc"><i>77</i>&nbsp;        return this.area.getWidth();</b>
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    public float getHeight() {
+<b class="nc"><i>81</i>&nbsp;        return this.area.getHeight();</b>
+<i>82</i>&nbsp;    }
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    public Rectangle getRectangle() {
+<b class="nc"><i>85</i>&nbsp;        return this.area;</b>
+<i>86</i>&nbsp;    }
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    public Texture getCurrentTexture() {
+<b class="nc"><i>89</i>&nbsp;        return this.currentTexture;</b>
+<i>90</i>&nbsp;    }
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;    /**
+<i>93</i>&nbsp;     * Objects to dispose of when {@link MenuScreen}
+<i>94</i>&nbsp;     * is disposed of
+<i>95</i>&nbsp;     */
+<i>96</i>&nbsp;    public void dispose() {
+<b class="nc"><i>97</i>&nbsp;        this.idleTexture.dispose();</b>
+<b class="nc"><i>98</i>&nbsp;        this.activeTexture.dispose();</b>
+<b class="nc"><i>99</i>&nbsp;        this.currentTexture.dispose();</b>
+<i>100</i>&nbsp;    }
+<i>101</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-27 02:20</div>
+</div>
+</body>
+</html>

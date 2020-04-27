@@ -1,0 +1,124 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Freeze</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy.PowerUp</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Freeze (com.mozarellabytes.kroy.PowerUp)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Freeze</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (1/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.7%
+  </span>
+  <span class="absValue">
+    (1/ 6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy.PowerUp;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.badlogic.gdx.math.Vector2;
+<i>4</i>&nbsp;import com.mozarellabytes.kroy.Entities.FireTruck;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;/**
+<i>7</i>&nbsp; * Freeze makes the freeze feature available,
+<i>8</i>&nbsp; * bypassing the cooldown
+<i>9</i>&nbsp; */
+<i>10</i>&nbsp;public class Freeze extends PowerUp {
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    /**
+<i>13</i>&nbsp;     * Constructor with given location
+<i>14</i>&nbsp;     * @param location  where the PowerUp spawns on the map
+<i>15</i>&nbsp;     */
+<b class="fc"><i>16</i>&nbsp;    public Freeze(Vector2 location) { super(&quot;freeze&quot;, location); }</b>
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /** This makes a Freeze instantly available in
+<i>19</i>&nbsp;     * gameScreen and then sets the appropriate
+<i>20</i>&nbsp;     * flags so that the PowerUp can be removed
+<i>21</i>&nbsp;     * from gameScreen */
+<i>22</i>&nbsp;    @Override
+<i>23</i>&nbsp;    public void invokePower(FireTruck truck) {
+<b class="nc"><i>24</i>&nbsp;        truck.makeFreezeAvailable();</b>
+<b class="nc"><i>25</i>&nbsp;        removePowerUp();</b>
+<b class="nc"><i>26</i>&nbsp;    }</b>
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    @Override
+<i>29</i>&nbsp;    public String getName() {
+<b class="nc"><i>30</i>&nbsp;        return &quot;Freeze&quot;;</b>
+<i>31</i>&nbsp;    }
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    @Override
+<i>34</i>&nbsp;    public String getDesc() {
+<b class="nc"><i>35</i>&nbsp;        return &quot;Makes the freeze ability available, bypassing the cooldown &quot;;</b>
+<i>36</i>&nbsp;    }
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;}
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-27 02:20</div>
+</div>
+</body>
+</html>

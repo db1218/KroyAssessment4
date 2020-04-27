@@ -270,7 +270,7 @@ public class FortressTest {
 
         fortress.setBombs(bombs);
 
-        for (int i=0; i<20; i++) fortress.updateBombs();
+        for (int i=0; i<100; i++) fortress.updateBombs();
 
         float fireTruckHealthAfter = fireTruck.getHP();
 
@@ -290,7 +290,7 @@ public class FortressTest {
         fireTruck.setPosition(new Vector2(15, 5));
         fortress.setBombs(bombs);
 
-        for (int i=0; i<20; i++) fortress.updateBombs();
+        for (int i=0; i<100; i++) fortress.updateBombs();
 
         float fireTruckHealthAfter = fireTruck.getHP();
 

@@ -1,0 +1,412 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DifficultyScreen</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy.Screens</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DifficultyScreen (com.mozarellabytes.kroy.Screens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DifficultyScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 114)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy.Screens;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.badlogic.gdx.Gdx;
+<i>4</i>&nbsp;import com.badlogic.gdx.Screen;
+<i>5</i>&nbsp;import com.badlogic.gdx.graphics.GL20;
+<i>6</i>&nbsp;import com.badlogic.gdx.graphics.OrthographicCamera;
+<i>7</i>&nbsp;import com.badlogic.gdx.graphics.Texture;
+<i>8</i>&nbsp;import com.badlogic.gdx.math.Rectangle;
+<i>9</i>&nbsp;import com.mozarellabytes.kroy.Kroy;
+<i>10</i>&nbsp;import com.mozarellabytes.kroy.Utilities.DifficultyLevel;
+<i>11</i>&nbsp;import com.mozarellabytes.kroy.InputHandlers.DifficultyScreenInputHandler;
+<i>12</i>&nbsp;import com.mozarellabytes.kroy.Utilities.SoundFX;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;/**
+<i>15</i>&nbsp; * This screen displays the user with 3 difficulties of
+<i>16</i>&nbsp; * our game to choose from, Easy, Medium and Hard. The user
+<i>17</i>&nbsp; * can also navigate back the the main menu screen
+<i>18</i>&nbsp; */
+<i>19</i>&nbsp;public class DifficultyScreen implements Screen {
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    /** The game */
+<i>22</i>&nbsp;    private final Kroy game;
+<i>23</i>&nbsp;    public final OrthographicCamera camera;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    /** The menu screen image - see ui/menuscreen_new */
+<i>26</i>&nbsp;    private final Texture backgroundImage;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    /** Rectangle containing the position of the play button */
+<i>29</i>&nbsp;    private final Rectangle easyButton;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /** Texture of the start button when it has not been clicked */
+<i>32</i>&nbsp;    private final Texture easyIdleTexture;
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    /** Texture of the start button when has been clicked */
+<i>35</i>&nbsp;    private final Texture easyClickedTexture;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    /** Contains the current state of the start button:
+<i>38</i>&nbsp;     * startIdleTexture if the start button is not being pressed,
+<i>39</i>&nbsp;     * startClickedTexture if the start button has been pressed */
+<i>40</i>&nbsp;    private Texture currentEasyTexture;
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    /** Rectangle containing the position of the control button */
+<i>44</i>&nbsp;    private final Rectangle mediumButton;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    /** Texture of the control button when it has not been clicked */
+<i>47</i>&nbsp;    private final Texture mediumIdleTexture;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    /** Texture of the control button when has been clicked */
+<i>50</i>&nbsp;    private final Texture mediumClickedTexture;
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    /** Contains the current state of the control button:
+<i>53</i>&nbsp;     * controlsIdleTexture if the control button is not being pressed,
+<i>54</i>&nbsp;     * controlsClickedTexture if the control button has been pressed */
+<i>55</i>&nbsp;    private Texture currentMediumTexture;
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    private final Rectangle hardButton;
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    private final Texture hardIdleTexture;
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    private final Texture hardClickedTexture;
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    private Texture currentHardTexture;
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    private final Rectangle returnButton;
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    private final Texture returnIdleTexture;
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    private final Texture returnClickedTexture;
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;    private Texture currentReturnTexture;
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;    /** Rectangle containing the position of the sound button */
+<i>74</i>&nbsp;    private final Rectangle soundButton;
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    /** Texture of the sound on button when it has not been clicked */
+<i>77</i>&nbsp;    private final Texture soundOnIdleTexture;
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;    /** Texture of the sound off button when it has not been clicked */
+<i>80</i>&nbsp;    private final Texture soundOffIdleTexture;
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    /** Texture of the sound on button when it has been clicked */
+<i>83</i>&nbsp;    private final Texture soundOnClickedTexture;
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    /** Texture of the sound off button when it has been clicked */
+<i>86</i>&nbsp;    private final Texture soundOffClickedTexture;
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    private Texture currentSoundTexture;
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    /** Constructs the MenuScreen
+<i>91</i>&nbsp;     *
+<i>92</i>&nbsp;     * @param game  LibGdx game
+<i>93</i>&nbsp;     */
+<b class="nc"><i>94</i>&nbsp;    public DifficultyScreen(final Kroy game) {</b>
+<b class="nc"><i>95</i>&nbsp;        this.game = game;</b>
+<i>96</i>&nbsp;
+<b class="nc"><i>97</i>&nbsp;        camera = new OrthographicCamera();</b>
+<b class="nc"><i>98</i>&nbsp;        camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);</b>
+<i>99</i>&nbsp;
+<b class="nc"><i>100</i>&nbsp;        backgroundImage = new Texture(Gdx.files.internal(&quot;menu_background.png&quot;), true);</b>
+<b class="nc"><i>101</i>&nbsp;        backgroundImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<i>102</i>&nbsp;
+<b class="nc"><i>103</i>&nbsp;        easyIdleTexture = new Texture(Gdx.files.internal(&quot;ui/easy_idle.png&quot;), true);</b>
+<b class="nc"><i>104</i>&nbsp;        easyIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<b class="nc"><i>105</i>&nbsp;        easyClickedTexture = new Texture(Gdx.files.internal(&quot;ui/easy_clicked.png&quot;), true);</b>
+<b class="nc"><i>106</i>&nbsp;        easyClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<i>107</i>&nbsp;
+<b class="nc"><i>108</i>&nbsp;        mediumIdleTexture = new Texture(Gdx.files.internal(&quot;ui/medium_idle_2.png&quot;), true);</b>
+<b class="nc"><i>109</i>&nbsp;        mediumIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<b class="nc"><i>110</i>&nbsp;        mediumClickedTexture = new Texture(Gdx.files.internal(&quot;ui/medium_clicked_2.png&quot;), true);</b>
+<b class="nc"><i>111</i>&nbsp;        mediumClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<i>112</i>&nbsp;
+<b class="nc"><i>113</i>&nbsp;        hardIdleTexture = new Texture(Gdx.files.internal(&quot;ui/hard_idle.png&quot;), true);</b>
+<b class="nc"><i>114</i>&nbsp;        hardIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<b class="nc"><i>115</i>&nbsp;        hardClickedTexture = new Texture(Gdx.files.internal(&quot;ui/hard_clicked.png&quot;), true);</b>
+<b class="nc"><i>116</i>&nbsp;        hardClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<i>117</i>&nbsp;
+<b class="nc"><i>118</i>&nbsp;        returnIdleTexture = new Texture(Gdx.files.internal(&quot;ui/return_idle_big.png&quot;), true);</b>
+<b class="nc"><i>119</i>&nbsp;        returnIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<b class="nc"><i>120</i>&nbsp;        returnClickedTexture = new Texture(Gdx.files.internal(&quot;ui/return_clicked_big.png&quot;), true);</b>
+<b class="nc"><i>121</i>&nbsp;        returnClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<i>122</i>&nbsp;
+<b class="nc"><i>123</i>&nbsp;        soundOnIdleTexture = new Texture(Gdx.files.internal(&quot;ui/sound_on_idle.png&quot;), true);</b>
+<b class="nc"><i>124</i>&nbsp;        soundOnIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<b class="nc"><i>125</i>&nbsp;        soundOffIdleTexture = new Texture(Gdx.files.internal(&quot;ui/sound_off_idle.png&quot;), true);</b>
+<b class="nc"><i>126</i>&nbsp;        soundOffIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<b class="nc"><i>127</i>&nbsp;        soundOnClickedTexture = new Texture(Gdx.files.internal(&quot;ui/sound_on_clicked.png&quot;), true);</b>
+<b class="nc"><i>128</i>&nbsp;        soundOnClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<b class="nc"><i>129</i>&nbsp;        soundOffClickedTexture = new Texture(Gdx.files.internal(&quot;ui/sound_off_clicked.png&quot;), true);</b>
+<b class="nc"><i>130</i>&nbsp;        soundOffClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);</b>
+<i>131</i>&nbsp;
+<b class="nc"><i>132</i>&nbsp;        DifficultyScreenInputHandler ih = new DifficultyScreenInputHandler(this);</b>
+<i>133</i>&nbsp;
+<b class="nc"><i>134</i>&nbsp;        currentSoundTexture = (SoundFX.music_enabled) ? soundOffIdleTexture : soundOnIdleTexture;</b>
+<i>135</i>&nbsp;
+<b class="nc"><i>136</i>&nbsp;        currentEasyTexture = easyIdleTexture;</b>
+<b class="nc"><i>137</i>&nbsp;        currentMediumTexture = mediumIdleTexture;</b>
+<b class="nc"><i>138</i>&nbsp;        currentHardTexture = hardIdleTexture;</b>
+<b class="nc"><i>139</i>&nbsp;        currentReturnTexture = returnIdleTexture;</b>
+<i>140</i>&nbsp;
+<b class="nc"><i>141</i>&nbsp;        easyButton = new Rectangle();</b>
+<b class="nc"><i>142</i>&nbsp;        easyButton.width = (float) (currentEasyTexture.getWidth()*0.75);</b>
+<b class="nc"><i>143</i>&nbsp;        easyButton.height = (float) (currentEasyTexture.getHeight()*0.75);</b>
+<b class="nc"><i>144</i>&nbsp;        easyButton.x = (int) (camera.viewportWidth/4 - easyButton.width/2);</b>
+<b class="nc"><i>145</i>&nbsp;        easyButton.y = (int) ((camera.viewportHeight/2 - easyButton.height/2) * 0.7);</b>
+<i>146</i>&nbsp;
+<b class="nc"><i>147</i>&nbsp;        mediumButton = new Rectangle();</b>
+<b class="nc"><i>148</i>&nbsp;        mediumButton.width = (float) (currentMediumTexture.getWidth()*0.75);</b>
+<b class="nc"><i>149</i>&nbsp;        mediumButton.height = (float) (currentMediumTexture.getHeight()*0.75);</b>
+<b class="nc"><i>150</i>&nbsp;        mediumButton.x = (int) (camera.viewportWidth/2 - mediumButton.width/2);</b>
+<b class="nc"><i>151</i>&nbsp;        mediumButton.y = (int) ((camera.viewportHeight/2 - mediumButton.height/2) * 0.7);</b>
+<i>152</i>&nbsp;
+<b class="nc"><i>153</i>&nbsp;        hardButton = new Rectangle();</b>
+<b class="nc"><i>154</i>&nbsp;        hardButton.width = (float) (currentHardTexture.getWidth()*0.75);</b>
+<b class="nc"><i>155</i>&nbsp;        hardButton.height = (float) (currentHardTexture.getHeight()*0.75);</b>
+<b class="nc"><i>156</i>&nbsp;        hardButton.x = (int) ((camera.viewportWidth/4) * 3 - hardButton.width/2);</b>
+<b class="nc"><i>157</i>&nbsp;        hardButton.y = (int) ((camera.viewportHeight/2 - hardButton.height/2) * 0.7);</b>
+<i>158</i>&nbsp;
+<b class="nc"><i>159</i>&nbsp;        returnButton = new Rectangle();</b>
+<b class="nc"><i>160</i>&nbsp;        returnButton.width = (float) (currentReturnTexture.getWidth()*0.75);</b>
+<b class="nc"><i>161</i>&nbsp;        returnButton.height = (float) (currentReturnTexture.getHeight()*0.75);</b>
+<b class="nc"><i>162</i>&nbsp;        returnButton.x = (int) (camera.viewportWidth/2 - returnButton.width/2);</b>
+<b class="nc"><i>163</i>&nbsp;        returnButton.y = (int) ((camera.viewportHeight/5 - returnButton.height/2));</b>
+<i>164</i>&nbsp;
+<b class="nc"><i>165</i>&nbsp;        soundButton = new Rectangle();</b>
+<b class="nc"><i>166</i>&nbsp;        soundButton.width = 50;</b>
+<b class="nc"><i>167</i>&nbsp;        soundButton.height = 50;</b>
+<b class="nc"><i>168</i>&nbsp;        soundButton.x = camera.viewportWidth - soundButton.getWidth() - 5;</b>
+<b class="nc"><i>169</i>&nbsp;        soundButton.y = camera.viewportHeight - soundButton.getHeight() - 5;</b>
+<i>170</i>&nbsp;
+<b class="nc"><i>171</i>&nbsp;        Gdx.input.setInputProcessor(ih);</b>
+<i>172</i>&nbsp;
+<i>173</i>&nbsp;    }
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;    @Override
+<i>176</i>&nbsp;    public void show() {
+<b class="nc"><i>177</i>&nbsp;        SoundFX.decideMusic(this);</b>
+<i>178</i>&nbsp;    }
+<i>179</i>&nbsp;
+<i>180</i>&nbsp;    @Override
+<i>181</i>&nbsp;    public void render(float delta) {
+<b class="nc"><i>182</i>&nbsp;        Gdx.gl.glClearColor(51/255f, 34/255f, 99/255f, 1);</b>
+<b class="nc"><i>183</i>&nbsp;        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</b>
+<i>184</i>&nbsp;
+<b class="nc"><i>185</i>&nbsp;        camera.update();</b>
+<i>186</i>&nbsp;
+<b class="nc"><i>187</i>&nbsp;        game.batch.setProjectionMatrix(camera.combined);</b>
+<i>188</i>&nbsp;
+<b class="nc"><i>189</i>&nbsp;        game.batch.begin();</b>
+<b class="nc"><i>190</i>&nbsp;        game.batch.draw(backgroundImage, 0, 0, camera.viewportWidth, camera.viewportHeight);</b>
+<b class="nc"><i>191</i>&nbsp;        game.batch.draw(currentEasyTexture, easyButton.x, easyButton.y, easyButton.width, easyButton.height);</b>
+<b class="nc"><i>192</i>&nbsp;        game.batch.draw(currentMediumTexture, mediumButton.x, mediumButton.y, mediumButton.width, mediumButton.height);</b>
+<b class="nc"><i>193</i>&nbsp;        game.batch.draw(currentHardTexture, hardButton.x, hardButton.y, hardButton.width, hardButton.height);</b>
+<b class="nc"><i>194</i>&nbsp;        game.batch.draw(currentReturnTexture, returnButton.x, returnButton.y, returnButton.width, returnButton.height);</b>
+<b class="nc"><i>195</i>&nbsp;        game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);</b>
+<b class="nc"><i>196</i>&nbsp;        game.batch.end();</b>
+<i>197</i>&nbsp;    }
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;    @Override
+<i>200</i>&nbsp;    public void resize(int width, int height) {
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;    }
+<i>203</i>&nbsp;
+<i>204</i>&nbsp;    @Override
+<i>205</i>&nbsp;    public void pause() {
+<i>206</i>&nbsp;
+<i>207</i>&nbsp;    }
+<i>208</i>&nbsp;
+<i>209</i>&nbsp;    @Override
+<i>210</i>&nbsp;    public void resume() {
+<i>211</i>&nbsp;
+<i>212</i>&nbsp;    }
+<i>213</i>&nbsp;
+<i>214</i>&nbsp;    @Override
+<i>215</i>&nbsp;    public void hide() {
+<i>216</i>&nbsp;
+<i>217</i>&nbsp;    }
+<i>218</i>&nbsp;
+<i>219</i>&nbsp;    @Override
+<i>220</i>&nbsp;    public void dispose() {
+<b class="nc"><i>221</i>&nbsp;        backgroundImage.dispose();</b>
+<b class="nc"><i>222</i>&nbsp;        currentEasyTexture.dispose();</b>
+<b class="nc"><i>223</i>&nbsp;        currentMediumTexture.dispose();</b>
+<b class="nc"><i>224</i>&nbsp;        currentHardTexture.dispose();</b>
+<b class="nc"><i>225</i>&nbsp;        easyClickedTexture.dispose();</b>
+<b class="nc"><i>226</i>&nbsp;        easyIdleTexture.dispose();</b>
+<b class="nc"><i>227</i>&nbsp;        mediumClickedTexture.dispose();</b>
+<b class="nc"><i>228</i>&nbsp;        mediumIdleTexture.dispose();</b>
+<b class="nc"><i>229</i>&nbsp;        hardClickedTexture.dispose();</b>
+<b class="nc"><i>230</i>&nbsp;        hardIdleTexture.dispose();</b>
+<b class="nc"><i>231</i>&nbsp;        currentSoundTexture.dispose();</b>
+<b class="nc"><i>232</i>&nbsp;        soundOnIdleTexture.dispose();</b>
+<b class="nc"><i>233</i>&nbsp;        soundOnClickedTexture.dispose();</b>
+<b class="nc"><i>234</i>&nbsp;        soundOffIdleTexture.dispose();</b>
+<b class="nc"><i>235</i>&nbsp;        soundOffClickedTexture.dispose();</b>
+<i>236</i>&nbsp;    }
+<i>237</i>&nbsp;
+<i>238</i>&nbsp;    /**
+<i>239</i>&nbsp;     * Start new game
+<i>240</i>&nbsp;     * @param level specified difficulty level
+<i>241</i>&nbsp;     */
+<b class="nc"><i>242</i>&nbsp;    public void toGameScreen(DifficultyLevel level) { game.setScreen(new GameScreen(game, level)); }</b>
+<i>243</i>&nbsp;
+<i>244</i>&nbsp;    /**
+<i>245</i>&nbsp;     * Go back to menu screen
+<i>246</i>&nbsp;     */
+<i>247</i>&nbsp;    public void toMenu() {
+<b class="nc"><i>248</i>&nbsp;        game.setScreen(new MenuScreen(game));</b>
+<i>249</i>&nbsp;    }
+<i>250</i>&nbsp;
+<i>251</i>&nbsp;    /** Changes the texture of the start button when it has been clicked on */
+<i>252</i>&nbsp;    public void clickedEasyButton() {
+<b class="nc"><i>253</i>&nbsp;        if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();</b>
+<b class="nc"><i>254</i>&nbsp;        currentEasyTexture = easyClickedTexture;</b>
+<i>255</i>&nbsp;    }
+<i>256</i>&nbsp;
+<i>257</i>&nbsp;    /**
+<i>258</i>&nbsp;     * Set the easy button to idle state
+<i>259</i>&nbsp;     */
+<b class="nc"><i>260</i>&nbsp;    public void idleEasyButton() { currentEasyTexture = easyIdleTexture; }</b>
+<i>261</i>&nbsp;
+<i>262</i>&nbsp;    /** Changes the texture of the start button when it has been clicked on */
+<i>263</i>&nbsp;    public void clickedMediumButton() {
+<b class="nc"><i>264</i>&nbsp;        if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();</b>
+<b class="nc"><i>265</i>&nbsp;        currentMediumTexture = mediumClickedTexture;</b>
+<i>266</i>&nbsp;    }
+<i>267</i>&nbsp;
+<i>268</i>&nbsp;    /**
+<i>269</i>&nbsp;     * Set the medium button to idle state
+<i>270</i>&nbsp;     */
+<i>271</i>&nbsp;    public void idleMediumButton() {
+<b class="nc"><i>272</i>&nbsp;        currentMediumTexture = mediumIdleTexture;</b>
+<i>273</i>&nbsp;    }
+<i>274</i>&nbsp;
+<i>275</i>&nbsp;    /** Changes the texture of the start button when it has been clicked on */
+<i>276</i>&nbsp;    public void clickedHardButton() {
+<b class="nc"><i>277</i>&nbsp;        if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();</b>
+<b class="nc"><i>278</i>&nbsp;        currentHardTexture = hardClickedTexture;</b>
+<i>279</i>&nbsp;    }
+<i>280</i>&nbsp;
+<i>281</i>&nbsp;    /**
+<i>282</i>&nbsp;     * Set the hard button to idle state
+<i>283</i>&nbsp;     */
+<i>284</i>&nbsp;    public void idleHardButton() {
+<b class="nc"><i>285</i>&nbsp;        currentHardTexture = hardIdleTexture;</b>
+<i>286</i>&nbsp;    }
+<i>287</i>&nbsp;
+<i>288</i>&nbsp;    /** Changes the texture of the return button when it has been clicked on */
+<i>289</i>&nbsp;    public void clickedReturnButton() {
+<b class="nc"><i>290</i>&nbsp;        if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();</b>
+<b class="nc"><i>291</i>&nbsp;        currentReturnTexture = returnClickedTexture;</b>
+<i>292</i>&nbsp;    }
+<i>293</i>&nbsp;
+<i>294</i>&nbsp;    /**
+<i>295</i>&nbsp;     * Set the return button to idle state
+<i>296</i>&nbsp;     */
+<i>297</i>&nbsp;    public void idleReturnButton() {
+<b class="nc"><i>298</i>&nbsp;        currentReturnTexture = returnIdleTexture;</b>
+<i>299</i>&nbsp;    }
+<i>300</i>&nbsp;
+<i>301</i>&nbsp;    /** Changes the texture of the sound button when it has been clicked on */
+<i>302</i>&nbsp;    public void clickedSoundButton() {
+<b class="nc"><i>303</i>&nbsp;        if (SoundFX.music_enabled) SoundFX.sfx_button_clicked.play();</b>
+<b class="nc"><i>304</i>&nbsp;        currentSoundTexture = SoundFX.music_enabled ? soundOffClickedTexture : soundOnClickedTexture;</b>
+<i>305</i>&nbsp;    }
+<i>306</i>&nbsp;
+<i>307</i>&nbsp;    /** Turns the sound on and off and changes the sound icon accordingly,
+<i>308</i>&nbsp;     * turns the sound off in the sound was on and turns the sound on if the
+<i>309</i>&nbsp;     * sound was off */
+<i>310</i>&nbsp;    public void changeSound() {
+<b class="nc"><i>311</i>&nbsp;        currentSoundTexture = SoundFX.music_enabled ? soundOnIdleTexture : soundOffIdleTexture;</b>
+<b class="nc"><i>312</i>&nbsp;        SoundFX.toggleMusic(this);</b>
+<i>313</i>&nbsp;    }
+<i>314</i>&nbsp;
+<i>315</i>&nbsp;    /** The texture of the sound button when it has not been clicked on */
+<i>316</i>&nbsp;    public void idleSoundButton() {
+<b class="nc"><i>317</i>&nbsp;        currentSoundTexture = SoundFX.music_enabled ? soundOffIdleTexture : soundOnIdleTexture;</b>
+<i>318</i>&nbsp;    }
+<i>319</i>&nbsp;
+<b class="nc"><i>320</i>&nbsp;    public Rectangle getEasyButton() { return easyButton; }</b>
+<i>321</i>&nbsp;
+<b class="nc"><i>322</i>&nbsp;    public Rectangle getMediumButton() { return mediumButton; }</b>
+<i>323</i>&nbsp;
+<b class="nc"><i>324</i>&nbsp;    public Rectangle getHardButton() { return hardButton; }</b>
+<i>325</i>&nbsp;
+<b class="nc"><i>326</i>&nbsp;    public Rectangle getReturnButton() { return returnButton; }</b>
+<i>327</i>&nbsp;
+<b class="nc"><i>328</i>&nbsp;    public Rectangle getSoundButton() {return soundButton; }</b>
+<i>329</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-27 02:20</div>
+</div>
+</body>
+</html>

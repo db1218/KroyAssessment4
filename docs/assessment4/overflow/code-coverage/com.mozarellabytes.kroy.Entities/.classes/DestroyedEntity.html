@@ -1,0 +1,132 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DestroyedEntity</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy.Entities</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DestroyedEntity (com.mozarellabytes.kroy.Entities)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DestroyedEntity</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 10)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy.Entities;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.badlogic.gdx.graphics.Texture;
+<i>4</i>&nbsp;import com.badlogic.gdx.graphics.g2d.Batch;
+<i>5</i>&nbsp;import com.badlogic.gdx.math.Rectangle;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;public class DestroyedEntity {
+<i>9</i>&nbsp;    /** The texture to be displayed on the map
+<i>10</i>&nbsp;     *
+<i>11</i>&nbsp;     */
+<i>12</i>&nbsp;    private final Texture deadTexture;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    /** A Rectangle containing the location and size of the texture on the map
+<i>15</i>&nbsp;     *
+<i>16</i>&nbsp;     */
+<i>17</i>&nbsp;    private final Rectangle area;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    /** Constructor for DestroyedEntity class for a Fortress
+<i>20</i>&nbsp;     *
+<i>21</i>&nbsp;     * @param deadTexture The texture to be displayed when the entity is destroyed
+<i>22</i>&nbsp;     * @param area The size and location of the destroyed entity on the map
+<i>23</i>&nbsp;     */
+<b class="nc"><i>24</i>&nbsp;    public DestroyedEntity(Texture deadTexture, Rectangle area) {</b>
+<b class="nc"><i>25</i>&nbsp;        this.deadTexture = deadTexture;</b>
+<b class="nc"><i>26</i>&nbsp;        this.area = area;</b>
+<b class="nc"><i>27</i>&nbsp;    }</b>
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    /** Constructor for DestroyedEntity class for a Fire Station
+<i>30</i>&nbsp;     *
+<i>31</i>&nbsp;     * @param deadTexture The texture to be displayed when the entity is destroyed
+<i>32</i>&nbsp;     * @param x The x location of the entity on the map
+<i>33</i>&nbsp;     * @param y The y location of the entity on the map
+<i>34</i>&nbsp;     * @param width The width of the entity&#39;s texture
+<i>35</i>&nbsp;     * @param height The height on the entity&#39;s texture.
+<i>36</i>&nbsp;     */
+<b class="nc"><i>37</i>&nbsp;    public DestroyedEntity(Texture deadTexture, float x, float y, float width, float height){</b>
+<b class="nc"><i>38</i>&nbsp;        this.deadTexture = deadTexture;</b>
+<b class="nc"><i>39</i>&nbsp;        this.area = new Rectangle(x, y, width, height);</b>
+<b class="nc"><i>40</i>&nbsp;    }</b>
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    /** Draws the destroyed entities texture on the map
+<i>43</i>&nbsp;     *
+<i>44</i>&nbsp;     * @param mapBatch the renderer in line with the map
+<i>45</i>&nbsp;     */
+<i>46</i>&nbsp;    public void draw(Batch mapBatch){
+<b class="nc"><i>47</i>&nbsp;        mapBatch.draw(this.deadTexture, this.area.x, this.area.y, this.area.width, this.area.height);</b>
+<b class="nc"><i>48</i>&nbsp;    }</b>
+<i>49</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-27 02:20</div>
+</div>
+</body>
+</html>

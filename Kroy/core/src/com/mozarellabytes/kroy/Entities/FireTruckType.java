@@ -27,7 +27,7 @@ public enum FireTruckType {
     AmethystMedium(300, 2.6f, Color.PURPLE, "Amethyst Truck", 6.5f, 0.24f, 230, "purple"),
     EmeraldMedium(160, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.3f, 140, "green"),
 
-    RubyHard(160, 4.2f, Color.RED, "Ruby Truck", 5, 0.14f, 120, "red"),
+    RubyHard(160, 4.2f, Color.RED, "Ruby Truck", 5, 0.14f, 150, "red"),
     SapphireHard(300, 3, Color.CYAN, "Sapphire Truck", 6, 0.16f, 130, "blue"),
     AmethystHard(320, 2.4f, Color.PURPLE, "Amethyst Truck", 6.5f, 0.20f, 180, "purple"),
     EmeraldHard(180, 4, Color.GREEN, "Emerald Truck", 4.5f, 0.24f, 110, "green");

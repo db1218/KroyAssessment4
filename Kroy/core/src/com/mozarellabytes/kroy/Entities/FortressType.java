@@ -23,17 +23,17 @@ public enum FortressType {
             new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_revs_dead.png"))),
 
-    Walmgate ("Walmgate Bar", 500, 0.015f, 8, 170, 9.5f, 5, 5,
+    Walmgate ("Walmgate Bar", 600, 0.015f, 8, 170, 9.5f, 5, 5,
             new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate_full.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate_dead.png"))),
 
-    Clifford ("Clifford's Tower", 500, 0.03f, 6.5f, 150, 7.5f, 4, 3,
+    Clifford ("Clifford's Tower", 490, 0.03f, 6.5f, 150, 7.5f, 4, 3,
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford_full.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford_dead.png"))),
 
-    CentralHall ("Central Hall", 500, 0.05f, 7.5f, 205, 7.75f, 4, 3,
+    CentralHall ("Central Hall", 510, 0.05f, 7.5f, 205, 7.75f, 4, 3,
             new Texture(Gdx.files.internal("sprites/fortress/UoY_central_hall_full.png")),
             new Texture(Gdx.files.internal("sprites/fortress/UoY_central_hall_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/UoY_central_hall_dead.png"))),
@@ -43,7 +43,7 @@ public enum FortressType {
             new Texture(Gdx.files.internal("sprites/fortress/fortress_yorkshire_museum_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/fortress_yorkshire_museum_dead.png"))),
     
-    Railway ("Railway Museum", 500, 0.01f, 8.5f, 175, 11f, 5, 4,
+    Railway ("Railway Museum", 550, 0.01f, 8.5f, 175, 11f, 5, 4,
             new Texture(Gdx.files.internal("sprites/fortress/york_railway_museum_full.png")),
             new Texture(Gdx.files.internal("sprites/fortress/york_railway_museum_half.png")),
             new Texture(Gdx.files.internal("sprites/fortress/york_railway_museum_dead.png")));

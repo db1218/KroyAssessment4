@@ -414,7 +414,7 @@ public class GameScreen implements Screen, ButtonBar {
 
             // checks power up collision with fire truck
             for (PowerUp power : powerUps) {
-                if (power.getPosition().equals(truck.getPosition()))
+                if (power.getPosition().equals(truck.getPosition()) && !power.isPowerCurrentlyInvoked())
                     power.invokePower(truck);
             }
 

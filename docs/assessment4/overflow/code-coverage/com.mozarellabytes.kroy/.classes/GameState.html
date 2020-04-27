@@ -1,0 +1,213 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GameState</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GameState (com.mozarellabytes.kroy)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameState</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 23)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.mozarellabytes.kroy.Screens.GameOverScreen;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;/** This class is used to keep track of the player&#39;s progress within
+<i>6</i>&nbsp; * the game. It keeps track of how many active fire trucks the user
+<i>7</i>&nbsp; * has and how many fortresses have been destroyed and causes the game
+<i>8</i>&nbsp; * to end declaring the player has having won or lost
+<i>9</i>&nbsp; */
+<i>10</i>&nbsp;public class GameState {
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    /** Number of fire trucks there are on screen */
+<i>13</i>&nbsp;    private int activeFireTrucks;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    private boolean hasShownDanceTutorial;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    /** The number of fortresses the player has destroyed */
+<i>18</i>&nbsp;    private int fortressesDestroyed;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    /** The number of trucks that have a fortress within their attack range */
+<i>21</i>&nbsp;    private int trucksInAttackRange;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    /**
+<i>24</i>&nbsp;     * If station is still alive or destroyed
+<i>25</i>&nbsp;     */
+<i>26</i>&nbsp;    private boolean stationDestoyed;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    /**
+<i>29</i>&nbsp;     * Has a FireTruck just hit a patrol?
+<i>30</i>&nbsp;     */
+<i>31</i>&nbsp;    private boolean hitPatrol;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /**
+<i>34</i>&nbsp;     * Is the player currently playing the minigame?
+<i>35</i>&nbsp;     */
+<i>36</i>&nbsp;    public boolean isDancing;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    /**
+<i>39</i>&nbsp;     * Has the player just exited the game?
+<i>40</i>&nbsp;     */
+<i>41</i>&nbsp;    public boolean hasQuitTheGame;
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    /** Constructor for GameState */
+<b class="nc"><i>44</i>&nbsp;    public GameState() {</b>
+<b class="nc"><i>45</i>&nbsp;        this.activeFireTrucks = 0;</b>
+<b class="nc"><i>46</i>&nbsp;        this.fortressesDestroyed = 0;</b>
+<b class="nc"><i>47</i>&nbsp;        this.stationDestoyed = false;</b>
+<b class="nc"><i>48</i>&nbsp;        this.hasShownDanceTutorial = false;</b>
+<i>49</i>&nbsp;    }
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    /** Adds one to activeFireTrucks, called when a firetruck is spawned */
+<i>52</i>&nbsp;    public void addFireTruck() {
+<b class="nc"><i>53</i>&nbsp;        this.activeFireTrucks++;</b>
+<i>54</i>&nbsp;    }
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    /** Removes one from activeFireTrucks, called when a firetruck
+<i>57</i>&nbsp;     * is destroyed */
+<i>58</i>&nbsp;    public void removeFireTruck() {
+<b class="nc"><i>59</i>&nbsp;        this.activeFireTrucks--;</b>
+<i>60</i>&nbsp;    }
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    /** Adds one to fortressesDestroyed when a user has destroyed a
+<i>63</i>&nbsp;     * fortress */
+<i>64</i>&nbsp;    public void addFortress() {
+<b class="nc"><i>65</i>&nbsp;        this.fortressesDestroyed++;</b>
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /** Determines whether the game has ended either when a certain
+<i>69</i>&nbsp;     * number of fortresses have been destroyed or when there are no
+<i>70</i>&nbsp;     * fire trucks left
+<i>71</i>&nbsp;     * @param game LibGDX game
+<i>72</i>&nbsp;     */
+<i>73</i>&nbsp;    public void hasGameEnded(Kroy game) {
+<b class="nc"><i>74</i>&nbsp;        if (fortressesDestroyed == 6) endGame(true, game);</b>
+<b class="nc"><i>75</i>&nbsp;        else if (activeFireTrucks == 0) endGame(false, game);</b>
+<i>76</i>&nbsp;    }
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    /**
+<i>79</i>&nbsp;     * When one or both of the end game conditions have been met
+<i>80</i>&nbsp;     *
+<i>81</i>&nbsp;     * @return  &lt;code&gt;true&lt;/code&gt; if game should end
+<i>82</i>&nbsp;     *          &lt;code&gt;false&lt;/code&gt; otherwise
+<i>83</i>&nbsp;     */
+<i>84</i>&nbsp;    public boolean shouldGameEnd() {
+<b class="nc"><i>85</i>&nbsp;        return fortressesDestroyed == 6 || activeFireTrucks == 0 ;</b>
+<i>86</i>&nbsp;    }
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    /** Triggers the appropriate game over screen depending
+<i>89</i>&nbsp;     * on if the user has won or lost
+<i>90</i>&nbsp;     * @param playerWon &lt;code&gt; true &lt;/code&gt; if player has won
+<i>91</i>&nbsp;     *                  &lt;code&gt; false &lt;/code&gt; if player has lost
+<i>92</i>&nbsp;     * @param game LibGDX game
+<i>93</i>&nbsp;     */
+<i>94</i>&nbsp;    private void endGame(Boolean playerWon, Kroy game) {
+<b class="nc"><i>95</i>&nbsp;        if (playerWon) game.setScreen(new GameOverScreen(game, true));</b>
+<b class="nc"><i>96</i>&nbsp;        else game.setScreen(new GameOverScreen(game, false));</b>
+<i>97</i>&nbsp;    }
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    public void setStationDestoyed() {
+<b class="nc"><i>100</i>&nbsp;        this.stationDestoyed = true;</b>
+<i>101</i>&nbsp;    }
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;    public boolean hasStationDestoyed() {
+<b class="nc"><i>104</i>&nbsp;        return this.stationDestoyed;</b>
+<i>105</i>&nbsp;    }
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;    public void setTrucksInAttackRange(int number){
+<b class="nc"><i>108</i>&nbsp;        trucksInAttackRange = number;</b>
+<i>109</i>&nbsp;    }
+<i>110</i>&nbsp;
+<b class="nc"><i>111</i>&nbsp;    public int getNumDestroyedFortresses() { return fortressesDestroyed; }</b>
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;    public void incrementTrucksInAttackRange(){
+<b class="nc"><i>114</i>&nbsp;        trucksInAttackRange++;</b>
+<i>115</i>&nbsp;    }
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;    public int getTrucksInAttackRange(){
+<b class="nc"><i>118</i>&nbsp;        return trucksInAttackRange;</b>
+<i>119</i>&nbsp;    }
+<i>120</i>&nbsp;
+<b class="nc"><i>121</i>&nbsp;    public void setDanceTutorialShown() { this.hasShownDanceTutorial = true; }</b>
+<i>122</i>&nbsp;
+<b class="nc"><i>123</i>&nbsp;    public boolean hasDanceTutorialShown() { return this.hasShownDanceTutorial; }</b>
+<i>124</i>&nbsp;
+<b class="nc"><i>125</i>&nbsp;    public boolean getHitPatrol() { return this.hitPatrol; }</b>
+<i>126</i>&nbsp;
+<b class="nc"><i>127</i>&nbsp;    public void setHitPatrol(boolean bool) { this.hitPatrol = bool; }</b>
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-27 02:20</div>
+</div>
+</body>
+</html>
