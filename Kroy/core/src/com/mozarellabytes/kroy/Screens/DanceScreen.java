@@ -182,7 +182,7 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
                 this.ETDancer.addTimeInState(delta);
 
                 if (this.danceMan.hasMissedLastBeat()) {
-                    if (this.firefighter.getTimeInState() > this.danceMan.getPhase() / 4) {
+                    if (this.firefighter.getTimeInState() > this.danceMan.getPhase() / 10) {
                         this.lastResult = DanceResult.MISSED;
                     }
                 }
@@ -250,6 +250,7 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
      */
     private void checkIfOver() {
         if (firefighter.getHealth() <= 0) {
+            patrol.setHP(Math.max(ETDancer.getHealth(), 0));
             firetruck.setHP(firefighter.getHealth());
             previousScreen.checkIfTruckDestroyed(firetruck);
             if (gameState.shouldGameEnd()) {
@@ -259,7 +260,7 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
             }
         } else if (ETDancer.getHealth() <= 0) {
             patrol.setHP(Math.max(ETDancer.getHealth(), 0));
-            patrol.setHP(-1);
+            firetruck.setHP(Math.max(firefighter.getHealth(), 0));
             goToGameScreen();
         }
     }

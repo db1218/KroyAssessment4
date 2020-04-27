@@ -1,6 +1,5 @@
 package com.mozarellabytes.kroy.PowerUp;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 
@@ -24,7 +23,6 @@ public class Heart extends PowerUp {
      */
     @Override
     public void invokePower(FireTruck truck) {
-        Gdx.app.log("new heart", String.valueOf(this));
         isPowerCurrentlyInvoked = true;
         restoreTrucksHP(truck);
         removePowerUp();

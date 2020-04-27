@@ -194,7 +194,7 @@ public class ControlsScreen implements Screen {
             game.font25.draw(game.batch, "An ET has challenged you to a dance-off!", (screenWidth / 2) - (36 * 15),screenHeight / 1.29f);
             game.font25.draw(game.batch, "Hit the arrow key as it gets to the center of the box to make the right move.", screenWidth / 7.692f, screenHeight * 0.68f);
             game.font25.draw(game.batch, "Correct moves build up your combo, but missed ones will break it!", screenWidth / 7.692f,screenHeight * 0.64f);
-            game.font25.draw(game.batch, "USE your combo do damage the ET by pressing [SPACE]", screenWidth / 7.692f,screenHeight * 0.60f);
+            game.font25.draw(game.batch, "USE your combo to damage the ET by pressing [SPACE]", screenWidth / 7.692f,screenHeight * 0.60f);
             game.font25.draw(game.batch, "The crazier the combo the bigger the damage!", screenWidth / 7.692f,screenHeight * 0.56f);
             game.font25.draw(game.batch, "But if you make the wrong move, feel the burn as the ET gets a turn.", screenWidth / 7.692f,screenHeight * 0.52f);
             game.batch.draw(arrow, (screenWidth / 4f) * 3f, (screenHeight / 5f) * 3f + ((inSecondPhase ? 1 : 0) - DanceScreen.phaseLerp((time/ timeCap)%1f)) * screenWidth/32, screenWidth/32, screenWidth/32);
