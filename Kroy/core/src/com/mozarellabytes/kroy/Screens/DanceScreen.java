@@ -182,7 +182,7 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
                 this.ETDancer.addTimeInState(delta);
 
                 if (this.danceMan.hasMissedLastBeat()) {
-                    if (this.firefighter.getTimeInState() > this.danceMan.getPhase() / 4) {
+                    if (this.firefighter.getTimeInState() > this.danceMan.getPhase() / 10) {
                         this.lastResult = DanceResult.MISSED;
                     }
                 }
