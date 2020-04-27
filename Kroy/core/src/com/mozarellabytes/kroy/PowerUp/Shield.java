@@ -43,6 +43,7 @@ public class Shield extends PowerUp {
     /** This sets the shield giving the truck immunity */
     @Override
     public void invokePower(FireTruck truck) {
+        Gdx.app.log("new shield", String.valueOf(this));
         this.isPowerCurrentlyInvoked = true;
         this.truck = truck;
         truck.setShield(true);
@@ -54,6 +55,7 @@ public class Shield extends PowerUp {
      * gameScreen can destroy this powerUp.
      */
     private void revokePowerUp() {
+        Gdx.app.log("shield destroyed", String.valueOf(this));
         truck.setShield(false);
         isPowerCurrentlyInvoked = false;
         canBeDestroyed = true;
@@ -67,6 +69,11 @@ public class Shield extends PowerUp {
     @Override
     public String getDesc() {
         return "Makes the fire truck immune to damage for 5 seconds";
+    }
+
+    @Override
+    public float getTimeLeftInPowerup() {
+        return timeLeftInPowerUp;
     }
 
 

@@ -33,6 +33,7 @@ public class Range extends PowerUp {
     /** This increases the truck's range */
     @Override
     public void invokePower(FireTruck truck) {
+        Gdx.app.log("new range", String.valueOf(this));
         this.isPowerCurrentlyInvoked = true;
         this.truck = truck;
         truck.setRange(truck.type.getRange() + rangeIncrease);
@@ -60,6 +61,7 @@ public class Range extends PowerUp {
      * gameScreen can destroy this powerUp.
      */
     private void revokePowerUp() {
+        Gdx.app.log("end of range", String.valueOf(this));
         truck.setRange(truck.type.getRange());
         canBeDestroyed = true;
         isPowerCurrentlyInvoked = false;
@@ -70,6 +72,11 @@ public class Range extends PowerUp {
 
     @Override
     public String getDesc() { return "Increase range of the fire truck by 3 tiles for 10 seconds"; }
+
+    @Override
+    public float getTimeLeftInPowerup() {
+        return timeLeftInPowerUp;
+    }
 
 
 }

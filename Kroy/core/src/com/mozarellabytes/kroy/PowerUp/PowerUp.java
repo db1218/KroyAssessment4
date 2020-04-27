@@ -175,4 +175,8 @@ public abstract class PowerUp {
         return this.elapsedTime;
     }
 
+    public abstract float getTimeLeftInPowerup ();
+
+    public boolean isPowerCurrentlyInvoked() { return isPowerCurrentlyInvoked; }
+
 }
