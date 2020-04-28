@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.Entities;
 
+/**********************************************************************************
+                                Added for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
@@ -7,8 +11,7 @@ import com.mozarellabytes.kroy.Utilities.Constants;
 
 import java.util.ArrayList;
 
-/**
- * Special Patrol which is the Boss. This spawns
+/** Special Patrol which is the Boss. This spawns
  * when a certain number (depending on difficulty)
  * of fortresses have been destroyed and will head
  * towards your Fortress.

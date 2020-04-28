@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.InputHandlers;
 
+/**********************************************************************************
+                                Edited for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -42,7 +46,10 @@ public class GameInputHandler implements InputProcessor {
         this.buttons = gui.getButtons();
     }
 
-    /** Called when a key was pressed
+    /** Edited for assessment 4 (added code to save the game and undo
+     * and redo part of the trucks path)
+     *
+     * Called when a key was pressed
      *
      * This handles toggling sound, the control screen, the pause
      * screen and makes the fire trucks attack a fortress that is
@@ -99,7 +106,9 @@ public class GameInputHandler implements InputProcessor {
         return false;
     }
 
-    /** Checks whether the user clicks on a firetruck, fortress, button or the end
+    /** Edited for assessment 4 to see if the player clicks on a powerup
+     *
+     * Checks whether the user clicks on a firetruck, powerup, fortress, button or the end
      * of a firetrucks path
      * @param screenX The x coordinate, origin is in the upper left corner
      * @param screenY The y coordinate, origin is in the upper left corner
@@ -141,7 +150,9 @@ public class GameInputHandler implements InputProcessor {
         return true;
     }
 
-    /** Check if a user clicks up on a button or if the user draws multiple
+    /** Edited for assessment 4 to allow the play to undo and redo the trucks path
+     *
+     * Check if a user clicks up on a button or if the user draws multiple
      * trucks to end on the same tile
      *
      * @param pointer the pointer for the event.
@@ -224,7 +235,9 @@ public class GameInputHandler implements InputProcessor {
         return false;
     }
 
-    /** Checks if user clicked on a power up, if it did it
+    /** Added for assessment 4
+     *
+     * Checks if user clicked on a power up, if it did it
      * becomes the selected entity meaning its stats will be rendered
      * in the top left hand corner
      *

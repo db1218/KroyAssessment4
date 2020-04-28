@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.Screens;
 
+/**********************************************************************************
+                                Edited for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,7 +17,9 @@ import com.mozarellabytes.kroy.Utilities.SoundFX;
 import com.mozarellabytes.kroy.GUI.MenuButton.State;
 import com.mozarellabytes.kroy.GUI.MenuToggleButton.ToggleState;
 
-/** This screen is shown after the splash screen and is
+/** Edited to add a button to access the saves screen
+ *
+ * This screen is shown after the splash screen and is
  * where the player can choose to start the game or view
  * the control screen */
 public class MenuScreen implements Screen {
@@ -32,7 +38,8 @@ public class MenuScreen implements Screen {
     private final MenuButton controlsButton;
     private final MenuToggleButton soundButton;
 
-    /**
+    /** Edited for assessment 4 to add a button to the saves screen
+     *
      * Constructs the MenuScreen
      *
      * @param game  LibGdx game
@@ -202,9 +209,7 @@ public class MenuScreen implements Screen {
         return newGameButton.getRectangle();
     }
 
-    public Rectangle getControlsButton() {
-        return controlsButton.getRectangle();
-    }
+    public Rectangle getControlsButton() { return controlsButton.getRectangle(); }
 
     public Rectangle getSoundButton() {
         return soundButton.getRectangle();

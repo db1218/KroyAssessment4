@@ -1,10 +1,16 @@
 package com.mozarellabytes.kroy.Entities;
 
+/**********************************************************************************
+                                    Edited for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 
-/**
+/** Edited to allow the trucks to have different values depending on the difficulty
+ * level
+ *
  * FireTruckType is an enum defining the trucks that can be present in the game.
  * Each truck type has a unique reserve, speed, trail colour, range, and attack points.
  * This allows there to be numerous different types of FireTrucks and numerous trucks
@@ -14,7 +20,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public enum FireTruckType {
 
-    /** The preset values for the different truck types includes the type's:
+    /** Edited for assessment 4 - The preset values for the different truck types includes the type's:
      * maximum reserve, speed, trailColour, name, attack range, attack points
      */
     RubyEasy(160, 4.2f, Color.RED, "Ruby Truck", 5.5f, 0.16f, 180,"red"),

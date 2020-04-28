@@ -1,10 +1,16 @@
 package com.mozarellabytes.kroy.PowerUp;
 
+/**********************************************************************************
+                                Added for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 
-/**
+/** Added for assessment 4 to implement the power
+ * up functionality
+ *
  * Shield makes the Fire Truck immune to damage from
  * fortresses and patrols for a set amount of time
  */
@@ -68,11 +74,5 @@ public class Shield extends PowerUp {
     public String getDesc() {
         return "Makes the fire truck immune to damage for 15 seconds";
     }
-
-    @Override
-    public float getTimeLeftInPowerup() {
-        return timeLeftInPowerUp;
-    }
-
 
 }

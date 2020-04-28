@@ -1,6 +1,11 @@
 package com.mozarellabytes.kroy.Screens;
 
+/**********************************************************************************
+                                Edited for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.utils.Timer;
 import com.mozarellabytes.kroy.GUI.ButtonBar;
 import com.mozarellabytes.kroy.InputHandlers.GameInputHandler;
 import com.mozarellabytes.kroy.PowerUp.PowerUp;
@@ -21,11 +26,12 @@ import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.*;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 
-/**
+/** Edited for assessment 4 to add patrols, saves,
+ * difficulty levels, freeze and pause screen
+ * functionality
+ *
  * The Screen that our game is played in.
  * Accessed from MenuScreen when the user
  * clicks the Start button, and exits when
@@ -81,9 +87,7 @@ public class GameScreen implements Screen, ButtonBar {
     /** List of Fortresses currently active on the map */
     private ArrayList<Fortress> fortresses;
 
-    /**
-     * List of patrols current active around the map
-     */
+    /** List of patrols current active around the map */
     private ArrayList<Patrol> patrols;
     private BossPatrol bossPatrol;
 
@@ -115,14 +119,24 @@ public class GameScreen implements Screen, ButtonBar {
      */
     private float freezeCooldown;
 
+    /** Boolean flag for whether the trucks are attacking */
     private boolean truckAttack;
+
+    /** A warning signal to highlight if the user has collided with a patrol */
     private Warning warn;
 
+
+    /** A list containing active powerUps, both those in use and those on the map */
     private ArrayList<PowerUp> powerUps;
+
+    /** A list containg the tile locations (Vector 2) of where the powerups can spawn */
     private ArrayList<Vector2> powerUpLocations;
 
+
+    /** The difficulty level selected for the game */
     private DifficultyLevel level;
 
+    /** Map containing the descriptors for the objects that need to be saved */
     private OrderedMap<String, Object> saveMap;
 
     /** Play when the game is being played
@@ -131,7 +145,8 @@ public class GameScreen implements Screen, ButtonBar {
         PLAY, PAUSE, FREEZE
     }
 
-    /**
+    /** Added for assessment 4 to implement save functionality
+     *
      * Constructor which generates the game from
      * a save file
      * @param game  LibGDX game
@@ -158,7 +173,9 @@ public class GameScreen implements Screen, ButtonBar {
         bossPatrol = save.getBossPatrol();
     }
 
-    /**
+    /** Edited for assessment 4 to create a game for the
+     * difficulty level selected in difficultyScreen
+     *
      * Constructor which has the game passed in
      *
      * @param game  LibGdx game
@@ -189,7 +206,8 @@ public class GameScreen implements Screen, ButtonBar {
 
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Initialise common objects independent on if a new Game
      * is being made, or loaded from a save state
      *
@@ -265,6 +283,10 @@ public class GameScreen implements Screen, ButtonBar {
         gui.getButtons().resetButtons();
     }
 
+    /** Edited for assessment 4 to render powerups and to add freeze
+     * and pause functionality
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         camera.update();
@@ -379,7 +401,9 @@ public class GameScreen implements Screen, ButtonBar {
         gui.renderButtons();
     }
 
-    /**
+    /** Edited for assessment 4 to include updating powerups, the freeze cooldown
+     * and visual effects (VFX)
+     *
      * Manages all of the updates/checks during the game
      *
      * @param delta The time in seconds since the last render
@@ -414,8 +438,9 @@ public class GameScreen implements Screen, ButtonBar {
 
             // checks power up collision with fire truck
             for (PowerUp power : powerUps) {
-                if (power.getPosition().equals(truck.getPosition()) && !power.isPowerCurrentlyInvoked())
+                if (power.getPosition().equals(truck.getPosition()) && !power.isPowerCurrentlyInvoked()) {
                     power.invokePower(truck);
+                }
             }
 
             // manages attacks between trucks and fortresses
@@ -516,6 +541,7 @@ public class GameScreen implements Screen, ButtonBar {
         gui.updateFreezeCooldown(freezeCooldown);
     }
 
+
     @Override
     public void resize(int width, int height) {
 
@@ -543,7 +569,8 @@ public class GameScreen implements Screen, ButtonBar {
         shapeMapRenderer.dispose();
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Spawns initial patrols
      */
     private void generatePatrols() {
@@ -552,7 +579,8 @@ public class GameScreen implements Screen, ButtonBar {
         }
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Generate a random patrol with a unique name
      * @return  new patrol
      */
@@ -565,7 +593,8 @@ public class GameScreen implements Screen, ButtonBar {
         return new Patrol(type, level.getMapWidth(), level.getMapHeight(), type.name() + " Patrol " + (patrolOfType + 1));
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Generates a random patrol type
      *
      * @return  patrol type
@@ -709,7 +738,8 @@ public class GameScreen implements Screen, ButtonBar {
         gameState.addFireTruck();
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Toggles between PLAY, PAUSE and FREEZE state when the Pause button is clicked
      * or when the SPACE bar is clicked
      *
@@ -739,7 +769,8 @@ public class GameScreen implements Screen, ButtonBar {
     }
 
 
-    /**
+    /** Added for assessment 4
+     *
      * Populate powerUpLocations with all the tiles that
      * are roads therefore a power up can spawn there
      *
@@ -760,7 +791,8 @@ public class GameScreen implements Screen, ButtonBar {
     }
 
 
-    /**
+    /** Added for assessment 4
+     *
      * Checks if a new power up can spawn
      */
     private void canCreatePowerUp() {
@@ -772,7 +804,8 @@ public class GameScreen implements Screen, ButtonBar {
         }
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Generates a random power up location
      *
      * @return  location
@@ -781,7 +814,8 @@ public class GameScreen implements Screen, ButtonBar {
         return powerUpLocations.get(new Random().nextInt(powerUpLocations.size()));
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Checks if a powerup is already in a location that a new
      * powerup is trying to spawn at
      *
@@ -796,7 +830,8 @@ public class GameScreen implements Screen, ButtonBar {
         return false;
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Create random power up
      *
      * @param location  to spawn power up
@@ -811,7 +846,9 @@ public class GameScreen implements Screen, ButtonBar {
     }
 
 
-    /** This updates the active power ups, if the power up has been
+    /** Added for assessment 4
+     *
+     * This updates the active power ups, if the power up has been
      * active for longer then the duration of the power up then it
      * is removed */
     public void updatePowerUps() {
@@ -825,14 +862,17 @@ public class GameScreen implements Screen, ButtonBar {
         powerUps.removeAll(powerUpsToRemove);
     }
 
-    /** The method for giving trucks that have the same end tiles adjacent end tiles
+    /** Added for assessment 4
+     *
+     * The method for giving trucks that have the same end tiles adjacent end tiles
      * so that they do not end up on the same tile
      */
     public void shortenActiveSegment() {
         selectedTruck.pathSegment.removeLast();
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * When save is initiated in the minigame screen, the minigame
      * state is added to the save file too
      *
@@ -844,7 +884,8 @@ public class GameScreen implements Screen, ButtonBar {
         saveGameState();
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Save the game to a JSON file which can then be resumed later
      */
     public void saveGameState() {
@@ -874,7 +915,8 @@ public class GameScreen implements Screen, ButtonBar {
         takeScreenshot(timestamp);
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Take screenshot of the screen, what the user can see
      * when the save button is clicked for the save screen
      * @param filename  to save to
@@ -892,7 +934,8 @@ public class GameScreen implements Screen, ButtonBar {
         pixmap.dispose();
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Get the list of fortress descriptor to be saved
      * @return  fortress descriptors
      */
@@ -904,7 +947,8 @@ public class GameScreen implements Screen, ButtonBar {
         return fortresses;
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Get the list of patrol descriptors to be saved
      * @return  patrol descriptors
      */
@@ -947,62 +991,36 @@ public class GameScreen implements Screen, ButtonBar {
         }, 3);
     }
 
-    public boolean isNotPaused() {
-        return state != PlayState.PAUSE;
-    }
+    public boolean isNotPaused() { return state != PlayState.PAUSE; }
 
     public void setState(PlayState state){
         this.state = state;
     }
 
-    public boolean isTruckAttackEnabled() {
-        return this.truckAttack;
-    }
+    public boolean isTruckAttackEnabled() { return this.truckAttack; }
 
-    public FireStation getStation() {
-        return this.station;
-    }
+    public FireStation getStation() { return this.station; }
 
-    public OrthographicCamera getCamera() {
-        return this.camera;
-    }
+    public OrthographicCamera getCamera() { return this.camera; }
 
-    public ArrayList<Fortress> getFortresses() {
-        return this.fortresses;
-    }
+    public ArrayList<Fortress> getFortresses() { return this.fortresses; }
 
-    public ArrayList<Patrol> getPatrols() {
-        return this.patrols;
-    }
+    public ArrayList<Patrol> getPatrols() { return this.patrols; }
 
-    public PlayState getState() {
-        return this.state;
-    }
+    public PlayState getState() { return this.state; }
 
-    public void setSelectedEntity(Object entity) {
-        this.selectedEntity = entity;
-    }
+    public void setSelectedEntity(Object entity) { this.selectedEntity = entity; }
 
-    public Object getSelectedEntity() {
-        return this.selectedEntity;
-    }
+    public Object getSelectedEntity() { return this.selectedEntity; }
 
     public void setFreezeCooldown(float time) { freezeCooldown = time; }
 
-    public BossPatrol getBossPatrol() {
-        return this.bossPatrol;
-    }
+    public BossPatrol getBossPatrol() { return this.bossPatrol; }
 
-    public FireTruck getSelectedTruck() {
-        return this.selectedTruck;
-    }
+    public FireTruck getSelectedTruck() { return this.selectedTruck; }
 
-    public void setSelectedTruck(FireTruck fireTruck) {
-        this.selectedTruck = fireTruck;
-    }
+    public void setSelectedTruck(FireTruck fireTruck) { this.selectedTruck = fireTruck; }
 
-    public ArrayList<PowerUp> getPowerUps() {
-        return this.powerUps;
-    }
+    public ArrayList<PowerUp> getPowerUps() { return this.powerUps; }
 
 }

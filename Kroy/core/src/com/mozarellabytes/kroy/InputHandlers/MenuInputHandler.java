@@ -64,7 +64,8 @@ public class MenuInputHandler implements InputProcessor {
         return false;
     }
 
-    /** Checks if the user clicks on the start, controls or sound button.
+     /**
+     * Checks if the user clicks on the start, controls or sound button.
      * It starts the game, shows the controls screen or toggles the sound
      * respectively.
      * @param screenX The x coordinate, origin is in the upper left corner

@@ -1,9 +1,14 @@
 package com.mozarellabytes.kroy.Minigame;
 
+/**********************************************************************************
+                                Edited for assessment 4
+ **********************************************************************************/
+
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/** Edited for assessment 4 to make the minigame easier
+ *
  * DanceManager controls all aspects of the minigame
  */
 public class DanceManager {
@@ -55,7 +60,8 @@ public class DanceManager {
         this.notDanceMoves.add(DanceMove.NONE);
     }
 
-    /**
+    /** Edited for assessment 4 to improve readability
+     *
      * Called once a frame to update the dance manager
      *
      * @param delta time since last frame
@@ -107,7 +113,8 @@ public class DanceManager {
         return 2 * Math.abs(getPhase()-.5f);
     }
 
-    /**
+    /** Edited for assessment 4 to make the minigame more playable
+     *
      * Makes the dancer perform a move
      * @param move the DanceMove for the dancer to perform
      * @return the DanceResult for the move, eg 'MISSED' or 'GREAT'
@@ -154,7 +161,7 @@ public class DanceManager {
             notifyResult(result);
             return result;
         } else {
-            // Player attempted two moves this beat, punish them :)
+            // Player attempted two moves this beat
             doneThisBeat = true;
             wrongMove();
             notifyResult(DanceResult.WRONG);
@@ -170,7 +177,8 @@ public class DanceManager {
         return this.choreographer.getMoveList();
     }
 
-    /**
+    /** Edited for assessment 4 to improve readability
+     *
      * get the move nearest to the current beat
      * eg if phase is .3f returns previous beat. If phase is .8f returns next beat.
      * @return DanceMove that on the nearest beat

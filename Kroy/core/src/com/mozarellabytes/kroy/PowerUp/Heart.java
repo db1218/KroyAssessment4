@@ -1,9 +1,15 @@
 package com.mozarellabytes.kroy.PowerUp;
 
+/**********************************************************************************
+                                    Added for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 
-/**
+/** Added for assessment 4 to implement the power
+ * up functionality
+ *
  * Heart resets the Fire Truck's HP (health points) to
  * it Fire Truck's maximum HP
  */
@@ -42,10 +48,5 @@ public class Heart extends PowerUp {
 
     @Override
     public String getDesc() { return "Heals the fire truck to full HP"; }
-
-    @Override
-    public float getTimeLeftInPowerup() {
-        return 0;
-    }
 
 }

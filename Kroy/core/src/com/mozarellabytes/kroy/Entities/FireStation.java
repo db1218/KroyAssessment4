@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.Entities;
 
+/**********************************************************************************
+                            Edited for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,7 +18,8 @@ import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.ArrayList;
 
-/**
+/** Edited for assessment 4 to implement save functionality
+ *
  * FireStation is a class created when it is called from GameScreen.
  * This class contains the location and sprite of the FireStation.
  * The FireStation spawns, repairs and refills the firetrucks and
@@ -255,7 +260,8 @@ public class FireStation {
         return fireTrucks;
     }
 
-    /**
+    /** Added for assessment 4 - used for implementing save functionality
+     *
      * Generates the description of the fire station to
      * be stored in the save file
      *

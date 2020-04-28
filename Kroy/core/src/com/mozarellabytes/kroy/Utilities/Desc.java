@@ -1,9 +1,14 @@
 package com.mozarellabytes.kroy.Utilities;
 
+/**********************************************************************************
+                             Added for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
 
-/**
+/** Added for assessment 4 to implement save functionality
+ *
  * Descriptions of the complex classes that need to be saved
  * to the save file. We use a description of the object and
  * not the object itself as we do not need all the values that

@@ -1,5 +1,10 @@
 package com.mozarellabytes.kroy.Entities;
 
+/**********************************************************************************
+                            Edited for assessment 4
+ **********************************************************************************/
+
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -11,7 +16,8 @@ import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.ArrayList;
 
-/**
+/** Edited for assessment 4 to allow save functionality
+ *
  * Fortresses can attack fire trucks when within range
  * and can regenerate health over time
  */
@@ -188,6 +194,15 @@ public class Fortress {
         return this.fortressType.getRange();
     }
 
+    public void setBombs(ArrayList<Bomb> bombs) { this.bombs = bombs; }
+
+    /** Added for assessment 4
+     *
+     * Generates the description of the fortress to
+     * be stored in the save file
+     *
+     * @return  description of fortress
+     */
     public Desc.Fortress getSave() {
         Desc.Fortress desc = new Desc.Fortress();
         desc.type = this.fortressType.name();
@@ -197,7 +212,4 @@ public class Fortress {
         return desc;
     }
 
-    public void setBombs(ArrayList<Bomb> bombs) {
-        this.bombs = bombs;
-    }
 }

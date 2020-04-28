@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.Screens;
 
+/**********************************************************************************
+                                Edited for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -20,7 +24,8 @@ import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Minigame.*;
 import com.mozarellabytes.kroy.Utilities.*;
 
-/**
+/** Edited for assessment 4 by adding a new background image
+ *
  * The screen for the minigame that triggers when a firetruck meets an ET patrol
  */
 public class DanceScreen implements Screen, BeatListener, ButtonBar {
@@ -119,7 +124,8 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
         SoundFX.stopTruckAttack();
     }
 
-    /**
+    /** Edited for assessment 4 to add in pause functionality
+     *
      * Manages all of the updates/checks during the game
      *
      * @param delta The time in seconds since the last render
@@ -245,7 +251,9 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
 
     }
 
-    /**
+    /** Edited for assessment 4 so that damage to the firetruck
+     * during the minigame is transferred back to the main game
+     *
      * Checks if the minigame should end, called every frame
      */
     private void checkIfOver() {
@@ -386,6 +394,7 @@ public class DanceScreen implements Screen, BeatListener, ButtonBar {
     public void changeSound() { SoundFX.toggleMusic(this); }
 
     @Override
+    /** Added for assessment 4 */
     public void saveGameState() {
         firetruck.setHP(firefighter.getHealth());
         patrol.setHP(ETDancer.getHealth());

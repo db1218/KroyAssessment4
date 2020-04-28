@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.Screens;
 
+/**********************************************************************************
+                                Added for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -11,7 +15,8 @@ import com.mozarellabytes.kroy.Utilities.DifficultyLevel;
 import com.mozarellabytes.kroy.InputHandlers.DifficultyScreenInputHandler;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
-/**
+/** Added for assessment 4 to implement difficulty levels.
+ *
  * This screen displays the user with 3 difficulties of
  * our game to choose from, Easy, Medium and Hard. The user
  * can also navigate back the the main menu screen
@@ -25,50 +30,66 @@ public class DifficultyScreen implements Screen {
     /** The menu screen image - see ui/menuscreen_new */
     private final Texture backgroundImage;
 
-    /** Rectangle containing the position of the play button */
+
+    /** Rectangle containing the position of the easy button */
     private final Rectangle easyButton;
 
-    /** Texture of the start button when it has not been clicked */
+    /** Texture of the easy button when it has not been clicked */
     private final Texture easyIdleTexture;
 
-    /** Texture of the start button when has been clicked */
+    /** Texture of the easy button when has been clicked */
     private final Texture easyClickedTexture;
 
-    /** Contains the current state of the start button:
-     * startIdleTexture if the start button is not being pressed,
-     * startClickedTexture if the start button has been pressed */
+    /** Contains the current state of the easy button:
+     * easyIdleTexture if the easy button is not being pressed,
+     * easyClickedTexture if the easy button has been pressed */
     private Texture currentEasyTexture;
 
 
-    /** Rectangle containing the position of the control button */
+    /** Rectangle containing the position of the medium button */
     private final Rectangle mediumButton;
 
-    /** Texture of the control button when it has not been clicked */
+    /** Texture of the medium button when it has not been clicked */
     private final Texture mediumIdleTexture;
 
-    /** Texture of the control button when has been clicked */
+    /** Texture of the medium button when has been clicked */
     private final Texture mediumClickedTexture;
 
-    /** Contains the current state of the control button:
-     * controlsIdleTexture if the control button is not being pressed,
-     * controlsClickedTexture if the control button has been pressed */
+    /** Contains the current state of the medium button:
+     * mediumIdleTexture if the medium button is not being pressed,
+     * mediumClickedTexture if the medium button has been pressed */
     private Texture currentMediumTexture;
 
+
+    /** Rectangle containing the position of the hard button */
     private final Rectangle hardButton;
 
+    /** Texture of the hard button when it has not been clicked */
     private final Texture hardIdleTexture;
 
+    /** Texture of the hard button when has been clicked */
     private final Texture hardClickedTexture;
 
+    /** Contains the current state of the hard button:
+     * hardIdleTexture if the hard button is not being pressed,
+     * hardClickedTexture if the hard button has been pressed */
     private Texture currentHardTexture;
 
+
+    /** Rectangle containing the position of the return button */
     private final Rectangle returnButton;
 
+    /** Texture of the return on button when it has not been clicked */
     private final Texture returnIdleTexture;
 
+    /** Texture of the return button when it has been clicked */
     private final Texture returnClickedTexture;
 
+    /** Contains the current state of the return button:
+     * returnIdleTexture if the return button is not being pressed,
+     * returnClickedTexture if the return button has been pressed */
     private Texture currentReturnTexture;
+
 
     /** Rectangle containing the position of the sound button */
     private final Rectangle soundButton;
@@ -85,6 +106,7 @@ public class DifficultyScreen implements Screen {
     /** Texture of the sound off button when it has been clicked */
     private final Texture soundOffClickedTexture;
 
+    /** Contains the current state of the sound button */
     private Texture currentSoundTexture;
 
     /** Constructs the MenuScreen

@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.GUI;
 
+/**********************************************************************************
+                                Edited for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -17,7 +21,9 @@ import com.mozarellabytes.kroy.Screens.GameScreen;
 
 import java.util.ArrayList;
 
-/**
+/** Edited for assessment 4 to be able to render the freeze screen and so the
+ * player can see the effects of a powerup when they click on them
+ *
  * This Class is responsible for displaying the majority of the GUI that the
  * user can see and interact with that are apart from the main function of
  * the game i.e. drawing the FireTruck's path. The GUI renders the buttons
@@ -97,7 +103,9 @@ public class GUI {
         batch.end();
     }
 
-    /**
+    /** Edited for assessment 4 to be able to render time bars
+     * for the PowerUps.
+     *
      * Render an entity to the screen
      */
     private void renderEntity() {
@@ -210,13 +218,14 @@ public class GUI {
         renderSelectedEntityBar(patrol.getHP(), patrol.getType().getMaxHP(), Color.RED, Color.FIREBRICK, 1);
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Calls the methods which render the attributes and
      * health of a power up in the stats area
      *
      * @param powerUp  in stats area
      */
-    private void renderSelectedEntityBars(PowerUp powerUp) {
+    public void renderSelectedEntityBars(PowerUp powerUp) {
         renderSelectedEntityBar(powerUp.getTimeLeftOnScreen(), powerUp.getTimeOnScreen(), Color.GOLD, Color.GOLDENROD, 1);
     }
 
@@ -371,7 +380,8 @@ public class GUI {
         batch.end();
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Renders the "Game Frozen text" with the time remaining
      * of the freeze displayed too
      *
@@ -410,7 +420,8 @@ public class GUI {
         this.GUIElements.set(2, GUIElement);
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Updates freeze cooldown on the screen
      *
      * @param cooldown  time until freeze available

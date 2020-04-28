@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.Utilities;
 
+/**********************************************************************************
+                                Added for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
@@ -7,7 +11,8 @@ import com.mozarellabytes.kroy.Entities.FireTruckType;
 
 import static com.mozarellabytes.kroy.Entities.FireTruckType.*;
 
-/**
+/** Added for assessment 4 to implement the different difficulty levels
+ *
  * The actual level which defines many different variables within
  * the game which change depending on the difficulty to change
  * the easy or hard the game is to play

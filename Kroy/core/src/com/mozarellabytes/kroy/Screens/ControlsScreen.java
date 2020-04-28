@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.Screens;
 
+/**********************************************************************************
+                                Edited for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -11,7 +15,10 @@ import com.mozarellabytes.kroy.Kroy;
 
 import java.awt.*;
 
-/** This screen shows the games controls including dragging the
+/** Edited for assessment 4 to display information about how to use the freeze
+ * screen
+ *
+ * This screen shows the games controls including dragging the
  * fire truck to move it and pressing 'A' to attack the fortresses */
 public class ControlsScreen implements Screen {
 
@@ -120,7 +127,10 @@ public class ControlsScreen implements Screen {
     public void show() {
     }
 
-    /** Renders the control screen including explaining how to move
+    /** Edited for assessment 4 to add instructions on how to use the
+     * freeze screen
+     *
+     * Renders the control screen including explaining how to move
      * the firetrucks and attack the fortresses
      *
      * @param delta The time in seconds since the last render. */

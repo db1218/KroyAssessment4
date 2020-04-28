@@ -1,9 +1,15 @@
 package com.mozarellabytes.kroy.PowerUp;
 
+/**********************************************************************************
+                            Added for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 
-/**
+/** Added for assessment 4 to implement the power
+ * up functionality
+ *
  * Water resets a truck's reserve to the truck's maximum
  * reserve
  */
@@ -11,7 +17,8 @@ public class Water extends PowerUp {
 
     /**
      * Constructor for Water
-     * @param location  where the PowerUp spawns on the map
+     *
+     * @param location where the PowerUp spawns on the map
      */
     public Water(Vector2 location) {
         super("water", location);
@@ -21,6 +28,7 @@ public class Water extends PowerUp {
      * This restores the truck's reserve and then sets the
      * appropriate flags so that the PowerUp can be
      * removed from gameScreen
+     *
      * @param truck truck that gets the effect of the fire truck
      */
     @Override
@@ -49,8 +57,4 @@ public class Water extends PowerUp {
         return "Restores the fire truck's water supply back to full";
     }
 
-    @Override
-    public float getTimeLeftInPowerup() {
-        return 0;
-    }
 }

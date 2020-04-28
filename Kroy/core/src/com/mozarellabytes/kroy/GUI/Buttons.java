@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.GUI;
 
+/**********************************************************************************
+                                Added for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -7,6 +11,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
+
+/** Added for assessment 4 to be able to reuse code as oppose
+ * to having the code for the buttons in the screen that they
+ * are used in
+ *
+ * Contains the most commonly used buttons */
 
 public class Buttons {
 

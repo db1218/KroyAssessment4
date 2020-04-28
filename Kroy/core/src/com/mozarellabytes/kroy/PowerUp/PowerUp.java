@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.PowerUp;
 
+/**********************************************************************************
+                            Added for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -12,7 +16,9 @@ import com.mozarellabytes.kroy.Entities.FireTruck;
 
 import java.util.ArrayList;
 
-/**
+/** Added for assessment 4 to implement the power
+ * up functionality
+ *
  * Abstract class for powerups which spawn
  * at random locations on roads and give the
  * fire truck advantages
@@ -174,8 +180,6 @@ public abstract class PowerUp {
     public float getElapsedTime() {
         return this.elapsedTime;
     }
-
-    public abstract float getTimeLeftInPowerup ();
 
     public boolean isPowerCurrentlyInvoked() { return isPowerCurrentlyInvoked; }
 

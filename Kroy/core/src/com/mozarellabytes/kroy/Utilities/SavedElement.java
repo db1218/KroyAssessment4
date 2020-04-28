@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.Utilities;
 
+/**********************************************************************************
+                            Added for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
@@ -10,7 +14,8 @@ import com.mozarellabytes.kroy.GameState;
 
 import java.util.ArrayList;
 
-/**
+/** Added for assessment 4 to implement save functionality
+ *
  * SavedElement contains all the information needed to save
  * and load the state of a game to and from a file
  */

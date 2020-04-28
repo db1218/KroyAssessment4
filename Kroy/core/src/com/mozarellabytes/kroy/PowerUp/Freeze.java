@@ -1,9 +1,15 @@
 package com.mozarellabytes.kroy.PowerUp;
 
+/**********************************************************************************
+                                Added for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 
-/**
+/** Added for assessment 4 to implement the power
+ * up functionality
+ *
  * Freeze makes the freeze feature available,
  * bypassing the cooldown
  */
@@ -35,12 +41,6 @@ public class Freeze extends PowerUp {
     public String getDesc() {
         return "Makes the freeze ability available, bypassing the cooldown ";
     }
-
-    @Override
-    public float getTimeLeftInPowerup() {
-        return 0;
-    }
-
 
 }
 

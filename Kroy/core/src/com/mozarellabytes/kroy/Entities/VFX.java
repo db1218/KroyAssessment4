@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.Entities;
 
+/**********************************************************************************
+                            Added for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;

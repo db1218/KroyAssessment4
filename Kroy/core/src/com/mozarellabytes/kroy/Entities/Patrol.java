@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.Entities;
 
+/**********************************************************************************
+                                Edited for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -10,7 +14,10 @@ import com.mozarellabytes.kroy.Utilities.Desc;
 
 import java.util.Random;
 
-/**
+/** Edited to implement save functionality and to make the code more
+ * readable and extendable, allows multiple patrols to spawn by randomly
+ * allocating each one a path instead of using hard coded values
+ *
  * Patrol is an entity that the player controls. It navigates the map
  * going through points defined in the the patrolType *
  */
@@ -53,7 +60,8 @@ public class Patrol extends Sprite {
         this.position = new Vector2(path.get(0).x, path.get(0).y);
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Constructs a Patrol from save at a position and of a certain type
      * which have been passed in
      *
@@ -84,7 +92,8 @@ public class Patrol extends Sprite {
         this.HP = type.getMaxHP();
     }
 
-    /**
+    /** Edited for assessment 4
+     *
      * Moves the patrol. It checks it's position relative to the next corner
      * of its rectangular route that it follows
      *
@@ -134,7 +143,8 @@ public class Patrol extends Sprite {
         mapBatch.draw(this, this.position.x, this.position.y, 1, 1);
     }
 
-    /**
+    /** Edited for assessment 4
+     *
      * Generates the random path the patrol will navigate
      * @param mapW  map width
      * @param mapH  map height
@@ -170,7 +180,8 @@ public class Patrol extends Sprite {
         return new Vector2(Math.round(position.x), Math.round(position.y));
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Generates the description of the patrol to
      * be stored in the save file
      *

@@ -1,10 +1,16 @@
 package com.mozarellabytes.kroy.PowerUp;
 
+/**********************************************************************************
+                            Added for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 
-/**
+/** Added for assessment 4 to implement the power
+ * up functionality
+ *
  * Range extends the range of a truck for a set amount
  * of time
  */
@@ -69,11 +75,5 @@ public class Range extends PowerUp {
 
     @Override
     public String getDesc() { return "Increase range of the fire truck by 3 tiles for 10 seconds"; }
-
-    @Override
-    public float getTimeLeftInPowerup() {
-        return timeLeftInPowerUp;
-    }
-
 
 }

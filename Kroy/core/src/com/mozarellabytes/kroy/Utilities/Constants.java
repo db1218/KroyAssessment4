@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.Utilities;
 
+/**********************************************************************************
+                            Edited for assessment 4
+ **********************************************************************************/
+
 /**
  * Contains a few constants that can be changed by the developer
  */

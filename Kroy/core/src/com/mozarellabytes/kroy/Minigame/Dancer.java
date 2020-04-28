@@ -1,10 +1,15 @@
 package com.mozarellabytes.kroy.Minigame;
 
+/**********************************************************************************
+                                Edited for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 
-/**
+/** Edited for assessment 4 to make the code more readable
+ *
  * Class for entities that are taking part in the dance-off
  */
 public class Dancer {
@@ -48,7 +53,9 @@ public class Dancer {
         createRoutine();
     }
 
-    /**
+    /** Added for assessment 4 to make it easier to change
+     * the jive routine
+     *
      * Creates the jive routine, by adding moves to
      * jiveRoutine
      */
@@ -103,7 +110,8 @@ public class Dancer {
         if (this.jiveStep == this.stepsInJive) stopJiving();
     }
 
-    /**
+    /** Edited for assessment 4 to make the code more efficient
+     *
      * While this dancer is jiving it will loop through its jiveRoutine
      * executing each step
      */
@@ -114,7 +122,8 @@ public class Dancer {
         this.setState(move);
     }
 
-    /**
+    /** Added for assessment 4 to improve code readability
+     *
      * This stops this dancer from jiving
      */
     private void stopJiving() {

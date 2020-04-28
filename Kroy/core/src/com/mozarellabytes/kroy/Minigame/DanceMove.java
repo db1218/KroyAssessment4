@@ -1,13 +1,14 @@
 package com.mozarellabytes.kroy.Minigame;
 
 /**********************************************************************************
-                                Edited for assessment 4
+                                Added for assessment 4
  **********************************************************************************/
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
-/**
+/** Added for assessment 4 to make it easier to add new moves
+ *
  * Enum containing the available dance moves and their appropriate textures. This is
  * used in DanceScreen to render the firefighter, ET and arrows to the screen, in
  * DanceChoreographer to generate the moves for the routine and in DanceManager to

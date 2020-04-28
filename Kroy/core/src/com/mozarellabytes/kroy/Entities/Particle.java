@@ -1,10 +1,17 @@
 package com.mozarellabytes.kroy.Entities;
 
+/**********************************************************************************
+                                Added for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
-/**
+/** Edited for assessment 4 - combined what was previously
+ * water particle and blaster particle into one particle
+ * class
+ *
  * One of many colourful visual rectangles which spawn
  * when a FireTruck attacks a Fortress, or when the Boss
  * attacks the FireStation. It goes towards the target
@@ -112,10 +119,6 @@ public class Particle {
     public void setPositionX(float x) {this.currentPosition.x = x;}
 
     public void setPositionY(float y) {this.currentPosition.y = y;}
-
-    public void setTargetPositionX(float x) {this.targetPosition.x = x;}
-
-    public void setTargetPositionY(float y) {this.targetPosition.y = y;}
 
 }
 

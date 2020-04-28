@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.Screens;
 
+/**********************************************************************************
+                                Edited for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -8,7 +12,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.mozarellabytes.kroy.InputHandlers.GameOverInputHandler;
 import com.mozarellabytes.kroy.Kroy;
 
-/**
+/** Edited for assessment 4 by adding new background
+ * images for if the player won or lost
+ *
  * This screen is shown after the game has ended.
  * It tells the player if they have won or lost.
  */
@@ -24,7 +30,9 @@ public class GameOverScreen implements Screen {
     /** Camera to set the projection for the screen */
     private final OrthographicCamera camera;
 
-    /** Constructor for the game screen
+    /** Edited for assessment 4 - added a new background image
+     *
+     * Constructor for the game screen
      * @param game  LibGdx game
      * @param won <code> true </code> if the game was won
      *            <code> false </code> if th game was lost

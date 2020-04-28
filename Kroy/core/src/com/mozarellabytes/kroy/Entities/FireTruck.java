@@ -1,5 +1,9 @@
 package com.mozarellabytes.kroy.Entities;
 
+/**********************************************************************************
+                                Edited for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -12,7 +16,9 @@ import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.*;
 
-/**
+/** Edited for assessment 4 to implement save functionality and to allow the player
+ * to redo and undo parts of the trucks path
+ *
  * FireTruck is an entity that the player controls. It navigates the map on the
  * roads defined in the Tiled Map by following a path that the user draws.
  *
@@ -99,10 +105,15 @@ public class FireTruck extends Sprite {
     /** the shortest path between 2 points */
     LinkedList<Vector2> reconstructedPath;
 
+    /** True for the duration that a truck is immune, triggered after
+     * it drives over a shield power up */
     private boolean inShield;
 
+    /** The attack points of the truck */
     private float AP;
+    /** The truck's range measured in tiles */
     private float range;
+    /** The orientation that a truck is facing - used for saves */
     private String rotation;
 
     /**
@@ -283,7 +294,8 @@ public class FireTruck extends Sprite {
         for (Vector2 position : findPath(coordinate, this.pathSegment.first())) this.pathSegment.addLast(position);
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Generates the path for when the truck starts to move
      * to simulate the truck moving smoothly, from the last
      * path segment
@@ -297,7 +309,8 @@ public class FireTruck extends Sprite {
         moving = true;
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Generates the path for when the truck starts to move
      * to simulate the truck moving smoothly, from ALL the
      * path segments
@@ -330,7 +343,8 @@ public class FireTruck extends Sprite {
         this.path.addLast(new Vector2(currentTile.x, currentTile.y));
     }
 
-    /**
+    /** Edited for assessment 4
+     *
      * Used when drawing the path to check whether the next tile to be added to the path is
      * valid
      *
@@ -466,11 +480,11 @@ public class FireTruck extends Sprite {
             reconstructedPath.add(at);
         }
 
-        Object[] objectAarray = reconstructedPath.toArray();
-        Vector2[] path = new Vector2[objectAarray.length];
+        Object[] objectArray = reconstructedPath.toArray();
+        Vector2[] path = new Vector2[objectArray.length];
 
-        for(int i=0;i<objectAarray.length;i++) {
-            path[i] = (Vector2) objectAarray[i];
+        for(int i=0;i<objectArray.length;i++) {
+            path[i] = (Vector2) objectArray[i];
         }
 
         reverse(path);
@@ -637,7 +651,8 @@ public class FireTruck extends Sprite {
         }
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * "Undo" a segment from the queue of segments that make up the
      * path that the truck follows. This can only happen when the game
      * is frozen and makes sure the truck ends up in a tile
@@ -668,7 +683,8 @@ public class FireTruck extends Sprite {
         }
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * "Redo" a segment that you just removed
      * with the "undo" method and only works when the
      * game is frozen and there is something to redo
@@ -697,7 +713,8 @@ public class FireTruck extends Sprite {
         mapBatch.draw(this, this.position.x, this.position.y, 1, 1);
     }
 
-    /**
+    /** Added for assessment 4
+     *
      * Generates the description of Firetruck which are
      * the values saved in the save file
      * @return  the description of FireTruck
@@ -812,8 +829,8 @@ public class FireTruck extends Sprite {
         return this.inShield;
     }
 
-    public void setShield(boolean b){
-        this.inShield = b;
+    public void setShield(boolean isInShield){
+        this.inShield = isInShield;
     }
 
     public float getAP() { return this.AP; }

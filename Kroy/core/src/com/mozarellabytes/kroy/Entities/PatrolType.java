@@ -1,9 +1,14 @@
 package com.mozarellabytes.kroy.Entities;
 
+/**********************************************************************************
+                                Edited for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
-/**
+/** Edited for assessment 4 to remove the paths that each patrol should follow.
+ *
  * FireTruckType is an enum defining the patrols that can be present in the game.
  * Each patrol type has a unique reserve, speed, trail colour, range, and attack points.
  * This allows there to be numerous different types of FireTrucks and numerous patrols
@@ -12,7 +17,8 @@ import com.badlogic.gdx.graphics.Texture;
  */
 public enum PatrolType {
 
-    /**
+    /** Edited for assessment 4
+     *
      * The preset values for the different patrol types includes the type's:
      * texture, speed, name, name, attack range, attack points
      */

@@ -1,11 +1,16 @@
 package com.mozarellabytes.kroy.Utilities;
 
+/**********************************************************************************
+                            Added for assessment 4
+ **********************************************************************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
-/**
+/** Added for assessment 4
+ *
  * This is a pop-up sprite of a warning sign instantiated when a truck collides with a
  * patrol.
  */
